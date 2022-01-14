@@ -1,0 +1,53 @@
+---
+version: '3'
+services:
+
+  li-pca-api:
+    build:
+      context: .
+      dockerfile: ./src/api/Dockerfile
+    stdin_open: true
+    tty: true
+    container_name: li-pca-api
+    hostname: li-pca-api
+    restart: on-failure
+    links:
+      - mongodb
+    volumes:
+      - .:/usr/src/api
+    environment:
+      - MONGODB_USERNAME=lipca
+      - MONGODB_PASSWORD=devpass1
+      - MONGODB_DATABASE=li-pca
+      - MONGODB_DATABASE=li-pca-app
+    networks:
+      - backend
+    ports:
+      - 8080:8080
+      - 8043:443
+      - 5678:5678
+
+  mongodb:
+    container_name: li-pca-db
+    hostname: li-pca-db
+    image: "mongo:3.6"
+    ports:
+      - "27017:27017"
+    command: --profile=1 --slowms=1
+    volumes:
+      - "mongodb:/data/db"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=li-pca
+      - MONGO_INITDB_ROOT_PASSWORD=devpass1
+      - MONGO_INITDB_DATABASE=li-pca
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  mongodb:
