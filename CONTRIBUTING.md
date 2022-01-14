@@ -24,12 +24,12 @@ one.
 
 ## Branches ##
 
-If you are a developer assigned to the PCA team, when creating a branch, 
-reference the corresponding ticket in JIRA as a prefix to the branch name. 
+If you are a developer assigned to the PCA team, when creating a branch,
+reference the corresponding ticket in JIRA as a prefix to the branch name.
 
 For example: PCADEV-123_some_feature_branch
 
-When pushing from your local repo to a remote, push first to your 
+When pushing from your local repo to a remote, push first to your
 remote branch and then create a pull request to merge back into develop.
 Pushes directly to develop is not allowed.
 
