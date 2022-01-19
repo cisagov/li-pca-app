@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Customers Controller Logic"""
+"""Customers Controller Logic."""
 
 # Standard Python Libraries
 import logging
@@ -13,7 +13,7 @@ from api.models.customer import Customer  # noqa: E501
 
 
 def create_customer(body=None):  # noqa: E501
-    """Add a new customer to the data store
+    """Add a new customer to the data store.
 
      # noqa: E501
 
@@ -29,7 +29,7 @@ def create_customer(body=None):  # noqa: E501
 
 
 def delete_customer_by_uuid(uuid):  # noqa: E501
-    """Deletes a customer
+    """Delete a customer.
 
      # noqa: E501
 
@@ -38,13 +38,12 @@ def delete_customer_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
-
     logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
 def get_all_customers(name=None):  # noqa: E501
-    """Find all customers
+    """Find all customers.
 
     Multiple status values can be provided with comma separated strings # noqa: E501
 
@@ -58,7 +57,7 @@ def get_all_customers(name=None):  # noqa: E501
 
 
 def get_customer_by_uuid(uuid):  # noqa: E501
-    """Find customer by uuid
+    """Find customer by uuid.
 
     Returns a single customer # noqa: E501
 
@@ -72,7 +71,7 @@ def get_customer_by_uuid(uuid):  # noqa: E501
 
 
 def update_customer_by_uuid(uuid, body=None):  # noqa: E501
-    """Update an existing customer
+    """Update an existing customer.
 
      # noqa: E501
 

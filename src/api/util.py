@@ -1,4 +1,4 @@
-"""Utility Module Logic"""
+"""Utility Module Logic."""
 
 # Standard Python Libraries
 import datetime

@@ -1,5 +1,5 @@
 #  coding: utf-8
-"""Customers Controller Test Logic"""
+"""Customers Controller Test Logic."""
 
 from __future__ import absolute_import
 
@@ -18,12 +18,12 @@ UUID_URL = f"/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/customers/{EXAMPLE_UUID}"
 
 
 class TestCustomersController(BaseTestCase):
-    """CustomersController integration test stubs"""
+    """CustomersController integration test stubs."""
 
     def test_create_customer(self):
-        """Test case for create_customer
+        """Test case for create_customer.
 
-        Add a new customer to the data store
+        Add a new customer to the data store.
         """
         body = Customer()
         response = self.client.open(
@@ -35,9 +35,9 @@ class TestCustomersController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_delete_customer_by_uuid(self):
-        """Test case for delete_customer_by_uuid
+        """Test case for delete_customer_by_uuid.
 
-        Deletes a customer
+        Delete a customer.
         """
         response = self.client.open(
             UUID_URL,
@@ -46,9 +46,9 @@ class TestCustomersController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_all_customers(self):
-        """Test case for get_all_customers
+        """Test case for get_all_customers.
 
-        Find all customers
+        Find all customers.
         """
         query_string = [("name", "name_example")]
         response = self.client.open(
@@ -59,9 +59,9 @@ class TestCustomersController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_customer_by_uuid(self):
-        """Test case for get_customer_by_uuid
+        """Test case for get_customer_by_uuid.
 
-        Find customer by uuid
+        Find customer by uuid.
         """
         response = self.client.open(
             UUID_URL,
@@ -70,9 +70,9 @@ class TestCustomersController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_update_customer_by_uuid(self):
-        """Test case for update_customer_by_uuid
+        """Test case for update_customer_by_uuid.
 
-        Update an existing customer
+        Update an existing customer.
         """
         body = Customer()
         response = self.client.open(

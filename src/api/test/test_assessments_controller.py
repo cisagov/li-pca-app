@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Assessments Controller Test Logic"""
+"""Assessments Controller Test Logic."""
 
 from __future__ import absolute_import
 
@@ -18,12 +18,12 @@ UUID_URL = f"/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/assessments/{EXAMPLE_UUID}"
 
 
 class TestAssessmentsController(BaseTestCase):
-    """AssessmentsController integration test stubs"""
+    """AssessmentsController integration test stubs."""
 
     def test_create_assessment(self):
-        """Test case for create_assessment
+        """Test case for create_assessment.
 
-        Add a new assessment to the data store
+        Add a new assessment to the data store.
         """
         body = Assessment()
         response = self.client.open(
@@ -35,9 +35,9 @@ class TestAssessmentsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_delete_assessment_by_uuid(self):
-        """Test case for delete_assessment_by_uuid
+        """Test case for delete_assessment_by_uuid.
 
-        Deletes an assessment
+        Deletes an assessment.
         """
         response = self.client.open(
             UUID_URL,
@@ -46,9 +46,9 @@ class TestAssessmentsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_all_assessments(self):
-        """Test case for get_all_assessments
+        """Test case for get_all_assessments.
 
-        Finds Assessments by status
+        Find Assessments by status.
         """
         query_string = [("customer_uuid", "customer_uuid_example")]
         response = self.client.open(
@@ -59,9 +59,9 @@ class TestAssessmentsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_assessment_by_uuid(self):
-        """Test case for get_assessment_by_uuid
+        """Test case for get_assessment_by_uuid.
 
-        Find assessment by uuid
+        Find assessment by uuid.
         """
         response = self.client.open(
             UUID_URL,
@@ -70,9 +70,9 @@ class TestAssessmentsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_update_assessment_by_uuid(self):
-        """Test case for update_assessment_by_uuid
+        """Test case for update_assessment_by_uuid.
 
-        Update an existing assessment
+        Update an existing assessment.
         """
         body = Assessment()
         response = self.client.open(

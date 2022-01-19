@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Authentication Controller Logic"""
+"""Authentication Controller Logic."""
 
 # Standard Python Libraries
 import logging
