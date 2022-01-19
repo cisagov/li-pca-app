@@ -1,0 +1,1202 @@
+openapi: 3.0.0
+info:
+  title: Li-PCA API
+  description: |
+    Li-PCA Apllication API Endpoints
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://virtserver.swaggerhub.com/Nick-Viola-Dev/Li-PCA2-APP/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://petstore.swagger.io/v1
+tags:
+- name: auth
+  description: Li-PCA Authentication
+- name: customers
+  description: Li-PCA Customers
+- name: assessments
+  description: Li-PCA Assessments
+- name: campaigns
+  description: Li-PCA Campaigns
+- name: templates
+  description: Li-PCA Templates
+- name: documents
+  description: Li-PCA Reports
+paths:
+  /assessments:
+    get:
+      tags:
+      - assessments
+      summary: Finds Assessments by status
+      description: Multiple status values can be provided with comma separated strings
+      operationId: get_all_assessments
+      parameters:
+      - name: customer_uuid
+        in: query
+        description: Assessment uuid filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assessment'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assessment'
+        "400":
+          description: Invalid status value
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.assessments_controller
+    post:
+      tags:
+      - assessments
+      summary: Add a new assessment to the data store
+      operationId: create_assessment
+      requestBody:
+        $ref: '#/components/requestBodies/Assessment'
+      responses:
+        "405":
+          description: Invalid input
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.assessments_controller
+  /assessments/{uuid}:
+    get:
+      tags:
+      - assessments
+      summary: Find assessment by uuid
+      description: Returns a single assessment
+      operationId: get_assessment_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of assessment to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Assessment not found
+      security:
+      - api_key: []
+      x-openapi-router-controller: api.controllers.assessments_controller
+    put:
+      tags:
+      - assessments
+      summary: Update an existing assessment
+      operationId: update_assessment_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of assessment to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      requestBody:
+        $ref: '#/components/requestBodies/Assessment'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: Assessment not found
+        "405":
+          description: Validation exception
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.assessments_controller
+    delete:
+      tags:
+      - assessments
+      summary: Deletes an assessment
+      operationId: delete_assessment_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: Assessment not found
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.assessments_controller
+  /customers:
+    get:
+      tags:
+      - customers
+      summary: Find all customers
+      description: Multiple status values can be provided with comma separated strings
+      operationId: get_all_customers
+      parameters:
+      - name: name
+        in: query
+        description: Customer name filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        "400":
+          description: Invalid name value
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.customers_controller
+    post:
+      tags:
+      - customers
+      summary: Add a new customer to the data store
+      operationId: create_customer
+      requestBody:
+        $ref: '#/components/requestBodies/Customer'
+      responses:
+        "405":
+          description: Invalid input
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.customers_controller
+  /customers/{uuid}:
+    get:
+      tags:
+      - customers
+      summary: Find customer by uuid
+      description: Returns a single customer
+      operationId: get_customer_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of customer to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Customer not found
+      security:
+      - api_key: []
+      x-openapi-router-controller: api.controllers.customers_controller
+    put:
+      tags:
+      - customers
+      summary: Update an existing customer
+      operationId: update_customer_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of customer to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      requestBody:
+        $ref: '#/components/requestBodies/Customer'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: Customer not found
+        "405":
+          description: Validation exception
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.customers_controller
+    delete:
+      tags:
+      - customers
+      summary: Deletes a customer
+      operationId: delete_customer_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: Customer not found
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.customers_controller
+  /templates:
+    get:
+      tags:
+      - templates
+      summary: Find all templates
+      description: |
+        Multiple status values can be provided with comma separated strings
+      operationId: get_all_templates
+      parameters:
+      - name: name
+        in: query
+        description: template name filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Template'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Template'
+        "400":
+          description: Invalid name value
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.templates_controller
+    post:
+      tags:
+      - templates
+      summary: Add a new template to the data store
+      operationId: create_template
+      requestBody:
+        $ref: '#/components/requestBodies/Template'
+      responses:
+        "405":
+          description: Invalid input
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.templates_controller
+  /templates/{uuid}:
+    get:
+      tags:
+      - templates
+      summary: Find template by uuid
+      description: Returns a single template
+      operationId: get_template_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of template to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Template'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Template'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: template not found
+      security:
+      - api_key: []
+      x-openapi-router-controller: api.controllers.templates_controller
+    put:
+      tags:
+      - templates
+      summary: Update an existing template
+      operationId: update_template_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of template to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      requestBody:
+        $ref: '#/components/requestBodies/Template'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: template not found
+        "405":
+          description: Validation exception
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.templates_controller
+    delete:
+      tags:
+      - templates
+      summary: Deletes a template
+      operationId: delete_template_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: template not found
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.templates_controller
+  /campaigns:
+    get:
+      tags:
+      - campaigns
+      summary: Find all campaigns
+      description: |
+        Multiple status values can be provided with comma separated strings
+      operationId: get_all_campaigns
+      parameters:
+      - name: name
+        in: query
+        description: campaign name filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Campaign'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Campaign'
+        "400":
+          description: Invalid name value
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.campaigns_controller
+    post:
+      tags:
+      - campaigns
+      summary: Add a new campaign to the data store
+      operationId: create_campaign
+      requestBody:
+        $ref: '#/components/requestBodies/Campaign'
+      responses:
+        "405":
+          description: Invalid input
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.campaigns_controller
+  /campaigns/{uuid}:
+    get:
+      tags:
+      - campaigns
+      summary: Find campaign by uuid
+      description: Returns a single campaign
+      operationId: get_campaign_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of campaign to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: campaign not found
+      security:
+      - api_key: []
+      x-openapi-router-controller: api.controllers.campaigns_controller
+    put:
+      tags:
+      - campaigns
+      summary: Update an existing campaign
+      operationId: update_campaign_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of campaign to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      requestBody:
+        $ref: '#/components/requestBodies/Campaign'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: campaign not found
+        "405":
+          description: Validation exception
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.campaigns_controller
+    delete:
+      tags:
+      - campaigns
+      summary: Deletes a campaign
+      operationId: delete_campaign_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: campaign not found
+      security:
+      - lipca_auth:
+        - write:campaigns
+        - read:campaigns
+      x-openapi-router-controller: api.controllers.campaigns_controller
+  /documents:
+    get:
+      tags:
+      - documents
+      summary: Find all campaigns
+      description: Get All Documents
+      operationId: get_all_documents
+      parameters:
+      - name: name
+        in: query
+        description: document name filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+        "400":
+          description: Invalid name value
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.documents_controller
+    post:
+      tags:
+      - documents
+      summary: Add a new document to the data store
+      operationId: create_document
+      requestBody:
+        $ref: '#/components/requestBodies/Document'
+      responses:
+        "405":
+          description: Invalid input
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.documents_controller
+  /documents/{uuid}:
+    get:
+      tags:
+      - documents
+      summary: Get document by uuid
+      description: Returns a single document
+      operationId: get_document_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of document to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Document'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: document not found
+      security:
+      - api_key: []
+      x-openapi-router-controller: api.controllers.documents_controller
+    put:
+      tags:
+      - documents
+      summary: Update/Replace an existing document
+      operationId: update_document_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of document to update/replace
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      requestBody:
+        $ref: '#/components/requestBodies/Document'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: document not found
+        "405":
+          description: Validation exception
+      security:
+      - lipca_auth:
+        - write:lipca
+        - read:lipca
+      x-openapi-router-controller: api.controllers.documents_controller
+    delete:
+      tags:
+      - documents
+      summary: Deletes a document
+      operationId: delete_document_by_uuid
+      parameters:
+      - name: uuid
+        in: path
+        description: uuid of document to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid4
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: document not found
+      security:
+      - lipca_auth:
+        - write:campaigns
+        - read:campaigns
+      x-openapi-router-controller: api.controllers.documents_controller
+  /user:
+    post:
+      tags:
+      - user
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: create_user
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        default:
+          description: successful operation
+      x-openapi-router-controller: api.controllers.user_controller
+  /user/createWithArray:
+    post:
+      tags:
+      - user
+      summary: Creates list of users with given input array
+      operationId: create_users_with_array_input
+      requestBody:
+        $ref: '#/components/requestBodies/UserArray'
+      responses:
+        default:
+          description: successful operation
+      x-openapi-router-controller: api.controllers.user_controller
+  /user/createWithList:
+    post:
+      tags:
+      - user
+      summary: Creates list of users with given input array
+      operationId: create_users_with_list_input
+      requestBody:
+        $ref: '#/components/requestBodies/UserArray'
+      responses:
+        default:
+          description: successful operation
+      x-openapi-router-controller: api.controllers.user_controller
+  /user/login:
+    get:
+      tags:
+      - user
+      summary: Logs user into the system
+      operationId: login_user
+      parameters:
+      - name: username
+        in: query
+        description: The user name for login
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: password
+        in: query
+        description: The password for login in clear text
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              style: simple
+              explode: false
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              style: simple
+              explode: false
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: string
+        "400":
+          description: Invalid username/password supplied
+      x-openapi-router-controller: api.controllers.user_controller
+  /user/logout:
+    get:
+      tags:
+      - user
+      summary: Logs out current logged in user session
+      operationId: logout_user
+      responses:
+        default:
+          description: successful operation
+      x-openapi-router-controller: api.controllers.user_controller
+  /user/{username}:
+    get:
+      tags:
+      - user
+      summary: Get user by user name
+      operationId: get_user_by_name
+      parameters:
+      - name: username
+        in: path
+        description: The name that needs to be fetched. Use user1 for testing.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+      x-openapi-router-controller: api.controllers.user_controller
+    put:
+      tags:
+      - user
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      operationId: update_user
+      parameters:
+      - name: username
+        in: path
+        description: name that need to be updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "400":
+          description: Invalid user supplied
+        "404":
+          description: User not found
+      x-openapi-router-controller: api.controllers.user_controller
+    delete:
+      tags:
+      - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: delete_user
+      parameters:
+      - name: username
+        in: path
+        description: The name that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+      x-openapi-router-controller: api.controllers.user_controller
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phone:
+          type: string
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+      example:
+        firstName: firstName
+        lastName: lastName
+        password: password
+        userStatus: 6
+        phone: phone
+        id: 0
+        email: email
+        username: username
+      xml:
+        name: User
+    Customer:
+      required:
+      - customer_uuid
+      - name
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid4
+        customer_uuid:
+          type: string
+          format: uuid4
+        name:
+          type: string
+        contact:
+          type: string
+        status:
+          type: string
+      example:
+        contact: contact
+        name: name
+        uuid: uuid
+        status: status
+    Assessment:
+      required:
+      - customer_uuid
+      - name
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid4
+        customer_uuid:
+          type: string
+          format: uuid4
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        uuid: uuid
+      xml:
+        name: Assessment
+    Template:
+      required:
+      - description
+      - doc_uuid
+      - name
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid4
+        name:
+          type: string
+        description:
+          type: string
+        doc_uuid:
+          type: string
+          description: Doc uuid for screenshot
+          format: uuid4
+      example:
+        name: name
+        doc_uuid: doc_uuid
+        description: description
+        uuid: uuid
+      xml:
+        name: Template
+    Campaign:
+      required:
+      - assessment_uuid
+      - description
+      - end_datetime
+      - name
+      - start_datetime
+      - status
+      - template_uuid
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: uuid string value
+          format: uuid4
+          example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed2
+        assessment_uuid:
+          type: string
+          format: uuid4
+          example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
+        name:
+          type: string
+        description:
+          type: string
+        template_uuid:
+          type: string
+          format: uuid4
+          example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
+        target_template_uuid:
+          type: string
+          description: uuid of associated template
+          format: uuid4
+          example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed4
+        email_template_uuid:
+          type: string
+          description: uuid of associated template
+          format: uuid4
+          example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed5
+        status:
+          type: string
+          description: campaign status in the data store
+          enum:
+          - queued
+          - running
+          - completed
+        start_datetime:
+          type: string
+          format: datetime
+        end_datetime:
+          type: string
+          format: datetime
+      example:
+        assessment_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
+        email_template_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed5
+        uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed2
+        target_template_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed4
+        status: queued
+      xml:
+        name: Campaign
+    Document:
+      required:
+      - description
+      - file_name
+      - parent_uuid
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid4
+        description:
+          type: string
+        parent_uuid:
+          type: string
+          description: uuid for parent association
+          format: uuid4
+        file_name:
+          type: string
+          format: binary
+      example:
+        parent_uuid: parent_uuid
+        file_name: ""
+        description: description
+        uuid: uuid
+      xml:
+        name: Document
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+  requestBodies:
+    Customer:
+      description: Customer object to be added to data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Customer'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Customer'
+    Assessment:
+      description: Assessment object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Assessment'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Assessment'
+      required: true
+    Campaign:
+      description: Campaign object to be added to data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Campaign'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Customer'
+    Template:
+      description: Campaign object to be added to data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Template'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Template'
+    Document:
+      description: Document object to be added to data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Document'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Document'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+      required: true
+  securitySchemes:
+    lipca_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://petstore.swagger.io/oauth/dialog
+          scopes:
+            write:lipca: modify li-pca data
+            read:lipca: read li-pca data
+      x-tokenInfoFunc: api.controllers.authorization_controller.check_lipca_auth
+      x-scopeValidateFunc: api.controllers.authorization_controller.validate_scope_lipca_auth
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      x-apikeyInfoFunc: api.controllers.authorization_controller.check_api_key

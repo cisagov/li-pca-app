@@ -19,8 +19,8 @@ from setuptools import find_packages, setup
 
 def readme():
     """Read in and return the contents of the project's README.md file."""
-    with open("README.md", encoding="utf-8") as in_file:
-        return in_file.read()
+    with open("README.md", encoding="utf-8") as f:
+        return f.read()
 
 
 # Below two methods were pulled from:
@@ -28,8 +28,8 @@ def readme():
 def read(rel_path):
     """Open a file for reading from a given relative path."""
     here = abspath(dirname(__file__))
-    with codecs.open(join(here, rel_path), "r") as in_file:
-        return in_file.read()
+    with codecs.open(join(here, rel_path), "r") as fp:
+        return fp.read()
 
 
 def get_version(version_file):
@@ -83,9 +83,9 @@ setup(
     # What does your project relate to?
     keywords="li-pca",
     packages=find_packages(where="src/api"),
-    package_dir={"": "src"},
+    package_dir={"": "./src/api"},
     package_data={"api": ["data/*.txt"]},
-    py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
+    py_modules=[splitext(basename(path))[0] for path in glob(".src/api/*.py")],
     include_package_data=True,
     install_requires=[
         "docopt",

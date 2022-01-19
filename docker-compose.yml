@@ -14,7 +14,7 @@ services:
     links:
       - mongodb
     volumes:
-      - .:/usr/src/api
+      - .src/api:/usr/src/api
     environment:
       - MONGODB_USERNAME=lipca
       - MONGODB_PASSWORD=devpass1
