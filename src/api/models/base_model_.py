@@ -1,3 +1,5 @@
+"""API Models Logic"""
+
 # Standard Python Libraries
 import pprint
 import typing
@@ -8,20 +10,28 @@ import six
 # cisagov Libraries
 from api import util
 
-T = typing.TypeVar("T")
+CustomType = typing.TypeVar("CustomType")
 
 
-class Model(object):
+class Model:
+    """Mode Class"""
+
     # swaggerTypes: The key is attribute name and the
     # value is attribute type.
-    swagger_types = {}
+    example = {"key": "val"}
+
+    swagger_types = {
+        example,
+    }
 
     # attributeMap: The key is attribute name and the
     # value is json key in definition.
-    attribute_map = {}
+    attribute_map = {
+        example,
+    }
 
     @classmethod
-    def from_dict(cls: typing.Type[T], dikt) -> T:
+    def from_dict(cls: typing.Type[CustomType], dikt) -> CustomType:
         """Returns the dict as a model"""
         return util.deserialize_model(dikt, cls)
 

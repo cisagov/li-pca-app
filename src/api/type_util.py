@@ -1,4 +1,6 @@
 # coding: utf-8
+"""Type Util Locic.
+"""
 
 # Standard Python Libraries
 import sys
@@ -9,15 +11,18 @@ if sys.version_info < (3, 7):
 
     def is_generic(klass):
         """Determine whether klass is a generic class"""
-        return type(klass) == typing.GenericMeta
+        return isinstance(klass, typing.GenericMeta)
+        # return type(klass) == typing.GenericMeta
 
     def is_dict(klass):
         """Determine whether klass is a Dict"""
-        return klass.__extra__ == dict
+        return isinstance(klass.__extra__, dict)
+        # return klass.__extra__ == dict
 
     def is_list(klass):
         """Determine whether klass is a List"""
-        return klass.__extra__ == list
+        return isinstance(klass.__extra__, list)
+        # return klass.__extra__ == list
 
 
 else:

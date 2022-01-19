@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+"""Customers Controller Logic"""
+
+# Standard Python Libraries
+import logging
+
 # Third-Party Libraries
 import connexion
-import six
 
 # cisagov Libraries
-from api import util
+# from api import util
 from api.models.customer import Customer  # noqa: E501
 
 
@@ -19,6 +24,7 @@ def create_customer(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Customer.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"
 
 
@@ -32,6 +38,8 @@ def delete_customer_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
+
+    logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
@@ -45,6 +53,7 @@ def get_all_customers(name=None):  # noqa: E501
 
     :rtype: List[Customer]
     """
+    logging.debug("name: %s", name)
     return "do some magic!"
 
 
@@ -58,6 +67,7 @@ def get_customer_by_uuid(uuid):  # noqa: E501
 
     :rtype: Customer
     """
+    logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
@@ -75,4 +85,5 @@ def update_customer_by_uuid(uuid, body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Customer.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"

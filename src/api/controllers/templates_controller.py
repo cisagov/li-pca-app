@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+"""Templatess Controller Logic"""
+
+# Standard Python Libraries
+import logging
+
 # Third-Party Libraries
 import connexion
-import six
 
 # cisagov Libraries
-from api import util
+# from api import util
 from api.models.template import Template  # noqa: E501
 
 
@@ -19,6 +24,7 @@ def create_template(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Template.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"
 
 
@@ -32,6 +38,7 @@ def delete_template_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
@@ -75,4 +82,5 @@ def update_template_by_uuid(uuid, body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Template.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"

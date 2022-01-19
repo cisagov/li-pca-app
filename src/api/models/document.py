@@ -1,14 +1,14 @@
 # coding: utf-8
+"""Customer Model"""
 
 from __future__ import absolute_import
-
-# Standard Python Libraries
-from datetime import date, datetime  # noqa: F401
-from typing import Dict, List  # noqa: F401
 
 # cisagov Libraries
 from api import util
 from api.models.base_model_ import Model
+
+# from datetime import date, datetime  # noqa: F401
+# from typing import Dict, List  # noqa: F401
 
 
 class Document(Model):
@@ -26,15 +26,15 @@ class Document(Model):
     ):  # noqa: E501
         """Document - a model defined in Swagger
 
-        :param uuid: The uuid of this Document.  # noqa: E501
-        :type uuid: str
-        :param description: The description of this Document.  # noqa: E501
-        :type description: str
-        :param parent_uuid: The parent_uuid of this Document.  # noqa: E501
-        :type parent_uuid: str
-        :param file_name: The file_name of this Document.  # noqa: E501
-        :type file_name: str
-        """
+                :param uuid: The uuid of this Document.  # noqa: E501
+                :type uuid: str
+                :param description: The description of this Document.  # noqa: E501
+                :type descriptuuuuion: str
+                :param parent_uuid: The parent_uuid of this Document.  # noqa: E501
+                :type parent_uuid: str
+                :param file_name: The file_name of this Document.  # noqa: E501
+                :type file_name: str
+        s"""
         self.swagger_types = {
             "uuid": str,
             "description": str,

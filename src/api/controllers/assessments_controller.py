@@ -1,9 +1,13 @@
+#!/usr/bin/env python
+"""Assessments Controller Logic"""
+
+# Standard Python Libraries
+import logging
+
 # Third-Party Libraries
 import connexion
-import six
 
 # cisagov Libraries
-from api import util
 from api.models.assessment import Assessment  # noqa: E501
 
 
@@ -19,6 +23,7 @@ def create_assessment(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Assessment.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"
 
 
@@ -32,6 +37,7 @@ def delete_assessment_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
@@ -45,6 +51,7 @@ def get_all_assessments(customer_uuid=None):  # noqa: E501
 
     :rtype: List[Assessment]
     """
+    logging.debug("Customer_uuid: %s", customer_uuid)
     return "do some magic!"
 
 
@@ -58,6 +65,7 @@ def get_assessment_by_uuid(uuid):  # noqa: E501
 
     :rtype: Assessment
     """
+    logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
@@ -73,6 +81,8 @@ def update_assessment_by_uuid(body, uuid):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("Uuid: %s", uuid)
     if connexion.request.is_json:
         body = Assessment.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"

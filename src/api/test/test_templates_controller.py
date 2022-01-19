@@ -1,14 +1,20 @@
 # coding: utf-8
+"""Templates Controller Test Logic"""
 
 from __future__ import absolute_import
 
 # Third-Party Libraries
 from flask import json
-from six import BytesIO
 
 # cisagov Libraries
 from api.models.template import Template  # noqa: E501
 from api.test import BaseTestCase
+
+# from six import BytesIO
+
+
+EXAMPLE_UUID = "uuid_example"
+UUID_URL = f"/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/templates/{EXAMPLE_UUID}"
 
 
 class TestTemplatesController(BaseTestCase):
@@ -34,9 +40,7 @@ class TestTemplatesController(BaseTestCase):
         Deletes a template
         """
         response = self.client.open(
-            "/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/templates/{uuid}".format(
-                uuid="uuid_example"
-            ),
+            UUID_URL,
             method="DELETE",
         )
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
@@ -60,9 +64,7 @@ class TestTemplatesController(BaseTestCase):
         Find template by uuid
         """
         response = self.client.open(
-            "/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/templates/{uuid}".format(
-                uuid="uuid_example"
-            ),
+            UUID_URL,
             method="GET",
         )
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
@@ -74,9 +76,7 @@ class TestTemplatesController(BaseTestCase):
         """
         body = Template()
         response = self.client.open(
-            "/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/templates/{uuid}".format(
-                uuid="uuid_example"
-            ),
+            UUID_URL,
             method="PUT",
             data=json.dumps(body),
             content_type="application/json",

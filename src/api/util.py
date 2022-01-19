@@ -1,12 +1,17 @@
+"""Utility Module Logic"""
+
 # Standard Python Libraries
 import datetime
-import typing
 
 # Third-Party Libraries
+from dateutil.parser import parse
 import six
 
 # cisagov Libraries
 from api import type_util
+
+# import logging
+# import typing
 
 
 def _deserialize(data, klass):
@@ -21,20 +26,21 @@ def _deserialize(data, klass):
         return None
 
     if klass in six.integer_types or klass in (float, str, bool, bytearray):
-        return _deserialize_primitive(data, klass)
+        result = _deserialize_primitive(data, klass)
     elif klass == object:
-        return _deserialize_object(data)
+        result = _deserialize_object(data)
     elif klass == datetime.date:
-        return deserialize_date(data)
+        result = deserialize_date(data)
     elif klass == datetime.datetime:
-        return deserialize_datetime(data)
+        result = deserialize_datetime(data)
     elif type_util.is_generic(klass):
         if type_util.is_list(klass):
-            return _deserialize_list(data, klass.__args__[0])
+            result = _deserialize_list(data, klass.__args__[0])
         if type_util.is_dict(klass):
-            return _deserialize_dict(data, klass.__args__[1])
+            result = _deserialize_dict(data, klass.__args__[1])
     else:
-        return deserialize_model(data, klass)
+        result = deserialize_model(data, klass)
+    return result
 
 
 def _deserialize_primitive(data, klass):
@@ -72,9 +78,6 @@ def deserialize_date(string):
     :rtype: date
     """
     try:
-        # Third-Party Libraries
-        from dateutil.parser import parse
-
         return parse(string).date()
     except ImportError:
         return string
@@ -92,8 +95,6 @@ def deserialize_datetime(string):
     """
     try:
         # Third-Party Libraries
-        from dateutil.parser import parse
-
         return parse(string)
     except ImportError:
         return string

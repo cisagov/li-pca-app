@@ -19,8 +19,8 @@ from setuptools import find_packages, setup
 
 def readme():
     """Read in and return the contents of the project's README.md file."""
-    with open("README.md", encoding="utf-8") as f:
-        return f.read()
+    with open("README.md", encoding="utf-8") as in_file:
+        return in_file.read()
 
 
 # Below two methods were pulled from:
@@ -28,8 +28,8 @@ def readme():
 def read(rel_path):
     """Open a file for reading from a given relative path."""
     here = abspath(dirname(__file__))
-    with codecs.open(join(here, rel_path), "r") as fp:
-        return fp.read()
+    with codecs.open(join(here, rel_path), "r") as in_file:
+        return in_file.read()
 
 
 def get_version(version_file):
@@ -93,6 +93,7 @@ setup(
         "setuptools >= 24.2.0",
         "connexion == 2.6.0",
         "python_dateutil == 2.6.0",
+        "six",
     ],
     extras_require={
         "test": [

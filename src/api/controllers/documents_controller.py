@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+"""Documents Controller Logic"""
+
+# Standard Python Libraries
+import logging
+
 # Third-Party Libraries
 import connexion
-import six
 
 # cisagov Libraries
-from api import util
+# from api import util
 from api.models.document import Document  # noqa: E501
 
 
@@ -19,6 +24,7 @@ def create_document(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Document.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"
 
 
@@ -32,6 +38,7 @@ def delete_document_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
@@ -45,6 +52,7 @@ def get_all_documents(name=None):  # noqa: E501
 
     :rtype: List[Document]
     """
+    logging.debug("name: %s", name)
     return "do some magic!"
 
 
@@ -58,6 +66,7 @@ def get_document_by_uuid(uuid):  # noqa: E501
 
     :rtype: Document
     """
+    logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
@@ -75,4 +84,5 @@ def update_document_by_uuid(uuid, body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Document.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"

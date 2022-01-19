@@ -46,7 +46,7 @@ VOLUME $CISA_HOME
 WORKDIR $API_SRC
 COPY . $CISA_HOME
 
-RUN pwd
+RUN ls -la /usr/src/api
 RUN pip install --no-cache-dir ${API_SRC}
 RUN chmod +x ${API_SRC}/var/getenv
 RUN ln -snf ${API_SRC}/var/getenv /usr/local/bin

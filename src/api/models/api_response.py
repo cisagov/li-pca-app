@@ -1,14 +1,14 @@
 # coding: utf-8
+"""Assessment Model"""
 
 from __future__ import absolute_import
-
-# Standard Python Libraries
-from datetime import date, datetime  # noqa: F401
-from typing import Dict, List  # noqa: F401
 
 # cisagov Libraries
 from api import util
 from api.models.base_model_ import Model
+
+# from datetime import date, datetime  # noqa: F401
+# from typing import Dict, List  # noqa: F401
 
 
 class ApiResponse(Model):
@@ -86,6 +86,7 @@ class ApiResponse(Model):
         :param type: The type of this ApiResponse.
         :type type: str
         """
+        # noqa: E501
 
         self._type = type
 

@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+"""Users Controller Logic"""
+
+# Standard Python Libraries
+import logging
+
 # Third-Party Libraries
 import connexion
-import six
 
 # cisagov Libraries
-from api import util
+# from api import util
 from api.models.user import User  # noqa: E501
 
 
@@ -19,6 +24,7 @@ def create_user(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"
 
 
@@ -34,6 +40,7 @@ def create_users_with_array_input(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = [User.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"
 
 
@@ -49,6 +56,7 @@ def create_users_with_list_input(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = [User.from_dict(d) for d in connexion.request.get_json()]  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"
 
 
@@ -62,6 +70,7 @@ def delete_user(username):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("username: %s", username)
     return "do some magic!"
 
 
@@ -75,6 +84,7 @@ def get_user_by_name(username):  # noqa: E501
 
     :rtype: User
     """
+    logging.debug("username: %s", username)
     return "do some magic!"
 
 
@@ -90,6 +100,11 @@ def login_user(username, password):  # noqa: E501
 
     :rtype: str
     """
+    # TODO: replace or remove this
+    hashed_password = password
+    logging.debug("hased pword: %s", hashed_password)
+
+    logging.debug("username: %s", username)
     return "do some magic!"
 
 
@@ -118,4 +133,5 @@ def update_user(body, username):  # noqa: E501
     """
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
+        logging.debug("Body: %s", body)
     return "do some magic!"
