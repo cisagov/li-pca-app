@@ -23,3 +23,7 @@ node_modules
 .geoipupdate.lock
 config.ini
 Dockerfile-x
+*.swp
+
+*.DS_Store
+DS_Store
