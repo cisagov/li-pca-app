@@ -1,14 +1,14 @@
-# Li-PCA-APP
+# Li-PCA-APP #
 
-## Overview
+## Overview ##
 
 Li-PCA-APP Project
 
-## Requirements
+## Requirements ##
 
 Python 3.5.2+
 
-## Usage
+## Usage ##
 
 To run the server, please execute the following from the root directory:
 
@@ -36,9 +36,10 @@ sudo pip install tox
 tox
 ```
 
-## Running with Docker
+## Running with Docker ##
 
-To run the server on a Docker container, please execute the following from the root directory:
+To run the server on a Docker container,
+please execute the following from the root directory:
 
 ```bash
 # building the image
