@@ -56,7 +56,7 @@ class User(Model):
             "password": str,
             "phone": str,
             "user_status": int,
-        }
+        }  # type: ignore
 
         self.attribute_map = {
             "id": "id",

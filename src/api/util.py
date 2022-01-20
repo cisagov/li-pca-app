@@ -4,8 +4,8 @@
 import datetime
 
 # Third-Party Libraries
-from dateutil.parser import parse
-import six
+from dateutil.parser import parse  # type: ignore
+import six  # type: ignore
 
 # cisagov Libraries
 from api import type_util

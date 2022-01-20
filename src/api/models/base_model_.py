@@ -5,7 +5,7 @@ import pprint
 import typing
 
 # Third-Party Libraries
-import six
+import six  # type: ignore
 
 # cisagov Libraries
 from api import util

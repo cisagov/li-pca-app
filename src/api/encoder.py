@@ -1,8 +1,8 @@
 """Encoding Utility Logic."""
 
 # Third-Party Libraries
-from connexion.apps.flask_app import FlaskJSONEncoder
-import six
+from connexion.apps.flask_app import FlaskJSONEncoder  # type: ignore
+import six  # type: ignore
 
 # cisagov Libraries
 from api.models.base_model_ import Model
