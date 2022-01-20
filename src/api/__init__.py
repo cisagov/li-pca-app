@@ -17,11 +17,11 @@ from api.controllers import (
 from ._version import __version__  # noqa: F401
 
 __all__ = [
-    assessments_controller,
-    authorization_controller,
-    campaigns_controller,
-    customers_controller,
-    documents_controller,
-    templates_controller,
-    user_controller,
+    "assessments_controller",
+    "authorization_controller",
+    "campaigns_controller",
+    "customers_controller",
+    "documents_controller",
+    "templates_controller",
+    "user_controller",
 ]
