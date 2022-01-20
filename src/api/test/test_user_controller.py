@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Users Controller Test Logic"""
+"""Users Controller Test Logic."""
 
 from __future__ import absolute_import
 
@@ -18,12 +18,12 @@ UUID_URL = f"/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/users/{EXAMPLE_UUID}"
 
 
 class TestUserController(BaseTestCase):
-    """UserController integration test stubs"""
+    """UserController integration test stubs."""
 
     def test_create_user(self):
-        """Test case for create_user
+        """Test case for create_user.
 
-        Create user
+        Create user.
         """
         body = User()
         response = self.client.open(
@@ -35,7 +35,7 @@ class TestUserController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_create_users_with_array_input(self):
-        """Test case for create_users_with_array_input
+        """Test case for create_users_with_array_input.
 
         Creates list of users with given input array
         """
@@ -49,9 +49,9 @@ class TestUserController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_create_users_with_list_input(self):
-        """Test case for create_users_with_list_input
+        """Test case for create_users_with_list_input.
 
-        Creates list of users with given input array
+        Creates list of users with given input array.
         """
         body = [User()]
         response = self.client.open(
@@ -63,9 +63,9 @@ class TestUserController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_delete_user(self):
-        """Test case for delete_user
+        """Test case for delete_user.
 
-        Delete user
+        Delete user.
         """
         response = self.client.open(
             UUID_URL,
@@ -74,9 +74,9 @@ class TestUserController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_user_by_name(self):
-        """Test case for get_user_by_name
+        """Test case for get_user_by_name.
 
-        Get user by user name
+        Get user by user name.
         """
         response = self.client.open(
             UUID_URL,
@@ -85,9 +85,9 @@ class TestUserController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_login_user(self):
-        """Test case for login_user
+        """Test case for login_user.
 
-        Logs user into the system
+        Log user into the system.
         """
         query_string = [
             ("username", "username_example"),
@@ -101,9 +101,9 @@ class TestUserController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_logout_user(self):
-        """Test case for logout_user
+        """Test case for logout_user.
 
-        Logs out current logged in user session
+        Log out current logged in user session.
         """
         response = self.client.open(
             "/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/user/logout", method="GET"
@@ -111,9 +111,9 @@ class TestUserController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_update_user(self):
-        """Test case for update_user
+        """Test case for update_user.
 
-        Updated user
+        Update user.
         """
         body = User()
         response = self.client.open(

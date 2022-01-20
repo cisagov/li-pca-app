@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Documents Controller Test Logic"""
+"""Documents Controller Test Logic."""
 
 from __future__ import absolute_import
 
@@ -18,12 +18,12 @@ UUID_URL = f"/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/documents/{EXAMPLE_UUID}"
 
 
 class TestDocumentsController(BaseTestCase):
-    """DocumentsController integration test stubs"""
+    """DocumentsController integration test stubs."""
 
     def test_create_document(self):
-        """Test case for create_document
+        """Test case for create_document.
 
-        Add a new document to the data store
+        Add a new document to the data store.
         """
         body = Document()
         response = self.client.open(
@@ -35,9 +35,9 @@ class TestDocumentsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_delete_document_by_uuid(self):
-        """Test case for delete_document_by_uuid
+        """Test case for delete_document_by_uuid.
 
-        Deletes a document
+        Delete a document.
         """
         response = self.client.open(
             UUID_URL,
@@ -46,9 +46,9 @@ class TestDocumentsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_all_documents(self):
-        """Test case for get_all_documents
+        """Test case for get_all_documents.
 
-        Find all campaigns
+        Find all campaigns.
         """
         query_string = [("name", "name_example")]
         response = self.client.open(
@@ -59,9 +59,9 @@ class TestDocumentsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_document_by_uuid(self):
-        """Test case for get_document_by_uuid
+        """Test case for get_document_by_uuid.
 
-        Get document by uuid
+        Get document by uuid.
         """
         response = self.client.open(
             UUID_URL,
@@ -70,9 +70,9 @@ class TestDocumentsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_update_document_by_uuid(self):
-        """Test case for update_document_by_uuid
+        """Test case for update_document_by_uuid.
 
-        Update/Replace an existing document
+        Update/Replace an existing document.
         """
         body = Document()
         response = self.client.open(

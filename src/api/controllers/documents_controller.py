@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Documents Controller Logic"""
+"""Documents Controller Logic."""
 
 # Standard Python Libraries
 import logging
@@ -13,7 +13,7 @@ from api.models.document import Document  # noqa: E501
 
 
 def create_document(body=None):  # noqa: E501
-    """Add a new document to the data store
+    """Add a new document to the data store.
 
      # noqa: E501
 
@@ -29,7 +29,7 @@ def create_document(body=None):  # noqa: E501
 
 
 def delete_document_by_uuid(uuid):  # noqa: E501
-    """Deletes a document
+    """Delete a document.
 
      # noqa: E501
 
@@ -43,7 +43,7 @@ def delete_document_by_uuid(uuid):  # noqa: E501
 
 
 def get_all_documents(name=None):  # noqa: E501
-    """Find all campaigns
+    """Find all campaigns.
 
     Get All Documents # noqa: E501
 
@@ -57,7 +57,7 @@ def get_all_documents(name=None):  # noqa: E501
 
 
 def get_document_by_uuid(uuid):  # noqa: E501
-    """Get document by uuid
+    """Get document by uuid.
 
     Returns a single document # noqa: E501
 
@@ -71,7 +71,7 @@ def get_document_by_uuid(uuid):  # noqa: E501
 
 
 def update_document_by_uuid(uuid, body=None):  # noqa: E501
-    """Update/Replace an existing document
+    """Update an existing document.
 
      # noqa: E501
 
@@ -82,6 +82,7 @@ def update_document_by_uuid(uuid, body=None):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("Uuid: %s", uuid)
     if connexion.request.is_json:
         body = Document.from_dict(connexion.request.get_json())  # noqa: E501
         logging.debug("Body: %s", body)

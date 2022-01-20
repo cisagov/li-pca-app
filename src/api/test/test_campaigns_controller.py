@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Campaigns Controller Test Logic"""
+"""Campaigns Controller Test Logic."""
 
 from __future__ import absolute_import
 
@@ -19,12 +19,12 @@ UUID_URL = f"/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/campaigns/{EXAMPLE_UUID}"
 
 
 class TestCampaignsController(BaseTestCase):
-    """CampaignsController integration test stubs"""
+    """CampaignsController integration test stubs."""
 
     def test_create_campaign(self):
-        """Test case for create_campaign
+        """Test case for create_campaign.
 
-        Add a new campaign to the data store
+        Add a new campaign to the data store.
         """
         body = Customer()
         response = self.client.open(
@@ -36,9 +36,9 @@ class TestCampaignsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_delete_campaign_by_uuid(self):
-        """Test case for delete_campaign_by_uuid
+        """Test case for delete_campaign_by_uuid.
 
-        Deletes a campaign
+        Delete a campaign.
         """
         response = self.client.open(
             UUID_URL,
@@ -47,9 +47,9 @@ class TestCampaignsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_all_campaigns(self):
-        """Test case for get_all_campaigns
+        """Test case for get_all_campaigns.
 
-        Find all campaigns
+        Find all campaigns.
         """
         query_string = [("name", "name_example")]
         response = self.client.open(
@@ -60,9 +60,9 @@ class TestCampaignsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_campaign_by_uuid(self):
-        """Test case for get_campaign_by_uuid
+        """Test case for get_campaign_by_uuid.
 
-        Find campaign by uuid
+        Find campaign by uuid.
         """
         response = self.client.open(
             UUID_URL,
@@ -71,9 +71,9 @@ class TestCampaignsController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_update_campaign_by_uuid(self):
-        """Test case for update_campaign_by_uuid
+        """Test case for update_campaign_by_uuid.
 
-        Update an existing campaign
+        Update an existing campaign.
         """
         body = Customer()
         response = self.client.open(

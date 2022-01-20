@@ -1,40 +1,45 @@
-# Li-PCA-APP
+# Li-PCA-APP #
 
-## Overview
+## Overview ##
+
 Li-PCA-APP Project
 
-## Requirements
+## Requirements ##
+
 Python 3.5.2+
 
-## Usage
+## Usage ##
+
 To run the server, please execute the following from the root directory:
 
-```
+```python
 pip3 install -r requirements.txt
 python3 -m api
 ```
 
 and open your browser to here:
 
-```
+```python
 http://localhost:8080/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/ui/
 ```
 
 Your Swagger definition lives here:
 
-```
+```python
 http://localhost:8080/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/swagger.json
 ```
 
 To launch the integration tests, use tox:
-```
+
+```python
 sudo pip install tox
 tox
 ```
 
-## Running with Docker
+## Running with Docker ##
 
-To run the server on a Docker container, please execute the following from the root directory:
+To run the server on a Docker container,
+please execute the following from the root directory:
 
 ```bash
 # building the image

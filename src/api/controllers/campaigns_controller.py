@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Campaign Controller Logic"""
+"""Campaign Controller Logic."""
 
 # Standard Python Libraries
 import logging
@@ -14,7 +14,7 @@ from api.models.customer import Customer  # noqa: E501
 
 
 def create_campaign(body=None):  # noqa: E501
-    """Add a new campaign to the data store
+    """Add a new campaign to the data store.
 
      # noqa: E501
 
@@ -36,7 +36,7 @@ def create_campaign(body=None):  # noqa: E501
 
 
 def delete_campaign_by_uuid(uuid):  # noqa: E501
-    """Deletes a campaign
+    """Delete a campaign.
 
      # noqa: E501
 
@@ -45,11 +45,12 @@ def delete_campaign_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
 def get_all_campaigns(name=None):  # noqa: E501
-    """Find all campaigns
+    """Find all campaigns.
 
     Multiple status values can be provided with comma separated strings  # noqa: E501
 
@@ -58,11 +59,12 @@ def get_all_campaigns(name=None):  # noqa: E501
 
     :rtype: List[Campaign]
     """
+    logging.debug("Name: %s", name)
     return "do some magic!"
 
 
 def get_campaign_by_uuid(uuid):  # noqa: E501
-    """Find campaign by uuid
+    """Find campaign by uuid.
 
     Returns a single campaign # noqa: E501
 
@@ -71,11 +73,12 @@ def get_campaign_by_uuid(uuid):  # noqa: E501
 
     :rtype: Campaign
     """
+    logging.debug("Uuid: %s", uuid)
     return "do some magic!"
 
 
 def update_campaign_by_uuid(uuid, body=None):  # noqa: E501
-    """Update an existing campaign
+    """Update an existing campaign.
 
      # noqa: E501
 
@@ -86,6 +89,7 @@ def update_campaign_by_uuid(uuid, body=None):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("Uuid: %s", uuid)
     if connexion.request.is_json:
         body = Campaign.from_dict(connexion.request.get_json())  # noqa: E501
         logging.debug("Body: %s", body)

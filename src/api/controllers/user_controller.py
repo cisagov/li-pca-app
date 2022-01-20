@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Users Controller Logic"""
+"""Users Controller Logic."""
 
 # Standard Python Libraries
 import logging
@@ -13,7 +13,7 @@ from api.models.user import User  # noqa: E501
 
 
 def create_user(body):  # noqa: E501
-    """Create user
+    """Create user.
 
     This can only be done by the logged in user. # noqa: E501
 
@@ -29,7 +29,7 @@ def create_user(body):  # noqa: E501
 
 
 def create_users_with_array_input(body):  # noqa: E501
-    """Creates list of users with given input array
+    """Create list of users with given input array.
 
      # noqa: E501
 
@@ -45,7 +45,7 @@ def create_users_with_array_input(body):  # noqa: E501
 
 
 def create_users_with_list_input(body):  # noqa: E501
-    """Creates list of users with given input array
+    """Create list of users with given input array.
 
      # noqa: E501
 
@@ -61,7 +61,7 @@ def create_users_with_list_input(body):  # noqa: E501
 
 
 def delete_user(username):  # noqa: E501
-    """Delete user
+    """Delete user.
 
     This can only be done by the logged in user. # noqa: E501
 
@@ -75,7 +75,7 @@ def delete_user(username):  # noqa: E501
 
 
 def get_user_by_name(username):  # noqa: E501
-    """Get user by user name
+    """Get user by user name.
 
      # noqa: E501
 
@@ -89,7 +89,7 @@ def get_user_by_name(username):  # noqa: E501
 
 
 def login_user(username, password):  # noqa: E501
-    """Logs user into the system
+    """Log user into the system.
 
      # noqa: E501
 
@@ -109,7 +109,7 @@ def login_user(username, password):  # noqa: E501
 
 
 def logout_user():  # noqa: E501
-    """Logs out current logged in user session
+    """Log out current logged in user session.
 
      # noqa: E501
 
@@ -120,7 +120,7 @@ def logout_user():  # noqa: E501
 
 
 def update_user(body, username):  # noqa: E501
-    """Updated user
+    """Update user.
 
     This can only be done by the logged in user. # noqa: E501
 
@@ -131,6 +131,7 @@ def update_user(body, username):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("Username: %s", username)
     if connexion.request.is_json:
         body = User.from_dict(connexion.request.get_json())  # noqa: E501
         logging.debug("Body: %s", body)

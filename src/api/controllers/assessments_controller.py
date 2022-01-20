@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Assessments Controller Logic"""
+"""Assessments Controller Logic."""
 
 # Standard Python Libraries
 import logging
@@ -12,14 +12,14 @@ from api.models.assessment import Assessment  # noqa: E501
 
 
 def create_assessment(body):  # noqa: E501
-    """Add a new assessment to the data store
+    """Add a new assessment to the data store.
 
      # noqa: E501
 
     :param body: Assessment object that needs to be added to the store
     :type body: dict | bytes
 
-    :rtype: None
+    :rtype: None.
     """
     if connexion.request.is_json:
         body = Assessment.from_dict(connexion.request.get_json())  # noqa: E501
@@ -28,7 +28,7 @@ def create_assessment(body):  # noqa: E501
 
 
 def delete_assessment_by_uuid(uuid):  # noqa: E501
-    """Deletes an assessment
+    """Delete an assessment.
 
      # noqa: E501
 
@@ -42,7 +42,7 @@ def delete_assessment_by_uuid(uuid):  # noqa: E501
 
 
 def get_all_assessments(customer_uuid=None):  # noqa: E501
-    """Finds Assessments by status
+    """Find Assessments by status.
 
     Multiple status values can be provided with comma separated strings # noqa: E501
 
@@ -56,7 +56,7 @@ def get_all_assessments(customer_uuid=None):  # noqa: E501
 
 
 def get_assessment_by_uuid(uuid):  # noqa: E501
-    """Find assessment by uuid
+    """Find assessment by uuid.
 
     Returns a single assessment # noqa: E501
 
@@ -70,7 +70,7 @@ def get_assessment_by_uuid(uuid):  # noqa: E501
 
 
 def update_assessment_by_uuid(body, uuid):  # noqa: E501
-    """Update an existing assessment
+    """Update an existing assessment.
 
      # noqa: E501
 

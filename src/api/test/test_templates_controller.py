@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Templates Controller Test Logic"""
+"""Templates Controller Test Logic."""
 
 from __future__ import absolute_import
 
@@ -18,10 +18,10 @@ UUID_URL = f"/Nick-Viola-Dev/Li-PCA2-APP/1.0.0/templates/{EXAMPLE_UUID}"
 
 
 class TestTemplatesController(BaseTestCase):
-    """TemplatesController integration test stubs"""
+    """TemplatesController integration test stubs."""
 
     def test_create_template(self):
-        """Test case for create_template
+        """Test case for create_template.
 
         Add a new template to the data store
         """
@@ -35,9 +35,9 @@ class TestTemplatesController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_delete_template_by_uuid(self):
-        """Test case for delete_template_by_uuid
+        """Test case for delete_template_by_uuid.
 
-        Deletes a template
+        Deletes a template.
         """
         response = self.client.open(
             UUID_URL,
@@ -46,9 +46,9 @@ class TestTemplatesController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_all_templates(self):
-        """Test case for get_all_templates
+        """Test case for get_all_templates.
 
-        Find all templates
+        Find all templates.
         """
         query_string = [("name", "name_example")]
         response = self.client.open(
@@ -59,7 +59,7 @@ class TestTemplatesController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_get_template_by_uuid(self):
-        """Test case for get_template_by_uuid
+        """Test case for get_template_by_uuid.
 
         Find template by uuid
         """
@@ -70,9 +70,9 @@ class TestTemplatesController(BaseTestCase):
         self.assert200(response, "Response body is : " + response.data.decode("utf-8"))
 
     def test_update_template_by_uuid(self):
-        """Test case for update_template_by_uuid
+        """Test case for update_template_by_uuid.
 
-        Update an existing template
+        Update an existing template.
         """
         body = Template()
         response = self.client.open(
