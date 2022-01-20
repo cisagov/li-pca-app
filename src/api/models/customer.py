@@ -37,14 +37,19 @@ class Customer(Model):
         :type status: str
         """
         # noqa: E501
-        self.swagger_types = {"uuid": str, "name": str, "contact": str, "status": str}
+        self.swagger_types = {
+            "uuid": str,
+            "name": str,
+            "contact": str,
+            "status": str,
+        }  # type: ignore
 
         self.attribute_map = {
             "uuid": "uuid",
             "name": "name",
             "contact": "contact",
             "status": "status",
-        }
+        }  # type: ignore
         self._uuid = uuid
         self._name = name
         self._contact = contact
@@ -68,7 +73,7 @@ class Customer(Model):
         :return: The uuid of this Customer.
         :rtype: str
         """
-        return self._uuid
+        return self._uuid  # type: ignore
 
     @uuid.setter
     def uuid(self, uuid: str):
@@ -91,7 +96,7 @@ class Customer(Model):
         :return: The name of this Customer.
         :rtype: str
         """
-        return self._name
+        return self._name  # type: ignore
 
     @name.setter
     def name(self, name: str):
@@ -114,7 +119,7 @@ class Customer(Model):
         :return: The contact of this Customer.
         :rtype: str
         """
-        return self._contact
+        return self._contact  # type: ignore
 
     @contact.setter
     def contact(self, contact: str):
@@ -132,7 +137,7 @@ class Customer(Model):
         :return: The status of this Customer.
         :rtype: str
         """
-        return self._status
+        return self._status  # type: ignore
 
     @status.setter
     def status(self, status: str):

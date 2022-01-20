@@ -40,14 +40,14 @@ class Document(Model):
             "description": str,
             "parent_uuid": str,
             "file_name": str,
-        }
+        }  # type: ignore
 
         self.attribute_map = {
             "uuid": "uuid",
             "description": "description",
             "parent_uuid": "parent_uuid",
             "file_name": "file_name",
-        }
+        }  # type: ignore
         self._uuid = uuid
         self._description = description
         self._parent_uuid = parent_uuid
@@ -71,7 +71,7 @@ class Document(Model):
         :return: The uuid of this Document.
         :rtype: str
         """
-        return self._uuid
+        return self._uuid  # type: ignore
 
     @uuid.setter
     def uuid(self, uuid: str):
@@ -94,7 +94,7 @@ class Document(Model):
         :return: The description of this Document.
         :rtype: str
         """
-        return self._description
+        return self._description  # type: ignore
 
     @description.setter
     def description(self, description: str):
@@ -119,7 +119,7 @@ class Document(Model):
         :return: The parent_uuid of this Document.
         :rtype: str
         """
-        return self._parent_uuid
+        return self._parent_uuid  # type: ignore
 
     @parent_uuid.setter
     def parent_uuid(self, parent_uuid: str):
@@ -144,7 +144,7 @@ class Document(Model):
         :return: The file_name of this Document.
         :rtype: str
         """
-        return self._file_name
+        return self._file_name  # type: ignore
 
     @file_name.setter
     def file_name(self, file_name: str):

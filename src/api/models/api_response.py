@@ -29,9 +29,13 @@ class ApiResponse(Model):
         :param message: The message of this ApiResponse.  # noqa: E501
         :type message: str
         """
-        self.swagger_types = {"code": int, "type": str, "message": str}
+        self.swagger_types = {"code": int, "type": str, "message": str}  # type: ignore
 
-        self.attribute_map = {"code": "code", "type": "type", "message": "message"}
+        self.attribute_map = {
+            "code": "code",
+            "type": "type",
+            "message": "message",
+        }  # type: ignore
         self._code = code
         self._type = type
         self._message = message
@@ -54,7 +58,7 @@ class ApiResponse(Model):
         :return: The code of this ApiResponse.
         :rtype: int
         """
-        return self._code
+        return self._code  # type: ignore
 
     @code.setter
     def code(self, code: int):
@@ -72,7 +76,7 @@ class ApiResponse(Model):
         :return: The type of this ApiResponse.
         :rtype: str
         """
-        return self._type
+        return self._type  # type: ignore
 
     @type.setter
     def type(self, type: str):
@@ -92,7 +96,7 @@ class ApiResponse(Model):
         :return: The message of this ApiResponse.
         :rtype: str
         """
-        return self._message
+        return self._message  # type: ignore
 
     @message.setter
     def message(self, message: str):

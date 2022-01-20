@@ -40,14 +40,14 @@ class Template(Model):
             "name": str,
             "description": str,
             "doc_uuid": str,
-        }
+        }  # type: ignore
 
         self.attribute_map = {
             "uuid": "uuid",
             "name": "name",
             "description": "description",
             "doc_uuid": "doc_uuid",
-        }
+        }  # type: ignore
         self._uuid = uuid
         self._name = name
         self._description = description
@@ -71,7 +71,7 @@ class Template(Model):
         :return: The uuid of this Template.
         :rtype: str
         """
-        return self._uuid
+        return self._uuid  # type: ignore
 
     @uuid.setter
     def uuid(self, uuid: str):
@@ -94,7 +94,7 @@ class Template(Model):
         :return: The name of this Template.
         :rtype: str
         """
-        return self._name
+        return self._name  # type: ignore
 
     @name.setter
     def name(self, name: str):
@@ -117,7 +117,7 @@ class Template(Model):
         :return: The description of this Template.
         :rtype: str
         """
-        return self._description
+        return self._description  # type: ignore
 
     @description.setter
     def description(self, description: str):
@@ -142,7 +142,7 @@ class Template(Model):
         :return: The doc_uuid of this Template.
         :rtype: str
         """
-        return self._doc_uuid
+        return self._doc_uuid  # type: ignore
 
     @doc_uuid.setter
     def doc_uuid(self, doc_uuid: str):

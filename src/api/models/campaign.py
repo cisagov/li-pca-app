@@ -44,7 +44,7 @@ class Campaign(Model):
             "target_template_uuid": str,
             "email_template_uuid": str,
             "status": str,
-        }
+        }  # type: ignore
 
         self.attribute_map = {
             "uuid": "uuid",
@@ -52,7 +52,7 @@ class Campaign(Model):
             "target_template_uuid": "target_template_uuid",
             "email_template_uuid": "email_template_uuid",
             "status": "status",
-        }
+        }  # type: ignore
         self._uuid = uuid
         self._assessment_uuid = assessment_uuid
         self._target_template_uuid = target_template_uuid
@@ -79,7 +79,7 @@ class Campaign(Model):
         :return: The uuid of this Campaign.
         :rtype: str
         """
-        return self._uuid
+        return self._uuid  # type: ignore
 
     @uuid.setter
     def uuid(self, uuid: str):
@@ -104,7 +104,7 @@ class Campaign(Model):
         :return: The assessment_uuid of this Campaign.
         :rtype: str
         """
-        return self._assessment_uuid
+        return self._assessment_uuid  # type: ignore
 
     @assessment_uuid.setter
     def assessment_uuid(self, assessment_uuid: str):
@@ -129,7 +129,7 @@ class Campaign(Model):
         :return: The target_template_uuid of this Campaign.
         :rtype: str
         """
-        return self._target_template_uuid
+        return self._target_template_uuid  # type: ignore
 
     @target_template_uuid.setter
     def target_template_uuid(self, target_template_uuid: str):
@@ -151,7 +151,7 @@ class Campaign(Model):
         :return: The email_template_uuid of this Campaign.
         :rtype: str
         """
-        return self._email_template_uuid
+        return self._email_template_uuid  # type: ignore
 
     @email_template_uuid.setter
     def email_template_uuid(self, email_template_uuid: str):
@@ -173,7 +173,7 @@ class Campaign(Model):
         :return: The status of this Campaign.
         :rtype: str
         """
-        return self._status
+        return self._status  # type: ignore
 
     @status.setter
     def status(self, status: str):

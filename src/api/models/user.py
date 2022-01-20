@@ -67,7 +67,7 @@ class User(Model):
             "password": "password",
             "phone": "phone",
             "user_status": "userStatus",
-        }
+        }  # type: ignore
         self._id = id
         self._username = username
         self._first_name = first_name
@@ -95,7 +95,7 @@ class User(Model):
         :return: The id of this User.
         :rtype: int
         """
-        return self._id
+        return self._id  # type: ignore
 
     @id.setter
     def id(self, id: int):
@@ -113,7 +113,7 @@ class User(Model):
         :return: The username of this User.
         :rtype: str
         """
-        return self._username
+        return self._username  # type: ignore
 
     @username.setter
     def username(self, username: str):
@@ -131,7 +131,7 @@ class User(Model):
         :return: The first_name of this User.
         :rtype: str
         """
-        return self._first_name
+        return self._first_name  # type: ignore
 
     @first_name.setter
     def first_name(self, first_name: str):
@@ -149,7 +149,7 @@ class User(Model):
         :return: The last_name of this User.
         :rtype: str
         """
-        return self._last_name
+        return self._last_name  # type: ignore
 
     @last_name.setter
     def last_name(self, last_name: str):
@@ -167,7 +167,7 @@ class User(Model):
         :return: The email of this User.
         :rtype: str
         """
-        return self._email
+        return self._email  # type: ignore
 
     @email.setter
     def email(self, email: str):
@@ -185,7 +185,7 @@ class User(Model):
         :return: The password of this User.
         :rtype: str
         """
-        return self._password
+        return self._password  # type: ignore
 
     @password.setter
     def password(self, password: str):
@@ -203,7 +203,7 @@ class User(Model):
         :return: The phone of this User.
         :rtype: str
         """
-        return self._phone
+        return self._phone  # type: ignore
 
     @phone.setter
     def phone(self, phone: str):
@@ -223,7 +223,7 @@ class User(Model):
         :return: The user_status of this User.
         :rtype: int
         """
-        return self._user_status
+        return self._user_status  # type: ignore
 
     @user_status.setter
     def user_status(self, user_status: int):

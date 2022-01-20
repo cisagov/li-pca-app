@@ -23,9 +23,9 @@ class Assessment(Model):
         :param uuid: The uuid of this Assessment.  # noqa: E501
         :type uuid: str
         """
-        self.swagger_types = {"uuid": str}
+        self.swagger_types = {"uuid": str}  # type: ignore
 
-        self.attribute_map = {"uuid": "uuid"}
+        self.attribute_map = {"uuid": "uuid"}  # type: ignore
         self._uuid = uuid
 
     @classmethod
@@ -46,7 +46,7 @@ class Assessment(Model):
         :return: The uuid of this Assessment.
         :rtype: str
         """
-        return self._uuid
+        return self._uuid  # type: ignore
 
     @uuid.setter
     def uuid(self, uuid: str):
