@@ -82,7 +82,7 @@ setup(
     python_requires=">=3.6",
     # What does your project relate to?
     keywords="li-pca",
-    packages=find_packages(where="src/api"),
+    packages=find_packages(where="src"),
     package_dir={"": "src"},
     package_data={"api": ["data/*.txt"]},
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
