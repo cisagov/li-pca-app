@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Assessment Model"""
+"""Assessment Model."""
 
 from __future__ import absolute_import
 
@@ -18,7 +18,7 @@ class Assessment(Model):
     """
 
     def __init__(self, uuid: str = None):  # noqa: E501
-        """Assessment - a model defined in Swagger
+        """Initialize the Assessment model defined in Swagger.
 
         :param uuid: The uuid of this Assessment.  # noqa: E501
         :type uuid: str
@@ -30,7 +30,7 @@ class Assessment(Model):
 
     @classmethod
     def from_dict(cls, dikt) -> "Assessment":
-        """Returns the dict as a model
+        """Return the dict as a model.
 
         :param dikt: A dict.
         :type: dict
@@ -41,8 +41,7 @@ class Assessment(Model):
 
     @property
     def uuid(self) -> str:
-        """Gets the uuid of this Assessment.
-
+        """Get the uuid of this Assessment.
 
         :return: The uuid of this Assessment.
         :rtype: str
@@ -51,8 +50,7 @@ class Assessment(Model):
 
     @uuid.setter
     def uuid(self, uuid: str):
-        """Sets the uuid of this Assessment.
-
+        """Set the uuid of this Assessment.
 
         :param uuid: The uuid of this Assessment.
         :type uuid: str

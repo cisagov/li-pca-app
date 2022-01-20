@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Customer Model"""
+"""Customer Model."""
 
 from __future__ import absolute_import
 
@@ -24,17 +24,17 @@ class Document(Model):
         parent_uuid: str = None,
         file_name: str = None,
     ):  # noqa: E501
-        """Document - a model defined in Swagger
+        """Initialize Document model defined in Swagger.
 
-                :param uuid: The uuid of this Document.  # noqa: E501
-                :type uuid: str
-                :param description: The description of this Document.  # noqa: E501
-                :type descriptuuuuion: str
-                :param parent_uuid: The parent_uuid of this Document.  # noqa: E501
-                :type parent_uuid: str
-                :param file_name: The file_name of this Document.  # noqa: E501
-                :type file_name: str
-        s"""
+        :param uuid: The uuid of this Document.
+        :type uuid: str
+        :param description: The description of this Document.
+        :type descriptuuuuion: str
+        :param parent_uuid: The parent_uuid of this Document.
+        :type parent_uuid: str
+        :param file_name: The file_name of this Document.
+        :type file_name: str
+        """
         self.swagger_types = {
             "uuid": str,
             "description": str,
@@ -55,7 +55,7 @@ class Document(Model):
 
     @classmethod
     def from_dict(cls, dikt) -> "Document":
-        """Returns the dict as a model
+        """Return the dict as a model.
 
         :param dikt: A dict.
         :type: dict
@@ -66,8 +66,7 @@ class Document(Model):
 
     @property
     def uuid(self) -> str:
-        """Gets the uuid of this Document.
-
+        """Get the uuid of this Document.
 
         :return: The uuid of this Document.
         :rtype: str
@@ -76,8 +75,7 @@ class Document(Model):
 
     @uuid.setter
     def uuid(self, uuid: str):
-        """Sets the uuid of this Document.
-
+        """Set the uuid of this Document.
 
         :param uuid: The uuid of this Document.
         :type uuid: str
@@ -91,8 +89,7 @@ class Document(Model):
 
     @property
     def description(self) -> str:
-        """Gets the description of this Document.
-
+        """Get the description of this Document.
 
         :return: The description of this Document.
         :rtype: str
@@ -101,8 +98,7 @@ class Document(Model):
 
     @description.setter
     def description(self, description: str):
-        """Sets the description of this Document.
-
+        """Set the description of this Document.
 
         :param description: The description of this Document.
         :type description: str
@@ -116,7 +112,7 @@ class Document(Model):
 
     @property
     def parent_uuid(self) -> str:
-        """Gets the parent_uuid of this Document.
+        """Get the parent_uuid of this Document.
 
         uuid for parent association  # noqa: E501
 
@@ -127,7 +123,7 @@ class Document(Model):
 
     @parent_uuid.setter
     def parent_uuid(self, parent_uuid: str):
-        """Sets the parent_uuid of this Document.
+        """Set the parent_uuid of this Document.
 
         uuid for parent association  # noqa: E501
 
@@ -143,8 +139,7 @@ class Document(Model):
 
     @property
     def file_name(self) -> str:
-        """Gets the file_name of this Document.
-
+        """Get the file_name of this Document.
 
         :return: The file_name of this Document.
         :rtype: str
@@ -153,8 +148,7 @@ class Document(Model):
 
     @file_name.setter
     def file_name(self, file_name: str):
-        """Sets the file_name of this Document.
-
+        """Set the file_name of this Document.
 
         :param file_name: The file_name of this Document.
         :type file_name: str

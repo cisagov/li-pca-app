@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Assessment Model"""
+"""Assessment Model."""
 
 from __future__ import absolute_import
 
@@ -20,11 +20,11 @@ class ApiResponse(Model):
     def __init__(
         self, code: int = None, type: str = None, message: str = None
     ):  # noqa: E501
-        """ApiResponse - a model defined in Swagger
+        """Initialize the ApiResponse model defined in Swagger.
 
-        :param code: The code of this ApiResponse.  # noqa: E501
+        :param code: The code of this ApiResponse.   noqa: E501
         :type code: int
-        :param type: The type of this ApiResponse.  # noqa: E501
+        :param type: The type of this ApiResponse.   noqa: E501
         :type type: str
         :param message: The message of this ApiResponse.  # noqa: E501
         :type message: str
@@ -38,7 +38,7 @@ class ApiResponse(Model):
 
     @classmethod
     def from_dict(cls, dikt) -> "ApiResponse":
-        """Returns the dict as a model
+        """Return the dict as a model.
 
         :param dikt: A dict.
         :type: dict
@@ -49,8 +49,7 @@ class ApiResponse(Model):
 
     @property
     def code(self) -> int:
-        """Gets the code of this ApiResponse.
-
+        """Get the code of this ApiResponse.
 
         :return: The code of this ApiResponse.
         :rtype: int
@@ -59,19 +58,16 @@ class ApiResponse(Model):
 
     @code.setter
     def code(self, code: int):
-        """Sets the code of this ApiResponse.
-
+        """Set the code of this ApiResponse.
 
         :param code: The code of this ApiResponse.
         :type code: int
         """
-
         self._code = code
 
     @property
     def type(self) -> str:
-        """Gets the type of this ApiResponse.
-
+        """Get the type of this ApiResponse.
 
         :return: The type of this ApiResponse.
         :rtype: str
@@ -80,8 +76,7 @@ class ApiResponse(Model):
 
     @type.setter
     def type(self, type: str):
-        """Sets the type of this ApiResponse.
-
+        """Set the type of this ApiResponse.
 
         :param type: The type of this ApiResponse.
         :type type: str
@@ -92,8 +87,7 @@ class ApiResponse(Model):
 
     @property
     def message(self) -> str:
-        """Gets the message of this ApiResponse.
-
+        """Get the message of this ApiResponse.
 
         :return: The message of this ApiResponse.
         :rtype: str
@@ -102,11 +96,9 @@ class ApiResponse(Model):
 
     @message.setter
     def message(self, message: str):
-        """Sets the message of this ApiResponse.
-
+        """Set the message of this ApiResponse.
 
         :param message: The message of this ApiResponse.
         :type message: str
         """
-
         self._message = message

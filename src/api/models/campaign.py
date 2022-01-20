@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Customer Model"""
+"""Customer Model."""
 
 from __future__ import absolute_import
 
@@ -25,7 +25,7 @@ class Campaign(Model):
         email_template_uuid: str = None,
         status: str = None,
     ):  # noqa: E501
-        """Campaign - a model defined in Swagger
+        """Initialize the Campaign model defined in Swagger.
 
         :param uuid: The uuid of this Campaign.  # noqa: E501
         :type uuid: str
@@ -61,7 +61,7 @@ class Campaign(Model):
 
     @classmethod
     def from_dict(cls, dikt) -> "Campaign":
-        """Returns the dict as a model
+        """Return the dict as a model.
 
         :param dikt: A dict.
         :type: dict
@@ -72,7 +72,7 @@ class Campaign(Model):
 
     @property
     def uuid(self) -> str:
-        """Gets the uuid of this Campaign.
+        """Get the uuid of this Campaign.
 
         uuid string value  # noqa: E501
 
@@ -83,7 +83,7 @@ class Campaign(Model):
 
     @uuid.setter
     def uuid(self, uuid: str):
-        """Sets the uuid of this Campaign.
+        """Set the uuid of this Campaign.
 
         uuid string value  # noqa: E501
 
@@ -99,8 +99,7 @@ class Campaign(Model):
 
     @property
     def assessment_uuid(self) -> str:
-        """Gets the assessment_uuid of this Campaign.
-
+        """Get the assessment_uuid of this Campaign.
 
         :return: The assessment_uuid of this Campaign.
         :rtype: str
@@ -109,8 +108,7 @@ class Campaign(Model):
 
     @assessment_uuid.setter
     def assessment_uuid(self, assessment_uuid: str):
-        """Sets the assessment_uuid of this Campaign.
-
+        """Set the assessment_uuid of this Campaign.
 
         :param assessment_uuid: The assessment_uuid of this Campaign.
         :type assessment_uuid: str
@@ -124,7 +122,7 @@ class Campaign(Model):
 
     @property
     def target_template_uuid(self) -> str:
-        """Gets the target_template_uuid of this Campaign.
+        """Get the target_template_uuid of this Campaign.
 
         uuid of associated template  # noqa: E501
 
@@ -135,19 +133,18 @@ class Campaign(Model):
 
     @target_template_uuid.setter
     def target_template_uuid(self, target_template_uuid: str):
-        """Sets the target_template_uuid of this Campaign.
+        """Set the target_template_uuid of this Campaign.
 
         uuid of associated template  # noqa: E501
 
         :param target_template_uuid: The target_template_uuid of this Campaign.
         :type target_template_uuid: str
         """
-
         self._target_template_uuid = target_template_uuid
 
     @property
     def email_template_uuid(self) -> str:
-        """Gets the email_template_uuid of this Campaign.
+        """Get the email_template_uuid of this Campaign.
 
         uuid of associated template  # noqa: E501
 
@@ -158,19 +155,18 @@ class Campaign(Model):
 
     @email_template_uuid.setter
     def email_template_uuid(self, email_template_uuid: str):
-        """Sets the email_template_uuid of this Campaign.
+        """Set the email_template_uuid of this Campaign.
 
         uuid of associated template  # noqa: E501
 
         :param email_template_uuid: The email_template_uuid of this Campaign.
         :type email_template_uuid: str
         """
-
         self._email_template_uuid = email_template_uuid
 
     @property
     def status(self) -> str:
-        """Gets the status of this Campaign.
+        """Get the status of this Campaign.
 
         campaign status in the data store  # noqa: E501
 
@@ -181,7 +177,7 @@ class Campaign(Model):
 
     @status.setter
     def status(self, status: str):
-        """Sets the status of this Campaign.
+        """Set the status of this Campaign.
 
         campaign status in the data store  # noqa: E501
 

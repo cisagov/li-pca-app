@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Template Model"""
+"""Template Model."""
 
 from __future__ import absolute_import
 
@@ -24,7 +24,7 @@ class Template(Model):
         description: str = None,
         doc_uuid: str = None,
     ):  # noqa: E501
-        """Template - a model defined in Swagger
+        """Template - a model defined in Swagger.
 
         :param uuid: The uuid of this Template.  # noqa: E501
         :type uuid: str
@@ -55,7 +55,7 @@ class Template(Model):
 
     @classmethod
     def from_dict(cls, dikt) -> "Template":
-        """Returns the dict as a model
+        """Return the dict as a model.
 
         :param dikt: A dict.
         :type: dict
@@ -66,8 +66,7 @@ class Template(Model):
 
     @property
     def uuid(self) -> str:
-        """Gets the uuid of this Template.
-
+        """Get the uuid of this Template.
 
         :return: The uuid of this Template.
         :rtype: str
@@ -76,8 +75,7 @@ class Template(Model):
 
     @uuid.setter
     def uuid(self, uuid: str):
-        """Sets the uuid of this Template.
-
+        """Set the uuid of this Template.
 
         :param uuid: The uuid of this Template.
         :type uuid: str
@@ -91,8 +89,7 @@ class Template(Model):
 
     @property
     def name(self) -> str:
-        """Gets the name of this Template.
-
+        """Get the name of this Template.
 
         :return: The name of this Template.
         :rtype: str
@@ -101,8 +98,7 @@ class Template(Model):
 
     @name.setter
     def name(self, name: str):
-        """Sets the name of this Template.
-
+        """Set the name of this Template.
 
         :param name: The name of this Template.
         :type name: str
@@ -116,8 +112,7 @@ class Template(Model):
 
     @property
     def description(self) -> str:
-        """Gets the description of this Template.
-
+        """Get the description of this Template.
 
         :return: The description of this Template.
         :rtype: str
@@ -126,8 +121,7 @@ class Template(Model):
 
     @description.setter
     def description(self, description: str):
-        """Sets the description of this Template.
-
+        """Set the description of this Template.
 
         :param description: The description of this Template.
         :type description: str
@@ -141,7 +135,7 @@ class Template(Model):
 
     @property
     def doc_uuid(self) -> str:
-        """Gets the doc_uuid of this Template.
+        """Get the doc_uuid of this Template.
 
         Doc uuid for screenshot  # noqa: E501
 
@@ -152,7 +146,7 @@ class Template(Model):
 
     @doc_uuid.setter
     def doc_uuid(self, doc_uuid: str):
-        """Sets the doc_uuid of this Template.
+        """Set the doc_uuid of this Template.
 
         Doc uuid for screenshot  # noqa: E501
 

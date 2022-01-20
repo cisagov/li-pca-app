@@ -1,4 +1,4 @@
-"""API Models Logic"""
+"""API Models Logic."""
 
 # Standard Python Libraries
 import pprint
@@ -14,7 +14,7 @@ CustomType = typing.TypeVar("CustomType")
 
 
 class Model:
-    """Mode Class"""
+    """Mode Class."""
 
     # swaggerTypes: The key is attribute name and the
     # value is attribute type.
@@ -32,11 +32,11 @@ class Model:
 
     @classmethod
     def from_dict(cls: typing.Type[CustomType], dikt) -> CustomType:
-        """Returns the dict as a model"""
+        """Return the dict as a model."""
         return util.deserialize_model(dikt, cls)
 
     def to_dict(self):
-        """Returns the model properties as a dict
+        """Return the model properties as a dict.
 
         :rtype: dict
         """
@@ -65,20 +65,20 @@ class Model:
         return result
 
     def to_str(self):
-        """Returns the string representation of the model
+        """Return the string representation of the model.
 
         :rtype: str
         """
         return pprint.pformat(self.to_dict())
 
     def __repr__(self):
-        """For `print` and `pprint`"""
+        """For `print` and `pprint`."""
         return self.to_str()
 
     def __eq__(self, other):
-        """Returns true if both objects are equal"""
+        """Return true if both objects are equal."""
         return self.__dict__ == other.__dict__
 
     def __ne__(self, other):
-        """Returns true if both objects are not equal"""
+        """Return true if both objects are not equal."""
         return not self == other

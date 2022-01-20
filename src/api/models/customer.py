@@ -1,4 +1,5 @@
 # coding: utf-8
+"""Customer Model."""
 
 from __future__ import absolute_import
 
@@ -23,8 +24,8 @@ class Customer(Model):
         name: str = None,
         contact: str = None,
         status: str = None,
-    ):  # noqa: E501
-        """Customer - a model defined in Swagger
+    ):
+        """Initialize Customer model defined in Swagger.
 
         :param uuid: The uuid of this Customer.  # noqa: E501
         :type uuid: str
@@ -35,6 +36,7 @@ class Customer(Model):
         :param status: The status of this Customer.  # noqa: E501
         :type status: str
         """
+        # noqa: E501
         self.swagger_types = {"uuid": str, "name": str, "contact": str, "status": str}
 
         self.attribute_map = {
@@ -50,7 +52,7 @@ class Customer(Model):
 
     @classmethod
     def from_dict(cls, dikt) -> "Customer":
-        """Returns the dict as a model
+        """Return the dict as a model.
 
         :param dikt: A dict.
         :type: dict
@@ -61,8 +63,7 @@ class Customer(Model):
 
     @property
     def uuid(self) -> str:
-        """Gets the uuid of this Customer.
-
+        """Get the uuid of this Customer.
 
         :return: The uuid of this Customer.
         :rtype: str
@@ -71,8 +72,7 @@ class Customer(Model):
 
     @uuid.setter
     def uuid(self, uuid: str):
-        """Sets the uuid of this Customer.
-
+        """Set the uuid of this Customer.
 
         :param uuid: The uuid of this Customer.
         :type uuid: str
@@ -86,8 +86,7 @@ class Customer(Model):
 
     @property
     def name(self) -> str:
-        """Gets the name of this Customer.
-
+        """Get the name of this Customer.
 
         :return: The name of this Customer.
         :rtype: str
@@ -96,8 +95,7 @@ class Customer(Model):
 
     @name.setter
     def name(self, name: str):
-        """Sets the name of this Customer.
-
+        """Set the name of this Customer.
 
         :param name: The name of this Customer.
         :type name: str
@@ -111,8 +109,7 @@ class Customer(Model):
 
     @property
     def contact(self) -> str:
-        """Gets the contact of this Customer.
-
+        """Get the contact of this Customer.
 
         :return: The contact of this Customer.
         :rtype: str
@@ -121,19 +118,16 @@ class Customer(Model):
 
     @contact.setter
     def contact(self, contact: str):
-        """Sets the contact of this Customer.
-
+        """Set the contact of this Customer.
 
         :param contact: The contact of this Customer.
         :type contact: str
         """
-
         self._contact = contact
 
     @property
     def status(self) -> str:
-        """Gets the status of this Customer.
-
+        """Get the status of this Customer.
 
         :return: The status of this Customer.
         :rtype: str
@@ -142,11 +136,9 @@ class Customer(Model):
 
     @status.setter
     def status(self, status: str):
-        """Sets the status of this Customer.
-
+        """Set the status of this Customer.
 
         :param status: The status of this Customer.
         :type status: str
         """
-
         self._status = status

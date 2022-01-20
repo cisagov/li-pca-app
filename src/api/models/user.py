@@ -28,7 +28,7 @@ class User(Model):
         phone: str = None,
         user_status: int = None,
     ):  # noqa: E501
-        """User - a model defined in Swagger
+        """User - a model defined in Swagger.
 
         :param id: The id of this User.  # noqa: E501
         :type id: int
@@ -79,7 +79,7 @@ class User(Model):
 
     @classmethod
     def from_dict(cls, dikt) -> "User":
-        """Returns the dict as a model
+        """Return the dict as a model.
 
         :param dikt: A dict.
         :type: dict
@@ -90,8 +90,7 @@ class User(Model):
 
     @property
     def id(self) -> int:
-        """Gets the id of this User.
-
+        """Get the id of this User.
 
         :return: The id of this User.
         :rtype: int
@@ -100,19 +99,16 @@ class User(Model):
 
     @id.setter
     def id(self, id: int):
-        """Sets the id of this User.
-
+        """Set the id of this User.
 
         :param id: The id of this User.
         :type id: int
         """
-
         self._id = id
 
     @property
     def username(self) -> str:
-        """Gets the username of this User.
-
+        """Get the username of this User.
 
         :return: The username of this User.
         :rtype: str
@@ -121,19 +117,16 @@ class User(Model):
 
     @username.setter
     def username(self, username: str):
-        """Sets the username of this User.
-
+        """Set the username of this User.
 
         :param username: The username of this User.
         :type username: str
         """
-
         self._username = username
 
     @property
     def first_name(self) -> str:
-        """Gets the first_name of this User.
-
+        """Get the first_name of this User.
 
         :return: The first_name of this User.
         :rtype: str
@@ -142,19 +135,16 @@ class User(Model):
 
     @first_name.setter
     def first_name(self, first_name: str):
-        """Sets the first_name of this User.
-
+        """Set the first_name of this User.
 
         :param first_name: The first_name of this User.
         :type first_name: str
         """
-
         self._first_name = first_name
 
     @property
     def last_name(self) -> str:
-        """Gets the last_name of this User.
-
+        """Get the last_name of this User.
 
         :return: The last_name of this User.
         :rtype: str
@@ -163,19 +153,16 @@ class User(Model):
 
     @last_name.setter
     def last_name(self, last_name: str):
-        """Sets the last_name of this User.
-
+        """Set the last_name of this User.
 
         :param last_name: The last_name of this User.
         :type last_name: str
         """
-
         self._last_name = last_name
 
     @property
     def email(self) -> str:
-        """Gets the email of this User.
-
+        """Get the email of this User.
 
         :return: The email of this User.
         :rtype: str
@@ -184,19 +171,16 @@ class User(Model):
 
     @email.setter
     def email(self, email: str):
-        """Sets the email of this User.
-
+        """Set the email of this User.
 
         :param email: The email of this User.
         :type email: str
         """
-
         self._email = email
 
     @property
     def password(self) -> str:
-        """Gets the password of this User.
-
+        """Get the password of this User.
 
         :return: The password of this User.
         :rtype: str
@@ -205,19 +189,16 @@ class User(Model):
 
     @password.setter
     def password(self, password: str):
-        """Sets the password of this User.
-
+        """Set the password of this User.
 
         :param password: The password of this User.
         :type password: str
         """
-
         self._password = password
 
     @property
     def phone(self) -> str:
-        """Gets the phone of this User.
-
+        """Get the phone of this User.
 
         :return: The phone of this User.
         :rtype: str
@@ -226,18 +207,16 @@ class User(Model):
 
     @phone.setter
     def phone(self, phone: str):
-        """Sets the phone of this User.
-
+        """Set the phone of this User.
 
         :param phone: The phone of this User.
         :type phone: str
         """
-
         self._phone = phone
 
     @property
     def user_status(self) -> int:
-        """Gets the user_status of this User.
+        """Get the user_status of this User.
 
         User Status  # noqa: E501
 
@@ -248,12 +227,11 @@ class User(Model):
 
     @user_status.setter
     def user_status(self, user_status: int):
-        """Sets the user_status of this User.
+        """Set the user_status of this User.
 
         User Status  # noqa: E501
 
         :param user_status: The user_status of this User.
         :type user_status: int
         """
-
         self._user_status = user_status
