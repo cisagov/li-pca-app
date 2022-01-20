@@ -107,12 +107,12 @@ repos:
     rev: 5.9.3
     hooks:
       - id: isort
-  # - repo: https://github.com/pre-commit/mirrors-mypy
-  #   rev: v0.910-1
-  #   hooks:
-  #     - id: mypy
-  #       additional_dependencies:
-  #         - types-setuptools
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.910-1
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - types-setuptools
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.29.0
     hooks:
