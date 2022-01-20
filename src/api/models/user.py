@@ -1,5 +1,5 @@
 # coding: utf-8
-"""User Model"""
+"""User Model."""
 
 from __future__ import absolute_import
 
