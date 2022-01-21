@@ -1,3 +1,4 @@
 --requirement requirements-test.txt
+flask_testing
 ipython
 mypy

@@ -107,6 +107,7 @@ setup(
             "pre-commit",
             "pytest-cov",
             "pytest",
+            "flask_testing",
         ]
     },
     # Conveniently allows one to run the CLI tool as `li-pca-api`
