@@ -61,10 +61,6 @@ paths:
                   $ref: '#/components/schemas/Assessment'
         "400":
           description: Invalid status value
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.assessments_controller
     post:
       tags:
@@ -76,10 +72,6 @@ paths:
       responses:
         "405":
           description: Invalid input
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.assessments_controller
   /assessments/{uuid}:
     get:
@@ -112,8 +104,6 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Assessment not found
-      security:
-        - api_key: []
       x-openapi-router-controller: api.controllers.assessments_controller
     put:
       tags:
@@ -139,10 +129,6 @@ paths:
           description: Assessment not found
         "405":
           description: Validation exception
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.assessments_controller
     delete:
       tags:
@@ -164,10 +150,6 @@ paths:
           description: Invalid uuid supplied
         "404":
           description: Assessment not found
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.assessments_controller
   /customers:
     get:
@@ -204,10 +186,6 @@ paths:
                   $ref: '#/components/schemas/Customer'
         "400":
           description: Invalid name value
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.customers_controller
     post:
       tags:
@@ -219,10 +197,6 @@ paths:
       responses:
         "405":
           description: Invalid input
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.customers_controller
   /customers/{uuid}:
     get:
@@ -255,8 +229,6 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Customer not found
-      security:
-        - api_key: []
       x-openapi-router-controller: api.controllers.customers_controller
     put:
       tags:
@@ -282,10 +254,6 @@ paths:
           description: Customer not found
         "405":
           description: Validation exception
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.customers_controller
     delete:
       tags:
@@ -307,10 +275,6 @@ paths:
           description: Invalid uuid supplied
         "404":
           description: Customer not found
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.customers_controller
   /templates:
     get:
@@ -348,10 +312,6 @@ paths:
                   $ref: '#/components/schemas/Template'
         "400":
           description: Invalid name value
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.templates_controller
     post:
       tags:
@@ -363,10 +323,6 @@ paths:
       responses:
         "405":
           description: Invalid input
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.templates_controller
   /templates/{uuid}:
     get:
@@ -399,8 +355,6 @@ paths:
           description: Invalid ID supplied
         "404":
           description: template not found
-      security:
-        - api_key: []
       x-openapi-router-controller: api.controllers.templates_controller
     put:
       tags:
@@ -426,10 +380,6 @@ paths:
           description: template not found
         "405":
           description: Validation exception
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.templates_controller
     delete:
       tags:
@@ -451,10 +401,6 @@ paths:
           description: Invalid uuid supplied
         "404":
           description: template not found
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.templates_controller
   /campaigns:
     get:
@@ -492,10 +438,6 @@ paths:
                   $ref: '#/components/schemas/Campaign'
         "400":
           description: Invalid name value
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.campaigns_controller
     post:
       tags:
@@ -507,10 +449,6 @@ paths:
       responses:
         "405":
           description: Invalid input
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.campaigns_controller
   /campaigns/{uuid}:
     get:
@@ -543,8 +481,6 @@ paths:
           description: Invalid ID supplied
         "404":
           description: campaign not found
-      security:
-        - api_key: []
       x-openapi-router-controller: api.controllers.campaigns_controller
     put:
       tags:
@@ -570,10 +506,6 @@ paths:
           description: campaign not found
         "405":
           description: Validation exception
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.campaigns_controller
     delete:
       tags:
@@ -595,10 +527,6 @@ paths:
           description: Invalid uuid supplied
         "404":
           description: campaign not found
-      security:
-        - lipca_auth:
-        - write:campaigns
-        - read:campaigns
       x-openapi-router-controller: api.controllers.campaigns_controller
   /documents:
     get:
@@ -635,10 +563,6 @@ paths:
                   $ref: '#/components/schemas/Document'
         "400":
           description: Invalid name value
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.documents_controller
     post:
       tags:
@@ -650,10 +574,6 @@ paths:
       responses:
         "405":
           description: Invalid input
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.documents_controller
   /documents/{uuid}:
     get:
@@ -686,8 +606,6 @@ paths:
           description: Invalid ID supplied
         "404":
           description: document not found
-      security:
-        - api_key: []
       x-openapi-router-controller: api.controllers.documents_controller
     put:
       tags:
@@ -713,10 +631,6 @@ paths:
           description: document not found
         "405":
           description: Validation exception
-      security:
-        - lipca_auth:
-        - write:lipca
-        - read:lipca
       x-openapi-router-controller: api.controllers.documents_controller
     delete:
       tags:
@@ -738,10 +652,6 @@ paths:
           description: Invalid uuid supplied
         "404":
           description: document not found
-      security:
-        - lipca_auth:
-        - write:campaigns
-        - read:campaigns
       x-openapi-router-controller: api.controllers.documents_controller
   /user:
     post:

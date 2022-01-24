@@ -8,7 +8,7 @@ from flask import json
 
 # cisagov Libraries
 from api.models.assessment import Assessment  # noqa: E501
-from api.test import BaseTestCase
+from tests import BaseTestCase
 
 # from six import BytesIO
 

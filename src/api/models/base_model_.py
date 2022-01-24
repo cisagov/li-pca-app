@@ -18,17 +18,13 @@ class Model:
 
     # swaggerTypes: The key is attribute name and the
     # value is attribute type.
-    example = {"key": "val"}
+    # example = {"key": "val"}
 
-    swagger_types = {
-        example,
-    }
+    swagger_types = {}  # type: ignore
 
     # attributeMap: The key is attribute name and the
     # value is json key in definition.
-    attribute_map = {
-        example,
-    }
+    attribute_map = {}  # type: ignore
 
     @classmethod
     def from_dict(cls: typing.Type[CustomType], dikt) -> CustomType:

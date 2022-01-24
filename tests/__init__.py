@@ -16,8 +16,8 @@ class BaseTestCase(TestCase):
 
     def create_app(self):
         """Create the base app test."""
-        logging.getLogger("connexion.operation").setLevel("ERROR")
-        app = connexion.App(__name__, specification_dir="./src/api/openapi")
+        logging.getLogger("connexion.operation").setLevel("DEBUG")
+        app = connexion.App(__name__, specification_dir="../src/api/openapi")
         app.app.json_encoder = JSONEncoder
         app.add_api("openapi.yaml")
         return app.app

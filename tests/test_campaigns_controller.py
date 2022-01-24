@@ -9,7 +9,7 @@ from flask import json
 # cisagov Libraries
 # from api.models.campaign import Campaign  # noqa: E501
 from api.models.customer import Customer  # noqa: E501
-from api.test import BaseTestCase
+from tests import BaseTestCase
 
 # from six import BytesIO
 
