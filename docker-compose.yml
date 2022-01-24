@@ -5,7 +5,7 @@ services:
   li-pca-api:
     build:
       context: .
-      dockerfile: ./src/api/Dockerfile
+      dockerfile: ./Dockerfile
     stdin_open: true
     tty: true
     container_name: li-pca-api
@@ -14,7 +14,7 @@ services:
     links:
       - mongodb
     volumes:
-      - .src/api:/usr/src/api
+      - .:/usr/src/api
     environment:
       - MONGODB_USERNAME=lipca
       - MONGODB_PASSWORD=devpass1
