@@ -9,9 +9,8 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: https://virtserver.swaggerhub.com/Nick-Viola-Dev/Li-PCA2-APP/1.0.0
+  - url: https://virtserver.swaggerhub.com/li-pca/v1
     description: SwaggerHub API Auto Mocking
-  - url: https://petstore.swagger.io/v1
 tags:
   - name: auth
     description: Li-PCA Authentication
