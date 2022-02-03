@@ -6,20 +6,13 @@
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cisagov/li-pca-app.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/li-pca-app/context:python)
 [![Known Vulnerabilities](https://snyk.io/test/github/cisagov/li-pca-app/develop/badge.svg)](https://snyk.io/test/github/cisagov/li-pca-app)
 
-This is a generic skeleton project that can be used to quickly get a
-new [cisagov](https://github.com/cisagov) Python library GitHub
-project started.  This skeleton project contains [licensing
-information](LICENSE), as well as
-[pre-commit hooks](https://pre-commit.com) and
-[GitHub Actions](https://github.com/features/actions) configurations
-appropriate for a Python library project.
+This repo contains the logic for the Li-PCA web application.
+It is used for setting up phishing campaigns and provides customized phishing
+capabilities.
 
-## New Repositories from a Skeleton ##
+## Running the Project ##
 
-Please see our [Project Setup guide](https://github.com/cisagov/development-guide/tree/develop/project_setup)
-for step-by-step instructions on how to start a new repository from
-a skeleton. This will save you time and effort when configuring a
-new repository!
+To run this project run `docker-compose up -d` in the root directory of this project.
 
 ## Contributing ##
 
