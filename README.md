@@ -12,7 +12,8 @@ capabilities.
 
 ## Running the Project ##
 
-To run this project run `docker-compose up -d` in the root directory of this project.
+To run this project locally run:
+`pip install -e . && python3 -m api` in the root directory of this project.
 
 ## Contributing ##
 
