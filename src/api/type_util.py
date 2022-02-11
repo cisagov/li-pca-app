@@ -23,7 +23,6 @@ if sys.version_info < (3, 7):
         return isinstance(klass.__extra__, list)
         # return klass.__extra__ == list
 
-
 else:
 
     def is_generic(klass):

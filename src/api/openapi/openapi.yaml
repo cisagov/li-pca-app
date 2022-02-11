@@ -9,8 +9,8 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: https://virtserver.swaggerhub.com/li-pca/v1
-    description: SwaggerHub API Auto Mocking
+  - url: https://virtserver.swaggerhub.com/li-pca
+    description: Li-PCA-APP API
 tags:
   - name: auth
     description: Li-PCA Authentication
@@ -25,7 +25,7 @@ tags:
   - name: documents
     description: Li-PCA Reports
 paths:
-  /assessments:
+  /v1/assessments:
     get:
       tags:
         - assessments
@@ -72,7 +72,7 @@ paths:
         "405":
           description: Invalid input
       x-openapi-router-controller: api.controllers.assessments_controller
-  /assessments/{uuid}:
+  /v1/assessments/{uuid}:
     get:
       tags:
         - assessments
@@ -150,7 +150,7 @@ paths:
         "404":
           description: Assessment not found
       x-openapi-router-controller: api.controllers.assessments_controller
-  /customers:
+  /v1/customers:
     get:
       tags:
         - customers
@@ -197,7 +197,7 @@ paths:
         "405":
           description: Invalid input
       x-openapi-router-controller: api.controllers.customers_controller
-  /customers/{uuid}:
+  /v1/customers/{uuid}:
     get:
       tags:
         - customers
@@ -275,7 +275,7 @@ paths:
         "404":
           description: Customer not found
       x-openapi-router-controller: api.controllers.customers_controller
-  /templates:
+  /v1/templates:
     get:
       tags:
         - templates
@@ -323,7 +323,7 @@ paths:
         "405":
           description: Invalid input
       x-openapi-router-controller: api.controllers.templates_controller
-  /templates/{uuid}:
+  /v1/templates/{uuid}:
     get:
       tags:
         - templates
@@ -401,7 +401,7 @@ paths:
         "404":
           description: template not found
       x-openapi-router-controller: api.controllers.templates_controller
-  /campaigns:
+  /v1/campaigns:
     get:
       tags:
         - campaigns
@@ -449,7 +449,7 @@ paths:
         "405":
           description: Invalid input
       x-openapi-router-controller: api.controllers.campaigns_controller
-  /campaigns/{uuid}:
+  /v1/campaigns/{uuid}:
     get:
       tags:
         - campaigns
@@ -527,7 +527,7 @@ paths:
         "404":
           description: campaign not found
       x-openapi-router-controller: api.controllers.campaigns_controller
-  /documents:
+  /v1/documents:
     get:
       tags:
         - documents
@@ -574,7 +574,7 @@ paths:
         "405":
           description: Invalid input
       x-openapi-router-controller: api.controllers.documents_controller
-  /documents/{uuid}:
+  /v1/documents/{uuid}:
     get:
       tags:
         - documents
@@ -652,7 +652,7 @@ paths:
         "404":
           description: document not found
       x-openapi-router-controller: api.controllers.documents_controller
-  /user:
+  /v1/user:
     post:
       tags:
         - user
@@ -670,7 +670,7 @@ paths:
         default:
           description: successful operation
       x-openapi-router-controller: api.controllers.user_controller
-  /user/createWithArray:
+  /v1/user/createWithArray:
     post:
       tags:
         - user
@@ -682,7 +682,7 @@ paths:
         default:
           description: successful operation
       x-openapi-router-controller: api.controllers.user_controller
-  /user/createWithList:
+  /v1/user/createWithList:
     post:
       tags:
         - user
@@ -694,7 +694,7 @@ paths:
         default:
           description: successful operation
       x-openapi-router-controller: api.controllers.user_controller
-  /user/login:
+  /v1/user/login:
     get:
       tags:
         - user
@@ -746,7 +746,7 @@ paths:
         "400":
           description: Invalid username/password supplied
       x-openapi-router-controller: api.controllers.user_controller
-  /user/logout:
+  /v1/user/logout:
     get:
       tags:
         - user
@@ -756,7 +756,7 @@ paths:
         default:
           description: successful operation
       x-openapi-router-controller: api.controllers.user_controller
-  /user/{username}:
+  /v1/user/{username}:
     get:
       tags:
         - user
@@ -1099,7 +1099,7 @@ components:
       type: oauth2
       flows:
         implicit:
-          authorizationUrl: http://petstore.swagger.io/oauth/dialog
+          authorizationUrl: http://cisa.li-pca-app.org/oauth/dialog
           scopes:
             write:lipca: modify li-pca data
             read:lipca: read li-pca data

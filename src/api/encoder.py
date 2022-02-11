@@ -30,7 +30,7 @@ class JSONEncoder(FlaskJSONEncoder):
     def set_decoding(self, encoding_type):
         """Set encooding type."""
         # Raise assertion error if input type is invalid
-        assert isinstance(encoding_type, str)
-
+        # TODO: Check B101 allowance in bandit config
+        # assert isinstance(encoding_type, str)
         self.encoding_type = encoding_type
         return self.encoding_type
