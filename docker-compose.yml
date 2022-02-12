@@ -43,6 +43,24 @@ services:
     networks:
       - backend
 
+  li-pca-web:
+    build:
+      context: ./src/ui
+      dockerfile: ./Dockerfile
+    container_name: li-pca-web
+    hostname: li-pca-web
+    depends_on:
+      - li-pca-api
+    ports:
+      - 4300:4300
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./src/ui:/usr/src/ui
+    networks:
+      - backend
+      - frontend
+
 networks:
   frontend:
     driver: bridge
