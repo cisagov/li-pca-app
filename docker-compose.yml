@@ -44,7 +44,6 @@ services:
   li-pca-web:
     build:
       context: ./src/ui
-      # dockerfile: ./Dockerfile
     container_name: li-pca-web
     hostname: li-pca-web
     stdin_open: true
@@ -53,7 +52,7 @@ services:
     depends_on:
       - li-pca-api
     ports:
-      - 4300:4300
+      - 3000:3000
     volumes:
       - ./src/ui:/usr/src/ui
     command: bash -c "npm ci && npm start --only=prod --no-audit"
