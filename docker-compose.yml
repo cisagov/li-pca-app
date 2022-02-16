@@ -11,8 +11,6 @@ services:
     container_name: li-pca-api
     hostname: li-pca-api
     restart: on-failure
-    links:
-      - mongodb
     volumes:
       - .:/usr/src/api
     environment:
@@ -42,6 +40,25 @@ services:
       - MONGO_INITDB_DATABASE=li-pca
     networks:
       - backend
+
+  li-pca-web:
+    build:
+      context: ./src/ui
+    container_name: li-pca-web
+    hostname: li-pca-web
+    stdin_open: true
+    tty: true
+    restart: on-failure
+    depends_on:
+      - li-pca-api
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src/ui:/usr/src/ui
+    command: bash -c "npm ci && npm start --only=prod --no-audit"
+    networks:
+      - backend
+      - frontend
 
 networks:
   frontend:
