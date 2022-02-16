@@ -1,51 +1,72 @@
 """LiPCA connection library."""
 
-__all__ = ["connect_from_config", "db_from_connection", "db_from_config"]
+__all__ = ["connect_from_config", "get_connection_db_by_mongoclient", "db_from_config"]
+
+# Standard Python Libraries
+import logging
 
 # Third-Party Libraries
 from pymodm import connect
-from pymongo import MongoClient
+from pymongo import ConnectionFailure, MongoClient
 
 # cisagov Libraries
 from config.config import Config
 
 
 def connect_from_config():
-    """Connect to Mongo from a Config object.
+    """Load configuration from file and connect through PyMODM.
 
-    :return: True if connection was successful, false if not.
+    Keyword arguments are passed through connect() to the underlying
+    MongoClient to configure connection pool settings.
+
+    :return: True if connection was established, False if not.
     :rtype: boolean
     """
     config = Config()
     if config is None:
+        logging.error("Unable to load configuration file")
         return False
-    connect(config.db_uri, tz_aware=True)
-    return True
+    try:
+        connect(
+            config.uri,
+            alias="lipca",
+            tz_aware=True,
+            maxPoolSize=config.conn_max_pool_size,
+            minPoolSize=config.conn_min_pool_size,
+            maxIdleTimeMs=config.conn_max_idle_time,
+            maxConnecting=config.conn_max_concurrent,
+            socketTimeoutMS=config.conn_socket_timeout,
+            connectTimeoutMS=config.conn_timeout,
+            waitQueueTimeoutMS=config.conn_wait_queue_timeout,
+            heartbeatFrequencyMs=config.conn_heartbeat_frequency,
+        )
+        return True
+    except ConnectionFailure as e:
+        logging.error("ConnectionFailure raised when trying to connect to MongoDB")
+        logging.error("Details: %s" % e)
 
 
-def db_from_connection(uri, name):
-    """Connect to database from uri and name passed as arguments.
+def get_connection_db_by_mongoclient(uri, name):
+    """Connect to MongoDB through a MongoClient.
 
-    :param uri: the address the MongoDB server is hosted at.
-    :type: str
-    :param name: the database name
-    :type str
+    :param uri: a URI to the MongoDB in the standard format beginning with mongodb://
+    :type uri: str
+    :param name: the name of the database to return from MongoDB
+    :type name: str
 
-    :return: a MongoClient object.
-    :rtype: MongoClient
+    :return: conn - a MongoClient connection object
+    :return: db - a Database object
     """
-    con = MongoClient(host=uri, tz_aware=True)
-    db = con[name]
-    return db
+    conn = MongoClient.connect(uri)
+    db = conn["name"]
+
+    return conn, db
 
 
 def db_from_config():
-    """Connect to MongoDB from a Configuration object.
+    """Load a configuration and then passes the pertinent information to get_connection_db_by_mongoclient().
 
-    :return: True if connected successfully, false otherwise
-    :rtype: boolean
+    :return: the tuple returned by get_connection_db_by_mongoclient
     """
     config = Config()
-    if config is None:
-        return False
-    return db_from_connection(config.db_uri, config.db_name)
+    return get_connection_db_by_mongoclient(config.db_uri, config.db_name)

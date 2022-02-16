@@ -2,7 +2,7 @@
 
 # Third-Party Libraries
 from base_doc import BaseDoc
-from pymodm import fields
+from pymodm import errors, fields
 
 CUSTOMER_COLLECTION = "customers"
 
@@ -21,17 +21,35 @@ class CustomerDoc(BaseDoc):
         collection_name = CUSTOMER_COLLECTION
         final = True  # so we don't get a '_cls' field in these documents
 
-    def get_customers(self):
+    def get_all_customers(self, filter=None):
+        """Get all customer documents in a collection in MongoDB.
+
+        If filter is None, all customer documents in the collection are returned
+
+        :param filter: filter by name
+        :return: list of customer objects.
+        :rtype: list
+        """
+        if filter is None:
+            query_set = CustomerDoc.objects.all().order_by([("_id", 1)])
+        else:
+            query_set = CustomerDoc.objects.raw({"$match": {"name": {"$in": filter}}})
+        all_customers = []
+        for customer in query_set:
+            all_customers.append(customer._id)
+        return all_customers
+
+    def get_by_customer_uuid(self, customer_uuid):
         """Get all customer documents in a collection in MongoDB.
 
         :return: list of customer objects.
         :rtype: list
         """
-        query_set = CustomerDoc.objects.all().order_by([("_id", 1)])
-        all_customers = []
-        for customer in query_set:
-            all_customers.append(customer._id)
-        return all_customers
+        try:
+            doc = CustomerDoc.objects.raw({"_id": customer_uuid}).first()
+        except errors.DoesNotExist:
+            return None
+        return doc
 
     def save(self, *args, **kwargs):
         """Receive arguments save to the database.

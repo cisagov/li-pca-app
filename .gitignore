@@ -27,3 +27,5 @@ Dockerfile-x
 
 *.DS_Store
 DS_Store
+*.DS_store
+*.vscode

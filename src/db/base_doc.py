@@ -27,4 +27,5 @@ class BaseDoc(MongoModel):
     class Meta:
         """Provide metadata & settings to the base document."""
 
+        connection_alias = "lipca"
         ignore_unknown_fields = True
