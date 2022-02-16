@@ -43,7 +43,7 @@ services:
 
   li-pca-web:
     build:
-      context: .src/ui
+      context: ./src/ui
       # dockerfile: ./Dockerfile
     container_name: li-pca-web
     hostname: li-pca-web
