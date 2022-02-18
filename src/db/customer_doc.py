@@ -12,7 +12,6 @@ CUSTOMER_COLLECTION = "customers"
 class CustomerDoc(BaseDoc):
     """The Customer Document."""
 
-    _id = fields.CharField(required=True)
     name = fields.CharField(required=True)
     contact = fields.CharField(required=True)
     status = fields.CharField(required=True)
