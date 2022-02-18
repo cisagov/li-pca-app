@@ -8,7 +8,7 @@ RUN pip install -e .
 
 COPY . /usr/src/app
 
-EXPOSE 8080
+# fEXPOSE 8080
 
 ENTRYPOINT ["python3"]
 

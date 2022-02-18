@@ -7,7 +7,8 @@ import logging
 
 # Third-Party Libraries
 from pymodm import connect
-from pymongo import ConnectionFailure, MongoClient
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
 
 # cisagov Libraries
 from config.config import Config

@@ -6,20 +6,17 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    stdin_open: true
-    tty: true
     container_name: li-pca-api
     hostname: li-pca-api
     restart: on-failure
     depends_on:
-      - mongodb
+      - li-pca-db
     volumes:
       - .:/usr/src/api
     environment:
-      - MONGODB_USERNAME=lipca
-      - MONGODB_PASSWORD=devpass1
-      - MONGODB_DATABASE=li-pca
-      - MONGODB_DATABASE=li-pca-app
+      - LI_PCA_DB_USERNAME=lipca
+      - LI_PCA_DB_PASSWORD=devpass1
+      - LI_PCA_DATABASE=li-pca
     networks:
       - backend
     ports:
@@ -27,15 +24,16 @@ services:
       - 8043:443
       - 5678:5678
 
-  mongodb:
+  li-pca-db:
     container_name: li-pca-db
     hostname: li-pca-db
-    image: "mongo:3.6"
+    restart: always
+    image: mongo
     ports:
-      - "27017:27017"
-    command: --profile=1 --slowms=1
+      - 27017:27017
+    # command: --profile=1 --slowms=1
     volumes:
-      - "mongodb:/data/db"
+      - "li-pca-db-data:/data/db"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=li-pca
       - MONGO_INITDB_ROOT_PASSWORD=devpass1
@@ -48,8 +46,6 @@ services:
       context: ./src/ui
     container_name: li-pca-web
     hostname: li-pca-web
-    stdin_open: true
-    tty: true
     restart: on-failure
     depends_on:
       - li-pca-api
@@ -69,4 +65,4 @@ networks:
     driver: bridge
 
 volumes:
-  mongodb:
+  li-pca-db-data:

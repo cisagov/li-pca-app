@@ -1,5 +1,5 @@
 """The database library."""
-# Third-Party Libraries
-import connect
+# cisagov Libraries
+from db import connect
 
 __all__ = connect.__all__

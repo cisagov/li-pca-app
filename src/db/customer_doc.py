@@ -1,8 +1,10 @@
 """The Customer Document."""
 
 # Third-Party Libraries
-from base_doc import BaseDoc
 from pymodm import errors, fields
+
+# cisagov Libraries
+from db.base_doc import BaseDoc
 
 CUSTOMER_COLLECTION = "customers"
 
