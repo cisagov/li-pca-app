@@ -1,0 +1,12 @@
+---
+database-name: "lipca"
+database-uri: "mongodb://mongodb:27017/lipca"
+database-user: "user"
+connection-max-pool-size: 100
+connection-min-pool-size: 0
+connection-max-idle-time-ms: None
+connection-max-concurrent: 2
+connection-socket-timeout-ms: None
+connection-timeout-ms: 20000
+connection-wait-queue-timeout-ms: None
+connection-heartbeat-frequency-ms: None
