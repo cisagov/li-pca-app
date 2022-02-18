@@ -9,11 +9,9 @@ from pymodm.errors import DoesNotExist, OperationError
 
 # cisagov Libraries
 # from api import util
-from db.connect import connect_from_config
 from db.customer_doc import CustomerDoc
 
 # from api.models.customer import Customer  # noqa: E501
-connect_from_config()
 
 
 def create_customer(body=None):  # noqa: E501

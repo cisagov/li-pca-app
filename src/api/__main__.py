@@ -6,6 +6,7 @@ import connexion
 
 # cisagov Libraries
 from api import encoder
+from src.db.connect import connect_from_config
 
 
 def main():
@@ -14,6 +15,7 @@ def main():
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api("openapi.yaml", arguments={"title": "Li-PCA API"}, pythonic_params=True)
     app.run(port=8080)
+    connect_from_config()
 
 
 if __name__ == "__main__":
