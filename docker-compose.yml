@@ -11,6 +11,8 @@ services:
     container_name: li-pca-api
     hostname: li-pca-api
     restart: on-failure
+    depends_on:
+      - mongodb
     volumes:
       - .:/usr/src/api
     environment:
