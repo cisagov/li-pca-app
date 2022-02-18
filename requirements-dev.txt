@@ -2,4 +2,5 @@
 flask_testing
 ipython
 mypy
+pymodm
 semver

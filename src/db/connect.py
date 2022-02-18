@@ -40,6 +40,7 @@ def connect_from_config():
             waitQueueTimeoutMS=config.conn_wait_queue_timeout,
             heartbeatFrequencyMs=config.conn_heartbeat_frequency,
         )
+        logging.info("Connected to LiPCA database...")
         return True
     except ConnectionFailure as e:
         logging.error("ConnectionFailure raised when trying to connect to MongoDB")
