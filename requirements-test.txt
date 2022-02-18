@@ -1,3 +1,4 @@
 --editable .[test]
 --requirement requirements.txt
 flask_testing
+pymodm

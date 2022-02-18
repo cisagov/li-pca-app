@@ -93,6 +93,7 @@ setup(
         "setuptools >= 24.2.0",
         "connexion == 2.6.0",
         "python_dateutil == 2.6.0",
+        "pymodm",
     ],
     extras_require={
         "test": [
