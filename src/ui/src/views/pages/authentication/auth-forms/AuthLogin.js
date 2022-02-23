@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from "@mui/material/styles";
@@ -18,7 +18,6 @@ import {
   OutlinedInput,
   Stack,
   Typography,
-  // useMediaQuery
 } from "@mui/material";
 
 // third party
@@ -39,7 +38,7 @@ const FirebaseLogin = ({ ...others }) => {
   const theme = useTheme();
   const scriptedRef = useScriptRef();
   // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-  const customization = useSelector((state) => state.customization);
+  // const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -62,25 +61,6 @@ const FirebaseLogin = ({ ...others }) => {
             }}
           >
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-
-            <Button
-              variant="outlined"
-              sx={{
-                cursor: "unset",
-                m: 2,
-                py: 0.5,
-                px: 7,
-                borderColor: `${theme.palette.grey[100]} !important`,
-                color: `${theme.palette.grey[900]}!important`,
-                fontWeight: 500,
-                borderRadius: `${customization.borderRadius}px`,
-              }}
-              disableRipple
-              disabled
-            >
-              OR
-            </Button>
-
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
           </Box>
         </Grid>
@@ -98,7 +78,6 @@ const FirebaseLogin = ({ ...others }) => {
           </Box>
         </Grid>
       </Grid>
-
       <Formik
         initialValues={{
           email: "info@codedthemes.com",
@@ -144,7 +123,8 @@ const FirebaseLogin = ({ ...others }) => {
               sx={{ ...theme.typography.customInput }}
             >
               <InputLabel htmlFor="outlined-adornment-email-login">
-                Email Address / Username
+                {" "}
+                Email Address / Username{" "}
               </InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-login"
@@ -172,7 +152,8 @@ const FirebaseLogin = ({ ...others }) => {
               sx={{ ...theme.typography.customInput }}
             >
               <InputLabel htmlFor="outlined-adornment-password-login">
-                Password
+                {" "}
+                Password{" "}
               </InputLabel>
               <OutlinedInput
                 id="outlined-adornment-password-login"
@@ -236,7 +217,6 @@ const FirebaseLogin = ({ ...others }) => {
                 <FormHelperText error>{errors.submit}</FormHelperText>
               </Box>
             )}
-
             <Box sx={{ mt: 2 }}>
               <AnimateButton>
                 <Button
