@@ -1,5 +1,8 @@
 """The database library."""
-# cisagov Libraries
-from db import connect
+from .connect import (
+    connect_from_config,
+    db_from_config,
+    get_connection_db_by_mongoclient,
+)
 
-__all__ = connect.__all__
+__all__ = ["connect_from_config", "get_connection_db_by_mongoclient", "db_from_config"]
