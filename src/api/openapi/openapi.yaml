@@ -880,9 +880,10 @@ components:
         uuid:
           type: string
           format: uuid4
-        customer_uuid:
+        critical_infrastructur_id:
           type: string
-          format: uuid4
+        critical_infrastructur_name:
+          type: string
         name:
           type: string
         contact:
