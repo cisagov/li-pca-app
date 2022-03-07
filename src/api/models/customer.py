@@ -21,6 +21,8 @@ class Customer(Model):
     def __init__(
         self,
         uuid: str = None,
+        critical_infrastructure_id: str = None,
+        critical_infrastructure_name: str = None,
         name: str = None,
         contact: str = None,
         status: str = None,
