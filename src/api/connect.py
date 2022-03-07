@@ -11,7 +11,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 
 # cisagov Libraries
-from config.config import Config
+from api.config.config import Config
 
 
 def connect_from_config():
@@ -29,17 +29,17 @@ def connect_from_config():
         return False
     try:
         connect(
-            config.uri,
+            config.db_uri,
             alias="lipca",
             tz_aware=True,
-            maxPoolSize=config.conn_max_pool_size,
-            minPoolSize=config.conn_min_pool_size,
-            maxIdleTimeMs=config.conn_max_idle_time,
-            maxConnecting=config.conn_max_concurrent,
-            socketTimeoutMS=config.conn_socket_timeout,
-            connectTimeoutMS=config.conn_timeout,
-            waitQueueTimeoutMS=config.conn_wait_queue_timeout,
-            heartbeatFrequencyMs=config.conn_heartbeat_frequency,
+            # maxPoolSize=config.conn_max_pool_size,
+            # minPoolSize=config.conn_min_pool_size,
+            # maxIdleTimeMs=config.conn_max_idle_time,
+            # maxConnecting=config.conn_max_concurrent,
+            # socketTimeoutMS=config.conn_socket_timeout,
+            # connectTimeoutMS=config.conn_timeout,
+            # waitQueueTimeoutMS=config.conn_wait_queue_timeout,
+            # heartbeatFrequencyMs=config.conn_heartbeat_frequency,
         )
         logging.info("Connected to LiPCA database...")
         return True

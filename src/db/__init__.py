@@ -1,5 +1,6 @@
 """The database library."""
-from .connect import (
+# cisagov Libraries
+from api.connect import (
     connect_from_config,
     db_from_config,
     get_connection_db_by_mongoclient,
