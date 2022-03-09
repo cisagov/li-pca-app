@@ -20,7 +20,7 @@ class Model:
     # value is attribute type.
     # example = {"key": "val"}
 
-    swagger_types = {}  # type: ignore
+    swagger_types = {"uuid": "uuid"}  # type: ignore
 
     # attributeMap: The key is attribute name and the
     # value is json key in definition.

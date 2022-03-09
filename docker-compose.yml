@@ -14,9 +14,10 @@ services:
     volumes:
       - .:/usr/src/api
     environment:
-      - LI_PCA_DB_USERNAME=lipca
-      - LI_PCA_DB_PASSWORD=devpass1
-      - LI_PCA_DATABASE=li-pca
+      - DB_USER=li-pca
+      - DB_PW=devpass1
+      - DB_HOST=li-pca-db
+      - DB_PORT=27017
     networks:
       - backend
     ports:
