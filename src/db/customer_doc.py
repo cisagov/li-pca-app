@@ -21,6 +21,7 @@ class CustomerDoc(BaseDoc):
 
         collection_name = CUSTOMER_COLLECTION
         final = True  # so we don't get a '_cls' field in these documents
+        # connection_alias = "lipca"
 
     def get_all_customers(self, filter=None):
         """Get all customer documents in a collection in MongoDB.

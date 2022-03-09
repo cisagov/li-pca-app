@@ -9,9 +9,6 @@ import connexion
 
 # cisagov Libraries
 from api import encoder
-from api.connect import connect_from_config
-
-connect_from_config()
 
 
 def main():

@@ -13,9 +13,11 @@ from api.connect import connect_from_config
 # from api import util
 from api.db.customer_doc import CustomerDoc
 
-connect_from_config()
+#
+# # from api.models.customer import Customer  # noqa: E501
 
-# from api.models.customer import Customer  # noqa: E501
+# connect("mongodb://li-pca:devpass1@li-pca-db:27017/li-pca", tz_aware=True)
+connect_from_config()
 
 
 def create_customer(body=None):  # noqa: E501

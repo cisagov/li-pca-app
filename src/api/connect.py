@@ -30,7 +30,6 @@ def connect_from_config():
     try:
         connect(
             config.db_uri,
-            alias="lipca",
             tz_aware=True,
             # maxPoolSize=config.conn_max_pool_size,
             # minPoolSize=config.conn_min_pool_size,
