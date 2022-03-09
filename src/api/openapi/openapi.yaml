@@ -872,7 +872,6 @@ components:
         name: User
     Customer:
       required:
-        - customer_uuid
         - name
         - uuid
       type: object

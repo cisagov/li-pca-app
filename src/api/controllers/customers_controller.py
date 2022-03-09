@@ -8,8 +8,12 @@ import logging
 from pymodm.errors import DoesNotExist, OperationError
 
 # cisagov Libraries
+from api.connect import connect_from_config
+
 # from api import util
-from db.customer_doc import CustomerDoc
+from api.db.customer_doc import CustomerDoc
+
+connect_from_config()
 
 # from api.models.customer import Customer  # noqa: E501
 
