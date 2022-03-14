@@ -189,13 +189,17 @@ paths:
     post:
       tags:
         - customers
-      summary: Add a new customer to the data store
       operationId: create_customer
       requestBody:
-        $ref: '#/components/requestBodies/Customer'
+        description: Created customer object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
       responses:
-        "405":
-          description: Invalid input
+        default:
+          description: successful operation
       x-openapi-router-controller: api.controllers.customers_controller
   /v1/customers/{uuid}:
     get:
@@ -1040,9 +1044,13 @@ components:
           type: string
   requestBodies:
     Customer:
+      required: true
       description: Customer object to be added to data store
       content:
         application/json:
+          schema:
+            $ref: '#/components/schemas/Customer'
+        application/x-www-form-urlencoded:
           schema:
             $ref: '#/components/schemas/Customer'
         application/xml:

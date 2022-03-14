@@ -94,7 +94,8 @@ setup(
         "connexion == 2.6.0",
         "python_dateutil == 2.6.0",
         "pymodm",
-        "connexion",
+        "marshmallow",
+        "pymongo",
     ],
     extras_require={
         "test": [

@@ -2,6 +2,7 @@
 --editable .
 connexion == 2.6.0
 flask_testing
+marshmallow
 pymodm
 python_dateutil == 2.6.0
 setuptools >= 21.0.0

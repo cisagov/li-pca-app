@@ -5,19 +5,13 @@
 import logging
 
 # Third-Party Libraries
-from pymodm.errors import DoesNotExist, OperationError
+# from pymodm.errors import DoesNotExist, OperationError
+import connexion
 
 # cisagov Libraries
-from api.connect import connect_from_config
+from api.db_manager import CustomerManager
 
-# from api import util
-from api.db.customer_doc import CustomerDoc
-
-#
-# # from api.models.customer import Customer  # noqa: E501
-
-# connect("mongodb://li-pca:devpass1@li-pca-db:27017/li-pca", tz_aware=True)
-connect_from_config()
+customer_manager = CustomerManager()
 
 
 def create_customer(body=None):  # noqa: E501
@@ -30,15 +24,27 @@ def create_customer(body=None):  # noqa: E501
 
     :rtype: None
     """
-    if body is None:
-        logging.warning("Body parameter is null during customer creation")
-        return
-    try:
-        CustomerDoc.save(body["id"], body["name"], body["contact"], body["status"])
+    # if body is None:
+    #     logging.warning("Body parameter is null during customer creation")
+    #     return
+    # try:
+    #     CustomerDoc.save(body["id"], body["name"], body["contact"], body["status"])
 
-    except OperationError as e:
-        logging.error("OperationError encountered when trying to save to database")
-        logging.error("%s" % e)
+    # except OperationError as e:
+    #     logging.error("OperationError encountered when trying to save to database")
+    #     logging.error("%s" % e)
+    # Campaign
+    # loggin
+    # connextion.request.get_json()
+    logging.debug("Conn request: %s", connexion.request.get_json())
+    if connexion.request.is_json:
+        # body = User.from_dict(connexion.request.get_json())  # noqa: E501
+        body = connexion.request.get_json()
+        logging.debug("Body: %s", body)
+        # body = connexion.request.get_json()  # noqa: E501
+        logging.debug("Body: %s", body)
+        customer_manager.save(body)
+        return body
 
 
 def delete_customer_by_uuid(uuid):  # noqa: E501
@@ -51,18 +57,18 @@ def delete_customer_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
-    try:
-        customer = get_customer_by_uuid(uuid)
-        if customer is None:
-            logging.info("Customer with uuid: %d could not be found" % uuid)
-            return
-        customer_doc = CustomerDoc(
-            customer["_id"], customer["name"], customer["contact"], customer["status"]
-        )
-        customer_doc.delete()
-    except OperationError as e:
-        logging.error("Exception raised on customer deletion for uuid: %d" % uuid)
-        logging.error("%s" % e)
+    # try:
+    #     customer = get_customer_by_uuid(uuid)
+    #     if customer is None:
+    #         logging.info("Customer with uuid: %d could not be found" % uuid)
+    #         return
+    #     customer_doc = CustomerDoc(
+    #         customer["_id"], customer["name"], customer["contact"], customer["status"]
+    #     )
+    #     customer_doc.delete()
+    # except OperationError as e:
+    #     logging.error("Exception raised on customer deletion for uuid: %d" % uuid)
+    #     logging.error("%s" % e)
 
 
 def get_all_customers(name=None):  # noqa: E501
@@ -75,12 +81,15 @@ def get_all_customers(name=None):  # noqa: E501
 
     :rtype: List[Customer]
     """
-    try:
-        all_customers = CustomerDoc.get_all_customers(name)
-        return all_customers
-    except OperationError as e:
-        logging.error("Exception raised on getting all customers")
-        logging.error("%s" % e)
+    # try:
+    #     all_customers = CustomerDoc.get_all_customers(name)
+    #     return all_customers
+    # except OperationError as e:
+    #     logging.error("Exception raised on getting all customers")
+    #     logging.error("%s" % e)
+    return customer_manager.all(
+        params=customer_manager.get_query(connexion.request.args)
+    )
 
 
 def get_customer_by_uuid(uuid):  # noqa: E501
@@ -93,14 +102,17 @@ def get_customer_by_uuid(uuid):  # noqa: E501
 
     :rtype: Customer
     """
-    try:
-        customer = CustomerDoc.find_by_customer_uuid(uuid)
-        if customer is None:
-            logging.info("Customer with uuid: %d could not be found" % uuid)
-        return customer
-    except OperationError as e:
-        logging.error("Exception raised on getting customer with uuid: %d" % uuid)
-        logging.error("%s" % e)
+    return customer_manager.all(
+        params=customer_manager.get_query(connexion.request.args)
+    )
+    # try:
+    #     customer = CustomerDoc.find_by_customer_uuid(uuid)
+    #     if customer is None:
+    #         logging.info("Customer with uuid: %d could not be found" % uuid)
+    #     return customer
+    # except OperationError as e:
+    #     logging.error("Exception raised on getting customer with uuid: %d" % uuid)
+    #     logging.error("%s" % e)
 
 
 def update_customer_by_uuid(uuid, body=None):  # noqa: E501
@@ -115,12 +127,12 @@ def update_customer_by_uuid(uuid, body=None):  # noqa: E501
 
     :rtype: None
     """
-    if body is None:
-        logging.warning("Body parameter is null during customer update")
-        return
+    # if body is None:
+    #     logging.warning("Body parameter is null during customer update")
+    #     return
 
-    try:
-        CustomerDoc.save(uuid, body["name"], body["contact"], body["status"])
-    except (DoesNotExist, OperationError) as e:
-        logging.error("Exception raised on updating customer with uuid: %d" % uuid)
-        logging.error("%s" % e)
+    # try:
+    #     CustomerDoc.save(uuid, body["name"], body["contact"], body["status"])
+    # except (DoesNotExist, OperationError) as e:
+    #     logging.error("Exception raised on updating customer with uuid: %d" % uuid)
+    #     logging.error("%s" % e)
