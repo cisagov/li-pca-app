@@ -21,7 +21,6 @@ class Manager:
         self.schema = schema
         self.other_indexes = other_indexes
         self.db = get_db()
-        self.collection = self.db.collection
 
     def get_query(self, data):
         """Get query parameters from schema."""
@@ -122,7 +121,7 @@ class Manager:
         """Get item from collection by id or filter."""
         if document_id:
             return self.read_data(
-                self.db.find_one(
+                self.collection.find_one(
                     self.document_query(document_id),
                     self.convert_fields(fields),
                 )
@@ -137,7 +136,7 @@ class Manager:
 
     def all(self, params=None, fields=None, sortby=None, limit=None):
         """Get all items in a collection."""
-        query = self.collection.find(
+        query = self.db.collection.find(
             self.format_params(params), self.convert_fields(fields)
         )
         if sortby:

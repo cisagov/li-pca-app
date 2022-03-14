@@ -7,11 +7,6 @@ from pymongo import MongoClient
 
 # import mongomock
 
-DB_USER = "li-pca"
-DB_PW = "devpass1"
-DB_HOST = "li-pca-db"
-DB_PORT = 27017
-
 
 def get_connection_string(db_user, db_pw, db_host, db_port):
     """Get connection string for connecting to MongoDB."""
