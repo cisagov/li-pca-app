@@ -1,5 +1,6 @@
 import React from "react";
 // material-ui
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -80,6 +81,9 @@ class NewCustomerPage extends React.Component {
                 </Card>
               </Grid>
             )}
+            <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 3 }}>
+              <Alert severity="error">No contacts available</Alert>
+            </Grid>
             <Grid
               item
               display={{ xs: "none", sm: "block" }}
