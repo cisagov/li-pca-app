@@ -63,3 +63,19 @@ and this project adheres to
   - Cleaned up AuthRegister.js and AuthLogin.js from src/views/pages
 - **Removed**
   - Removed EnhancedTable.js and the reference to it in src/views/campaigns/index.js
+
+## [0.0.5] - 2022-03-15 ##
+
+- **Added**
+- New route in routes/MainRoutes.js for "/customers/newcustomer"
+- New folders in ui-component called /forms and /tables
+- The folder /forms has new components CustomerForm and CustomerPOCForm
+- The folder /tables has new components MainDataTable and DisplayDataTable
+- Add packages "@date-io/date-fns", "@types/date-fns" for selecting dates in a form
+
+- **Changed**
+  - .eslintrc has been modified to match the linter in pre-commit
+  - Change references to removed file in views/customers/index.js to new one
+
+- **Removed**
+  - SingleRowSelectionGrid.js has been removed and replaced with /tables/MainDataTable.js
