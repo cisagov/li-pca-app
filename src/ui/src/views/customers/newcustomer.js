@@ -13,6 +13,14 @@ import MainCard from "ui-component/cards/MainCard";
 // ==============================|| New Customer View ||============================== //
 
 class NewCustomerPage extends React.Component {
+  constructor() {
+    super();
+    this.state = { isToggleOn: true };
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    this.setState((state) => ({ isToggleOn: !state.isToggleOn }));
+  }
   render() {
     return (
       <MainCard title="Campaigns">
@@ -63,11 +71,15 @@ class NewCustomerPage extends React.Component {
                 Customer/Organization Point of Contacts
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: 1 }}>
-              <Card variant="outlined">
-                <CustomerPOCForm />
-              </Card>
-            </Grid>
+            {this.state.isToggleOn ? (
+              ""
+            ) : (
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: 1 }}>
+                <Card variant="outlined">
+                  <CustomerPOCForm />
+                </Card>
+              </Grid>
+            )}
             <Grid
               item
               display={{ xs: "none", sm: "block" }}
