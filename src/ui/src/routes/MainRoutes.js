@@ -8,7 +8,11 @@ import MainLayout from "layout/MainLayout";
 const CampaignsPage = Loadable(lazy(() => import("views/campaigns")));
 // customers page routing
 const CustomersPage = Loadable(lazy(() => import("views/customers")));
-// templates page routing
+// edit customers page routing
+const EditCustomerPage = Loadable(
+  lazy(() => import("views/customers/editcustomer"))
+);
+// new customers page routing
 const NewCustomerPage = Loadable(
   lazy(() => import("views/customers/newcustomer"))
 );
@@ -34,6 +38,10 @@ const MainRoutes = {
     {
       path: "/customers",
       element: <CustomersPage />,
+    },
+    {
+      path: "/customers/editcustomer",
+      element: <EditCustomerPage />,
     },
     {
       path: "/customers/newcustomer",
