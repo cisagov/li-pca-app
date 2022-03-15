@@ -72,10 +72,17 @@ and this project adheres to
 - The folder /forms has new components CustomerForm and CustomerPOCForm
 - The folder /tables has new components MainDataTable and DisplayDataTable
 - Add packages "@date-io/date-fns", "@types/date-fns" for selecting dates in a form
+- Add editcustomer by making a copy of addcustomer
+- New route in routes/MainRoutes.js for "/customers/editcustomer"
+- Add toggle functionality to edit|newcustomer, button "Add Customer Contact"
+- Add alert in newcustomer "No contacts available"
 
 - **Changed**
   - .eslintrc has been modified to match the linter in pre-commit
   - Change references to removed file in views/customers/index.js to new one
+  - Turned newcustomer and editcustomer into class components
 
 - **Removed**
   - SingleRowSelectionGrid.js has been removed and replaced with /tables/MainDataTable.js
+  - Removed unused props and style in CustomerForm.js
+  - Removed components and data in newcustomer only needed in editcustomer
