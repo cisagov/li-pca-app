@@ -11,7 +11,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
-export default function CustomerForm(props) {
+export default function CustomerForm() {
   const [dateVal, setDateVal] = React.useState(null);
   const [cusTypeVal, setCusTypeVal] = React.useState("");
   return (
@@ -128,7 +128,7 @@ export default function CustomerForm(props) {
             // value={values.custDomain}
           />
         </Grid>
-        <Grid item xs={10} sm={3} md={3} lg={3} xl={3} sx={{ mt: 3 }}>
+        <Grid item xs={10} sm={3} md={3} lg={3} xl={3}>
           <TextField
             fullWidth
             required
