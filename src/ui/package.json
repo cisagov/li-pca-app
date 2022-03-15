@@ -17,6 +17,7 @@
     ]
   },
   "dependencies": {
+    "@date-io/date-fns": "^2.13.1",
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
@@ -31,6 +32,7 @@
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
+    "@types/date-fns": "^2.6.0",
     "apexcharts": "^3.26.1",
     "clsx": "^1.1.1",
     "formik": "^2.2.6",
