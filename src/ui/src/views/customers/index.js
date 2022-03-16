@@ -5,8 +5,9 @@ import IconButton from "@mui/material/IconButton";
 
 // project imports
 import MainCard from "ui-component/cards/MainCard";
-import SingleRowSelectionGrid from "ui-component/SingleRowSelectionGrid";
-// ==============================|| SAMPLE PAGE ||============================== //
+import MainDataTable from "ui-component/tables/MainDataTable";
+
+// ==============================|| Customers view ||============================== //
 
 const rows = [
   {
@@ -118,7 +119,7 @@ const columns = [
   { field: "col5", headerName: "State", flex: 1 },
   { field: "col6", headerName: "Zip Code", flex: 1 },
   {
-    field: "edit",
+    field: "col7",
     headerName: "Edit",
     sortable: false,
     disableClickEventBubbling: true,
@@ -142,7 +143,7 @@ const CustomersPage = () => (
       </Grid>
     </Grid>
     <br />
-    <SingleRowSelectionGrid data={data} />
+    <MainDataTable data={data} newEntryRoute="newcustomer" />
   </MainCard>
 );
 

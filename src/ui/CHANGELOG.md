@@ -63,3 +63,26 @@ and this project adheres to
   - Cleaned up AuthRegister.js and AuthLogin.js from src/views/pages
 - **Removed**
   - Removed EnhancedTable.js and the reference to it in src/views/campaigns/index.js
+
+## [0.0.5] - 2022-03-15 ##
+
+- **Added**
+  - New route in routes/MainRoutes.js for "/customers/newcustomer"
+  - New folders in ui-component called /forms and /tables
+  - The folder /forms has new components CustomerForm and CustomerPOCForm
+  - The folder /tables has new components MainDataTable and DisplayDataTable
+  - Add packages "@date-io/date-fns", "@types/date-fns" to select dates in forms
+  - Add editcustomer by making a copy of addcustomer
+  - New route in routes/MainRoutes.js for "/customers/editcustomer"
+  - Add toggle functionality to edit|newcustomer, button "Add Customer Contact"
+  - Add alert in newcustomer "No contacts available"
+
+- **Changed**
+  - .eslintrc has been modified to match the linter in pre-commit
+  - Change references to removed file in views/customers/index.js to new one
+  - Turned newcustomer and editcustomer into class components
+
+- **Removed**
+  - SingleRowSelectionGrid.js has been removed and replaced with /tables/MainDataTable.js
+  - Removed unused props and style in CustomerForm.js
+  - Removed components and data in newcustomer only needed in editcustomer

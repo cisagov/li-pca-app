@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // material-ui
@@ -6,7 +7,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
-import AddButton from "@mui/icons-material/Add";
+import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
 import {
@@ -26,9 +27,15 @@ CustomToolbar.propTypes = {
   clearSearch: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
+  newEntryRoute: PropTypes.string.isRequired,
 };
 
 function CustomToolbar(props) {
+  let navigate = useNavigate();
+  const newEntryRouteChange = () => {
+    let path = `${props.newEntryRoute}`;
+    navigate(path);
+  };
   return (
     <GridToolbarContainer>
       <Box
@@ -76,21 +83,24 @@ function CustomToolbar(props) {
       <GridToolbarFilterButton />
       <GridToolbarDensitySelector />
       <GridToolbarExport />
-      <Button size="small" startIcon={<AddButton fontSize="small" />}>
+      <Button
+        size="small"
+        startIcon={<AddIcon fontSize="small" />}
+        onClick={newEntryRouteChange}
+      >
         New Row
       </Button>
     </GridToolbarContainer>
   );
 }
 
-SingleRowSelectionGrid.propTypes = {
+MainDataTable.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-export default function SingleRowSelectionGrid(props) {
+export default function MainDataTable(props) {
   const [searchText, setSearchText] = React.useState("");
   const [rows, setRows] = React.useState(props.data.rows);
-
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
     const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
@@ -107,25 +117,24 @@ export default function SingleRowSelectionGrid(props) {
   }, [props.data.rows]);
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={props.data.columns}
-        autoHeight
-        disableSelectionOnClick
-        components={{
-          Toolbar: CustomToolbar,
-        }}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        componentsProps={{
-          toolbar: {
-            value: searchText,
-            onChange: (event) => requestSearch(event.target.value),
-            clearSearch: () => requestSearch(""),
-          },
-        }}
-      />
-    </div>
+    <DataGrid
+      rows={rows}
+      columns={props.data.columns}
+      autoHeight
+      disableSelectionOnClick
+      components={{
+        Toolbar: CustomToolbar,
+      }}
+      pageSize={10}
+      rowsPerPageOptions={[10]}
+      componentsProps={{
+        toolbar: {
+          value: searchText,
+          onChange: (event) => requestSearch(event.target.value),
+          clearSearch: () => requestSearch(""),
+          newEntryRoute: props.newEntryRoute,
+        },
+      }}
+    />
   );
 }
