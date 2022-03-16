@@ -79,7 +79,7 @@ class Manager:
     def create_indexes(self):
         """Create indexes for collection."""
         for index in self.other_indexes:
-            self.collection.create_index(index, unique=False)
+            self.db.collection.create_index(index, unique=False)
 
     def add_created(self, data):
         """Add created attribute to data on save."""
@@ -121,14 +121,14 @@ class Manager:
         """Get item from collection by id or filter."""
         if document_id:
             return self.read_data(
-                self.collection.find_one(
+                self.db.collection.find_one(
                     self.document_query(document_id),
                     self.convert_fields(fields),
                 )
             )
         else:
             return self.read_data(
-                self.collection.find_one(
+                self.db.collection.find_one(
                     filter_data,
                     self.convert_fields(fields),
                 )
@@ -148,7 +148,7 @@ class Manager:
     def delete(self, document_id=None, params=None):
         """Delete item by object id."""
         if document_id:
-            return self.collection.delete_one(
+            return self.db.collection.delete_one(
                 self.document_query(document_id)
             ).raw_result
         if params or params == {}:
@@ -161,7 +161,7 @@ class Manager:
         """Update item by id."""
         data = self.clean_data(data)
         data = self.add_updated(data)
-        self.collection.update_one(
+        self.db.collection.update_one(
             self.document_query(document_id),
             {"$set": self.load_data(data, partial=True)},
         ).raw_result
@@ -170,7 +170,7 @@ class Manager:
         """Update many items with params."""
         data = self.clean_data(data)
         data = self.add_updated(data)
-        self.collection.update_many(
+        self.db.collection.update_many(
             params,
             {"$set": self.load_data(data, partial=True)},
         )
@@ -180,7 +180,7 @@ class Manager:
         self.create_indexes()
         data = self.clean_data(data)
         data = self.add_created(data)
-        result = self.collection.insert_one(self.load_data(data))
+        result = self.db.collection.insert_one(self.load_data(data))
         return {"_id": str(result.inserted_id)}
 
     def save_many(self, data):
@@ -188,18 +188,18 @@ class Manager:
         self.create_indexes()
         data = self.clean_data(data)
         data = self.add_created(data)
-        result = self.collection.insert_many(self.load_data(data, many=True))
+        result = self.db.collection.insert_many(self.load_data(data, many=True))
         return result.inserted_ids
 
     def add_to_list(self, document_id, field, data):
         """Add item to list in document."""
-        return self.collection.update_one(
+        return self.db.collection.update_one(
             self.document_query(document_id), {"$push": {field: data}}
         ).raw_result
 
     def delete_from_list(self, document_id, field, data):
         """Delete item from list in document."""
-        return self.collection.update_one(
+        return self.db.collection.update_one(
             self.document_query(document_id), {"$pull": {field: data}}
         ).raw_result
 
@@ -207,14 +207,14 @@ class Manager:
         """Update item in list from document."""
         query = self.document_query(document_id)
         query.update(params)
-        return self.collection.update_one(query, {"$set": {field: data}}).raw_result
+        return self.db.collection.update_one(query, {"$set": {field: data}}).raw_result
 
     def upsert(self, query, data):
         """Upsert documents into the database."""
         data = self.clean_data(data)
         data = self.add_created(data)
         data = self.add_updated(data)
-        self.collection.update_one(
+        self.db.collection.update_one(
             query,
             {"$set": self.load_data(data)},
             upsert=True,
@@ -222,19 +222,19 @@ class Manager:
 
     def random(self, count=1):
         """Select a random record from collection."""
-        return list(self.collection.aggregate([{"$sample": {"size": count}}]))
+        return list(self.db.collection.aggregate([{"$sample": {"size": count}}]))
 
     def exists(self, parameters=None):
         """Check if record exists."""
         fields = self.convert_fields(["_id"])
-        result = list(self.collection.find(parameters, fields))
+        result = list(self.db.collection.find(parameters, fields))
         return bool(result)
 
     def find_one_and_update(self, params, data, fields=None):
         """Find an object and update it."""
         data = self.clean_data(data)
         data = self.add_updated(data)
-        return self.collection.find_one_and_update(
+        return self.db.collection.find_one_and_update(
             params,
             {"$set": self.load_data(data, partial=True)},
             return_document=pymongo.ReturnDocument.AFTER,
