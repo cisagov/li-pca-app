@@ -10,6 +10,7 @@ import pymongo
 # cisagov Libraries
 from api.config.db import get_db
 from api.models.customer_mongo import CustomerSchema
+from api.models.template_mongo import TemplateSchema
 
 
 class Manager:
@@ -351,12 +352,11 @@ class CustomerManager(Manager):
 #         )
 #
 #
-# class TemplateManager(Manager):
-#     """Template Manager."""
-#
-#     def __init__(self):
-#         """Super."""
-#         return super().__init__(
-#             collection="template",
-#             schema=TemplateSchema,
-#         )
+
+
+class TemplateManager(Manager):
+    """Template Manager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(collection="template", schema=TemplateSchema)
