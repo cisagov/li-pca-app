@@ -1,0 +1,14 @@
+"""Landing page schemas."""
+# Third-Party Libraries
+from marshmallow import fields
+
+# cisagov Libraries
+from api.models.base import BaseSchema
+
+
+class LandingPageSchema(BaseSchema):
+    """LandingPageSchema."""
+
+    name = fields.Str(required=True)
+    is_default_template = fields.Bool(missing=False)
+    html = fields.Str()

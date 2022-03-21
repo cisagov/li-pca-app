@@ -3,7 +3,7 @@
 from marshmallow import Schema, fields, validate
 
 # cisagov Libraries
-from api.schemas.base_schema import BaseSchema
+from api.models.base import BaseSchema
 
 
 class TemplateAppearanceSchema(Schema):

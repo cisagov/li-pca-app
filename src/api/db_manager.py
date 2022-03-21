@@ -9,7 +9,15 @@ import pymongo
 
 # cisagov Libraries
 from api.config.db import get_db
+from api.models.config_mongo import ConfigSchema
 from api.models.customer_mongo import CustomerSchema
+from api.models.cycle_mongo import CycleSchema
+from api.models.landing_page_mongo import LandingPageSchema
+from api.models.nonhuman_mongo import NonHumanSchema
+from api.models.recommendation_mongo import RecommendationsSchema
+from api.models.sending_profile_mongo import SendingProfileSchema
+from api.models.subscription_manager_mongo import SubscriptionSchema
+from api.models.target_mongo import TargetSchema
 from api.models.template_mongo import TemplateSchema
 
 
@@ -243,15 +251,15 @@ class Manager:
         )
 
 
-# class ConfigManager(Manager):
-#     """ConfigManager."""
-#
-#     def __init__(self):
-#         """Super."""
-#         return super().__init__(
-#             collection="config",
-#             schema=ConfigSchema,
-#         )
+class ConfigManager(Manager):
+    """ConfigManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="config",
+            schema=ConfigSchema,
+        )
 
 
 class CustomerManager(Manager):
@@ -265,93 +273,91 @@ class CustomerManager(Manager):
         )
 
 
-# class CycleManager(Manager):
-#     """CycleManager."""
-#
-#     def __init__(self):
-#         """Super."""
-#         return super().__init__(
-#             collection="cycle",
-#             schema=CycleSchema,
-#         )
-#
-#
-# class LandingPageManager(Manager):
-#     """LandingPageManager."""
+class CycleManager(Manager):
+    """CycleManager."""
 
-#     def __init__(self):
-#         """Super."""
-#         return super().__init__(
-#             collection="landing_page",
-#             schema=LandingPageSchema,
-#         )
-
-#     def clear_and_set_default(self, document_id):
-#         """Set Default Landing Page."""
-#         sub_query = {}
-#         newvalues = {"$set": {"is_default_template": False}}
-#         self.db.update_many(sub_query, newvalues)
-#         sub_query = self.document_query(document_id)
-#         newvalues = {"$set": {"is_default_template": True}}
-#         self.db.update_one(sub_query, newvalues)
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="cycle",
+            schema=CycleSchema,
+        )
 
 
-# class NonHumanManager(Manager):
-#     """NonHumanManager."""
-#
-#     def __init__(self):
-#         """Super."""
-#         return super().__init__(
-#             collection="nonhuman",
-#             schema=NonHumanSchema,
-#         )
-#
-#
-# class RecommendationManager(Manager):
-#     """RecommendationManager."""
-#
-#     def __init__(self):
-#         """Super."""
-#         return super().__init__(
-#             collection="recommendation",
-#             schema=RecommendationsSchema,
-#         )
-#
-#
-# class SendingProfileManager(Manager):
-#     """SendingProfileManager."""
-#
-#     def __init__(self):
-#         """Super."""
-#         return super().__init__(
-#             collection="sending_profile",
-#             schema=SendingProfileSchema,
-#         )
-#
-#
-# class SubscriptionManager(Manager):
-#     """SubscriptionManager."""
-#
-#     def __init__(self):
-#         """Super."""
-#         return super().__init__(
-#             collection="subscription",
-#             schema=SubscriptionSchema,
-#         )
-#
-#
-# class TargetManager(Manager):
-#     """Target Manager."""
-#
-#     def __init__(self):
-#         """Super."""
-#         return super().__init__(
-#             collection="target",
-#             schema=TargetSchema,
-#             other_indexes=["email"],
-#         )
-#
-#
+class LandingPageManager(Manager):
+    """LandingPageManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="landing_page",
+            schema=LandingPageSchema,
+        )
+
+    def clear_and_set_default(self, document_id):
+        """Set Default Landing Page."""
+        sub_query = {}
+        newvalues = {"$set": {"is_default_template": False}}
+        self.db.update_many(sub_query, newvalues)
+        sub_query = self.document_query(document_id)
+        newvalues = {"$set": {"is_default_template": True}}
+        self.db.update_one(sub_query, newvalues)
+
+
+class NonHumanManager(Manager):
+    """NonHumanManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="nonhuman",
+            schema=NonHumanSchema,
+        )
+
+
+class RecommendationManager(Manager):
+    """RecommendationManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="recommendation",
+            schema=RecommendationsSchema,
+        )
+
+
+class SendingProfileManager(Manager):
+    """SendingProfileManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="sending_profile",
+            schema=SendingProfileSchema,
+        )
+
+
+class SubscriptionManager(Manager):
+    """SubscriptionManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="subscription",
+            schema=SubscriptionSchema,
+        )
+
+
+class TargetManager(Manager):
+    """Target Manager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="target",
+            schema=TargetSchema,
+            other_indexes=["email"],
+        )
 
 
 class TemplateManager(Manager):
