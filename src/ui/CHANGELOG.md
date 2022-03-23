@@ -16,26 +16,26 @@ and this project adheres to
   - lipca_logo.png to src/assets/images
 - **Changed**
   - "react-scripts" version from 4.0.3 to 5.0.0 in package.json
-  - secondary colors to other colors in src/assets/scss/_themes-vars.module.scss
+  - secondary colors to other colors in src/assets/scss/\_themes-vars.module.scss
   - svg file to a real image in src/ui-component/Logo.js
 - **Removed**
   - "airbnb" package from .eslintrc
   - removed sign in capability with Google in AuthLogin.js and AuthRegister.js in
-  src/views/pages/authentiation/auth-forms
+    src/views/pages/authentiation/auth-forms
 
-## [0.0.2] - 2022-02-10 ###
+## [0.0.2] - 2022-02-10 ##
 
 - **Added**
   - templates, landing-pages, sending-profiles,
-  campaigns folders created with their own index.js in src/views
+    campaigns folders created with their own index.js in src/views
 - **Changed**
   - sample-page view is now called customer along with all its references
   - image used for User1 in src/layout/MainLayout/Header/ProfileSection/index.js
 - **Removed**
   - removed search and notification buttons in the index.js and their folders in
-  src/layout/MainLayout/Header/
+    src/layout/MainLayout/Header/
   - removed unneeded text and cards and their imports in the profile pop down in
-  src/layout/MainLayout/Header/ProfileSection/index.js
+    src/layout/MainLayout/Header/ProfileSection/index.js
 
 ## [0.0.3] - 2022-02-11 ##
 
@@ -50,7 +50,7 @@ and this project adheres to
   - commented out useTheme in src/ui-component/Logo.js
   - Removed logos and google icons from src/asset
   - Removed importing utilities and dashboard from src/layout/menu-items/index.js,
-  src/routes/MainRoutes.js, and their folders in src/views
+    src/routes/MainRoutes.js, and their folders in src/views
   - public/index.html removed some meta tags
 
 ## [0.0.4] - 2022-02-22 ##
@@ -67,17 +67,20 @@ and this project adheres to
 ## [0.0.5] - 2022-03-15 ##
 
 - **Added**
+
   - New route in routes/MainRoutes.js for "/customers/newcustomer"
   - New folders in ui-component called /forms and /tables
   - The folder /forms has new components CustomerForm and CustomerPOCForm
   - The folder /tables has new components MainDataTable and DisplayDataTable
-  - Add packages "@date-io/date-fns", "@types/date-fns" for selecting dates in a form
+  - Add packages "@date-io/date-fns", "@types/date-fns" for selecting dates in a
+   form
   - Add editcustomer by making a copy of addcustomer
   - New route in routes/MainRoutes.js for "/customers/editcustomer"
   - Add toggle functionality to edit|newcustomer, button "Add Customer Contact"
   - Add alert in newcustomer "No contacts available"
 
 - **Changed**
+
   - .eslintrc has been modified to match the linter in pre-commit
   - Change references to removed file in views/customers/index.js to new one
   - Turned newcustomer and editcustomer into class components
@@ -86,3 +89,13 @@ and this project adheres to
   - SingleRowSelectionGrid.js has been removed and replaced with /tables/MainDataTable.js
   - Removed unused props and style in CustomerForm.js
   - Removed components and data in newcustomer only needed in editcustomer
+
+## [0.0.6] - 2022-03-23 ##
+
+- **Changed**
+  - In newcustomer.js and editcustomer.js, they are back to being
+   functional components and added two hooks, one that takes care of
+   toggling the add customer contact card, and the other that will pass
+   along the data to the forms and back.
+  - In CustomerForm.js and CustomerPOCForm.js, each form element now
+   includes a value from props and an onChange function that will update the value.
