@@ -1,9 +1,6 @@
-import React from "react";
-// import ReactDOM from 'react-dom';
-// import { useFormik } from 'formik';
-// import * as yup from "yup";
-// material-ui
+//material-ui
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import Button from "@mui/material/Button";
 import DatePicker from "@mui/lab/DatePicker";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
@@ -11,9 +8,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
-export default function CustomerForm() {
-  const [dateVal, setDateVal] = React.useState(null);
-  const [cusTypeVal, setCusTypeVal] = React.useState("");
+const CustomerForm = (props) => {
   return (
     <FormControl>
       <Grid container spacing={2}>
@@ -24,8 +19,13 @@ export default function CustomerForm() {
             id="custName"
             name="custName"
             label="Customer Name"
-            // onChange={formik.handleChange}
-            // value={values.custName}
+            value={props.custForm.custName}
+            onChange={(e) => {
+              props.setCustform({
+                ...props.custForm,
+                custName: e.target.value,
+              });
+            }}
           />
         </Grid>
         <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
@@ -35,9 +35,10 @@ export default function CustomerForm() {
             id="custId"
             name="custId"
             label="Customer Identifier"
-            // helperText="Customer acronym"
-            // onChange={formik.handleChange}
-            // value={values.custId}
+            value={props.custForm.custId}
+            onChange={(e) => {
+              props.setCustform({ ...props.custForm, custId: e.target.value });
+            }}
           />
         </Grid>
         <Grid item xs={10} sm={7} md={7} lg={7} xl={7}>
@@ -47,8 +48,13 @@ export default function CustomerForm() {
             id="custDomain"
             name="custDomain"
             label="Customer Domain"
-            // onChange={formik.handleChange}
-            // value={values.custDomain}
+            value={props.custForm.custDomain}
+            onChange={(e) => {
+              props.setCustform({
+                ...props.custForm,
+                custDomain: e.target.value,
+              });
+            }}
           />
         </Grid>
         <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
@@ -57,9 +63,9 @@ export default function CustomerForm() {
               fullWidth
               required
               label="Appendix A Date"
-              value={dateVal}
-              onChange={(event) => {
-                setDateVal(event);
+              value={props.custForm.dateVal}
+              onChange={(e) => {
+                props.setCustform({ ...props.custForm, dateVal: e });
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -70,18 +76,27 @@ export default function CustomerForm() {
             select
             fullWidth
             required
-            value={cusTypeVal}
+            value={props.custForm.custType}
             label="Customer Type"
-            onChange={(event) => {
-              setCusTypeVal(event.target.value);
+            onChange={(e) => {
+              props.setCustform({
+                ...props.custForm,
+                custType: e.target.value,
+              });
             }}
           >
-            <MenuItem value={10}>Government - Federal</MenuItem>
-            <MenuItem value={20}>Government - State</MenuItem>
-            <MenuItem value={30}>Government - Local</MenuItem>
-            <MenuItem value={40}>Government - Tribal</MenuItem>
-            <MenuItem value={50}>Government - Territorial</MenuItem>
-            <MenuItem value={60}>Private</MenuItem>
+            <MenuItem value={"Government - Federal"}>
+              Government - Federal
+            </MenuItem>
+            <MenuItem value={"Government - State"}>Government - State</MenuItem>
+            <MenuItem value={"Government - Local"}>Government - Local</MenuItem>
+            <MenuItem value={"Government - Tribal"}>
+              Government - Tribal
+            </MenuItem>
+            <MenuItem value={"Government - Territorial"}>
+              Government - Territorial
+            </MenuItem>
+            <MenuItem value={"Private"}>Private</MenuItem>
           </TextField>
         </Grid>
         <Grid item xs={2} sm={4} md={5} lg={5} xl={5}></Grid>
@@ -92,8 +107,13 @@ export default function CustomerForm() {
             id="addressOne"
             name="addressOne"
             label="Address 1"
-            // onChange={formik.handleChange}
-            // value={values.custDomain}
+            value={props.custForm.addressOne}
+            onChange={(e) => {
+              props.setCustform({
+                ...props.custForm,
+                addressOne: e.target.value,
+              });
+            }}
           />
         </Grid>
         <Grid item xs={10} sm={4} md={5} lg={5} xl={5}>
@@ -102,8 +122,13 @@ export default function CustomerForm() {
             id="addressTwo"
             name="addressTwo"
             label="Address 2"
-            // onChange={formik.handleChange}
-            // value={values.custDomain}
+            value={props.custForm.addressTwo}
+            onChange={(e) => {
+              props.setCustform({
+                ...props.custForm,
+                addressTwo: e.target.value,
+              });
+            }}
           />
         </Grid>
         <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
@@ -113,8 +138,10 @@ export default function CustomerForm() {
             id="city"
             name="city"
             label="City"
-            // onChange={formik.handleChange}
-            // value={values.custDomain}
+            value={props.custForm.city}
+            onChange={(e) => {
+              props.setCustform({ ...props.custForm, city: e.target.value });
+            }}
           />
         </Grid>
         <Grid item xs={10} sm={3} md={3} lg={3} xl={3}>
@@ -124,8 +151,10 @@ export default function CustomerForm() {
             id="state"
             name="state"
             label="State"
-            // onChange={formik.handleChange}
-            // value={values.custDomain}
+            value={props.custForm.state}
+            onChange={(e) => {
+              props.setCustform({ ...props.custForm, state: e.target.value });
+            }}
           />
         </Grid>
         <Grid item xs={10} sm={3} md={3} lg={3} xl={3}>
@@ -135,11 +164,46 @@ export default function CustomerForm() {
             id="zip"
             name="zip"
             label="Zip Code"
-            // onChange={formik.handleChange}
-            // value={values.custDomain}
+            value={props.custForm.zip}
+            onChange={(e) => {
+              props.setCustform({ ...props.custForm, zip: e.target.value });
+            }}
           />
+        </Grid>
+        <Grid
+          item
+          display={{ xs: "none", sm: "block" }}
+          sm={9}
+          md={10}
+          lg={10}
+          xl={11}
+        />
+        <Grid item xs={10} sm={3} md={2} lg={2} xl={1}>
+          <Button
+            size="large"
+            fullWidth
+            onClick={() => {
+              props.setCustform({
+                ...props.custForm,
+                custName: "",
+                custId: "",
+                custDomain: "",
+                dateVal: Date.now(),
+                custType: "",
+                addressOne: "",
+                addressTwo: "",
+                city: "",
+                state: "",
+                zip: "",
+              });
+            }}
+          >
+            Reset
+          </Button>
         </Grid>
       </Grid>
     </FormControl>
   );
-}
+};
+
+export default CustomerForm;

@@ -1,7 +1,3 @@
-// import React from "react";
-// import ReactDOM from 'react-dom';
-// import { useFormik } from 'formik';
-// import * as yup from "yup";
 // material-ui
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
@@ -11,7 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 
-export default function CustomerPOCForm() {
+export default function CustomerPOCForm(props) {
   return (
     // <form onSubmit={formik.handleSubmit}>
     <div>
@@ -27,8 +23,12 @@ export default function CustomerPOCForm() {
                   id="firstName"
                   name="firstName"
                   label="First Name"
-                  // onChange={formik.handleChange}
-                  // value={values.firstName}
+                  value={props.custForm.contact_list.firstName}
+                  onChange={(e) => {
+                    const cF = { ...props.custForm };
+                    cF.contact_list.firstName = e.target.value;
+                    props.setCustform(cF);
+                  }}
                 />
               </Grid>
               <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
@@ -38,8 +38,12 @@ export default function CustomerPOCForm() {
                   id="lastName"
                   name="lastName"
                   label="Last Name"
-                  // onChange={formik.handleChange}
-                  // value={values.lastName}
+                  value={props.custForm.contact_list.lastName}
+                  onChange={(e) => {
+                    const cF = { ...props.custForm };
+                    cF.contact_list.lastName = e.target.value;
+                    props.setCustform(cF);
+                  }}
                 />
               </Grid>
               <Grid item xs={10} sm={4} md={4} lg={4} xl={4}>
@@ -48,8 +52,12 @@ export default function CustomerPOCForm() {
                   id="title"
                   name="title"
                   label="Title"
-                  // onChange={formik.handleChange}
-                  // value={values.title}
+                  value={props.custForm.contact_list.title}
+                  onChange={(e) => {
+                    const cF = { ...props.custForm };
+                    cF.contact_list.title = e.target.value;
+                    props.setCustform(cF);
+                  }}
                 />
               </Grid>
               <Grid item xs={10} sm={4} md={4} lg={4} xl={4}>
@@ -58,8 +66,12 @@ export default function CustomerPOCForm() {
                   id="officePhone"
                   name="officePhone"
                   label="Office Phone"
-                  // onChange={formik.handleChange}
-                  // value={values.officePhone}
+                  value={props.custForm.contact_list.officePhone}
+                  onChange={(e) => {
+                    const cF = { ...props.custForm };
+                    cF.contact_list.officePhone = e.target.value;
+                    props.setCustform(cF);
+                  }}
                 />
               </Grid>
               <Grid item xs={10} sm={4} md={4} lg={4} xl={4}>
@@ -68,8 +80,12 @@ export default function CustomerPOCForm() {
                   id="mobilePhone"
                   name="mobilePhone"
                   label="Mobile Phone"
-                  // onChange={formik.handleChange}
-                  // value={values.mobilePhone}
+                  value={props.custForm.contact_list.mobilePhone}
+                  onChange={(e) => {
+                    const cF = { ...props.custForm };
+                    cF.contact_list.mobilePhone = e.target.value;
+                    props.setCustform(cF);
+                  }}
                 />
               </Grid>
               <Grid item xs={10} sm={10} md={7} lg={7} xl={7}>
@@ -79,8 +95,12 @@ export default function CustomerPOCForm() {
                   id="email"
                   name="email"
                   label="Email"
-                  // onChange={formik.handleChange}
-                  // value={values.email}
+                  value={props.custForm.contact_list.email}
+                  onChange={(e) => {
+                    const cF = { ...props.custForm };
+                    cF.contact_list.email = e.target.value;
+                    props.setCustform(cF);
+                  }}
                 />
               </Grid>
               <Grid item xs={10} sm={10} md={7} lg={7} xl={7}>
@@ -91,13 +111,18 @@ export default function CustomerPOCForm() {
                   id="contactNotes"
                   name="contactNotes"
                   label="Contact Notes"
-                  // onChange={formik.handleChange}
-                  // value={values.contactNotes}
+                  value={props.custForm.contact_list.contactNotes}
+                  onChange={(e) => {
+                    const cF = { ...props.custForm };
+                    cF.contact_list.contactNotes = e.target.value;
+                    props.setCustform(cF);
+                  }}
                 />
               </Grid>
               <Grid item xs={2} sm={2} md={5} lg={5} xl={5}></Grid>
               <Grid item xs={10} sm={4} md={3} lg={2} xl={2}>
                 <Button
+                  disabled
                   color="primary"
                   variant="contained"
                   type="submit"
@@ -109,7 +134,12 @@ export default function CustomerPOCForm() {
                 </Button>
               </Grid>
               <Grid item xs={10} sm={2} md={2} lg={2} xl={2}>
-                <Button color="primary" type="submit" size="large" fullWidth>
+                <Button
+                  color="primary"
+                  size="large"
+                  fullWidth
+                  onClick={() => props.setToggle(!props.isToggleOn)}
+                >
                   Close
                 </Button>
               </Grid>
@@ -122,8 +152,24 @@ export default function CustomerPOCForm() {
                 lg={2}
                 xl={1}
               >
-                <Button size="large" fullWidth>
-                  Clear
+                <Button
+                  size="large"
+                  fullWidth
+                  onClick={() => {
+                    const cF = { ...props.custForm };
+                    cF.contact_list = {
+                      firstName: "",
+                      lastName: "",
+                      title: "",
+                      officePhone: "",
+                      mobilePhone: "",
+                      email: "",
+                      contactNotes: "",
+                    };
+                    props.setCustform(cF);
+                  }}
+                >
+                  Reset
                 </Button>
               </Grid>
             </Grid>
