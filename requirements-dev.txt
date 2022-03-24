@@ -1,4 +1,5 @@
 --requirement requirements-test.txt
+flask_cors
 flask_testing
 ipython
 mypy
