@@ -7,9 +7,9 @@ info:
   version: 1.0.0
 externalDocs:
   description: Find out more about Swagger
-  url: http://swagger.io
+  url: http://localhost:8080/li-pca/docs
 servers:
-  - url: https://virtserver.swaggerhub.com/li-pca
+  - url: https://localhost:8080/li-pca
     description: Li-PCA-APP API
 tags:
   - name: auth
@@ -874,30 +874,70 @@ components:
         username: username
       xml:
         name: User
+    Contact:
+      required:
+        - first_name
+        - last_name
+        - email
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        title:
+          type: string
+        office_phone:
+          type: string
+        mobile_phone:
+          type: string
+        email:
+          type: string
+        notes:
+          type: string
+        active:
+          type: boolean
     Customer:
       required:
         - name
-        - uuid
+        - identifier
       type: object
       properties:
         uuid:
           type: string
           format: uuid4
+        name:
+          type: string
+        identifier:
+          type: string
         critical_infrastructur_id:
           type: string
         critical_infrastructur_name:
           type: string
-        name:
+        address_1:
           type: string
-        contact:
+        address_2:
           type: string
-        status:
+        city:
+          type: string
+        state:
+          type: string
+        zip_code:
+          type: string
+        customer_type:
+          type: string
+        contact_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+        industry:
+          type: string
+        sector:
+          type: string
+        domain:
           type: string
       example:
-        contact: contact
-        name: name
-        uuid: uuid
-        status: status
+        name: Test1
     Assessment:
       required:
         - customer_uuid

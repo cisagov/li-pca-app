@@ -1,15 +1,17 @@
 #!/usr/bin/env python
-"""Templatess Controller Logic."""
+"""Templates Controller Logic."""
 
 # Standard Python Libraries
 import logging
 
 # Third-Party Libraries
 import connexion
+from flask import jsonify
 
 # cisagov Libraries
-# from api import util
-from api.models.template import Template  # noqa: E501
+from api.db_manager import TemplateManager
+
+db_manager = TemplateManager()
 
 
 def create_template(body=None):  # noqa: E501
@@ -22,10 +24,12 @@ def create_template(body=None):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("Conn request: %s", connexion.request.get_json())
     if connexion.request.is_json:
-        body = Template.from_dict(connexion.request.get_json())  # noqa: E501
+        body = connexion.request.get_json()
         logging.debug("Body: %s", body)
-    return "do some magic!"
+        logging.debug("Body: %s", body)
+        return jsonify(db_manager.save(body))
 
 
 def delete_template_by_uuid(uuid):  # noqa: E501
@@ -38,11 +42,11 @@ def delete_template_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
-    logging.debug("Uuid: %s", uuid)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    return jsonify(db_manager.delete(uuid))
 
 
-def get_all_templates(name=None):  # noqa: E501
+def get_all_templates(uuid):  # noqa: E501
     """Find all templates.
 
     Multiple status values can be provided with comma separated strings  # noqa: E501
@@ -52,8 +56,10 @@ def get_all_templates(name=None):  # noqa: E501
 
     :rtype: List[Template]
     """
-    logging.debug("Name: %s", name)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    logging.debug("request args: %s", connexion.request.args)
+    return jsonify(db_manager.all(params=db_manager.get_query(connexion.request.args)))
+    return db_manager.all(params=db_manager.get_query(connexion.request.args))
 
 
 def get_template_by_uuid(uuid):  # noqa: E501
@@ -66,8 +72,8 @@ def get_template_by_uuid(uuid):  # noqa: E501
 
     :rtype: Template
     """
-    logging.debug("Uuid: %s", uuid)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    return jsonify(db_manager.get(document_id=uuid))
 
 
 def update_template_by_uuid(uuid, body=None):  # noqa: E501
@@ -82,8 +88,5 @@ def update_template_by_uuid(uuid, body=None):  # noqa: E501
 
     :rtype: None
     """
-    logging.debug("Uuid: %s", uuid)
-    if connexion.request.is_json:
-        body = Template.from_dict(connexion.request.get_json())  # noqa: E501
-        logging.debug("Body: %s", body)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    return db_manager.update(document_id=uuid, data=connexion.request.get_json())
