@@ -96,6 +96,7 @@ setup(
         "pymodm",
         "marshmallow",
         "pymongo",
+        "flask_cors",
     ],
     extras_require={
         "test": [
