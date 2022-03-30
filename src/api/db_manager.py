@@ -114,7 +114,12 @@ class Manager:
 
     def clean_data(self, data):
         """Clean data for saves to the database."""
-        invalid_fields = ["_id", "created", "updated"]
+        invalid_fields = [
+            "_id",
+            "uuid",
+            "created",
+            "updated",
+        ]
         if type(data) is dict:
             for field in invalid_fields:
                 if field in data:
@@ -365,4 +370,7 @@ class TemplateManager(Manager):
 
     def __init__(self):
         """Super."""
-        return super().__init__(collection="template", schema=TemplateSchema)
+        return super().__init__(
+            collection="template",
+            schema=TemplateSchema,
+        )
