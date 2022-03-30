@@ -1,16 +1,17 @@
 #!/usr/bin/env python
-"""Campaign Controller Logic."""
+"""Campaigns Controller Logic."""
 
 # Standard Python Libraries
 import logging
 
 # Third-Party Libraries
 import connexion
+from flask import jsonify
 
 # cisagov Libraries
-# from api import util
-from api.models.campaign import Campaign  # noqa: E501
-from api.models.customer import Customer  # noqa: E501
+from api.db_manager import CampaignManager
+
+db_manager = CampaignManager()
 
 
 def create_campaign(body=None):  # noqa: E501
@@ -23,16 +24,12 @@ def create_campaign(body=None):  # noqa: E501
 
     :rtype: None
     """
-    campaign_model = Campaign
-    logging.debug("Campaign model: %s", campaign_model)
-
-    customer_model = Customer
-    logging.debug("Customer model: %s", customer_model)
-
+    logging.debug("Conn request: %s", connexion.request.get_json())
     if connexion.request.is_json:
-        body = Campaign.from_dict(connexion.request.get_json())  # noqa: E501
+        body = connexion.request.get_json()
         logging.debug("Body: %s", body)
-    return "do some magic!"
+        logging.debug("Body: %s", body)
+        return jsonify(db_manager.save(body))
 
 
 def delete_campaign_by_uuid(uuid):  # noqa: E501
@@ -45,36 +42,38 @@ def delete_campaign_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
-    logging.debug("Uuid: %s", uuid)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    return jsonify(db_manager.delete(uuid))
 
 
-def get_all_campaigns(name=None):  # noqa: E501
+def get_all_campaigns(uuid):  # noqa: E501
     """Find all campaigns.
 
     Multiple status values can be provided with comma separated strings  # noqa: E501
 
-    :param name: campaign name filter
+    :param name: template name filter
     :type name: List[str]
 
-    :rtype: List[Campaign]
+    :rtype: List[Template]
     """
-    logging.debug("Name: %s", name)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    logging.debug("request args: %s", connexion.request.args)
+    return jsonify(db_manager.all(params=db_manager.get_query(connexion.request.args)))
+    return db_manager.all(params=db_manager.get_query(connexion.request.args))
 
 
 def get_campaign_by_uuid(uuid):  # noqa: E501
-    """Find campaign by uuid.
+    """Find template by uuid.
 
     Returns a single campaign # noqa: E501
 
-    :param uuid: uuid of campaign to return
+    :param uuid: uuid of template to return
     :type uuid: str
 
-    :rtype: Campaign
+    :rtype: Template
     """
-    logging.debug("Uuid: %s", uuid)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    return jsonify(db_manager.get(document_id=uuid))
 
 
 def update_campaign_by_uuid(uuid, body=None):  # noqa: E501
@@ -89,8 +88,5 @@ def update_campaign_by_uuid(uuid, body=None):  # noqa: E501
 
     :rtype: None
     """
-    logging.debug("Uuid: %s", uuid)
-    if connexion.request.is_json:
-        body = Campaign.from_dict(connexion.request.get_json())  # noqa: E501
-        logging.debug("Body: %s", body)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    return db_manager.update(document_id=uuid, data=connexion.request.get_json())
