@@ -6,29 +6,34 @@ import logging
 
 # Third-Party Libraries
 import connexion
+from flask import jsonify
 
 # cisagov Libraries
-from api.models.assessment import Assessment  # noqa: E501
+from api.db_manager import AssessmentManager
+
+db_manager = AssessmentManager()
 
 
-def create_assessment(body):  # noqa: E501
+def create_assessment(body=None):  # noqa: E501
     """Add a new assessment to the data store.
 
      # noqa: E501
 
-    :param body: Assessment object that needs to be added to the store
+    :param body: Assessment object to be added to data store
     :type body: dict | bytes
 
-    :rtype: None.
+    :rtype: None
     """
+    logging.debug("Conn request: %s", connexion.request.get_json())
     if connexion.request.is_json:
-        body = Assessment.from_dict(connexion.request.get_json())  # noqa: E501
+        body = connexion.request.get_json()
         logging.debug("Body: %s", body)
-    return "do some magic!"
+        logging.debug("Body: %s", body)
+        return jsonify(db_manager.save(body))
 
 
 def delete_assessment_by_uuid(uuid):  # noqa: E501
-    """Delete an assessment.
+    """Delete a assessment.
 
      # noqa: E501
 
@@ -37,22 +42,24 @@ def delete_assessment_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
-    logging.debug("Uuid: %s", uuid)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    return jsonify(db_manager.delete(uuid))
 
 
-def get_all_assessments(customer_uuid=None):  # noqa: E501
-    """Find Assessments by status.
+def get_all_assessments(uuid):  # noqa: E501
+    """Find all assessments.
 
-    Multiple status values can be provided with comma separated strings # noqa: E501
+    Multiple status values can be provided with comma separated strings  # noqa: E501
 
-    :param customer_uuid: Assessment uuid filter
-    :type customer_uuid: List[str]
+    :param name: template name filter
+    :type name: List[str]
 
-    :rtype: List[Assessment]
+    :rtype: List[Template]
     """
-    logging.debug("Customer_uuid: %s", customer_uuid)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    logging.debug("request args: %s", connexion.request.args)
+    return jsonify(db_manager.all(params=db_manager.get_query(connexion.request.args)))
+    return db_manager.all(params=db_manager.get_query(connexion.request.args))
 
 
 def get_assessment_by_uuid(uuid):  # noqa: E501
@@ -60,29 +67,26 @@ def get_assessment_by_uuid(uuid):  # noqa: E501
 
     Returns a single assessment # noqa: E501
 
-    :param uuid: uuid of assessment to return
+    :param uuid: uuid of template to return
     :type uuid: str
 
     :rtype: Assessment
     """
-    logging.debug("Uuid: %s", uuid)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    return jsonify(db_manager.get(document_id=uuid))
 
 
-def update_assessment_by_uuid(body, uuid):  # noqa: E501
+def update_assessment_by_uuid(uuid, body=None):  # noqa: E501
     """Update an existing assessment.
 
      # noqa: E501
 
-    :param body: Assessment object that needs to be added to the store
-    :type body: dict | bytes
     :param uuid: uuid of assessment to update
     :type uuid: str
+    :param body: assessment object to be added to data store
+    :type body: dict | bytes
 
     :rtype: None
     """
-    logging.debug("Uuid: %s", uuid)
-    if connexion.request.is_json:
-        body = Assessment.from_dict(connexion.request.get_json())  # noqa: E501
-        logging.debug("Body: %s", body)
-    return "do some magic!"
+    logging.debug("uuid: %s", uuid)
+    return db_manager.update(document_id=uuid, data=connexion.request.get_json())
