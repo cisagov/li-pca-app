@@ -1,150 +1,82 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 // material-ui
 import { Grid } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import IconButton from "@mui/material/IconButton";
 
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
 
+// third party
+import axios from "axios";
 // ==============================|| Customers view ||============================== //
 
-const rows = [
-  {
-    id: 1,
-    col1: "Pharmacy Laboratories",
-    col2: "PHLB",
-    col3: "123 Main St.",
-    col4: "Townsville",
-    col5: "VA",
-    col6: "00001",
-  },
-  {
-    id: 2,
-    col1: "Idaho National Laboratory",
-    col2: "INL",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-  {
-    id: 3,
-    col1: "Gov of Smith County",
-    col2: "GSC",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-  {
-    id: 4,
-    col1: "City of Jonestown",
-    col2: "CTJN",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-  {
-    id: 5,
-    col1: "DHS CISA",
-    col2: "ABC",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-  {
-    id: 6,
-    col1: "City of Example",
-    col2: "DEF",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-  {
-    id: 7,
-    col1: "City of Example",
-    col2: "GHI",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-  {
-    id: 8,
-    col1: "City of Example",
-    col2: "JKL",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-  {
-    id: 9,
-    col1: "City of Example",
-    col2: "MNO",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-  {
-    id: 10,
-    col1: "City of Example",
-    col2: "PQR",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-  {
-    id: 11,
-    col1: "City of Example",
-    col2: "STU",
-    col3: "test",
-    col4: "test",
-    col5: "test",
-    col6: "test",
-  },
-];
-const columns = [
-  { field: "id", hide: true },
-  { field: "col1", headerName: "Name", flex: 2 },
-  { field: "col2", headerName: "Identifier", flex: 1 },
-  { field: "col3", headerName: "Address", flex: 2.5 },
-  { field: "col4", headerName: "City", flex: 1.5 },
-  { field: "col5", headerName: "State", flex: 1 },
-  { field: "col6", headerName: "Zip Code", flex: 1 },
-  {
-    field: "col7",
-    headerName: "Edit",
-    sortable: false,
-    disableClickEventBubbling: true,
-    renderCell: () => {
-      return (
-        <IconButton variant="contained" color="primary">
-          <EditIcon />
-        </IconButton>
-      );
-    },
-    flex: 0.5,
-  },
-];
-const data = { rows: rows, columns: columns };
+const baseURL = "http://localhost:8080/li-pca/v1/customers";
 
-const CustomersPage = () => (
-  <MainCard title="Customers">
-    <Grid container spacing={2}>
-      <Grid item xs={8}>
-        Customer data shown below.
+function CustomersPage() {
+  const columns = [
+    { field: "id", hide: true },
+    { field: "name", headerName: "Name", flex: 2 },
+    { field: "identifier", headerName: "Identifier", flex: 1 },
+    { field: "address_1", headerName: "Address", flex: 2.5 },
+    { field: "city", headerName: "City", flex: 1.5 },
+    { field: "state", headerName: "State", flex: 1 },
+    { field: "zip_code", headerName: "Zip Code", flex: 1 },
+  ];
+  const jsonRows = require("./mockCusData.json");
+
+  // Ignore until back-end data is populated
+  const [getData, setData] = React.useState([]);
+  React.useEffect(() => {
+    axios
+      .get(baseURL, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        setData(data);
+      })
+      .catch((error) => {
+        console.log("Error fetching data");
+        console.log(error);
+      });
+  }, []);
+
+  const cusRows = (rowsArray) => {
+    if (Object.keys(rowsArray).length !== 0) {
+      let counter = 0;
+      let cusRows = [];
+      cusRows = Array.from(rowsArray);
+      cusRows.forEach((entry) => {
+        entry["id"] = counter;
+        counter = counter + 1;
+      });
+      return cusRows;
+    }
+    return [];
+  };
+  const cusData = { rows: cusRows(jsonRows), columns: columns };
+
+  return (
+    <MainCard title="Customers">
+      <Grid container spacing={2}>
+        <Grid item xs={8}>
+          {/* Customer data shown below. */}
+          This is just something to fill in while I test axios. I will use the
+          space below this to confirm.
+          {/* {getAll.data} */}
+        </Grid>
       </Grid>
-    </Grid>
-    <br />
-    <MainDataTable data={data} newEntryRoute="newcustomer" />
-  </MainCard>
-);
-
+      <br />
+      <MainDataTable
+        data={cusData}
+        newEntryRoute="data-entry"
+        editEntryRoute="data-entry"
+      />
+    </MainCard>
+  );
+}
 export default CustomersPage;
