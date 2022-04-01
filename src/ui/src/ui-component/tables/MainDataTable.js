@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 // material-ui
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
@@ -32,10 +33,6 @@ CustomToolbar.propTypes = {
 
 function CustomToolbar(props) {
   let navigate = useNavigate();
-  const newEntryRouteChange = () => {
-    let path = `${props.newEntryRoute}`;
-    navigate(path);
-  };
   return (
     <GridToolbarContainer>
       <Box
@@ -86,7 +83,9 @@ function CustomToolbar(props) {
       <Button
         size="small"
         startIcon={<AddIcon fontSize="small" />}
-        onClick={newEntryRouteChange}
+        onClick={() => {
+          navigate(`${props.newEntryRoute}`);
+        }}
       >
         New Row
       </Button>
@@ -99,6 +98,7 @@ MainDataTable.propTypes = {
 };
 
 export default function MainDataTable(props) {
+  let navigate = useNavigate();
   const [searchText, setSearchText] = React.useState("");
   const [rows, setRows] = React.useState(props.data.rows);
   const requestSearch = (searchValue) => {
@@ -115,13 +115,37 @@ export default function MainDataTable(props) {
   React.useEffect(() => {
     setRows(props.data.rows);
   }, [props.data.rows]);
-
+  // const [selectedRow, setSelectedRow] = React.useState([]);
+  // console.log(selectedRow);
+  const columns = props.data.columns;
+  columns.push({
+    field: "edit",
+    headerName: "Edit",
+    sortable: false,
+    disableClickEventBubbling: true,
+    renderCell: (cellValues) => {
+      return (
+        <IconButton
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            navigate(`${props.editEntryRoute}`, {
+              state: { row: cellValues.row },
+            });
+          }}
+        >
+          <EditIcon />
+        </IconButton>
+      );
+    },
+    flex: 0.5,
+  });
   return (
     <DataGrid
       rows={rows}
-      columns={props.data.columns}
+      columns={columns}
       autoHeight
-      disableSelectionOnClick
+      // disableSelectionOnClick
       components={{
         Toolbar: CustomToolbar,
       }}
@@ -135,6 +159,10 @@ export default function MainDataTable(props) {
           newEntryRoute: props.newEntryRoute,
         },
       }}
+      // onSelectionModelChange={(id) => {
+      //   const selectedID = new Set(id);
+      //   setSelectedRow(rows.filter((row) => selectedID.has(row.id)));
+      // }}
     />
   );
 }
