@@ -1,209 +1,310 @@
+import React from "react";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+
 //material-ui
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Button from "@mui/material/Button";
 import DatePicker from "@mui/lab/DatePicker";
-import FormControl from "@mui/material/FormControl";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import Grid from "@mui/material/Grid";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
+//third party
+import { useFormik } from "formik";
+import * as yup from "yup";
+
+const validationSchema = yup.object({
+  name: yup.string().required("Name is required"),
+  identifier: yup.string().required("Identifier is required"),
+  domain: yup.string().required("Domain is required"),
+  customer_type: yup.string().required("Customer Type is required"),
+  address_1: yup.string().required("Address 1 is required"),
+  city: yup.string().required("City is required"),
+  state: yup.string().required("State is required"),
+  zip_code: yup.string().required("Zip Code is required"),
+});
+
 const CustomerForm = (props) => {
+  let navigate = useNavigate();
+  const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
+  const [savebtnOpen, setSavebtnOpen] = React.useState(false);
+  const formik = useFormik({
+    initialValues: props.initialCustValues,
+    validationSchema: validationSchema,
+    onSubmit: (values, actions) => {
+      const cF = {
+        ...props.custData,
+        name: values.name,
+        identifier: values.identifier,
+        domain: values.domain,
+        customer_type: values.customer_type,
+        address_1: values.address_1,
+        address_2: values.address_2,
+        city: values.city,
+        state: values.state,
+        zip_code: values.zip_code,
+      };
+      props.setCustData(cF);
+      actions.resetForm();
+      console.log(props.custData);
+      //() => navigate("/li-pca-app/customers");
+    },
+  });
+  const handleCancel = () => {
+    if (formik.dirty) {
+      setCancelbtnOpen(true);
+    } else {
+      navigate("/li-pca-app/customers");
+    }
+  };
+  const handleSave = () => {
+    setSavebtnOpen(true);
+  };
+  const handleClose = () => {
+    setCancelbtnOpen(false);
+    setSavebtnOpen(false);
+  };
   return (
-    <FormControl>
-      <Grid container spacing={2}>
-        <Grid item xs={10} sm={7} md={7} lg={7} xl={7}>
-          <TextField
-            fullWidth
-            required
-            id="custName"
-            name="custName"
-            label="Customer Name"
-            value={props.custForm.custName}
-            onChange={(e) => {
-              props.setCustform({
-                ...props.custForm,
-                custName: e.target.value,
-              });
-            }}
-          />
-        </Grid>
-        <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
-          <TextField
-            fullWidth
-            required
-            id="custId"
-            name="custId"
-            label="Customer Identifier"
-            value={props.custForm.custId}
-            onChange={(e) => {
-              props.setCustform({ ...props.custForm, custId: e.target.value });
-            }}
-          />
-        </Grid>
-        <Grid item xs={10} sm={7} md={7} lg={7} xl={7}>
-          <TextField
-            fullWidth
-            required
-            id="custDomain"
-            name="custDomain"
-            label="Customer Domain"
-            value={props.custForm.custDomain}
-            onChange={(e) => {
-              props.setCustform({
-                ...props.custForm,
-                custDomain: e.target.value,
-              });
-            }}
-          />
-        </Grid>
-        <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
+    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+      <form id="customer-form" onSubmit={formik.handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={10} sm={7} md={7} lg={7} xl={7}>
+            <TextField
               fullWidth
-              required
-              label="Appendix A Date"
-              value={props.custForm.dateVal}
-              onChange={(e) => {
-                props.setCustform({ ...props.custForm, dateVal: e });
-              }}
-              renderInput={(params) => <TextField {...params} />}
+              id="name"
+              name="name"
+              label="Customer Name *"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
             />
-          </LocalizationProvider>
-        </Grid>
-        <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
-          <TextField
-            select
-            fullWidth
-            required
-            value={props.custForm.custType}
-            label="Customer Type"
-            onChange={(e) => {
-              props.setCustform({
-                ...props.custForm,
-                custType: e.target.value,
-              });
-            }}
-          >
-            <MenuItem value={"Government - Federal"}>
-              Government - Federal
-            </MenuItem>
-            <MenuItem value={"Government - State"}>Government - State</MenuItem>
-            <MenuItem value={"Government - Local"}>Government - Local</MenuItem>
-            <MenuItem value={"Government - Tribal"}>
-              Government - Tribal
-            </MenuItem>
-            <MenuItem value={"Government - Territorial"}>
-              Government - Territorial
-            </MenuItem>
-            <MenuItem value={"Private"}>Private</MenuItem>
-          </TextField>
-        </Grid>
-        <Grid item xs={2} sm={4} md={5} lg={5} xl={5}></Grid>
-        <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
-          <TextField
-            fullWidth
-            required
-            id="addressOne"
-            name="addressOne"
-            label="Address 1"
-            value={props.custForm.addressOne}
-            onChange={(e) => {
-              props.setCustform({
-                ...props.custForm,
-                addressOne: e.target.value,
-              });
-            }}
+          </Grid>
+          <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
+            <TextField
+              fullWidth
+              id="identifier"
+              name="identifier"
+              label="Customer Identifier *"
+              value={formik.values.identifier}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.identifier && Boolean(formik.errors.identifier)
+              }
+              helperText={formik.touched.identifier && formik.errors.identifier}
+            />
+          </Grid>
+          <Grid item xs={10} sm={7} md={7} lg={7} xl={7}>
+            <TextField
+              fullWidth
+              id="domain"
+              name="domain"
+              label="Customer Domain *"
+              value={formik.values.domain}
+              onChange={formik.handleChange}
+              error={formik.touched.domain && Boolean(formik.errors.domain)}
+              helperText={formik.touched.domain && formik.errors.domain}
+            />
+          </Grid>
+          <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                fullWidth
+                label="Appendix A Date"
+                value={props.custData.appendixADate}
+                onChange={(e) => {
+                  props.setCustData({ ...props.custData, appendixADate: e });
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+            <TextField
+              select
+              fullWidth
+              label="Customer Type *"
+              id="customer_type"
+              name="customer_type"
+              value={formik.values.customer_type}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.customer_type &&
+                Boolean(formik.errors.customer_type)
+              }
+              helperText={
+                formik.touched.customer_type && formik.errors.customer_type
+              }
+            >
+              <MenuItem value={"Federal"}>Government - Federal</MenuItem>
+              <MenuItem value={"State"}>Government - State</MenuItem>
+              <MenuItem value={"Local"}>Government - Local</MenuItem>
+              <MenuItem value={"Tribal"}>Government - Tribal</MenuItem>
+              <MenuItem value={"Territorial"}>
+                Government - Territorial
+              </MenuItem>
+              <MenuItem value={"Private"}>Private</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={2} sm={4} md={5} lg={5} xl={5}></Grid>
+          <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+            <TextField
+              fullWidth
+              id="address_1"
+              name="address_1"
+              label="Address 1 *"
+              value={formik.values.address_1}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.address_1 && Boolean(formik.errors.address_1)
+              }
+              helperText={formik.touched.address_1 && formik.errors.address_1}
+            />
+          </Grid>
+          <Grid item xs={10} sm={4} md={5} lg={5} xl={5}>
+            <TextField
+              fullWidth
+              id="address_2"
+              name="address_2"
+              label="Address 2"
+              value={formik.values.address_2}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.address_2 && Boolean(formik.errors.address_2)
+              }
+              helperText={formik.touched.address_2 && formik.errors.address_2}
+            />
+          </Grid>
+          <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
+            <TextField
+              fullWidth
+              id="city"
+              name="city"
+              label="City *"
+              value={formik.values.city}
+              onChange={formik.handleChange}
+              error={formik.touched.city && Boolean(formik.errors.city)}
+              helperText={formik.touched.city && formik.errors.city}
+            />
+          </Grid>
+          <Grid item xs={10} sm={3} md={3} lg={3} xl={3}>
+            <TextField
+              fullWidth
+              id="state"
+              name="state"
+              label="State *"
+              value={formik.values.state}
+              onChange={formik.handleChange}
+              error={formik.touched.state && Boolean(formik.errors.state)}
+              helperText={formik.touched.state && formik.errors.state}
+            />
+          </Grid>
+          <Grid item xs={10} sm={3} md={3} lg={3} xl={3}>
+            <TextField
+              fullWidth
+              id="zip_code"
+              name="zip_code"
+              label="Zip Code *"
+              value={formik.values.zip_code}
+              onChange={formik.handleChange}
+              error={formik.touched.zip_code && Boolean(formik.errors.zip_code)}
+              helperText={formik.touched.zip_code && formik.errors.zip_code}
+            />
+          </Grid>
+          <Grid
+            item
+            display={{ xs: "none", sm: "block" }}
+            sm={9}
+            md={10}
+            lg={10}
+            xl={11}
           />
+          <Grid item xs={10} sm={3} md={2} lg={2} xl={1}>
+            <Button size="large" fullWidth onClick={formik.handleReset}>
+              Reset
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={10} sm={4} md={5} lg={5} xl={5}>
-          <TextField
-            fullWidth
-            id="addressTwo"
-            name="addressTwo"
-            label="Address 2"
-            value={props.custForm.addressTwo}
-            onChange={(e) => {
-              props.setCustform({
-                ...props.custForm,
-                addressTwo: e.target.value,
-              });
-            }}
-          />
-        </Grid>
-        <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
-          <TextField
-            fullWidth
-            required
-            id="city"
-            name="city"
-            label="City"
-            value={props.custForm.city}
-            onChange={(e) => {
-              props.setCustform({ ...props.custForm, city: e.target.value });
-            }}
-          />
-        </Grid>
-        <Grid item xs={10} sm={3} md={3} lg={3} xl={3}>
-          <TextField
-            fullWidth
-            required
-            id="state"
-            name="state"
-            label="State"
-            value={props.custForm.state}
-            onChange={(e) => {
-              props.setCustform({ ...props.custForm, state: e.target.value });
-            }}
-          />
-        </Grid>
-        <Grid item xs={10} sm={3} md={3} lg={3} xl={3}>
-          <TextField
-            fullWidth
-            required
-            id="zip"
-            name="zip"
-            label="Zip Code"
-            value={props.custForm.zip}
-            onChange={(e) => {
-              props.setCustform({ ...props.custForm, zip: e.target.value });
-            }}
-          />
-        </Grid>
+      </form>
+      {props.children}
+      <Grid container spacing={2}>
+        <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 5 }} />
         <Grid
           item
           display={{ xs: "none", sm: "block" }}
-          sm={9}
-          md={10}
-          lg={10}
-          xl={11}
+          sm={5}
+          md={7}
+          lg={8}
+          xl={8}
         />
-        <Grid item xs={10} sm={3} md={2} lg={2} xl={1}>
+        <Grid item xs={10} sm={5} md={4} lg={3} xl={3}>
+          <form id="customer-form">
+            <Button
+              fullWidth
+              variant="contained"
+              size="large"
+              disabled={!(formik.dirty && props.hasContact)}
+              onClick={handleSave}
+            >
+              Save Customer
+            </Button>
+            <Dialog open={savebtnOpen}>
+              <DialogTitle>Confirmation</DialogTitle>
+              <DialogContent>
+                Do you want to save your changes?
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  endIcon={<CheckCircleOutlineIcon />}
+                  type="submit"
+                  form="customer-form"
+                >
+                  Save
+                </Button>
+              </DialogContent>
+            </Dialog>
+          </form>
+        </Grid>
+        <Grid item xs={10} sm={1} md={1} lg={1} xl={1}>
           <Button
+            color="dark"
+            variant="text"
             size="large"
             fullWidth
-            onClick={() => {
-              props.setCustform({
-                ...props.custForm,
-                custName: "",
-                custId: "",
-                custDomain: "",
-                dateVal: Date.now(),
-                custType: "",
-                addressOne: "",
-                addressTwo: "",
-                city: "",
-                state: "",
-                zip: "",
-              });
-            }}
+            onClick={handleCancel}
           >
-            Reset
+            Cancel
           </Button>
+          <Dialog open={cancelbtnOpen}>
+            <DialogTitle>Are you sure you want to leave this page?</DialogTitle>
+            <DialogContent>
+              <CheckCircleOutlineIcon />
+              Changes made here will not be saved.
+              <Button onClick={() => navigate("/li-pca-app/customers")}>
+                Yes
+              </Button>
+              <Button onClick={handleClose}>Cancel</Button>
+            </DialogContent>
+          </Dialog>
         </Grid>
       </Grid>
-    </FormControl>
+    </Grid>
   );
+};
+
+CustomerForm.propTypes = {
+  initialCustValues: PropTypes.object,
+  custData: PropTypes.object,
+  setCustData: PropTypes.func,
+  children: PropTypes.array,
+  hasContact: PropTypes.bool,
 };
 
 export default CustomerForm;
