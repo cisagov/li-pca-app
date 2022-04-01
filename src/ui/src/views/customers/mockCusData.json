@@ -1,0 +1,178 @@
+[
+  {
+    "_id": "62324115fb20f2203a5645fc",
+    "address_1": "123 Main St.",
+    "city": "Townsville",
+    "contact_list": [
+      {
+        "active": true,
+        "email": "test@test.com",
+        "first_name": "Jane",
+        "last_name": "Johnson",
+        "mobile_phone": "999-888-7777",
+        "notes": "test notes",
+        "office_phone": "666-555-4444",
+        "title": ""
+      }
+    ],
+    "created": "2022-03-16T19:57:09.137000+00:00",
+    "created_by": "bot",
+    "identifier": "PHLB",
+    "name": "Pharmacy Laboratories",
+    "state": "VA",
+    "zip_code": "00001"
+  },
+  {
+    "_id": "6234cbf1fb20f2203a5645fd",
+    "address_1": "test",
+    "city": "test",
+    "contact_list": [
+      {
+        "active": true,
+        "email": "test@test.com",
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "mobile_phone": "111-222-3333",
+        "notes": "test notes",
+        "office_phone": "444-555-6666",
+        "title": ""
+      }
+    ],
+    "created": "2022-03-18T18:14:09.015000+00:00",
+    "created_by": "bot",
+    "identifier": "INL",
+    "name": "Idaho National Laboratory",
+    "state": "test",
+    "zip_code": "test"
+  },
+  {
+    "_id": "6239efa99fd62bfb45aa7844",
+    "address_1": "test",
+    "city": "test",
+    "contact_list": [
+      {
+        "active": true,
+        "email": "test@test.com",
+        "first_name": "John",
+        "last_name": "Smith",
+        "mobile_phone": "777-777-7777",
+        "notes": "test notes",
+        "office_phone": "888-888-8888",
+        "title": ""
+      }
+    ],
+    "created": "2022-03-22T15:47:53.255000+00:00",
+    "created_by": "bot",
+    "identifier": "GSC",
+    "name": "Gov of Smith County",
+    "state": "test",
+    "zip_code": "test"
+  },
+  {
+    "_id": "623cb36b9fd62bfb45aa7845",
+    "address_1": "test",
+    "city": "test",
+    "contact_list": [
+      {
+        "active": true,
+        "email": "test@test.com",
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "mobile_phone": "555-555-5555",
+        "notes": "test notes",
+        "office_phone": "444-444-4444",
+        "title": ""
+      }
+    ],
+    "created": "2022-03-24T18:07:39.620000+00:00",
+    "created_by": "bot",
+    "identifier": "CTJN",
+    "name": "City of Jonestown",
+    "state": "test",
+    "zip_code": "test"
+  },
+  {
+    "_id": "623cd3f687a4d59dd4473552",
+    "address_1": "test",
+    "city": "test",
+    "contact_list": [
+      {
+        "active": true,
+        "email": "test@test.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "mobile_phone": "999-999-9999",
+        "notes": "test notes",
+        "office_phone": "666-666-6666",
+        "title": ""
+      }
+    ],
+    "created": "2022-03-24T20:26:30.880000+00:00",
+    "created_by": "bot",
+    "identifier": "ABC",
+    "name": "DHS CISA",
+    "state": "test",
+    "zip_code": "test"
+  },
+  {
+    "_id": "623cd77987a4d59dd4473553",
+    "address_1": "test",
+    "city": "test",
+    "contact_list": [
+      {
+        "active": true,
+        "email": "test@test.com",
+        "first_name": "John",
+        "last_name": "Johnson",
+        "mobile_phone": "222-222-2222",
+        "notes": "test notes",
+        "office_phone": "333-333-3333",
+        "title": ""
+      }
+    ],
+    "created": "2022-03-24T20:41:29.673000+00:00",
+    "created_by": "bot",
+    "identifier": "DEF",
+    "name": "City of Example",
+    "state": "test",
+    "zip_code": "test"
+  },
+  {
+    "_id": "623cd9cb87a4d59dd4473554",
+    "address_1": "1234 Test Lane",
+    "address_2": "4567 Test Dr.",
+    "city": "Test",
+    "contact_list": [
+      {
+        "active": true,
+        "email": "test@test.com",
+        "first_name": "John",
+        "last_name": "Smith",
+        "mobile_phone": "777-777-7777",
+        "notes": "test notes",
+        "office_phone": "888-888-8888",
+        "title": ""
+      },
+      {
+        "active": false,
+        "email": "test@test.com",
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "mobile_phone": "222-333-4444",
+        "notes": "test notes",
+        "office_phone": "555-666-7777",
+        "title": ""
+      }
+    ],
+    "created": "2022-03-24T20:51:23.619000+00:00",
+    "created_by": "bot",
+    "customer_type": "Federal",
+    "domain": "test.com",
+    "identifier": "GHI",
+    "industry": "test industry",
+    "name": "test customer 2",
+    "sector": "test sector",
+    "state": "LA",
+    "zip_code": "12344"
+  }
+]
