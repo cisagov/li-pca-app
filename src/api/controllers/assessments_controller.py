@@ -59,7 +59,6 @@ def get_all_assessments(uuid):  # noqa: E501
     logging.debug("uuid: %s", uuid)
     logging.debug("request args: %s", connexion.request.args)
     return jsonify(db_manager.all(params=db_manager.get_query(connexion.request.args)))
-    return db_manager.all(params=db_manager.get_query(connexion.request.args))
 
 
 def get_assessment_by_uuid(uuid):  # noqa: E501
