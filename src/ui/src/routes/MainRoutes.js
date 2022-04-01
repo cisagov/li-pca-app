@@ -12,8 +12,8 @@ const CustomersPage = Loadable(lazy(() => import("views/customers")));
 const EditCustomerPage = Loadable(
   lazy(() => import("views/customers/editcustomer"))
 );
-// new customers page routing
-const NewCustomerPage = Loadable(
+// customer data entry page routing
+const CustDataEntryPage = Loadable(
   lazy(() => import("views/customers/newcustomer"))
 );
 // templates page routing
@@ -44,8 +44,8 @@ const MainRoutes = {
       element: <EditCustomerPage />,
     },
     {
-      path: "/customers/newcustomer",
-      element: <NewCustomerPage />,
+      path: "/customers/data-entry",
+      element: <CustDataEntryPage />,
     },
     {
       path: "/templates",
