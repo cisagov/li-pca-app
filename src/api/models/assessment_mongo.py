@@ -9,6 +9,5 @@ from api.models.base import BaseSchema
 class AssessmentSchema(BaseSchema):
     """Assessment Schema."""
 
-    _id = fields.UUID(
-        primary_key=True, required=True, validate=validate.Regexp("^RV[0-9]{4,5}")
-    )
+    rv_id = fields.Str(required=True, validate=validate.Regexp("^RV[0-9]{4,5}"))
+    customer_uuid = fields.UUID(required=True)
