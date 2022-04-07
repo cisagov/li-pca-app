@@ -1,112 +1,127 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
+
 // material-ui
-import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+
 // project imports
 import CustomerForm from "ui-component/forms/CustomerForm";
 import CustomerPOCForm from "ui-component/forms/CustomerPOCForm";
 import MainCard from "ui-component/cards/MainCard";
 
-// ==============================|| New Customer View ||============================== //
+// ==============================|| Create/Update Customer View ||============================== //
 
-class NewCustomerPage extends React.Component {
-  constructor() {
-    super();
-    this.state = { isToggleOn: true };
-    this.handleClick = this.handleClick.bind(this);
+let custPOCValues = {
+  id: 0,
+  email: "",
+  first_name: "",
+  last_name: "",
+  mobile_phone: "",
+  notes: "",
+  office_phone: "",
+  title: "",
+};
+let custFilledPOCValues = {};
+const custRowsTransform = (custRows) => {
+  if (!custRows.hasOwnProperty("name")) {
+    custRows.name = "";
   }
-  handleClick() {
-    this.setState((state) => ({ isToggleOn: !state.isToggleOn }));
+  if (!custRows.hasOwnProperty("identifier")) {
+    custRows.identifier = "";
   }
-  render() {
-    return (
-      <MainCard title="Campaigns">
-        <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <Typography variant="h4" gutterBottom component="div">
-                Customer Information
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <CustomerForm />
-            </Grid>
-            <Grid item xs={10} sm={6} md={5} lg={4} xl={3} sx={{ mt: 3 }}>
-              <Button
-                color="warning"
-                variant="contained"
-                size="large"
-                fullWidth
-                onClick={this.handleClick}
-              >
-                Add Customer Contact
-              </Button>
-            </Grid>
-            <Grid
-              item
-              display={{ xs: "none", sm: "block" }}
-              sm={3}
-              md={5}
-              lg={6}
-              xl={8}
-            ></Grid>
-            <Grid
-              item
-              display={{ xs: "none", sm: "block" }}
-              sm={3}
-              md={2}
-              lg={2}
-              xl={1}
-              sx={{ mt: 2 }}
-            >
-              <Button size="large" fullWidth>
-                Clear
-              </Button>
-            </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 3 }}>
+  if (!custRows.hasOwnProperty("domain")) {
+    custRows.domain = "";
+  }
+  if (!custRows.hasOwnProperty("appendixADate")) {
+    custRows.appendixADate = Date.now();
+  }
+  if (!custRows.hasOwnProperty("customer_type")) {
+    custRows.customer_type = "";
+  }
+  if (!custRows.hasOwnProperty("address_1")) {
+    custRows.address_1 = "";
+  }
+  if (!custRows.hasOwnProperty("address_2")) {
+    custRows.address_2 = "";
+  }
+  if (!custRows.hasOwnProperty("city")) {
+    custRows.city = "";
+  }
+  if (!custRows.hasOwnProperty("state")) {
+    custRows.state = "";
+  }
+  if (!custRows.hasOwnProperty("zip_code")) {
+    custRows.zip_code = "";
+  }
+  if (!custRows.hasOwnProperty("contact_list")) {
+    custRows.contact_list = [];
+  }
+  return custRows;
+};
+
+const custNewOrEdit = (dataEntryType) => {
+  if (dataEntryType == "new") {
+    return ["New Customer", false];
+  }
+  return ["Edit Customer", true];
+};
+
+const CustDataEntryPage = () => {
+  const { state } = useLocation();
+  let custValues = custRowsTransform(state.row);
+  let [mainCardTitle, hasContactBool] = custNewOrEdit(state.dataEntryType);
+
+  const [hasContact, setHasContact] = React.useState(hasContactBool);
+  const [custData, setCustData] = React.useState(custValues);
+  const [contactUpdate, setContactUpdate] = React.useState(false);
+  const [hasSubmitted, setHasSubmitted] = React.useState(false);
+
+  if (hasSubmitted) {
+    // TODO: Add Axios functions to POST or PUT data
+    console.log(custData);
+  }
+  return (
+    <MainCard title={mainCardTitle}>
+      <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Typography variant="h4" gutterBottom component="div">
+              Customer Information
+            </Typography>
+          </Grid>
+          <CustomerForm
+            initialCustValues={custValues}
+            setCustData={setCustData}
+            custData={custData}
+            hasContact={hasContact}
+            contactUpdate={contactUpdate}
+            setHasSubmitted={setHasSubmitted}
+          >
+            <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 2 }}>
               <Typography variant="h4" gutterBottom component="div">
                 Customer/Organization Point of Contacts
               </Typography>
             </Grid>
-            {this.state.isToggleOn ? (
-              ""
-            ) : (
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: 1 }}>
-                <Card variant="outlined">
-                  <CustomerPOCForm />
-                </Card>
-              </Grid>
-            )}
-            <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 3 }}>
-              <Alert severity="error">No contacts available</Alert>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: 1 }}>
+              <CustomerPOCForm
+                initialPOCValues={custPOCValues}
+                custFilledPOCValues={custFilledPOCValues}
+                setCustData={setCustData}
+                custPOCData={custData.contact_list}
+                custData={custData}
+                hasContact={hasContact}
+                setHasContact={setHasContact}
+                contactUpdate={contactUpdate}
+                setContactUpdate={setContactUpdate}
+              />
             </Grid>
-            <Grid
-              item
-              display={{ xs: "none", sm: "block" }}
-              sm={5}
-              md={7}
-              lg={8}
-              xl={8}
-            ></Grid>
-            <Grid item xs={10} sm={5} md={4} lg={3} xl={3}>
-              <Button disabled variant="contained" size="large" fullWidth>
-                Save Customer
-              </Button>
-            </Grid>
-            <Grid item xs={10} sm={1} md={1} lg={1} xl={1}>
-              <Button color="dark" variant="text" size="large" fullWidth>
-                Cancel
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </MainCard>
-    );
-  }
-}
+          </CustomerForm>
+        </Grid>
+      </Box>
+    </MainCard>
+  );
+};
 
-export default NewCustomerPage;
+export default CustDataEntryPage;
