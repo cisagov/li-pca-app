@@ -25,7 +25,5 @@ config.ini
 Dockerfile-x
 *.swp
 
-*.DS_Store
-DS_Store
 *.DS_store
 *.vscode
