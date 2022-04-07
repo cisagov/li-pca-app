@@ -18,6 +18,12 @@ const NewCustomerPage = Loadable(
 );
 // templates page routing
 const TemplatesPage = Loadable(lazy(() => import("views/templates")));
+const EditTemplatePage = Loadable(
+  lazy(() => import("views/templates/edittemplate"))
+);
+const NewTemplatePage = Loadable(
+  lazy(() => import("views/templates/newtemplate"))
+);
 // landing-pages page routing
 const LandingPagesPage = Loadable(lazy(() => import("views/landing-pages")));
 // sending-profiles page routing
@@ -50,6 +56,14 @@ const MainRoutes = {
     {
       path: "/templates",
       element: <TemplatesPage />,
+    },
+    {
+      path: "/templates/newtemplate",
+      element: <NewTemplatePage />,
+    },
+    {
+      path: "/templates/edittemplate",
+      element: <EditTemplatePage />,
     },
     {
       path: "/landing-pages",
