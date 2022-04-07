@@ -67,7 +67,6 @@ and this project adheres to
 ## [0.0.5] - 2022-03-15 ##
 
 - **Added**
-
   - New route in routes/MainRoutes.js for "/customers/newcustomer"
   - New folders in ui-component called /forms and /tables
   - The folder /forms has new components CustomerForm and CustomerPOCForm
@@ -80,7 +79,6 @@ and this project adheres to
   - Add alert in newcustomer "No contacts available"
 
 - **Changed**
-
   - .eslintrc has been modified to match the linter in pre-commit
   - Change references to removed file in views/customers/index.js to new one
   - Turned newcustomer and editcustomer into class components
@@ -96,6 +94,32 @@ and this project adheres to
   - In newcustomer.js and editcustomer.js, they are back to being
    functional components and added two hooks, one that takes care of
    toggling the add customer contact card, and the other that will pass
-   along the data to the forms and back.
+   along the data to the forms and back
   - In CustomerForm.js and CustomerPOCForm.js, each form element now
-   includes a value from props and an onChange function that will update the value.
+   includes a value from props and an onChange function that will update the value
+
+## [0.0.7] - 2022-04-1 ##
+
+- **Added**
+  - Installed axios. It is added to the package.json, package-lock.json, and
+  yarn.lock files
+  - Created a json for customer mock data
+  - Add edit button functionality to table, allowing table data to be used in the
+  component it gets re-routed to
+  - Add data specifying whether the new component will get routed data for a new
+  customer or a customer edit in MainDataTable.js
+  - Add to CustomerForm.js and CustomerPOCForm.js logic on whether the data is for
+  a new customer or a customer edit and when to have the save button disabled
+  - Add save validation and confirmation pop ups to CustomerForm.js
+  - Add logic to newcustomer.js to clean data before it is sent over to the form
+
+- **Changed**
+  - Update CustomerForm.js and CustomerPOCForm.js to use Formik and Yup
+  - Renamed new NewCustomerPage to CustDataEntryPage in MainRoutes.js
+  - Refactored newcustomer.js to include edit functionality
+  - Update defaultPath in config.js
+
+- **Removed**
+  - Removed mock data from customer/index.js
+  - Remove editcustomer route from MainRoutes.js
+  - Delete unneeded editcustomer.js
