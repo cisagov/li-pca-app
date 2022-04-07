@@ -319,13 +319,17 @@ paths:
     post:
       tags:
         - templates
-      summary: Add a new template to the data store
       operationId: create_template
       requestBody:
-        $ref: '#/components/requestBodies/Template'
+        description: Created template object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Template'
+        required: true
       responses:
-        "405":
-          description: Invalid input
+        default:
+          description: successful operation
       x-openapi-router-controller: api.controllers.templates_controller
   /v1/templates/{uuid}:
     get:
@@ -961,10 +965,8 @@ components:
         name: Assessment
     Template:
       required:
-        - description
-        - doc_uuid
         - name
-        - uuid
+        - from_address
       type: object
       properties:
         uuid:
@@ -974,15 +976,86 @@ components:
           type: string
         description:
           type: string
-        doc_uuid:
+        sender_profile_id:
           type: string
-          description: Doc uuid for screenshot
-          format: uuid4
+        landing_page_id:
+          type: string
+        deception_score:
+          type: integer
+        from_address:
+          type: string
+        retired:
+          type: boolean
+        retired_description:
+          type: string
+        sophisticated:
+          type: array
+          items:
+            type: string
+        red_flag:
+          type: array
+          items:
+            type: string
+        subject:
+          type: string
+        text:
+          type: string
+        html:
+          type: string
+        indicators:
+          type: array
+          items:
+            type: object
+            properties:
+              appearance:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    grammar:
+                      type: integer
+                    link_domain:
+                      type: integer
+                    logo_graphics:
+                      type: integer
+              sender:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    external:
+                      type: integer
+                    internal:
+                      type: integer
+                    authoritative:
+                      type: integer
+              relevancy:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    organization:
+                      type: integer
+                    public_news:
+                      type: integer
+              behavior:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fear:
+                      type: integer
+                    duty_obligation:
+                      type: integer
+                    curiosity:
+                      type: integer
+                    greed:
+                      type: integer
       example:
-        name: name
-        doc_uuid: doc_uuid
-        description: description
-        uuid: uuid
+        name: "Order Details"
+        description: "Contains fake order tracking information."
+        sender_profile_id: "some-fake-id"
+        deception_score: 1
       xml:
         name: Template
     Campaign:

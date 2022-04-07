@@ -51,10 +51,10 @@ class TemplateSchema(BaseSchema):
     """TemplateSchema."""
 
     name = fields.Str(required=True)
-    landing_page_id = fields.Str(required=False, allow_none=True)
-    sending_profile_id = fields.Str(required=False, allow_none=True)
-    deception_score = fields.Int(validate=validate.Range(min=1, max=6))
     from_address = fields.Str(required=True)
+    landing_page_id = fields.Str(allow_none=True)
+    sending_profile_id = fields.Str(allow_none=True)
+    deception_score = fields.Int(validate=validate.Range(min=1, max=6))
     retired = fields.Bool(missing=False)
     retired_description = fields.Str(default="", allow_none=True)
     sophisticated = fields.List(fields.Str(), allow_none=True)

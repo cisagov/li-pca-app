@@ -46,7 +46,7 @@ def delete_campaign_by_uuid(uuid):  # noqa: E501
     return jsonify(db_manager.delete(uuid))
 
 
-def get_all_campaigns(uuid):  # noqa: E501
+def get_all_campaigns(filter_params=None):  # noqa: E501
     """Find all campaigns.
 
     Multiple status values can be provided with comma separated strings  # noqa: E501
@@ -56,9 +56,9 @@ def get_all_campaigns(uuid):  # noqa: E501
 
     :rtype: List[Template]
     """
-    logging.debug("uuid: %s", uuid)
     logging.debug("request args: %s", connexion.request.args)
-    return jsonify(db_manager.all(params=db_manager.get_query(connexion.request.args)))
+    filter_params = connexion.request.args
+    return jsonify(db_manager.all(params=db_manager.get_query(filter_params)))
 
 
 def get_campaign_by_uuid(uuid):  # noqa: E501
