@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 // material-ui
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
@@ -32,10 +33,7 @@ CustomToolbar.propTypes = {
 
 function CustomToolbar(props) {
   let navigate = useNavigate();
-  const newEntryRouteChange = () => {
-    let path = `${props.newEntryRoute}`;
-    navigate(path);
-  };
+  const values = {};
   return (
     <GridToolbarContainer>
       <Box
@@ -86,7 +84,11 @@ function CustomToolbar(props) {
       <Button
         size="small"
         startIcon={<AddIcon fontSize="small" />}
-        onClick={newEntryRouteChange}
+        onClick={() => {
+          navigate(`${props.newEntryRoute}`, {
+            state: { row: values, dataEntryType: "new" },
+          });
+        }}
       >
         New Row
       </Button>
@@ -96,9 +98,12 @@ function CustomToolbar(props) {
 
 MainDataTable.propTypes = {
   data: PropTypes.object.isRequired,
+  newEntryRoute: PropTypes.string,
+  editEntryRoute: PropTypes.string,
 };
 
 export default function MainDataTable(props) {
+  let navigate = useNavigate();
   const [searchText, setSearchText] = React.useState("");
   const [rows, setRows] = React.useState(props.data.rows);
   const requestSearch = (searchValue) => {
@@ -116,12 +121,34 @@ export default function MainDataTable(props) {
     setRows(props.data.rows);
   }, [props.data.rows]);
 
+  const columns = props.data.columns;
+  columns.push({
+    field: "edit",
+    headerName: "Edit",
+    sortable: false,
+    disableClickEventBubbling: true,
+    renderCell: (cellValues) => {
+      return (
+        <IconButton
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            navigate(`${props.editEntryRoute}`, {
+              state: { row: cellValues.row, dataEntryType: "edit" },
+            });
+          }}
+        >
+          <EditIcon />
+        </IconButton>
+      );
+    },
+    flex: 0.5,
+  });
   return (
     <DataGrid
       rows={rows}
-      columns={props.data.columns}
+      columns={columns}
       autoHeight
-      disableSelectionOnClick
       components={{
         Toolbar: CustomToolbar,
       }}
