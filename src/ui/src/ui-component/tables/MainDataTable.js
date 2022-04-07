@@ -33,6 +33,7 @@ CustomToolbar.propTypes = {
 
 function CustomToolbar(props) {
   let navigate = useNavigate();
+  const values = {};
   return (
     <GridToolbarContainer>
       <Box
@@ -84,7 +85,9 @@ function CustomToolbar(props) {
         size="small"
         startIcon={<AddIcon fontSize="small" />}
         onClick={() => {
-          navigate(`${props.newEntryRoute}`);
+          navigate(`${props.newEntryRoute}`, {
+            state: { row: values, dataEntryType: "new" },
+          });
         }}
       >
         New Row
@@ -95,6 +98,8 @@ function CustomToolbar(props) {
 
 MainDataTable.propTypes = {
   data: PropTypes.object.isRequired,
+  newEntryRoute: PropTypes.string,
+  editEntryRoute: PropTypes.string,
 };
 
 export default function MainDataTable(props) {
@@ -115,8 +120,7 @@ export default function MainDataTable(props) {
   React.useEffect(() => {
     setRows(props.data.rows);
   }, [props.data.rows]);
-  // const [selectedRow, setSelectedRow] = React.useState([]);
-  // console.log(selectedRow);
+
   const columns = props.data.columns;
   columns.push({
     field: "edit",
@@ -130,7 +134,7 @@ export default function MainDataTable(props) {
           color="primary"
           onClick={() => {
             navigate(`${props.editEntryRoute}`, {
-              state: { row: cellValues.row },
+              state: { row: cellValues.row, dataEntryType: "edit" },
             });
           }}
         >
@@ -145,7 +149,6 @@ export default function MainDataTable(props) {
       rows={rows}
       columns={columns}
       autoHeight
-      // disableSelectionOnClick
       components={{
         Toolbar: CustomToolbar,
       }}
@@ -159,10 +162,6 @@ export default function MainDataTable(props) {
           newEntryRoute: props.newEntryRoute,
         },
       }}
-      // onSelectionModelChange={(id) => {
-      //   const selectedID = new Set(id);
-      //   setSelectedRow(rows.filter((row) => selectedID.has(row.id)));
-      // }}
     />
   );
 }
