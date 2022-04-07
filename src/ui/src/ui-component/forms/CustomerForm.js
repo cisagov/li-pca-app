@@ -34,26 +34,28 @@ const CustomerForm = (props) => {
   let navigate = useNavigate();
   const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
   const [savebtnOpen, setSavebtnOpen] = React.useState(false);
+  const fieldsToValidate = {
+    name: true,
+    identifier: true,
+    domain: true,
+    customer_type: true,
+    address_1: true,
+    city: true,
+    state: true,
+    zip_code: true,
+  };
   const formik = useFormik({
     initialValues: props.initialCustValues,
     validationSchema: validationSchema,
+    validateOnChange: true,
     onSubmit: (values, actions) => {
-      const cF = {
-        ...props.custData,
-        name: values.name,
-        identifier: values.identifier,
-        domain: values.domain,
-        customer_type: values.customer_type,
-        address_1: values.address_1,
-        address_2: values.address_2,
-        city: values.city,
-        state: values.state,
-        zip_code: values.zip_code,
-      };
-      props.setCustData(cF);
-      actions.resetForm();
-      console.log(props.custData);
-      //() => navigate("/li-pca-app/customers");
+      values.contact_list = props.custData.contact_list;
+      props.setCustData(values);
+      props.setHasSubmitted(true);
+      setTimeout(() => {
+        actions.resetForm();
+        navigate("/li-pca-app/customers");
+      });
     },
   });
   const handleCancel = () => {
@@ -63,12 +65,19 @@ const CustomerForm = (props) => {
       navigate("/li-pca-app/customers");
     }
   };
-  const handleSave = () => {
-    setSavebtnOpen(true);
+  const isDisabled = () => {
+    if (!props.hasContact) {
+      return true;
+    } else if (props.hasContact && (formik.dirty || props.contactUpdate)) {
+      return false;
+    }
+    return true;
   };
-  const handleClose = () => {
-    setCancelbtnOpen(false);
-    setSavebtnOpen(false);
+  const handleSave = () => {
+    formik.setTouched(fieldsToValidate);
+    if (formik.isValid && props.hasContact) {
+      setSavebtnOpen(true);
+    }
   };
   return (
     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -244,34 +253,34 @@ const CustomerForm = (props) => {
           xl={8}
         />
         <Grid item xs={10} sm={5} md={4} lg={3} xl={3}>
-          <form id="customer-form">
-            <Button
-              fullWidth
-              variant="contained"
-              size="large"
-              disabled={!(formik.dirty && props.hasContact)}
-              onClick={handleSave}
-            >
-              Save Customer
-            </Button>
-            <Dialog open={savebtnOpen}>
-              <DialogTitle>Confirmation</DialogTitle>
-              <DialogContent>
-                Do you want to save your changes?
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  endIcon={<CheckCircleOutlineIcon />}
-                  type="submit"
-                  form="customer-form"
-                >
-                  Save
-                </Button>
-              </DialogContent>
-            </Dialog>
-          </form>
+          <Button
+            fullWidth
+            variant="contained"
+            size="large"
+            disabled={isDisabled()}
+            onClick={handleSave}
+          >
+            Save Customer
+          </Button>
         </Grid>
+        <form id="customer-form">
+          <Dialog open={savebtnOpen}>
+            <DialogTitle>Confirmation</DialogTitle>
+            <DialogContent>
+              Do you want to save your changes?
+              <Button onClick={() => setSavebtnOpen(false)}>Cancel</Button>
+              <Button
+                color="primary"
+                variant="contained"
+                endIcon={<CheckCircleOutlineIcon />}
+                type="submit"
+                form="customer-form"
+              >
+                Save
+              </Button>
+            </DialogContent>
+          </Dialog>
+        </form>
         <Grid item xs={10} sm={1} md={1} lg={1} xl={1}>
           <Button
             color="dark"
@@ -285,12 +294,11 @@ const CustomerForm = (props) => {
           <Dialog open={cancelbtnOpen}>
             <DialogTitle>Are you sure you want to leave this page?</DialogTitle>
             <DialogContent>
-              <CheckCircleOutlineIcon />
               Changes made here will not be saved.
               <Button onClick={() => navigate("/li-pca-app/customers")}>
                 Yes
               </Button>
-              <Button onClick={handleClose}>Cancel</Button>
+              <Button onClick={() => setCancelbtnOpen(false)}>Cancel</Button>
             </DialogContent>
           </Dialog>
         </Grid>
@@ -301,10 +309,12 @@ const CustomerForm = (props) => {
 
 CustomerForm.propTypes = {
   initialCustValues: PropTypes.object,
-  custData: PropTypes.object,
   setCustData: PropTypes.func,
-  children: PropTypes.array,
+  custData: PropTypes.object,
   hasContact: PropTypes.bool,
+  contactUpdate: PropTypes.bool,
+  children: PropTypes.array,
+  setHasSubmitted: PropTypes.func,
 };
 
 export default CustomerForm;
