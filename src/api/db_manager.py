@@ -3,6 +3,7 @@
 from datetime import datetime
 
 # Third-Party Libraries
+from bson.binary import UUID, Binary
 from bson.objectid import ObjectId
 from flask import g
 import pymongo
@@ -45,6 +46,13 @@ class Manager:
         elif type(document_id) is ObjectId:
             return {"_id": document_id}
 
+    def document_query_uuid(self, document_id):
+        """Get query for a document by id."""
+        if type(document_id) is str:
+            return {"uuid": Binary(document_id)}
+        elif type(document_id) is UUID:
+            return {"uuid": document_id}
+
     def convert_fields(self, fields):
         """Convert list of fields into mongo syntax."""
         if not fields:
@@ -58,10 +66,15 @@ class Manager:
         """Format params."""
         if not params:
             return {}
+        if params.get("uuid", {}).get("$in"):
+            new_ids = []
+            for item in params["uuid"]["$in"]:
+                new_ids.append(UUID(item))
+            params["uuid"]["$in"] = new_ids
         if params.get("_id", {}).get("$in"):
             new_ids = []
-            for i in params["_id"]["$in"]:
-                new_ids.append(ObjectId(i))
+            for item in params["_id"]["$in"]:
+                new_ids.append(ObjectId(item))
             params["_id"]["$in"] = new_ids
         return params
 
@@ -150,6 +163,32 @@ class Manager:
                 )
             )
 
+    def get_uuid(self, document_id=None, filter_data=None, fields=None):
+        """Get item from collection by id or filter."""
+        if document_id:
+            return self.read_data(
+                self.db.collection.find_one(
+                    self.document_query_uuid(document_id),
+                    self.convert_fields(fields),
+                )
+            )
+        else:
+            return self.read_data(
+                self.db.collection.find_one(
+                    filter_data,
+                    self.convert_fields(fields),
+                )
+            )
+
+    def get_mongo_id(self, document_id=None, filter_data=None, fields=None):
+        """Get item from collection by id or filter."""
+        return self.read_data(
+            self.db.collection.find_one(
+                self.document_query(_id=document_id),
+                self.convert_fields(fields),
+            )
+        )
+
     def all(self, params=None, fields=None, sortby=None, limit=None):
         """Get all items in a collection."""
         query = self.db.collection.find(
@@ -173,12 +212,33 @@ class Manager:
             "Either a document id or params must be supplied when deleting."
         )
 
+    def delete_uuid(self, document_id=None, params=None):
+        """Delete item by object id."""
+        if document_id:
+            return self.db.collection.delete_one(
+                self.document_query_uuid(document_id)
+            ).raw_result
+        if params or params == {}:
+            return self.db.delete_many(params).raw_result
+        raise Exception(
+            "Either a document id or params must be supplied when deleting."
+        )
+
     def update(self, document_id, data):
         """Update item by id."""
         data = self.clean_data(data)
         data = self.add_updated(data)
         self.db.collection.update_one(
             self.document_query(document_id),
+            {"$set": self.load_data(data, partial=True)},
+        ).raw_result
+
+    def update_uuid(self, document_id, data):
+        """Update item by id."""
+        data = self.clean_data(data)
+        data = self.add_updated(data)
+        self.db.collection.update_one(
+            self.document_query_uuid(document_id),
             {"$set": self.load_data(data, partial=True)},
         ).raw_result
 

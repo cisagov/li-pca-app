@@ -184,9 +184,21 @@ paths:
                 items:
                   $ref: '#/components/schemas/Customer'
         "400":
-          description: Invalid name value
+          description: Invalid id supplied
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiResponse'
+                x-content-type: application/json
+        "404":
+          description: Assessment not found
+        "405":
+          description: Validation exception
       x-openapi-router-controller: api.controllers.customers_controller
     post:
+      x-openapi-router-controller: api.controllers.customers_controller
       tags:
         - customers
       operationId: create_customer
@@ -198,9 +210,15 @@ paths:
               $ref: '#/components/schemas/Customer'
         required: true
       responses:
-        default:
+        "200":
           description: successful operation
-      x-openapi-router-controller: api.controllers.customers_controller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Customer'
   /v1/customers/{uuid}:
     get:
       tags:
@@ -211,13 +229,12 @@ paths:
       parameters:
         - name: uuid
           in: path
-          description: uuid of customer to return
+          description: uuid of customer to update
           required: true
           style: simple
           explode: false
           schema:
             type: string
-            format: uuid4
       responses:
         "200":
           description: successful operation
@@ -229,34 +246,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
         "400":
-          description: Invalid ID supplied
+          description: Invalid uuid supplied
         "404":
           description: Customer not found
       x-openapi-router-controller: api.controllers.customers_controller
     put:
-      tags:
-        - customers
-      summary: Update an existing customer
+      summary: Updated Customer
+      description: Update customer by uuid
       operationId: update_customer_by_uuid
       parameters:
         - name: uuid
           in: path
-          description: uuid of customer to update
+          description: uuid that needs to be updated
           required: true
           style: simple
           explode: false
           schema:
             type: string
-            format: uuid4
       requestBody:
         $ref: '#/components/requestBodies/Customer'
       responses:
         "400":
-          description: Invalid uuid supplied
+          description: Invalid Customer supplied
         "404":
           description: Customer not found
-        "405":
-          description: Validation exception
       x-openapi-router-controller: api.controllers.customers_controller
     delete:
       tags:
@@ -266,18 +279,15 @@ paths:
       parameters:
         - name: uuid
           in: path
-          description: uuid to delete
+          description: uuid that needs to be updated
           required: true
           style: simple
           explode: false
           schema:
             type: string
-            format: uuid4
       responses:
-        "400":
-          description: Invalid uuid supplied
-        "404":
-          description: Customer not found
+        default:
+          description: successful operation
       x-openapi-router-controller: api.controllers.customers_controller
   /v1/templates:
     get:
@@ -897,16 +907,26 @@ components:
           type: string
         email:
           type: string
+          format: email
         notes:
           type: string
         active:
           type: boolean
+          default: true
     Customer:
       required:
         - name
         - identifier
+        - address_1
+        - city
+        - state
+        - zip_code
+        - customer_type
+        - contact_list
       type: object
       properties:
+        _id:
+          type: string
         uuid:
           type: string
           format: uuid4
@@ -914,7 +934,13 @@ components:
           type: string
         identifier:
           type: string
-        critical_infrastructur_id:
+        customer_type:
+          type: string
+        industry:
+          type: string
+        sector:
+          type: string
+        Kcritical_infrastructur_id:
           type: string
         critical_infrastructur_name:
           type: string
@@ -928,20 +954,40 @@ components:
           type: string
         zip_code:
           type: string
-        customer_type:
+        domain:
           type: string
+        appendix_a_date:
+          type: string
+          format: date
         contact_list:
           type: array
           items:
             $ref: '#/components/schemas/Contact'
-        industry:
-          type: string
-        sector:
-          type: string
-        domain:
-          type: string
       example:
-        name: Test1
+        name: test customer 2
+        identifier: test identifier 2
+        yaddress_1: 1234 Test Lane
+        address_2: 4567 Seconod Dr.
+        city: Test
+        state: LA
+        zip_code: '12344'
+        customer_type: Federal
+        industry: Oil & Gashhhh
+        sector: Oil & Gas
+        domain: test.com
+        critical_infrastructure_id: '1'
+        critical_infrastructure_name: Oil & Gas
+        appendix_a_date: 2022-4-14
+        contact_list:
+          - first_name: Contact
+            last_name: Test
+            title: Owner
+            office_phone: 888-888-8888
+            mobile_phone: 777-777-7777
+            email: test@test.com
+            notes: test notes
+            active: true
+            name: Test1
     Assessment:
       required:
         - customer_uuid

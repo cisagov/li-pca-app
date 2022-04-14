@@ -21,9 +21,8 @@ class BaseSchema(Schema):
 
         unknown = EXCLUDE
 
-    _id = fields.UUID(missing=uuid.uuid4)
-    uuid = fields.UUID(missing=uuid.uuid4)
+    uuid = fields.UUID(default=uuid.uuid4())
     created = DateTimeField(allow_none=True)
-    created_by = fields.Str()
+    created_by = fields.String(allow_none=True)
     updated = DateTimeField(allow_none=True)
-    updated_by = fields.Str()
+    updated_by = fields.String(allow_none=True)

@@ -29,7 +29,6 @@ def create_customer(body=None):  # noqa: E501
     if connexion.request.is_json:
         body = connexion.request.get_json()
         logging.debug("Body: %s", body)
-        logging.debug("Body: %s", body)
         return jsonify(db_manager.save(body))
 
 
@@ -43,8 +42,8 @@ def delete_customer_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
-    logging.debug("uuid: %s", uuid)
-    return jsonify(db_manager.delete(uuid))
+    print("uuid: %s", uuid)
+    return jsonify(db_manager.delete(document_id=uuid))
 
 
 def get_all_customers(filter_params=None):  # noqa: E501
@@ -76,7 +75,7 @@ def get_customer_by_uuid(uuid):  # noqa: E501
     return jsonify(db_manager.get(document_id=uuid))
 
 
-def update_customer_by_uuid(uuid):  # noqa: E501
+def update_customer_by_uuid(body, uuid):  # noqa: E501
     """Update an existing customer.
 
      # noqa: E501
@@ -88,5 +87,9 @@ def update_customer_by_uuid(uuid):  # noqa: E501
 
     :rtype: None
     """
+    logging.debug("body: %s", body)
     logging.debug("uuid: %s", uuid)
-    return db_manager.update(document_id=uuid, data=connexion.request.get_json())
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+        logging.debug("Body: %s", body)
+        return jsonify(db_manager.update(document_id=uuid, data=body))
