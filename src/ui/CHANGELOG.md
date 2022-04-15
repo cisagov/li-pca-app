@@ -123,3 +123,13 @@ and this project adheres to
   - Removed mock data from customer/index.js
   - Remove editcustomer route from MainRoutes.js
   - Delete unneeded editcustomer.js
+
+## [0.0.8] - 2022-04-15 ##
+
+- **Added**
+  - Add POST HTTP request with axios in newcustomer.js
+
+- **Changed**
+  - Refactor JSX in customers/index.js
+  - Update formik submit function to remove re-routing and add styling to
+  dialogs in CustomerForm.js
