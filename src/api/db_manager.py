@@ -232,6 +232,7 @@ class Manager:
             self.document_query(document_id),
             {"$set": self.load_data(data, partial=True)},
         ).raw_result
+        return self.get(document_id)
 
     def update_uuid(self, document_id, data):
         """Update item by id."""
