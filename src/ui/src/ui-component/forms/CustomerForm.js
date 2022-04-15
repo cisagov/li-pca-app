@@ -7,7 +7,9 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Button from "@mui/material/Button";
 import DatePicker from "@mui/lab/DatePicker";
 import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import Grid from "@mui/material/Grid";
@@ -19,6 +21,7 @@ import TextField from "@mui/material/TextField";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+// TODO: look up yup validation unique values to validate unique identifer value
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
   identifier: yup.string().required("Identifier is required"),
@@ -48,13 +51,12 @@ const CustomerForm = (props) => {
     initialValues: props.initialCustValues,
     validationSchema: validationSchema,
     validateOnChange: true,
-    onSubmit: (values, actions) => {
+    onSubmit: (values) => {
       values.contact_list = props.custData.contact_list;
       props.setCustData(values);
       props.setHasSubmitted(true);
       setTimeout(() => {
-        actions.resetForm();
-        navigate("/li-pca-app/customers");
+        setSavebtnOpen(false);
       });
     },
   });
@@ -265,10 +267,13 @@ const CustomerForm = (props) => {
         </Grid>
         <form id="customer-form">
           <Dialog open={savebtnOpen}>
-            <DialogTitle>Confirmation</DialogTitle>
+            <DialogTitle>Do you want to save changes to customer?</DialogTitle>
             <DialogContent>
-              Do you want to save your changes?
-              <Button onClick={() => setSavebtnOpen(false)}>Cancel</Button>
+              <DialogContentText>
+                Confirming will make changes in the database.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
               <Button
                 color="primary"
                 variant="contained"
@@ -278,7 +283,8 @@ const CustomerForm = (props) => {
               >
                 Save
               </Button>
-            </DialogContent>
+              <Button onClick={() => setSavebtnOpen(false)}>Cancel</Button>
+            </DialogActions>
           </Dialog>
         </form>
         <Grid item xs={10} sm={1} md={1} lg={1} xl={1}>
@@ -294,12 +300,16 @@ const CustomerForm = (props) => {
           <Dialog open={cancelbtnOpen}>
             <DialogTitle>Are you sure you want to leave this page?</DialogTitle>
             <DialogContent>
-              Changes made here will not be saved.
+              <DialogContentText>
+                Changes made here will not be saved.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
               <Button onClick={() => navigate("/li-pca-app/customers")}>
                 Yes
               </Button>
               <Button onClick={() => setCancelbtnOpen(false)}>Cancel</Button>
-            </DialogContent>
+            </DialogActions>
           </Dialog>
         </Grid>
       </Grid>
