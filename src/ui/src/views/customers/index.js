@@ -1,7 +1,10 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+
 // material-ui
-import { Grid } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Grid";
 
 // project imports
 import MainCard from "ui-component/cards/MainCard";
@@ -11,10 +14,8 @@ import MainDataTable from "ui-component/tables/MainDataTable";
 import axios from "axios";
 // ==============================|| Customers view ||============================== //
 
-const baseURL = "http://localhost:8080/li-pca/v1/customers";
-
-function CustomersPage() {
-  const columns = [
+function BaseJSX(props) {
+  const cols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Name", flex: 2 },
     { field: "identifier", headerName: "Identifier", flex: 1 },
@@ -23,11 +24,35 @@ function CustomersPage() {
     { field: "state", headerName: "State", flex: 1 },
     { field: "zip_code", headerName: "Zip Code", flex: 1 },
   ];
-  const jsonRows = require("./mockCusData.json");
+  return (
+    <MainCard title="Customers">
+      <Grid container spacing={2}>
+        <Grid item xs={8} sm={12} md={12} lg={12} xl={12}>
+          {props.children}
+          <MainDataTable
+            data={{ rows: props.rows, columns: cols }}
+            newEntryRoute={props.dataEntry}
+            editEntryRoute={props.dataEntry}
+          />
+        </Grid>
+      </Grid>
+    </MainCard>
+  );
+}
 
-  // Ignore until back-end data is populated
-  const [getData, setData] = React.useState([]);
-  React.useEffect(() => {
+BaseJSX.propTypes = {
+  rows: PropTypes.array,
+  children: PropTypes.object,
+  dataEntry: PropTypes.string,
+};
+
+function CustomersPage() {
+  const baseURL = "http://localhost:8080/li-pca/v1/customers";
+  const [isLoading, setLoading] = useState(true);
+  const [getData, setData] = useState([]);
+  const [getError, setError] = useState([false, ""]);
+
+  useEffect(() => {
     axios
       .get(baseURL, {
         headers: {
@@ -36,11 +61,13 @@ function CustomersPage() {
         },
       })
       .then((response) => {
-        const data = response.data;
-        setData(data);
+        setData(response.data);
+        setLoading(false);
+        setError([false, ""]);
       })
       .catch((error) => {
-        console.log("Error fetching data");
+        setError([true, error.message]);
+        setLoading(false);
         console.log(error);
       });
   }, []);
@@ -54,29 +81,42 @@ function CustomersPage() {
         entry["id"] = counter;
         counter = counter + 1;
       });
-      return cusRows;
+      return rowsArray;
     }
     return [];
   };
-  const cusData = { rows: cusRows(jsonRows), columns: columns };
+  // Mock data test
+  // const jsonRows = require("./mockCusData.json");
+  // const rows = cusRows(jsonRows);
+  const rows = cusRows(getData);
 
+  if (isLoading) {
+    return (
+      <BaseJSX rows={[]} dataEntry={""}>
+        <Typography>Loading...</Typography>
+      </BaseJSX>
+    );
+  } else if (getError[0]) {
+    return (
+      <BaseJSX rows={[]} dataEntry={""}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {getError[1]}. Unable to load customer data from the database.
+        </Alert>
+      </BaseJSX>
+    );
+  } else if (rows.length === 0) {
+    return (
+      <BaseJSX rows={[]} dataEntry={"data-entry"}>
+        <Typography sx={{ mb: 2 }}>No customer data entries found.</Typography>
+      </BaseJSX>
+    );
+  }
   return (
-    <MainCard title="Customers">
-      <Grid container spacing={2}>
-        <Grid item xs={8}>
-          {/* Customer data shown below. */}
-          This is just something to fill in while I test axios. I will use the
-          space below this to confirm.
-          {/* {getAll.data} */}
-        </Grid>
-      </Grid>
-      <br />
-      <MainDataTable
-        data={cusData}
-        newEntryRoute="data-entry"
-        editEntryRoute="data-entry"
-      />
-    </MainCard>
+    <BaseJSX rows={rows} dataEntry={"data-entry"}>
+      <Typography sx={{ mb: 2 }}>
+        Customer data from the database shown below.
+      </Typography>
+    </BaseJSX>
   );
 }
 export default CustomersPage;

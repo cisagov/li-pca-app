@@ -123,3 +123,27 @@ and this project adheres to
   - Removed mock data from customer/index.js
   - Remove editcustomer route from MainRoutes.js
   - Delete unneeded editcustomer.js
+
+## [0.0.8] - 2022-04-15 ##
+
+- **Added**
+  - Add POST HTTP request with axios in newcustomer.js
+
+- **Changed**
+  - Refactor JSX in customers/index.js
+  - Update formik submit function to remove re-routing and add styling to
+  dialogs in CustomerForm.js
+
+## [0.0.8] - 2022-04-19 ##
+
+- **Added**
+  - Add PUT and DELETE HTTP requests using axios in newcustomer.js and hooks
+  - Add edit and delete functionality and JSX to CustomerForm.js
+  - Add new folder popups and two new components, ConfirmDialog.js and ResultDialog.js
+  for reusable nature
+
+- **Changed**
+  - Update newcustomer.js and CustomerForm.js to use reusable dialog components
+  - Update setCustData hook to only overwrite changed data rather than
+  overwriting the whole custData object in CustomerForm.js
+  - Update secondary colors in _themes-vars.module.scss
