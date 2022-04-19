@@ -3,11 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 // material-ui
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
@@ -15,12 +10,10 @@ import Typography from "@mui/material/Typography";
 import CustomerForm from "ui-component/forms/CustomerForm";
 import CustomerPOCForm from "ui-component/forms/CustomerPOCForm";
 import MainCard from "ui-component/cards/MainCard";
+import ResultDialog from "ui-component/popups/ResultDialog";
 
 // third party
 import axios from "axios";
-
-// assets
-import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 
 // ==============================|| Create/Update Customer View ||============================== //
 
@@ -92,16 +85,22 @@ const CustDataEntryPage = () => {
   const [contactUpdate, setContactUpdate] = React.useState(false);
   const [hasSubmitted, setHasSubmitted] = React.useState(false);
   const [getError, setError] = React.useState([false, ""]);
-  const baseURL = "http://localhost:8080/li-pca/v1/customers";
+  const [getDelete, setDelete] = React.useState(false);
 
+  // TODO: Add Territorial to customer_type in back-end
   React.useEffect(() => {
+    const baseURL = "http://localhost:8080/li-pca/v1/customers";
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    };
+    // TODO: Have custData.UUID in JSON object in back-end
+    // const custUUID = custData.uuid;
+    const custUUID = "625dead00846ce8031144dc8";
     if (hasSubmitted && mainCardTitle == "New Customer") {
       axios
         .post(baseURL, custData, {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
+          headers: headers,
         })
         .then((response) => {
           console.log(response);
@@ -109,13 +108,45 @@ const CustDataEntryPage = () => {
         })
         .catch((error) => {
           setError([true, error.message]);
-          console.log("Error fetching data");
+          console.log("Error adding data");
+          console.log(custData);
+          console.log(error);
+        });
+    } else if (hasSubmitted && mainCardTitle == "Edit Customer") {
+      axios
+        .put(baseURL + "/" + custUUID, custData, {
+          headers: headers,
+        })
+        .then((response) => {
+          console.log(response);
+          setError([false, ""]);
+        })
+        .catch((error) => {
+          setError([true, error.message]);
+          console.log("Error updating data");
+          console.log(custData);
+          console.log(error);
+        });
+    } else if (getDelete) {
+      axios
+        .delete(baseURL + "/" + custUUID, {
+          headers: headers,
+        })
+        .then((response) => {
+          console.log(response);
+          setError([false, ""]);
+        })
+        .catch((error) => {
+          setError([true, error.message]);
+          console.log("Error deleting data");
+          console.log(custData);
           console.log(error);
         });
     }
-  }, [custData, hasSubmitted, mainCardTitle]);
+  }, [custData, hasSubmitted, mainCardTitle, getDelete]);
   const closeDialog = () => {
     setHasSubmitted(false);
+    setDelete(false);
     if (!getError[0]) {
       navigate("/li-pca-app/customers");
     }
@@ -125,63 +156,13 @@ const CustDataEntryPage = () => {
     <MainCard title={mainCardTitle}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
         <Grid container spacing={2}>
-          {getError[0] ? (
-            <Dialog open={hasSubmitted}>
-              <Grid sx={{ textAlign: "center" }}>
-                <DialogTitle>
-                  <Grid item>
-                    <IconCircleX color="#E62C22" size={100} stroke={1} />
-                  </Grid>
-                  <Grid item>{getError[1]}</Grid>
-                </DialogTitle>
-                <DialogContent>
-                  <Grid item>
-                    <DialogContentText>
-                      {mainCardTitle} changes are unable to be saved.
-                      <br />
-                      Check the console log for more details.
-                    </DialogContentText>
-                  </Grid>
-                  <Grid item sx={{ mt: 3, mb: 1 }}>
-                    <Button
-                      onClick={closeDialog}
-                      size="large"
-                      variant="contained"
-                    >
-                      Ok
-                    </Button>
-                  </Grid>
-                </DialogContent>
-              </Grid>
-            </Dialog>
-          ) : (
-            <Dialog open={hasSubmitted}>
-              <Grid sx={{ textAlign: "center" }}>
-                <DialogTitle>
-                  <Grid item>
-                    <IconCircleCheck color="#00b341" size={100} stroke={1} />
-                  </Grid>
-                  <Grid item>Successful save</Grid>
-                </DialogTitle>
-                <DialogContent>
-                  <Grid item>
-                    <DialogContentText>
-                      {mainCardTitle} changes have been made successfully.
-                    </DialogContentText>
-                  </Grid>
-                  <Grid item sx={{ mt: 3, mb: 1 }}>
-                    <Button
-                      onClick={closeDialog}
-                      size="large"
-                      variant="contained"
-                    >
-                      Ok
-                    </Button>
-                  </Grid>
-                </DialogContent>
-              </Grid>
-            </Dialog>
-          )}
+          <ResultDialog
+            type={getDelete ? "Delete Customer" : mainCardTitle}
+            hasSubmitted={hasSubmitted}
+            getDelete={getDelete}
+            error={getError}
+            closeDialog={closeDialog}
+          />
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             <Typography variant="h4" gutterBottom component="div">
               Customer Information
@@ -194,6 +175,8 @@ const CustDataEntryPage = () => {
             hasContact={hasContact}
             contactUpdate={contactUpdate}
             setHasSubmitted={setHasSubmitted}
+            dataEntryType={mainCardTitle}
+            setDelete={setDelete}
           >
             <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 2 }}>
               <Typography variant="h4" gutterBottom component="div">
