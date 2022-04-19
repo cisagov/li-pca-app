@@ -51,7 +51,7 @@ const CustomerForm = (props) => {
     validateOnChange: true,
     onSubmit: (values) => {
       values.contact_list = props.custData.contact_list;
-      props.setCustData(values);
+      props.setCustData(Object.assign(props.custData, values));
       props.setHasSubmitted(true);
       setTimeout(() => {
         setSavebtnOpen(false);
