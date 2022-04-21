@@ -25,7 +25,12 @@ def get_db():
         os.environ.get("DB_HOST"),
         os.environ.get("DB_PORT"),
     )
-    return MongoClient(conn_str, tz_aware=True).pca
+    return MongoClient(
+        conn_str,
+        tz_aware=True,
+        uuidRepresentation="standard",
+        unicode_decode_error_handler="replace",
+    ).pca
 
 
 DB = get_db()

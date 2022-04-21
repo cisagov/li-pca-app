@@ -34,7 +34,9 @@ class CustomerSchema(BaseSchema):
     zip_code = fields.Str(required=True)
     customer_type = fields.Str(
         required=True,
-        validate=validate.OneOf(["Federal", "State", "Local", "Tribal", "Private"]),
+        validate=validate.OneOf(
+            ["Federal", "State", "Local", "Tribal", "Private", "Territorial"]
+        ),
     )
     contact_list = fields.List(fields.Nested(CustomerContactSchema), required=True)
     industry = fields.Str()

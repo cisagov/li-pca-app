@@ -21,6 +21,7 @@ class BaseSchema(Schema):
 
         unknown = EXCLUDE
 
+    _id = fields.Str()
     uuid = fields.UUID(default=uuid.uuid4())
     created = DateTimeField(allow_none=True)
     created_by = fields.String(allow_none=True)
