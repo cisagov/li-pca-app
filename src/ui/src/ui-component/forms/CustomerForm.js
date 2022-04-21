@@ -6,19 +6,19 @@ import { useNavigate } from "react-router-dom";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Button from "@mui/material/Button";
 import DatePicker from "@mui/lab/DatePicker";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import Grid from "@mui/material/Grid";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
+// project imports
+import ConfirmDialog from "ui-component/popups/ConfirmDialog";
+
 //third party
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+// TODO: look up yup validation unique values to validate unique identifer value
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
   identifier: yup.string().required("Identifier is required"),
@@ -34,6 +34,7 @@ const CustomerForm = (props) => {
   let navigate = useNavigate();
   const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
   const [savebtnOpen, setSavebtnOpen] = React.useState(false);
+  const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
   const fieldsToValidate = {
     name: true,
     identifier: true,
@@ -48,13 +49,12 @@ const CustomerForm = (props) => {
     initialValues: props.initialCustValues,
     validationSchema: validationSchema,
     validateOnChange: true,
-    onSubmit: (values, actions) => {
+    onSubmit: (values) => {
       values.contact_list = props.custData.contact_list;
-      props.setCustData(values);
+      props.setCustData(Object.assign(props.custData, values));
       props.setHasSubmitted(true);
       setTimeout(() => {
-        actions.resetForm();
-        navigate("/li-pca-app/customers");
+        setSavebtnOpen(false);
       });
     },
   });
@@ -79,6 +79,18 @@ const CustomerForm = (props) => {
       setSavebtnOpen(true);
     }
   };
+
+  const confirmDelete = () => {
+    setTimeout(() => {
+      setDeletebtnOpen(false);
+      props.setDelete(true);
+    });
+  };
+  let subtitleConfirm =
+    formik.values.name + " will be updated in the database.";
+  if (props.dataEntryType == "New Customer") {
+    subtitleConfirm = formik.values.name + " will be added to the database.";
+  }
   return (
     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
       <form id="customer-form" onSubmit={formik.handleSubmit}>
@@ -244,17 +256,29 @@ const CustomerForm = (props) => {
       {props.children}
       <Grid container spacing={2}>
         <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 5 }} />
-        <Grid
-          item
-          display={{ xs: "none", sm: "block" }}
-          sm={5}
-          md={7}
-          lg={8}
-          xl={8}
-        />
+        {props.dataEntryType == "New Customer" ? (
+          <Grid
+            item
+            display={{ xs: "none", sm: "block" }}
+            sm={5}
+            md={7}
+            lg={8}
+            xl={8}
+          />
+        ) : (
+          <Grid
+            item
+            display={{ xs: "none", sm: "block" }}
+            sm={1}
+            md={4}
+            lg={6}
+            xl={6}
+          />
+        )}
         <Grid item xs={10} sm={5} md={4} lg={3} xl={3}>
           <Button
             fullWidth
+            color="info"
             variant="contained"
             size="large"
             disabled={isDisabled()}
@@ -264,23 +288,44 @@ const CustomerForm = (props) => {
           </Button>
         </Grid>
         <form id="customer-form">
-          <Dialog open={savebtnOpen}>
-            <DialogTitle>Confirmation</DialogTitle>
-            <DialogContent>
-              Do you want to save your changes?
-              <Button onClick={() => setSavebtnOpen(false)}>Cancel</Button>
-              <Button
-                color="primary"
-                variant="contained"
-                endIcon={<CheckCircleOutlineIcon />}
-                type="submit"
-                form="customer-form"
-              >
-                Save
-              </Button>
-            </DialogContent>
-          </Dialog>
+          <ConfirmDialog
+            subtitle={subtitleConfirm}
+            confirmText="Save"
+            closeText="Cancel"
+            isOpen={savebtnOpen}
+            handleClose={() => setSavebtnOpen(false)}
+            buttonType="submit"
+            formName="customer-form"
+          />
         </form>
+        {props.dataEntryType == "New Customer" ? (
+          <React.Fragment />
+        ) : (
+          <React.Fragment>
+            <Grid item xs={10} sm={4} md={3} lg={2} xl={2}>
+              <Button
+                fullWidth
+                variant="text"
+                size="large"
+                color="error"
+                disabled={false}
+                onClick={() => setDeletebtnOpen(true)}
+              >
+                Delete Customer
+              </Button>
+            </Grid>
+            <ConfirmDialog
+              subtitle={
+                formik.values.name + " will be deleted in the database."
+              }
+              confirmText="Delete"
+              closeText="Cancel"
+              isOpen={deletebtnOpen}
+              handleClick={confirmDelete}
+              handleClose={() => setDeletebtnOpen(false)}
+            />
+          </React.Fragment>
+        )}
         <Grid item xs={10} sm={1} md={1} lg={1} xl={1}>
           <Button
             color="dark"
@@ -291,16 +336,14 @@ const CustomerForm = (props) => {
           >
             Cancel
           </Button>
-          <Dialog open={cancelbtnOpen}>
-            <DialogTitle>Are you sure you want to leave this page?</DialogTitle>
-            <DialogContent>
-              Changes made here will not be saved.
-              <Button onClick={() => navigate("/li-pca-app/customers")}>
-                Yes
-              </Button>
-              <Button onClick={() => setCancelbtnOpen(false)}>Cancel</Button>
-            </DialogContent>
-          </Dialog>
+          <ConfirmDialog
+            subtitle="Unsaved changes will be discarded."
+            confirmText="Leave"
+            closeText="Cancel"
+            isOpen={cancelbtnOpen}
+            handleClick={() => navigate("/li-pca-app/customers")}
+            handleClose={() => setCancelbtnOpen(false)}
+          />
         </Grid>
       </Grid>
     </Grid>
@@ -315,6 +358,8 @@ CustomerForm.propTypes = {
   contactUpdate: PropTypes.bool,
   children: PropTypes.array,
   setHasSubmitted: PropTypes.func,
+  dataEntryType: PropTypes.string,
+  setDelete: PropTypes.func,
 };
 
 export default CustomerForm;

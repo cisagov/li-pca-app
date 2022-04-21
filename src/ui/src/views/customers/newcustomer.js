@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // material-ui
 import Box from "@mui/material/Box";
@@ -10,6 +10,10 @@ import Typography from "@mui/material/Typography";
 import CustomerForm from "ui-component/forms/CustomerForm";
 import CustomerPOCForm from "ui-component/forms/CustomerPOCForm";
 import MainCard from "ui-component/cards/MainCard";
+import ResultDialog from "ui-component/popups/ResultDialog";
+
+// third party
+import axios from "axios";
 
 // ==============================|| Create/Update Customer View ||============================== //
 
@@ -23,7 +27,9 @@ let custPOCValues = {
   office_phone: "",
   title: "",
 };
+
 let custFilledPOCValues = {};
+
 const custRowsTransform = (custRows) => {
   if (!custRows.hasOwnProperty("name")) {
     custRows.name = "";
@@ -70,6 +76,7 @@ const custNewOrEdit = (dataEntryType) => {
 
 const CustDataEntryPage = () => {
   const { state } = useLocation();
+  let navigate = useNavigate();
   let custValues = custRowsTransform(state.row);
   let [mainCardTitle, hasContactBool] = custNewOrEdit(state.dataEntryType);
 
@@ -77,15 +84,85 @@ const CustDataEntryPage = () => {
   const [custData, setCustData] = React.useState(custValues);
   const [contactUpdate, setContactUpdate] = React.useState(false);
   const [hasSubmitted, setHasSubmitted] = React.useState(false);
+  const [getError, setError] = React.useState([false, ""]);
+  const [getDelete, setDelete] = React.useState(false);
 
-  if (hasSubmitted) {
-    // TODO: Add Axios functions to POST or PUT data
-    console.log(custData);
-  }
+  // TODO: Add Territorial to customer_type in back-end
+  React.useEffect(() => {
+    const baseURL = "http://localhost:8080/li-pca/v1/customers";
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    };
+    // TODO: Have custData.UUID in JSON object in back-end
+    // const custUUID = custData.uuid;
+    const custUUID = "625dead00846ce8031144dc8";
+    if (hasSubmitted && mainCardTitle == "New Customer") {
+      axios
+        .post(baseURL, custData, {
+          headers: headers,
+        })
+        .then((response) => {
+          console.log(response);
+          setError([false, ""]);
+        })
+        .catch((error) => {
+          setError([true, error.message]);
+          console.log("Error adding data");
+          console.log(custData);
+          console.log(error);
+        });
+    } else if (hasSubmitted && mainCardTitle == "Edit Customer") {
+      axios
+        .put(baseURL + "/" + custUUID, custData, {
+          headers: headers,
+        })
+        .then((response) => {
+          console.log(response);
+          setError([false, ""]);
+        })
+        .catch((error) => {
+          setError([true, error.message]);
+          console.log("Error updating data");
+          console.log(custData);
+          console.log(error);
+        });
+    } else if (getDelete) {
+      axios
+        .delete(baseURL + "/" + custUUID, {
+          headers: headers,
+        })
+        .then((response) => {
+          console.log(response);
+          setError([false, ""]);
+        })
+        .catch((error) => {
+          setError([true, error.message]);
+          console.log("Error deleting data");
+          console.log(custData);
+          console.log(error);
+        });
+    }
+  }, [custData, hasSubmitted, mainCardTitle, getDelete]);
+  const closeDialog = () => {
+    setHasSubmitted(false);
+    setDelete(false);
+    if (!getError[0]) {
+      navigate("/li-pca-app/customers");
+    }
+  };
+
   return (
     <MainCard title={mainCardTitle}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
         <Grid container spacing={2}>
+          <ResultDialog
+            type={getDelete ? "Delete Customer" : mainCardTitle}
+            hasSubmitted={hasSubmitted}
+            getDelete={getDelete}
+            error={getError}
+            closeDialog={closeDialog}
+          />
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             <Typography variant="h4" gutterBottom component="div">
               Customer Information
@@ -98,6 +175,8 @@ const CustDataEntryPage = () => {
             hasContact={hasContact}
             contactUpdate={contactUpdate}
             setHasSubmitted={setHasSubmitted}
+            dataEntryType={mainCardTitle}
+            setDelete={setDelete}
           >
             <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 2 }}>
               <Typography variant="h4" gutterBottom component="div">
