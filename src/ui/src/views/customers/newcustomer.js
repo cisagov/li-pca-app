@@ -79,7 +79,6 @@ const CustDataEntryPage = () => {
   let navigate = useNavigate();
   let custValues = custRowsTransform(state.row);
   let [mainCardTitle, hasContactBool] = custNewOrEdit(state.dataEntryType);
-
   const [hasContact, setHasContact] = React.useState(hasContactBool);
   const [custData, setCustData] = React.useState(custValues);
   const [contactUpdate, setContactUpdate] = React.useState(false);
@@ -87,16 +86,13 @@ const CustDataEntryPage = () => {
   const [getError, setError] = React.useState([false, ""]);
   const [getDelete, setDelete] = React.useState(false);
 
-  // TODO: Add Territorial to customer_type in back-end
   React.useEffect(() => {
     const baseURL = "http://localhost:8080/li-pca/v1/customers";
+    const cust_id = custData._id;
     const headers = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     };
-    // TODO: Have custData.UUID in JSON object in back-end
-    // const custUUID = custData.uuid;
-    const custUUID = "625dead00846ce8031144dc8";
     if (hasSubmitted && mainCardTitle == "New Customer") {
       axios
         .post(baseURL, custData, {
@@ -114,7 +110,7 @@ const CustDataEntryPage = () => {
         });
     } else if (hasSubmitted && mainCardTitle == "Edit Customer") {
       axios
-        .put(baseURL + "/" + custUUID, custData, {
+        .put(baseURL + "/" + cust_id, custData, {
           headers: headers,
         })
         .then((response) => {
@@ -129,7 +125,7 @@ const CustDataEntryPage = () => {
         });
     } else if (getDelete) {
       axios
-        .delete(baseURL + "/" + custUUID, {
+        .delete(baseURL + "/" + cust_id, {
           headers: headers,
         })
         .then((response) => {
