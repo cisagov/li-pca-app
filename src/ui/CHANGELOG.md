@@ -147,3 +147,10 @@ and this project adheres to
   - Update setCustData hook to only overwrite changed data rather than
   overwriting the whole custData object in CustomerForm.js
   - Update secondary colors in _themes-vars.module.scss
+
+## [0.0.9] - 2022-04-22 ##
+
+- **Added**
+  - Add API calls to use _id in the URL instead of hardcoded values in newcustomer.js
+  - Add yup validation for unique Customer Identifer values in CustomerForm.js
+  and MainDataTable.js and newcustomer.js to get the list of identifiers

@@ -18,19 +18,31 @@ import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-// TODO: look up yup validation unique values to validate unique identifer value
-const validationSchema = yup.object({
-  name: yup.string().required("Name is required"),
-  identifier: yup.string().required("Identifier is required"),
-  domain: yup.string().required("Domain is required"),
-  customer_type: yup.string().required("Customer Type is required"),
-  address_1: yup.string().required("Address 1 is required"),
-  city: yup.string().required("City is required"),
-  state: yup.string().required("State is required"),
-  zip_code: yup.string().required("Zip Code is required"),
+yup.addMethod(yup.string, "unique", function (myArray, msg) {
+  return this.test({
+    name: "unique",
+    message: msg,
+    test: (value) => !myArray.includes(value),
+  });
 });
 
 const CustomerForm = (props) => {
+  const validationSchema = yup.object({
+    name: yup
+      .string()
+      .required("Name is required")
+      .min(2, "Please enter more than one character"),
+    identifier: yup
+      .string()
+      .required("Identifier is required")
+      .unique(props.identifiers, "This Customer Identifier already exists"),
+    domain: yup.string().required("Domain is required"),
+    customer_type: yup.string().required("Customer Type is required"),
+    address_1: yup.string().required("Address 1 is required"),
+    city: yup.string().required("City is required"),
+    state: yup.string().required("State is required"),
+    zip_code: yup.string().required("Zip Code is required"),
+  });
   let navigate = useNavigate();
   const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
   const [savebtnOpen, setSavebtnOpen] = React.useState(false);
@@ -360,6 +372,7 @@ CustomerForm.propTypes = {
   setHasSubmitted: PropTypes.func,
   dataEntryType: PropTypes.string,
   setDelete: PropTypes.func,
+  identifiers: PropTypes.array,
 };
 
 export default CustomerForm;
