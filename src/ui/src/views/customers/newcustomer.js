@@ -74,6 +74,15 @@ const custNewOrEdit = (dataEntryType) => {
   return ["Edit Customer", true];
 };
 
+const getOtherIdentifiers = (custData, custValues) => {
+  const identifierArr = custData.map(({ identifier }) => identifier);
+  return identifierArr.filter((identifier) => {
+    if (identifier != custValues.identifier) {
+      return identifier;
+    }
+  });
+};
+
 const CustDataEntryPage = () => {
   const { state } = useLocation();
   let navigate = useNavigate();
@@ -173,6 +182,7 @@ const CustDataEntryPage = () => {
             setHasSubmitted={setHasSubmitted}
             dataEntryType={mainCardTitle}
             setDelete={setDelete}
+            identifiers={getOtherIdentifiers(state.rows, custValues)}
           >
             <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 2 }}>
               <Typography variant="h4" gutterBottom component="div">
