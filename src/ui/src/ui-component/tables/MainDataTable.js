@@ -29,6 +29,7 @@ CustomToolbar.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   newEntryRoute: PropTypes.string.isRequired,
+  rows: PropTypes.array,
 };
 
 function CustomToolbar(props) {
@@ -86,7 +87,7 @@ function CustomToolbar(props) {
         startIcon={<AddIcon fontSize="small" />}
         onClick={() => {
           navigate(`${props.newEntryRoute}`, {
-            state: { row: values, dataEntryType: "new" },
+            state: { row: values, dataEntryType: "new", rows: props.rows },
           });
         }}
       >
@@ -134,7 +135,11 @@ export default function MainDataTable(props) {
           color="primary"
           onClick={() => {
             navigate(`${props.editEntryRoute}`, {
-              state: { row: cellValues.row, dataEntryType: "edit" },
+              state: {
+                row: cellValues.row,
+                dataEntryType: "edit",
+                rows: rows,
+              },
             });
           }}
         >
@@ -160,6 +165,7 @@ export default function MainDataTable(props) {
           onChange: (event) => requestSearch(event.target.value),
           clearSearch: () => requestSearch(""),
           newEntryRoute: props.newEntryRoute,
+          rows: rows,
         },
       }}
     />
