@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 // material-ui
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -9,6 +10,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import CustomerForm from "ui-component/forms/CustomerForm";
 import CustomerPOCForm from "ui-component/forms/CustomerPOCForm";
+import DisplayDataTable from "ui-component/tables/DisplayDataTable";
 import MainCard from "ui-component/cards/MainCard";
 import ResultDialog from "ui-component/popups/ResultDialog";
 
@@ -94,6 +96,7 @@ const CustDataEntryPage = () => {
   const [hasSubmitted, setHasSubmitted] = React.useState(false);
   const [getError, setError] = React.useState([false, ""]);
   const [getDelete, setDelete] = React.useState(false);
+  const [hasCampaigns, setCampaigns] = React.useState(false);
 
   React.useEffect(() => {
     const baseURL = "http://localhost:8080/li-pca/v1/customers";
@@ -156,7 +159,40 @@ const CustDataEntryPage = () => {
       navigate("/li-pca-app/customers");
     }
   };
-
+  const campaignCols = [
+    { field: "id", hide: true },
+    { field: "name", headerName: "Name", flex: 2 },
+    { field: "status", headerName: "Status", flex: 2 },
+    { field: "active", headerName: "Active", flex: 2 },
+    { field: "start_date", headerName: "Start Date", flex: 1.5 },
+    { field: "inpsect", headerName: "Inspect", flex: 1.5 },
+  ];
+  const renderCampaigns = () => {
+    const title = (
+      <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ mt: 5, mb: 3 }}>
+        <Typography variant="h4" gutterBottom component="div">
+          Customer Campaigns
+        </Typography>
+      </Grid>
+    );
+    if (state.dataEntryType != "new" && hasCampaigns) {
+      return (
+        <>
+          {title}
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: 1 }}>
+            <DisplayDataTable data={{ rows: [], columns: campaignCols }} />
+          </Grid>
+        </>
+      );
+    } else if (state.dataEntryType != "new") {
+      return (
+        <>
+          {title}
+          <Alert severity="info">Customer has no campaigns</Alert>
+        </>
+      );
+    }
+  };
   return (
     <MainCard title={mainCardTitle}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
@@ -202,6 +238,7 @@ const CustDataEntryPage = () => {
                 setContactUpdate={setContactUpdate}
               />
             </Grid>
+            {renderCampaigns()}
           </CustomerForm>
         </Grid>
       </Box>
