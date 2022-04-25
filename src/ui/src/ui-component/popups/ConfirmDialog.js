@@ -61,18 +61,22 @@ const ConfirmDialog = (props) => {
   return (
     <Dialog open={props.isOpen}>
       <Grid sx={{ textAlign: "center" }}>
-        <DialogTitle>
-          <Grid item>
+        <DialogTitle sx={{ fontSize: 20 }}>
+          <Grid item sx={{ mt: 2 }}>
             <IconAlertCircle color="#2196f3" size={100} stroke={1} />
           </Grid>
           <Grid item>{title}</Grid>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>{props.subtitle}</DialogContentText>
+          <DialogContentText sx={{ fontSize: 16 }}>
+            {props.subtitle}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          {confirmButton}
-          <Button onClick={props.handleClose}>{props.closeText}</Button>
+          <Grid item sx={{ mb: 2 }}>
+            {confirmButton}
+            <Button onClick={props.handleClose}>{props.closeText}</Button>
+          </Grid>
         </DialogActions>
       </Grid>
     </Dialog>

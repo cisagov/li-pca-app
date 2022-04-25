@@ -27,13 +27,17 @@ const ResultDialog = (props) => {
   return (
     <Dialog open={props.hasSubmitted || props.getDelete}>
       <Grid sx={{ textAlign: "center" }}>
-        <DialogTitle>
-          <Grid item>{bigIcon}</Grid>
+        <DialogTitle sx={{ fontSize: 20 }}>
+          <Grid item sx={{ mt: 2 }}>
+            {bigIcon}
+          </Grid>
           <Grid item>{title}</Grid>
         </DialogTitle>
         <DialogContent>
           <Grid item>
-            <DialogContentText>{subtitle}</DialogContentText>
+            <DialogContentText sx={{ fontSize: 16 }}>
+              {subtitle}
+            </DialogContentText>
           </Grid>
           <Grid item sx={{ mt: 3, mb: 1 }}>
             <Button
