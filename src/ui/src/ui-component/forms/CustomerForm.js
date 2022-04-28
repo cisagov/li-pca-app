@@ -17,6 +17,7 @@ import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 //third party
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { format } from "date-fns";
 
 yup.addMethod(yup.string, "unique", function (myArray, msg) {
   return this.test({
@@ -63,7 +64,10 @@ const CustomerForm = (props) => {
     validateOnChange: true,
     onSubmit: (values) => {
       values.contact_list = props.custData.contact_list;
-      values.appendixADate = props.custData.appendixADate;
+      values.appendixADate = format(
+        props.custData.appendixADate,
+        "yyyy-MM-dd HH:mm:ss z"
+      );
       props.setCustData(Object.assign(props.custData, values));
       props.setHasSubmitted(true);
       setTimeout(() => {
