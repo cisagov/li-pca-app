@@ -12,33 +12,44 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
 
 // assets
 import { IconAlertCircle } from "@tabler/icons";
 
 const ConfirmDialog = (props) => {
-  let endIcon = <React.Fragment />;
-  let confirmText = props.confirmText;
-  let confirmButton = <Button />;
-  let color = "primary";
+  const [getDelete, setDelete] = React.useState("");
   let title = "Do you want to save changes to this entry?";
+  let confirmText = props.confirmText;
+  let endIcon = <CheckCircleOutlineIcon />;
+  let color = "primary";
+  let confirmButton = <Button />;
 
-  if (confirmText == "Delete") {
-    title = "Are you sure you want to delete this entry?";
-    endIcon = <DeleteIcon />;
-    color = "error";
-  } else if (confirmText == "Leave") {
+  const isDisabled = () => {
+    if (confirmText == "Delete") {
+      if (getDelete == "DELETE") {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  };
+  if (confirmText == "Leave") {
     title = "Are you sure you want to leave this page?";
     endIcon = <ExitToAppIcon />;
     color = "secondary";
   }
-
+  if (confirmText == "Delete") {
+    title = "Are you sure you want to delete this entry?";
+    endIcon = <DeleteIcon />;
+    color = "error";
+  }
   if (confirmText == "Save") {
     confirmButton = (
       <Button
         variant="contained"
         color={color}
-        endIcon={<CheckCircleOutlineIcon />}
+        endIcon={endIcon}
         type={props.buttonType}
         form={props.formName}
       >
@@ -52,6 +63,7 @@ const ConfirmDialog = (props) => {
         color={color}
         variant="contained"
         endIcon={endIcon}
+        disabled={isDisabled()}
       >
         {props.confirmText}
       </Button>
@@ -69,8 +81,23 @@ const ConfirmDialog = (props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ fontSize: 16 }}>
-            {props.subtitle}
+            <Grid item sx={{ mb: 2 }}>
+              {props.subtitle}
+            </Grid>
           </DialogContentText>
+          {confirmText == "Delete" ? (
+            <Grid item sx={{ mt: 3 }}>
+              <TextField
+                id="outlined-number"
+                label="Type 'DELETE' to confirm"
+                helperText="Please type DELETE in all caps to continue"
+                value={getDelete}
+                onChange={(e) => setDelete(e.target.value)}
+              />
+            </Grid>
+          ) : (
+            <React.Fragment />
+          )}
         </DialogContent>
         <DialogActions>
           <Grid item sx={{ mb: 2 }}>
