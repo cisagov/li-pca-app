@@ -63,6 +63,7 @@ const CustomerForm = (props) => {
     validateOnChange: true,
     onSubmit: (values) => {
       values.contact_list = props.custData.contact_list;
+      values.appendixADate = props.custData.appendixADate;
       props.setCustData(Object.assign(props.custData, values));
       props.setHasSubmitted(true);
       setTimeout(() => {
