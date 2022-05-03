@@ -18,42 +18,42 @@ import TextField from "@mui/material/TextField";
 import { IconAlertCircle } from "@tabler/icons";
 
 const ConfirmDialog = (props) => {
-  const [getDelete, setDelete] = React.useState("");
+  const [getDeleteText, setDeleteText] = React.useState("");
   let title = "Do you want to save changes to this entry?";
-  let confirmText = props.confirmText;
+  let confirmType = props.confirmType;
   let endIcon = <CheckCircleOutlineIcon />;
   let color = "primary";
   let confirmButton = <Button />;
 
   const isDisabled = () => {
-    if (confirmText == "Delete") {
-      if (getDelete == "DELETE") {
+    if (confirmType == "Delete") {
+      if (getDeleteText == "DELETE") {
         return false;
       }
       return true;
     }
     return false;
   };
-  if (confirmText == "Leave") {
+  if (confirmType == "Leave") {
     title = "Are you sure you want to leave this page?";
     endIcon = <ExitToAppIcon />;
     color = "secondary";
   }
-  if (confirmText == "Delete") {
+  if (confirmType == "Delete") {
     title = "Are you sure you want to delete this entry?";
     endIcon = <DeleteIcon />;
     color = "error";
   }
-  if (confirmText == "Save") {
+  if (confirmType == "Save") {
     confirmButton = (
       <Button
         variant="contained"
+        type="submit"
         color={color}
         endIcon={endIcon}
-        type={props.buttonType}
         form={props.formName}
       >
-        {props.confirmText}
+        {props.confirmType}
       </Button>
     );
   } else {
@@ -65,10 +65,16 @@ const ConfirmDialog = (props) => {
         endIcon={endIcon}
         disabled={isDisabled()}
       >
-        {props.confirmText}
+        {props.confirmType}
       </Button>
     );
   }
+  let handleClose = () => {
+    if (confirmType == "Delete") {
+      setDeleteText("");
+    }
+    props.setIsOpen(false);
+  };
 
   return (
     <Dialog open={props.isOpen}>
@@ -80,19 +86,19 @@ const ConfirmDialog = (props) => {
           <Grid item>{title}</Grid>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ fontSize: 16 }}>
-            <Grid item sx={{ mb: 2 }}>
+          <Grid item sx={{ mb: 2 }}>
+            <DialogContentText sx={{ fontSize: 16 }}>
               {props.subtitle}
-            </Grid>
-          </DialogContentText>
-          {confirmText == "Delete" ? (
+            </DialogContentText>
+          </Grid>
+          {confirmType == "Delete" ? (
             <Grid item sx={{ mt: 3 }}>
               <TextField
                 id="outlined-number"
                 label="Type 'DELETE' to confirm"
                 helperText="Please type DELETE in all caps to continue"
-                value={getDelete}
-                onChange={(e) => setDelete(e.target.value)}
+                value={getDeleteText}
+                onChange={(e) => setDeleteText(e.target.value)}
               />
             </Grid>
           ) : (
@@ -102,7 +108,7 @@ const ConfirmDialog = (props) => {
         <DialogActions>
           <Grid item sx={{ mb: 2 }}>
             {confirmButton}
-            <Button onClick={props.handleClose}>{props.closeText}</Button>
+            <Button onClick={handleClose}>Cancel</Button>
           </Grid>
         </DialogActions>
       </Grid>
@@ -112,13 +118,11 @@ const ConfirmDialog = (props) => {
 
 ConfirmDialog.propTypes = {
   subtitle: PropTypes.string,
-  confirmText: PropTypes.string,
-  closeText: PropTypes.string,
-  isOpen: PropTypes.bool,
+  confirmType: PropTypes.string,
   handleClick: PropTypes.func,
-  handleClose: PropTypes.func,
-  buttonType: PropTypes.string,
   formName: PropTypes.string,
+  isOpen: PropTypes.bool,
+  setisOpen: PropTypes.func,
 };
 
 export default ConfirmDialog;

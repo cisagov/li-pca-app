@@ -307,12 +307,10 @@ const CustomerForm = (props) => {
         <form id="customer-form">
           <ConfirmDialog
             subtitle={subtitleConfirm}
-            confirmText="Save"
-            closeText="Cancel"
-            isOpen={savebtnOpen}
-            handleClose={() => setSavebtnOpen(false)}
-            buttonType="submit"
+            confirmType="Save"
             formName="customer-form"
+            isOpen={savebtnOpen}
+            setIsOpen={setSavebtnOpen}
           />
         </form>
         {props.dataEntryType == "New Customer" ? (
@@ -335,11 +333,10 @@ const CustomerForm = (props) => {
               subtitle={
                 formik.values.name + " will be deleted in the database."
               }
-              confirmText="Delete"
-              closeText="Cancel"
-              isOpen={deletebtnOpen}
+              confirmType="Delete"
               handleClick={confirmDelete}
-              handleClose={() => setDeletebtnOpen(false)}
+              isOpen={deletebtnOpen}
+              setIsOpen={setDeletebtnOpen}
             />
           </React.Fragment>
         )}
@@ -355,11 +352,10 @@ const CustomerForm = (props) => {
           </Button>
           <ConfirmDialog
             subtitle="Unsaved changes will be discarded."
-            confirmText="Leave"
-            closeText="Cancel"
-            isOpen={cancelbtnOpen}
+            confirmType="Leave"
             handleClick={() => navigate("/li-pca-app/customers")}
-            handleClose={() => setCancelbtnOpen(false)}
+            isOpen={cancelbtnOpen}
+            setIsOpen={setCancelbtnOpen}
           />
         </Grid>
       </Grid>
