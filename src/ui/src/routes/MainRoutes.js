@@ -14,11 +14,9 @@ const CustDataEntryPage = Loadable(
 );
 // templates page routing
 const TemplatesPage = Loadable(lazy(() => import("views/templates")));
-const EditTemplatePage = Loadable(
-  lazy(() => import("views/templates/edittemplate"))
-);
-const NewTemplatePage = Loadable(
-  lazy(() => import("views/templates/newtemplate"))
+// templates data entry page routing
+const TemplateDataEntryPage = Loadable(
+  lazy(() => import("views/templates/dataentry"))
 );
 // landing-pages page routing
 const LandingPagesPage = Loadable(lazy(() => import("views/landing-pages")));
@@ -50,12 +48,8 @@ const MainRoutes = {
       element: <TemplatesPage />,
     },
     {
-      path: "/templates/newtemplate",
-      element: <NewTemplatePage />,
-    },
-    {
-      path: "/templates/edittemplate",
-      element: <EditTemplatePage />,
+      path: "/templates/data-entry",
+      element: <TemplateDataEntryPage />,
     },
     {
       path: "/landing-pages",
