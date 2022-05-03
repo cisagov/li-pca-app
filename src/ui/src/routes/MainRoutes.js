@@ -10,7 +10,7 @@ const CampaignsPage = Loadable(lazy(() => import("views/campaigns")));
 const CustomersPage = Loadable(lazy(() => import("views/customers")));
 // customer data entry page routing
 const CustDataEntryPage = Loadable(
-  lazy(() => import("views/customers/newcustomer"))
+  lazy(() => import("views/customers/dataentry"))
 );
 // templates page routing
 const TemplatesPage = Loadable(lazy(() => import("views/templates")));
