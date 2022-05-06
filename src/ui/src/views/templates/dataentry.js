@@ -10,6 +10,7 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import TemplateAttributeForm from "ui-component/forms/TemplateAttributeForm";
 import Typography from "@mui/material/Typography";
 
 //project imports
@@ -39,6 +40,14 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
+const getOtherIdentifiers = (templateData, templateValues) => {
+  const identifierArr = templateData.map(({ identifier }) => identifier);
+  return identifierArr.filter((identifier) => {
+    if (identifier != templateValues.identifier) {
+      return identifier;
+    }
+  });
+};
 const TemplateDataEntryPage = () => {
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -102,7 +111,16 @@ const TemplateDataEntryPage = () => {
                   Tab One contents
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                  Tab Two contents
+                  <TemplateAttributeForm
+                    initialTemplateAttributeValues={templateAttributeValues}
+                    setTemplateAttributeData={setTemplateAttributeData}
+                    templateAttributeData={templateAttributeData}
+                    setHasSubmitted={setHasSubmitted}
+                    identifiers={getOtherIdentifiers(
+                      state.rows,
+                      templateAttributeValues
+                    )}
+                  />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   Tab Three contents
