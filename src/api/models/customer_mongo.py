@@ -42,4 +42,4 @@ class CustomerSchema(BaseSchema):
     industry = fields.Str()
     sector = fields.Str()
     domain = fields.Str()
-    appendix_a_date = DateTimeField()
+    appendix_a_date = DateTimeField(required=True)
