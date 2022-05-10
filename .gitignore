@@ -27,3 +27,4 @@ Dockerfile-x
 
 *.DS_store
 *.vscode
+dist
