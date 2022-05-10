@@ -308,3 +308,15 @@ const TemplateAttrForm = (props) => {
     </form>
   );
 };
+
+TemplateAttrForm.propTypes = {
+  initialTemplateAttrValues: PropTypes.object,
+  setTemplateAttrData: PropTypes.func,
+  templateAttrData: PropTypes.object,
+  setHasSubmitted: PropTypes.func,
+  dataEntryType: PropTypes.string,
+  setDelete: PropTypes.func,
+  identifiers: PropTypes.array,
+};
+
+export default TemplateAttrForm;
