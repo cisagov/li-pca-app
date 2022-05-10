@@ -175,9 +175,18 @@ const TemplateDataEntryPage = () => {
                   ) : (
                     <DataGrid
                       autoHeight
+                      pageSize={5}
+                      rowsPerPageOptions={[5]}
                       rows={templateValues.campaigns}
                       columns={campaignColumns}
                       density="compact"
+                      onSelectionModelChange={(id) => {
+                        const item = templateValues.campaigns.find(
+                          (row) => row.id === id[0]
+                        );
+                        console.log(item);
+                        // TODO: Navigate to campaign page
+                      }}
                     />
                   )}
                 </TabPanel>
