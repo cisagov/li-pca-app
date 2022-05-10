@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // material-ui
@@ -6,6 +7,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Tabs from "@mui/material/Tabs";
@@ -16,9 +18,60 @@ import Typography from "@mui/material/Typography";
 import MainCard from "ui-component/cards/MainCard";
 import { TextField } from "@mui/material";
 
+const temRowsTransform = (templateRows) => {
+  if (!templateRows.hasOwnProperty("name")) {
+    templateRows.name = "";
+  }
+  if (!templateRows.hasOwnProperty("from_address")) {
+    templateRows.from_address = "";
+  }
+  if (!templateRows.hasOwnProperty("landing_page_id")) {
+    templateRows.landing_page_id = "";
+  }
+  if (!templateRows.hasOwnProperty("sending_profile_id")) {
+    templateRows.sending_profile_id = "";
+  }
+  if (!templateRows.hasOwnProperty("deception_score")) {
+    templateRows.deception_score = 0;
+  }
+  if (!templateRows.hasOwnProperty("retired")) {
+    templateRows.retired = false;
+  }
+  if (!templateRows.hasOwnProperty("retired_description")) {
+    templateRows.retired_description = "";
+  }
+  if (!templateRows.hasOwnProperty("sophisticated")) {
+    templateRows.sophisticated = [];
+  }
+  if (!templateRows.hasOwnProperty("red_flag")) {
+    templateRows.red_flag = [];
+  }
+  if (!templateRows.hasOwnProperty("subject")) {
+    templateRows.subject = "";
+  }
+  if (!templateRows.hasOwnProperty("text")) {
+    templateRows.text = "";
+  }
+  if (!templateRows.hasOwnProperty("html")) {
+    templateRows.html = "";
+  }
+  if (!templateRows.hasOwnProperty("indicators")) {
+    templateRows.indicators = [];
+  }
+  if (!templateRows.hasOwnProperty("campaigns")) {
+    templateRows.campaigns = [];
+  }
+  return templateRows;
+};
+
+const campaignColumns = [
+  { field: "id", hide: true },
+  { field: "name", headerName: "Campaign Name", flex: 4 },
+  { field: "status", headerName: "Status", flex: 4 },
+];
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <Typography
       component="div"
@@ -39,13 +92,23 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
+const temNewOrEdit = (dataEntryType) => {
+  if (dataEntryType == "new") {
+    return "New Template";
+  }
+  return "Edit Template";
+};
+
 const TemplateDataEntryPage = () => {
+  const { state } = useLocation();
+  let mainCardTitle = temNewOrEdit(state.dataEntryType);
+  let templateValues = temRowsTransform(state.row);
   const [value, setValue] = React.useState(0);
-  const handleChange = (event, newValue) => {
+  const handleTabChange = (event, newValue) => {
     setValue(newValue);
   };
   return (
-    <MainCard title="Templates">
+    <MainCard title={mainCardTitle}>
       <Box>
         <Grid container spacing={3}>
           <Grid item xs={4} sm={3} md={2} lg={2} xl={2}>
@@ -91,7 +154,7 @@ const TemplateDataEntryPage = () => {
                   allowScrollButtonsMobile
                   aria-label="scrollable force tabs example"
                   value={value}
-                  onChange={handleChange}
+                  onChange={handleTabChange}
                 >
                   <Tab label="HTML View" />
                   <Tab label="Template Attributes" />
@@ -105,7 +168,18 @@ const TemplateDataEntryPage = () => {
                   Tab Two contents
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  Tab Three contents
+                  {templateValues.campaigns.length === 0 ? (
+                    <Typography>
+                      No campaigns are currently using this template
+                    </Typography>
+                  ) : (
+                    <DataGrid
+                      autoHeight
+                      rows={templateValues.campaigns}
+                      columns={campaignColumns}
+                      density="compact"
+                    />
+                  )}
                 </TabPanel>
                 <TabPanel value={value} index={3}>
                   Tab Four contents
