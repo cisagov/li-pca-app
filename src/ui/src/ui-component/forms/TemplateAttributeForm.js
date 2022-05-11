@@ -99,13 +99,12 @@ const TemplateAttrForm = (props) => {
             helperText={formik.touched.name && formik.errors.subject}
           />
         </Grid>
-        <br />
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h4" gutterBottom component="div">
             From Address:
           </Typography>
         </Grid>
-        <Grid item xs={10} sm={3} md={3} lg={3} xl={6}>
+        <Grid item xs={10} sm={4} md={4} lg={4} xl={4}>
           <TextField
             fullWidth
             id="display_name"
@@ -117,7 +116,7 @@ const TemplateAttrForm = (props) => {
             helperText={formik.touched.name && formik.errors.name}
           />
         </Grid>
-        <Grid item xs={10} sm={3} md={3} lg={3} xl={6}>
+        <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
           <TextField
             fullWidth
             id="sender"
@@ -139,7 +138,7 @@ const TemplateAttrForm = (props) => {
             Recommendations:
           </Typography>
         </Grid>
-        <Grid item xs={10} sm={3} md={3} lg={3} xl={12}>
+        <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
           <TextField
             fullWidth
             id="title"
@@ -151,7 +150,7 @@ const TemplateAttrForm = (props) => {
             helperText={formik.touched.title && formik.errors.title}
           />
         </Grid>
-        <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+        <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
           <TextField
             select
             fullWidth
@@ -173,11 +172,11 @@ const TemplateAttrForm = (props) => {
             <MenuItem value={"Sophisticated"}>Sophisticated</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={10} sm={10} md={7} lg={7} xl={7}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <TextField
             fullWidth
             multiline
-            minRows={6}
+            minRows={10}
             id="recommendation_description"
             name="recommendation_description"
             label="Description *"
@@ -185,7 +184,7 @@ const TemplateAttrForm = (props) => {
             onChange={formik.handleChange}
           />
         </Grid>
-        <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+        <Grid item xs={12} sm={8} md={8} lg={8} xl={8}>
           <TextField
             select
             fullWidth
@@ -206,7 +205,7 @@ const TemplateAttrForm = (props) => {
             <MenuItem value={"Sophisticated 2"}>Value 2</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+        <Grid item xs={12} sm={8} md={8} lg={8} xl={8}>
           <TextField
             select
             fullWidth
@@ -227,13 +226,12 @@ const TemplateAttrForm = (props) => {
             <MenuItem value={"Red Flag 2"}>Value 2</MenuItem>
           </TextField>
         </Grid>
-        <br />
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h4" gutterBottom component="div">
             Subscription Config:
           </Typography>
         </Grid>
-        <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+        <Grid item xs={12} sm={8} md={8} lg={8} xl={8}>
           <TextField
             select
             fullWidth
@@ -255,7 +253,7 @@ const TemplateAttrForm = (props) => {
             <MenuItem value={"Sending Profile 2"}>Value 2</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+        <Grid item xs={12} sm={8} md={8} lg={8} xl={8}>
           <TextField
             select
             fullWidth
@@ -275,7 +273,7 @@ const TemplateAttrForm = (props) => {
             <MenuItem value={"Landing Page 2"}>Value 2</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={10} sm={5} md={4} lg={3} xl={3}>
+        <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
           <Button
             fullWidth
             color="info"
