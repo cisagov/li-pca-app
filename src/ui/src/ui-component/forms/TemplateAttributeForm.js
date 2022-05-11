@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
@@ -24,12 +25,12 @@ const TemplateAttrForm = (props) => {
     name: yup
       .string()
       .required("Template Name is required")
-      .min(2, "Please enter more than one character")
-      .unique(props.identifiers, "Please enter a unique template name"),
+      .min(2, "Please enter more than one character"),
     from_address: yup.string().required("From Address is required"),
   });
   let navigate = useNavigate();
-  condy[(savebtnOpen, setSavebtnOpen)] = React.useState(false);
+  const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
+  const [savebtnOpen, setSavebtnOpen] = React.useState(false);
   const fieldsToValidate = {
     name: true,
     from_address: true,
@@ -42,11 +43,11 @@ const TemplateAttrForm = (props) => {
     recommendation_description: false,
   };
   const formik = useFormik({
-    initialValues: props.initialTemplateAttrValues,
+    initialValues: props.initialTemplateValues,
     validationSchema: validationSchema,
     validateOnChange: true,
     onSubmit: (values) => {
-      props.setTemplateAttrData(Object.assign(props.templateAttrData, values));
+      props.setTemplateData(Object.assign(props.templateData, values));
       props.setHasSubmitted(true);
       setTimeout(() => {
         setSavebtnOpen(false);
@@ -310,9 +311,9 @@ const TemplateAttrForm = (props) => {
 };
 
 TemplateAttrForm.propTypes = {
-  initialTemplateAttrValues: PropTypes.object,
-  setTemplateAttrData: PropTypes.func,
-  templateAttrData: PropTypes.object,
+  initialTemplateValues: PropTypes.object,
+  setTemplateData: PropTypes.func,
+  templateData: PropTypes.object,
   setHasSubmitted: PropTypes.func,
   dataEntryType: PropTypes.string,
   setDelete: PropTypes.func,
