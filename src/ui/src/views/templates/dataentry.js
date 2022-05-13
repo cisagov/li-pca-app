@@ -7,12 +7,21 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { DataGrid } from "@mui/x-data-grid";
 import Divider from "@mui/material/Divider";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import FeedIcon from "@mui/icons-material/Feed";
 import Grid from "@mui/material/Grid";
+import RuleIcon from "@mui/icons-material/Rule";
+import SettingsIcon from "@mui/icons-material/Settings";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
+import WebIcon from "@mui/icons-material/Web";
 
 //project imports
 import MainCard from "ui-component/cards/MainCard";
@@ -107,92 +116,252 @@ const TemplateDataEntryPage = () => {
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const steps = [
+    "HTML View",
+    "Template Attributes",
+    "Campaigns",
+    "Template Testing",
+  ];
+
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [completed, setCompleted] = React.useState({});
+
+  const stepIcons = [
+    <WebIcon color={activeStep == 0 ? "dark" : "primary"} />,
+    <SettingsIcon color={activeStep == 1 ? "dark" : "primary"} />,
+    <EmailOutlinedIcon color={activeStep == 2 ? "dark" : "primary"} />,
+    <RuleIcon color={activeStep == 3 ? "dark" : "primary"} />,
+  ];
+
+  const totalSteps = () => {
+    return steps.length;
+  };
+
+  const completedSteps = () => {
+    return Object.keys(completed).length;
+  };
+
+  const isLastStep = () => {
+    return activeStep === totalSteps() - 1;
+  };
+
+  const allStepsCompleted = () => {
+    return completedSteps() === totalSteps();
+  };
+
+  const handleNext = () => {
+    const newActiveStep =
+      isLastStep() && !allStepsCompleted()
+        ? // It"s the last step, but not all steps have been completed,
+          // find the first step that has been completed
+          steps.findIndex((step, i) => !(i in completed))
+        : activeStep + 1;
+    setActiveStep(newActiveStep);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleStep = (step) => () => {
+    setActiveStep(step);
+  };
+
+  const handleComplete = () => {
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    setCompleted(newCompleted);
+    handleNext();
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+    setCompleted({});
+  };
+
+  const stepContent = () => {
+    if (activeStep == 0) {
+      return (
+        <Typography>
+          Step 1. This will be where the editor will be displayed.
+        </Typography>
+      );
+    } else if (activeStep == 1) {
+      return "Step 2";
+    } else if (activeStep == 2) {
+      if (templateValues.campaigns.length === 0) {
+        return (
+          <Typography>
+            No campaigns are currently using this template.
+          </Typography>
+        );
+      }
+      return (
+        <DataGrid
+          autoHeight
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          rows={templateValues.campaigns}
+          columns={campaignColumns}
+          density="compact"
+          onSelectionModelChange={(id) => {
+            const item = templateValues.campaigns.find(
+              (row) => row.id === id[0]
+            );
+            console.log(item);
+            // TODO: Navigate to campaign page
+          }}
+        />
+      );
+    } else {
+      return "Step 4";
+    }
+  };
   return (
     <MainCard title={mainCardTitle}>
       <Box>
         <Grid container spacing={3}>
-          <Grid item xs={4} sm={3} md={2} lg={2} xl={2}>
-            <Button
-              color="warning"
-              size="large"
-              variant="contained"
-              fullWidth
-              startIcon={<ArrowBackIosIcon />}
-            >
-              Previous
-            </Button>
-          </Grid>
-          <Grid item xs={4} sm={6} md={8} lg={8} xl={8} />
-          <Grid item xs={4} sm={3} md={2} lg={2} xl={2}>
-            <Button
-              color="warning"
-              size="large"
-              variant="contained"
-              fullWidth
-              endIcon={<ArrowForwardIosIcon />}
-            >
-              Next
-            </Button>
-          </Grid>
+          {mainCardTitle == "New Template" ? (
+            <React.Fragment />
+          ) : (
+            <React.Fragment>
+              <Grid item xs={6} sm={5} md={4} lg={3} xl={3}>
+                <Button
+                  color="warning"
+                  size="medium"
+                  variant="contained"
+                  fullWidth
+                  startIcon={<ArrowBackIosIcon />}
+                >
+                  Previous Template
+                </Button>
+              </Grid>
+              <Grid
+                item
+                display={{ xs: "none", sm: "block" }}
+                sm={2}
+                md={4}
+                lg={6}
+                xl={6}
+              />
+              <Grid item xs={6} sm={5} md={4} lg={3} xl={3}>
+                <Button
+                  color="warning"
+                  size="medium"
+                  variant="contained"
+                  fullWidth
+                  endIcon={<ArrowForwardIosIcon />}
+                >
+                  Next Template
+                </Button>
+              </Grid>
+              <Grid item xs={12} xl={12} sx={{ mt: 2 }} />
+            </React.Fragment>
+          )}
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8} sx={{ mr: 2 }}>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={8} md={8} lg={7} xl={7}>
-                <TextField fullWidth label="Template Name"></TextField>
+                <TextField fullWidth label="Template Name" size="small" />
               </Grid>
               <Grid item xs={12} sm={4} md={4} lg={4} xl={3}>
-                <Button size="large" variant="contained" fullWidth>
+                <Button size="medium" variant="contained" fullWidth>
                   Import Email
                 </Button>
               </Grid>
               <Grid item display={{ xs: "none", xl: "block" }} xl={2} />
             </Grid>
             <Grid container>
-              <Grid item xs={12} md={12} xl={12} sx={{ mt: 3 }}>
-                <Tabs
-                  variant="scrollable"
-                  scrollButtons
-                  allowScrollButtonsMobile
-                  aria-label="scrollable force tabs example"
-                  value={value}
-                  onChange={handleTabChange}
-                >
-                  <Tab label="HTML View" />
-                  <Tab label="Template Attributes" />
-                  <Tab label="Campaigns" />
-                  <Tab label="Template Testing" />
-                </Tabs>
-                <TabPanel value={value} index={0}>
-                  Tab One contents
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                  Tab Two contents
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                  {templateValues.campaigns.length === 0 ? (
-                    <Typography>
-                      No campaigns are currently using this template
-                    </Typography>
-                  ) : (
-                    <DataGrid
-                      autoHeight
-                      pageSize={5}
-                      rowsPerPageOptions={[5]}
-                      rows={templateValues.campaigns}
-                      columns={campaignColumns}
-                      density="compact"
-                      onSelectionModelChange={(id) => {
-                        const item = templateValues.campaigns.find(
-                          (row) => row.id === id[0]
-                        );
-                        console.log(item);
-                        // TODO: Navigate to campaign page
-                      }}
-                    />
-                  )}
-                </TabPanel>
-                <TabPanel value={value} index={3}>
-                  Tab Four contents
-                </TabPanel>
+              <Grid item xs={12} md={12} xl={12} sx={{ mt: 7 }}>
+                <Box sx={{ width: "100%" }}>
+                  <Stepper nonLinear activeStep={activeStep} alternativeLabel>
+                    {steps.map((label, index) => (
+                      <Step key={label} completed={completed[index]}>
+                        <StepButton
+                          onClick={handleStep(index)}
+                          icon={
+                            completed[index] ? (
+                              <CheckCircleIcon color="primary" />
+                            ) : (
+                              stepIcons[index]
+                            )
+                          }
+                        >
+                          {label}
+                        </StepButton>
+                      </Step>
+                    ))}
+                  </Stepper>
+                  <div>
+                    {allStepsCompleted() ? (
+                      <React.Fragment>
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          sx={{ mt: 8, mb: 7 }}
+                        >
+                          <Typography>
+                            All steps completed - you&apos;re finished
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{ display: "flex", flexDirection: "row", pt: 2 }}
+                        >
+                          <Box sx={{ flex: "1 1 auto" }} />
+                          <Button onClick={handleReset}>Reset</Button>
+                        </Box>
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          sx={{ mt: 8 }}
+                        >
+                          {stepContent()}
+                        </Box>
+                        <Box sx={{ mb: 7 }} />
+                        <Box
+                          sx={{ display: "flex", flexDirection: "row", pt: 2 }}
+                        >
+                          <Button
+                            color="inherit"
+                            disabled={activeStep === 0}
+                            onClick={handleBack}
+                            sx={{ mr: 1 }}
+                          >
+                            Back
+                          </Button>
+                          <Box sx={{ flex: "1 1 auto" }} />
+                          <Button onClick={handleNext} sx={{ mr: 1 }}>
+                            Next
+                          </Button>
+                          {activeStep !== steps.length &&
+                            (completed[activeStep] ? (
+                              <Typography
+                                variant="caption"
+                                sx={{ display: "inline-block" }}
+                              >
+                                Step {activeStep + 1} already completed
+                              </Typography>
+                            ) : (
+                              <Button
+                                onClick={handleComplete}
+                                variant="contained"
+                                color="primary"
+                              >
+                                {completedSteps() === totalSteps() - 1
+                                  ? "Finish"
+                                  : "Save Step"}
+                              </Button>
+                            ))}
+                        </Box>
+                      </React.Fragment>
+                    )}
+                  </div>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
