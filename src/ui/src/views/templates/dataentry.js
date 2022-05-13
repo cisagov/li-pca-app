@@ -20,6 +20,7 @@ import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import TemplateAttributeForm from "ui-component/forms/TemplateAttributeForm";
 import Typography from "@mui/material/Typography";
 import WebIcon from "@mui/icons-material/Web";
 
@@ -101,6 +102,15 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
+const getOtherIdentifiers = (templateData, templateValues) => {
+  const identifierArr = templateData.map(({ identifier }) => identifier);
+  return identifierArr.filter((identifier) => {
+    if (identifier != templateValues.identifier) {
+      return identifier;
+    }
+  });
+};
+
 const temNewOrEdit = (dataEntryType) => {
   if (dataEntryType == "new") {
     return "New Template";
@@ -110,6 +120,7 @@ const temNewOrEdit = (dataEntryType) => {
 
 const TemplateDataEntryPage = () => {
   const { state } = useLocation();
+  let navigate = useNavigate();
   let mainCardTitle = temNewOrEdit(state.dataEntryType);
   let templateValues = temRowsTransform(state.row);
   const [value, setValue] = React.useState(0);

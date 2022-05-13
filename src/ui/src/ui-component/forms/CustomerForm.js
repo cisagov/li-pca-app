@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
