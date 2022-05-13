@@ -42,8 +42,8 @@ const custRowsTransform = (custRows) => {
   if (!custRows.hasOwnProperty("domain")) {
     custRows.domain = "";
   }
-  if (!custRows.hasOwnProperty("appendixADate")) {
-    custRows.appendixADate = Date.now();
+  if (!custRows.hasOwnProperty("appendix_a_date")) {
+    custRows.appendix_a_date = new Date().toISOString();
   }
   if (!custRows.hasOwnProperty("customer_type")) {
     custRows.customer_type = "";

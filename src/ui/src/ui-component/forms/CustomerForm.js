@@ -17,7 +17,6 @@ import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 //third party
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { format } from "date-fns";
 
 yup.addMethod(yup.string, "unique", function (myArray, msg) {
   return this.test({
@@ -50,6 +49,7 @@ const CustomerForm = (props) => {
   const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
   const fieldsToValidate = {
     name: true,
+    appendix_a_date: true,
     identifier: true,
     domain: true,
     customer_type: true,
@@ -64,10 +64,8 @@ const CustomerForm = (props) => {
     validateOnChange: true,
     onSubmit: (values) => {
       values.contact_list = props.custData.contact_list;
-      values.appendixADate = format(
-        props.custData.appendixADate,
-        "yyyy-MM-dd HH:mm:ss z"
-      );
+      const appendixADate = new Date(props.custData.appendix_a_date);
+      values.appendix_a_date = appendixADate.toISOString();
       props.setCustData(Object.assign(props.custData, values));
       props.setHasSubmitted(true);
       setTimeout(() => {
@@ -155,9 +153,10 @@ const CustomerForm = (props) => {
               <DatePicker
                 fullWidth
                 label="Appendix A Date"
-                value={props.custData.appendixADate}
+                value={props.custData.appendix_a_date}
                 onChange={(e) => {
-                  props.setCustData({ ...props.custData, appendixADate: e });
+                  props.setCustData({ ...props.custData, appendix_a_date: e });
+                  formik.setFieldValue("appendix_a_date", e);
                 }}
                 renderInput={(params) => <TextField {...params} />}
               />
