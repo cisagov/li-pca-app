@@ -11,22 +11,19 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { DataGrid } from "@mui/x-data-grid";
 import Divider from "@mui/material/Divider";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import FeedIcon from "@mui/icons-material/Feed";
 import Grid from "@mui/material/Grid";
+import MainCard from "ui-component/cards/MainCard";
 import RuleIcon from "@mui/icons-material/Rule";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import TemplateAttributeForm from "ui-component/forms/TemplateAttributeForm";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import WebIcon from "@mui/icons-material/Web";
 
 //project imports
-import MainCard from "ui-component/cards/MainCard";
-import { TextField } from "@mui/material";
+import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
 
 const temRowsTransform = (templateRows) => {
   if (!templateRows.hasOwnProperty("name")) {
@@ -127,7 +124,8 @@ const TemplateDataEntryPage = () => {
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const [templateData, setTemplateData] = React.useState(templateValues);
+  const [hasSubmitted, setHasSubmitted] = React.useState(false);
   const steps = [
     "HTML View",
     "Template Attributes",
@@ -199,7 +197,15 @@ const TemplateDataEntryPage = () => {
         </Typography>
       );
     } else if (activeStep == 1) {
-      return "Step 2";
+      return (
+        <TemplateAttrForm
+          initialTemplateValues={templateValues}
+          setTemplateData={setTemplateData}
+          templateData={templateData}
+          setHasSubmitted={setHasSubmitted}
+          identifiers={getOtherIdentifiers(state.rows, templateValues)}
+        />
+      );
     } else if (activeStep == 2) {
       if (templateValues.campaigns.length === 0) {
         return (
