@@ -211,7 +211,7 @@ const TemplateAttrForm = (props) => {
             label="Red Flag *"
             id="red_flag"
             name="red_flag"
-            value={formik.values.sophisticated}
+            value={formik.values.red_flag}
             onChange={formik.handleChange}
             error={
               formik.touched.sophisticated &&
@@ -235,8 +235,8 @@ const TemplateAttrForm = (props) => {
             select
             fullWidth
             label="Sending Profile Selection *"
-            id="sending_profile"
-            name="sending_profile"
+            id="sending_profile_id"
+            name="sending_profile_id"
             value={formik.values.sending_profile_id}
             onChange={formik.handleChange}
             error={
@@ -257,7 +257,8 @@ const TemplateAttrForm = (props) => {
             select
             fullWidth
             label="Landing Page Selection *"
-            id="landing_page"
+            id="landing_page_id"
+            name="landing_page_id"
             value={formik.values.landing_page_id}
             onChange={formik.handleChange}
             error={

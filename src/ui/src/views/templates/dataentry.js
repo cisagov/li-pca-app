@@ -26,7 +26,7 @@ const temRowsTransform = (templateRows) => {
   if (!templateRows.hasOwnProperty("from_address")) {
     templateRows.from_address = "";
   }
-  if (!templateRows.hasOwnProperty("landing_page_id")) {
+  if (!templateRows.hasOwnProperty("landing_page")) {
     templateRows.landing_page_id = "";
   }
   if (!templateRows.hasOwnProperty("sending_profile_id")) {
@@ -42,10 +42,10 @@ const temRowsTransform = (templateRows) => {
     templateRows.retired_description = "";
   }
   if (!templateRows.hasOwnProperty("sophisticated")) {
-    templateRows.sophisticated = [];
+    templateRows.sophisticated = "";
   }
   if (!templateRows.hasOwnProperty("red_flag")) {
-    templateRows.red_flag = [];
+    templateRows.red_flag = "";
   }
   if (!templateRows.hasOwnProperty("subject")) {
     templateRows.subject = "";
@@ -61,6 +61,9 @@ const temRowsTransform = (templateRows) => {
   }
   if (!templateRows.hasOwnProperty("campaigns")) {
     templateRows.campaigns = [];
+  }
+  if (!templateRows.hasOwnProperty("recommendation_type")) {
+    templateRows.recommendation_type = "";
   }
   return templateRows;
 };
