@@ -18,14 +18,13 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import WebIcon from "@mui/icons-material/Web";
 
 //project imports
 import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
+import TemplateTestingForm from "ui-component/forms/TemplateTestingForm";
 
 const temRowsTransform = (templateRows) => {
   if (!templateRows.hasOwnProperty("name")) {
@@ -238,7 +237,15 @@ const TemplateDataEntryPage = () => {
         />
       );
     } else {
-      return "Step 4";
+      return (
+        <TemplateTestingForm
+          initialTemplateValues={templateValues}
+          setTemplateData={setTemplateData}
+          templateData={templateData}
+          setHasSubmitted={setHasSubmitted}
+          identifiers={getOtherIdentifiers(state.rows, templateValues)}
+        />
+      );
     }
   };
   return (
