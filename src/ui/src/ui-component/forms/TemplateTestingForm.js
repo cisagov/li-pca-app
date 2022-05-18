@@ -49,7 +49,7 @@ const TemplateTestingForm = () => {
             Select the sending profile that will be used.
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={11} md={11} lg={10} xl={9}>
+        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
             select
             fullWidth
@@ -78,7 +78,7 @@ const TemplateTestingForm = () => {
             Select the customer that will be used in generating tags.
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={11} md={11} lg={10} xl={9}>
+        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
             select
             fullWidth
@@ -102,7 +102,7 @@ const TemplateTestingForm = () => {
             Email to send to. Default sends to a mail tester.
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={11} md={11} lg={10} xl={9}>
+        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
             fullWidth
             id="email"
@@ -122,7 +122,7 @@ const TemplateTestingForm = () => {
             Enter other attributes used for tags.
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={6} md={6} lg={6} xl={5}>
+        <Grid item xs={11} sm={5} md={5} lg={5} xl={4}>
           <TextField
             fullWidth
             id="first_name"
@@ -136,7 +136,7 @@ const TemplateTestingForm = () => {
             helperText={formik.touched.first_name && formik.errors.first_name}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={6} lg={6} xl={5}>
+        <Grid item xs={11} sm={6} md={6} lg={5} xl={5}>
           <TextField
             fullWidth
             id="last_name"
@@ -148,7 +148,7 @@ const TemplateTestingForm = () => {
             helperText={formik.touched.last_name && formik.errors.last_name}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={6} lg={6} xl={5}>
+        <Grid item xs={11} sm={5} md={5} lg={5} xl={4}>
           <TextField
             fullWidth
             id="role"
@@ -160,8 +160,8 @@ const TemplateTestingForm = () => {
             helperText={formik.touched.role && formik.errors.role}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={6} lg={6} xl={7} />
-        <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
+        <Grid item xs={12} sm={7} md={7} lg={7} xl={8} />
+        <Grid item xs={11} sm={5} md={5} lg={5} xl={5} sx={{ mt: 3 }}>
           <Button
             fullWidth
             color="info"
@@ -174,8 +174,8 @@ const TemplateTestingForm = () => {
           </Button>
         </Grid>
         <Grid item xs={10} sm={1} md={1} lg={1} xl={1} />
-        <Grid item xs={12} sm={11} md={11} lg={10} xl={9}>
-          <TextField disabled fullWidth multiline minRows={10} label="" />
+        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
+          <TextField disabled fullWidth multiline minRows={3} label="" />
         </Grid>
       </Grid>
     </form>
