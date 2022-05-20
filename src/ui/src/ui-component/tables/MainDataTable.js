@@ -30,6 +30,7 @@ CustomToolbar.propTypes = {
   value: PropTypes.string.isRequired,
   newEntryRoute: PropTypes.string.isRequired,
   rows: PropTypes.array,
+  tableCategory: PropTypes.string,
 };
 
 function CustomToolbar(props) {
@@ -91,7 +92,7 @@ function CustomToolbar(props) {
           });
         }}
       >
-        New Row
+        New {props.tableCategory}
       </Button>
     </GridToolbarContainer>
   );
@@ -101,6 +102,7 @@ MainDataTable.propTypes = {
   data: PropTypes.object.isRequired,
   newEntryRoute: PropTypes.string,
   editEntryRoute: PropTypes.string,
+  tableCategory: PropTypes.string,
 };
 
 export default function MainDataTable(props) {
@@ -166,6 +168,7 @@ export default function MainDataTable(props) {
           clearSearch: () => requestSearch(""),
           newEntryRoute: props.newEntryRoute,
           rows: rows,
+          tableCategory: props.tableCategory,
         },
       }}
     />

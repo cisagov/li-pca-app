@@ -33,6 +33,7 @@ function BaseJSX(props) {
             data={{ rows: props.rows, columns: cols }}
             newEntryRoute={props.dataEntry}
             editEntryRoute={props.dataEntry}
+            tableCategory={"Customer"}
           />
         </Grid>
       </Grid>
