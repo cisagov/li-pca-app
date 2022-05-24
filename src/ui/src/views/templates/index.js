@@ -13,6 +13,7 @@ import MainDataTable from "ui-component/tables/MainDataTable";
 
 // third party
 import axios from "axios";
+import AdvancedDataTable from "ui-component/tables/AdvancedDataTable";
 
 // ==============================|| Templates view ||============================== //
 
@@ -28,7 +29,7 @@ function BaseJSX(props) {
       <Grid container spacing={2}>
         <Grid item xs={8} sm={12} md={12} lg={12} xl={12}>
           {props.children}
-          <MainDataTable
+          <AdvancedDataTable
             data={{ rows: props.rows, columns: cols }}
             newEntryRoute={props.dataEntry}
             editEntryRoute={props.dataEntry}
