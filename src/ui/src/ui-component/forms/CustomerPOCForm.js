@@ -14,7 +14,6 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
-
 // project imports
 import DisplayDataTable from "ui-component/tables/DisplayDataTable";
 
@@ -37,6 +36,7 @@ function CustomerPOCForm(props) {
   );
   let [entryToEdit, setEntryToEdit] = React.useState({});
   let initialPOCValues = {};
+  let contactLen = props.custPOCData.length;
   if (!editContact) {
     initialPOCValues = props.initialPOCValues;
   } else {
@@ -107,16 +107,14 @@ function CustomerPOCForm(props) {
       setTimeout(() => {
         setCusContactsRows(updatedPOCData);
       });
-      props.setHasContact(true);
       actions.resetForm();
       setToggleCard(!isToggleCardOn);
       setEditContact(false);
-      props.setContactUpdate(true);
     },
   });
 
   let counter = 0;
-  if (props.hasContact) {
+  if (contactLen >= 1) {
     props.custPOCData.forEach((custRows) => {
       custRows.id = counter;
       counter = counter + 1;
@@ -149,9 +147,6 @@ function CustomerPOCForm(props) {
       ...props.custData,
       contact_list: updatedPOCData,
     });
-    if (props.custPOCData.length <= 1) {
-      props.setHasContact(false);
-    }
     setTimeout(() => {
       setCusContactsRows(updatedPOCData);
     });
@@ -333,7 +328,7 @@ function CustomerPOCForm(props) {
           </CardContent>
         </Card>
       )}
-      {props.hasContact ? (
+      {contactLen >= 1 ? (
         <Grid
           item
           xs={12}
@@ -348,6 +343,9 @@ function CustomerPOCForm(props) {
           />
         </Grid>
       ) : (
+        <React.Fragment />
+      )}
+      {contactLen < 2 ? (
         <Grid
           item
           xs={10}
@@ -358,12 +356,16 @@ function CustomerPOCForm(props) {
           sx={{ mb: 3, mt: 3 }}
         >
           <Tooltip
-            title="Add at least one contact to save a new customer."
+            title="Add at least two point of contacts to be able to Save"
             placement="bottom-start"
           >
-            <Alert severity="error"> No contacts available.</Alert>
+            <Alert severity="error">
+              Customer does not have two or more contacts
+            </Alert>
           </Tooltip>
         </Grid>
+      ) : (
+        <React.Fragment />
       )}
     </React.Fragment>
   );
@@ -375,9 +377,6 @@ CustomerPOCForm.propTypes = {
   setCustData: PropTypes.func,
   custPOCData: PropTypes.array,
   custData: PropTypes.object,
-  hasContact: PropTypes.bool,
-  setHasContact: PropTypes.func,
-  setContactUpdate: PropTypes.func,
 };
 
 export default CustomerPOCForm;
