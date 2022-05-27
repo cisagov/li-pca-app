@@ -22,9 +22,17 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { isEqual } from "lodash";
 
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
 const validationSchema = yup.object({
   first_name: yup.string().required("First Name is required"),
   last_name: yup.string().required("Last Name is required"),
+  office_phone: yup
+    .string()
+    .required("Work phone is required")
+    .matches(phoneRegExp, "Phone number is not valid"),
+  mobile_phone: yup.string().matches(phoneRegExp, "Phone number is not valid"),
   email: yup.string().required("Email is required").email("Email is invalid"),
 });
 
@@ -48,8 +56,8 @@ function CustomerPOCForm(props) {
     { field: "name", headerName: "Name", flex: 1 },
     { field: "title", headerName: "Title", flex: 0.5 },
     { field: "email", headerName: "Email", flex: 1 },
+    { field: "office_phone", headerName: "Work Phone", flex: 1 },
     { field: "mobile_phone", headerName: "Mobile Phone", flex: 1 },
-    { field: "office_phone", headerName: "Office Phone", flex: 1 },
     {
       field: "col6",
       headerName: "",
@@ -233,9 +241,17 @@ function CustomerPOCForm(props) {
                       fullWidth
                       id="office_phone"
                       name="office_phone"
-                      label="Office Phone"
+                      label="Work Phone *"
                       value={formik.values.office_phone}
                       onChange={formik.handleChange}
+                      error={
+                        formik.touched.office_phone &&
+                        Boolean(formik.errors.office_phone)
+                      }
+                      helperText={
+                        formik.touched.office_phone &&
+                        formik.errors.office_phone
+                      }
                     />
                   </Grid>
                   <Grid item xs={10} sm={4} md={4} lg={4} xl={4}>
@@ -246,6 +262,14 @@ function CustomerPOCForm(props) {
                       label="Mobile Phone"
                       value={formik.values.mobile_phone}
                       onChange={formik.handleChange}
+                      error={
+                        formik.touched.mobile_phone &&
+                        Boolean(formik.errors.mobile_phone)
+                      }
+                      helperText={
+                        formik.touched.mobile_phone &&
+                        formik.errors.mobile_phone
+                      }
                     />
                   </Grid>
                   <Grid item xs={10} sm={10} md={7} lg={7} xl={7}>
