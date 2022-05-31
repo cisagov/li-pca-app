@@ -1041,68 +1041,25 @@ components:
         retired_description:
           type: string
         sophisticated:
-          type: array
-          items:
-            type: string
+          type: string
         red_flag:
-          type: array
-          items:
-            type: string
+          type: string
         subject:
           type: string
         text:
           type: string
         html:
           type: string
+        recommendation_type:
+          type: string
+        campaigns:
+          type: array
+          items:
+            type: string
         indicators:
           type: array
           items:
-            type: object
-            properties:
-              appearance:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    grammar:
-                      type: integer
-                    link_domain:
-                      type: integer
-                    logo_graphics:
-                      type: integer
-              sender:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    external:
-                      type: integer
-                    internal:
-                      type: integer
-                    authoritative:
-                      type: integer
-              relevancy:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    organization:
-                      type: integer
-                    public_news:
-                      type: integer
-              behavior:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    fear:
-                      type: integer
-                    duty_obligation:
-                      type: integer
-                    curiosity:
-                      type: integer
-                    greed:
-                      type: integer
+            type: string
       example:
         name: "Order Details"
         description: "Contains fake order tracking information."
