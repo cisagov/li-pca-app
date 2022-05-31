@@ -393,7 +393,11 @@ paths:
             type: string
             format: uuid4
       requestBody:
-        $ref: '#/components/requestBodies/Template'
+        description: Updated template object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Template'
       responses:
         "400":
           description: Invalid uuid supplied
@@ -918,15 +922,6 @@ components:
           type: boolean
           default: true
     Customer:
-      # required:
-      #   - name
-      #   - identifier
-      #   - address_1
-      #   - city
-      #   - state
-      #   - zip_code
-      #   - customer_type
-      #   - contact_list
       type: object
       properties:
         _id:
@@ -1016,9 +1011,6 @@ components:
       xml:
         name: Assessment
     Template:
-      required:
-        - name
-        - from_address
       type: object
       properties:
         uuid:
