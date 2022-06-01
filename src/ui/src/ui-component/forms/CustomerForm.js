@@ -43,6 +43,9 @@ const CustomerForm = (props) => {
     city: yup.string().required("City is required"),
     state: yup.string().required("State is required"),
     zip_code: yup.string().required("Zip Code is required"),
+    critical_infrastructure: yup
+      .string()
+      .required("Critical Infrastructure is required"),
   });
   let navigate = useNavigate();
   const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
@@ -58,6 +61,7 @@ const CustomerForm = (props) => {
     city: true,
     state: true,
     zip_code: true,
+    critical_infrastructure: true,
   };
   const formik = useFormik({
     initialValues: props.initialCustValues,
@@ -254,6 +258,68 @@ const CustomerForm = (props) => {
               error={formik.touched.zip_code && Boolean(formik.errors.zip_code)}
               helperText={formik.touched.zip_code && formik.errors.zip_code}
             />
+          </Grid>
+          <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+            <TextField
+              select
+              fullWidth
+              label="Critical Infrastructure *"
+              id="critical_infrastructure"
+              name="critical_infrastructure"
+              value={formik.values.critical_infrastructure}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.critical_infrastructure &&
+                Boolean(formik.errors.critical_infrastructure)
+              }
+              helperText={
+                formik.touched.critical_infrastructure &&
+                formik.errors.critical_infrastructure
+              }
+            >
+              <MenuItem value={"Chemical Sector"}>Chemical Sector</MenuItem>
+              <MenuItem value={"Commercial Facilities Sector"}>
+                Commercial Facilities Sector
+              </MenuItem>
+              <MenuItem value={"Communications Sector"}>
+                Communications Sector
+              </MenuItem>
+              <MenuItem value={"Critical Manufacturing Sector"}>
+                Critical Manufacturing Sector
+              </MenuItem>
+              <MenuItem value={"Dams Sector"}>Dams Sector</MenuItem>
+              <MenuItem value={"Defense Industrial Base Sector"}>
+                Defense Industrial Base Sector
+              </MenuItem>
+              <MenuItem value={"Emergency Services Sector"}>
+                Emergency Services Sector
+              </MenuItem>
+              <MenuItem value={"Energy Sector"}>Energy Sector</MenuItem>
+              <MenuItem value={"Financial Services Sector"}>
+                Financial Services Sector
+              </MenuItem>
+              <MenuItem value={"Food and Agriculture Sector"}>
+                Food and Agriculture Sector
+              </MenuItem>
+              <MenuItem value={"Government Facilities Sector"}>
+                Government Facilities Sector
+              </MenuItem>
+              <MenuItem value={"Healthcare and Public Health Sector"}>
+                Healthcare and Public Health Sector
+              </MenuItem>
+              <MenuItem value={"Information Technology Sector"}>
+                Information Technology Sector
+              </MenuItem>
+              <MenuItem value={"Nuclear Reactor, Materials, and Waste Sector"}>
+                Nuclear Reactor, Materials, and Waste Sector
+              </MenuItem>
+              <MenuItem value={"Transportation Systems Sector"}>
+                Transportation Systems Sector
+              </MenuItem>
+              <MenuItem value={"Water and Wastewater Systems Sector"}>
+                Water and Wastewater Systems Sector
+              </MenuItem>
+            </TextField>
           </Grid>
           <Grid
             item

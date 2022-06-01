@@ -22,7 +22,7 @@ class Customer(Model):
         self,
         uuid: str = None,
         critical_infrastructure_id: str = None,
-        critical_infrastructure_name: str = None,
+        critical_infrastructure: str = None,
         name: str = None,
         contact: str = None,
         status: str = None,
@@ -44,6 +44,7 @@ class Customer(Model):
             "name": str,
             "contact": str,
             "status": str,
+            "critical_infrastructure": str,
         }  # type: ignore
 
         self.attribute_map = {
@@ -51,11 +52,13 @@ class Customer(Model):
             "name": "name",
             "contact": "contact",
             "status": "status",
+            "critical_infrastructure": str,
         }  # type: ignore
         self._uuid = uuid
         self._name = name
         self._contact = contact
         self._status = status
+        self._critical_infrastructure = critical_infrastructure
 
     @classmethod
     def from_dict(cls, dikt) -> "Customer":

@@ -19,6 +19,11 @@ function BaseJSX(props) {
     { field: "id", hide: true },
     { field: "name", headerName: "Name", flex: 2 },
     { field: "identifier", headerName: "Identifier", flex: 1 },
+    {
+      field: "critical_infrastructure",
+      headerName: "Critical Infrastructure",
+      flex: 1,
+    },
     { field: "address_1", headerName: "Address", flex: 2.5 },
     { field: "city", headerName: "City", flex: 1.5 },
     { field: "state", headerName: "State", flex: 1 },

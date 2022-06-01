@@ -944,9 +944,7 @@ components:
           type: string
         sector:
           type: string
-        Kcritical_infrastructur_id:
-          type: string
-        critical_infrastructur_name:
+        critical_infrastructure:
           type: string
         address_1:
           type: string
@@ -979,8 +977,7 @@ components:
         industry: Oil & Gashhhh
         sector: Oil & Gas
         domain: test.com
-        critical_infrastructure_id: '1'
-        critical_infrastructure_name: Oil & Gas
+        critical_infrastructure: Energy Sector
         appendix_a_date: 2022-4-14
         contact_list:
           - first_name: Contact

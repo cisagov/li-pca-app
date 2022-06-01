@@ -43,3 +43,26 @@ class CustomerSchema(BaseSchema):
     sector = fields.Str()
     domain = fields.Str()
     appendix_a_date = DateTimeField(required=True)
+    critical_infrastructure = fields.Str(
+        required=True,
+        validate=validate.OneOf(
+            [
+                "Chemical Sector",
+                "Commercial Facilities Sector",
+                "Communications Sector",
+                "Critical Manufacturing Sector",
+                "Dams Sector",
+                "Defense Industrial Base Sector",
+                "Emergency Services Sector",
+                "Energy Sector",
+                "Financial Services Sector",
+                "Food and Agriculture Sector",
+                "Government Facilities Sector",
+                "Healthcare and Public Health Sector",
+                "Information Technology Sector",
+                "Nuclear Reactor, Materials, and Waste Sector",
+                "Transportation Systems Sector",
+                "Water and Wastewater Systems Sector",
+            ]
+        ),
+    )

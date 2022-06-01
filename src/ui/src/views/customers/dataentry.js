@@ -66,6 +66,9 @@ const custRowsTransform = (custRows) => {
   if (!custRows.hasOwnProperty("contact_list")) {
     custRows.contact_list = [];
   }
+  if (!custRows.hasOwnProperty("critical_infrastructure")) {
+    custRows.critical_infrastructure = "";
+  }
   return custRows;
 };
 
