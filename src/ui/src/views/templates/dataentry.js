@@ -25,6 +25,7 @@ import WebIcon from "@mui/icons-material/Web";
 //project imports
 import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
 import TemplateTestingForm from "ui-component/forms/TemplateTestingForm";
+import TemplateHtmlEditor from "ui-component/forms/TemplateHtmlEditor";
 
 const temRowsTransform = (templateRows) => {
   if (!templateRows.hasOwnProperty("name")) {
@@ -196,11 +197,7 @@ const TemplateDataEntryPage = () => {
 
   const stepContent = () => {
     if (activeStep == 0) {
-      return (
-        <Typography>
-          Step 1. This will be where the editor will be displayed.
-        </Typography>
-      );
+      return <TemplateHtmlEditor />;
     } else if (activeStep == 1) {
       return (
         <TemplateAttrForm
