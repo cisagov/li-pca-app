@@ -393,7 +393,11 @@ paths:
             type: string
             format: uuid4
       requestBody:
-        $ref: '#/components/requestBodies/Template'
+        description: Updated template object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Template'
       responses:
         "400":
           description: Invalid uuid supplied
@@ -918,15 +922,6 @@ components:
           type: boolean
           default: true
     Customer:
-      # required:
-      #   - name
-      #   - identifier
-      #   - address_1
-      #   - city
-      #   - state
-      #   - zip_code
-      #   - customer_type
-      #   - contact_list
       type: object
       properties:
         _id:
@@ -1013,9 +1008,6 @@ components:
       xml:
         name: Assessment
     Template:
-      required:
-        - name
-        - from_address
       type: object
       properties:
         uuid:
@@ -1038,68 +1030,25 @@ components:
         retired_description:
           type: string
         sophisticated:
-          type: array
-          items:
-            type: string
+          type: string
         red_flag:
-          type: array
-          items:
-            type: string
+          type: string
         subject:
           type: string
         text:
           type: string
         html:
           type: string
+        recommendation_type:
+          type: string
+        campaigns:
+          type: array
+          items:
+            type: string
         indicators:
           type: array
           items:
-            type: object
-            properties:
-              appearance:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    grammar:
-                      type: integer
-                    link_domain:
-                      type: integer
-                    logo_graphics:
-                      type: integer
-              sender:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    external:
-                      type: integer
-                    internal:
-                      type: integer
-                    authoritative:
-                      type: integer
-              relevancy:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    organization:
-                      type: integer
-                    public_news:
-                      type: integer
-              behavior:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    fear:
-                      type: integer
-                    duty_obligation:
-                      type: integer
-                    curiosity:
-                      type: integer
-                    greed:
-                      type: integer
+            type: string
       example:
         name: "Order Details"
         description: "Contains fake order tracking information."

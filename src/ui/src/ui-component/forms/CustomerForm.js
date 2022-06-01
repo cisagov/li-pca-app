@@ -10,7 +10,6 @@ import Grid from "@mui/material/Grid";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
@@ -48,6 +47,8 @@ const CustomerForm = (props) => {
       .required("Critical Infrastructure is required"),
   });
   let navigate = useNavigate();
+  let contactLen = props.custData.contact_list.length;
+  const [contactUpdated, setContactUpdate] = React.useState(false);
   const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
   const [savebtnOpen, setSavebtnOpen] = React.useState(false);
   const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
@@ -66,6 +67,7 @@ const CustomerForm = (props) => {
   const formik = useFormik({
     initialValues: props.initialCustValues,
     validationSchema: validationSchema,
+    validateOnMount: true,
     validateOnChange: true,
     onSubmit: (values) => {
       values.contact_list = props.custData.contact_list;
@@ -78,28 +80,34 @@ const CustomerForm = (props) => {
       });
     },
   });
+  const didMount = React.useRef(false);
+  React.useEffect(() => {
+    if (didMount.current) {
+      setContactUpdate(true);
+    } else {
+      didMount.current = true;
+    }
+  }, [props.custData.contact_list]);
   const handleCancel = () => {
-    if (formik.dirty) {
+    if (contactUpdated || formik.dirty) {
       setCancelbtnOpen(true);
     } else {
       navigate("/li-pca-app/customers");
     }
   };
   const isDisabled = () => {
-    if (!props.hasContact) {
-      return true;
-    } else if (props.hasContact && (formik.dirty || props.contactUpdate)) {
+    if (contactLen >= 2 && (contactUpdated || formik.dirty)) {
       return false;
     }
     return true;
   };
+
   const handleSave = () => {
     formik.setTouched(fieldsToValidate);
-    if (formik.isValid && props.hasContact) {
+    if (formik.isValid && contactLen >= 2 && (contactUpdated || formik.dirty)) {
       setSavebtnOpen(true);
     }
   };
-
   const confirmDelete = () => {
     setTimeout(() => {
       setDeletebtnOpen(false);
@@ -433,8 +441,6 @@ CustomerForm.propTypes = {
   initialCustValues: PropTypes.object,
   setCustData: PropTypes.func,
   custData: PropTypes.object,
-  hasContact: PropTypes.bool,
-  contactUpdate: PropTypes.bool,
   children: PropTypes.array,
   setHasSubmitted: PropTypes.func,
   dataEntryType: PropTypes.string,

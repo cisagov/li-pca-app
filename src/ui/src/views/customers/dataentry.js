@@ -74,9 +74,9 @@ const custRowsTransform = (custRows) => {
 
 const custNewOrEdit = (dataEntryType) => {
   if (dataEntryType == "new") {
-    return ["New Customer", false];
+    return "New Customer";
   }
-  return ["Edit Customer", true];
+  return "Edit Customer";
 };
 
 const getOtherIdentifiers = (custData, custValues) => {
@@ -92,10 +92,8 @@ const CustDataEntryPage = () => {
   const { state } = useLocation();
   let navigate = useNavigate();
   let custValues = custRowsTransform(state.row);
-  let [mainCardTitle, hasContactBool] = custNewOrEdit(state.dataEntryType);
-  const [hasContact, setHasContact] = React.useState(hasContactBool);
+  let mainCardTitle = custNewOrEdit(state.dataEntryType);
   const [custData, setCustData] = React.useState(custValues);
-  const [contactUpdate, setContactUpdate] = React.useState(false);
   const [hasSubmitted, setHasSubmitted] = React.useState(false);
   const [getError, setError] = React.useState([false, ""]);
   const [getDelete, setDelete] = React.useState(false);
@@ -216,8 +214,6 @@ const CustDataEntryPage = () => {
             initialCustValues={custValues}
             setCustData={setCustData}
             custData={custData}
-            hasContact={hasContact}
-            contactUpdate={contactUpdate}
             setHasSubmitted={setHasSubmitted}
             dataEntryType={mainCardTitle}
             setDelete={setDelete}
@@ -235,10 +231,6 @@ const CustDataEntryPage = () => {
                 setCustData={setCustData}
                 custPOCData={custData.contact_list}
                 custData={custData}
-                hasContact={hasContact}
-                setHasContact={setHasContact}
-                contactUpdate={contactUpdate}
-                setContactUpdate={setContactUpdate}
               />
             </Grid>
             {renderCampaigns()}
