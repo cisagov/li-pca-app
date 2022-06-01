@@ -22,7 +22,7 @@ function BaseJSX(props) {
     {
       field: "critical_infrastructure",
       headerName: "Critical Infrastructure",
-      flex: 1,
+      flex: 2,
     },
     { field: "address_1", headerName: "Address", flex: 2.5 },
     { field: "city", headerName: "City", flex: 1.5 },
