@@ -427,6 +427,28 @@ paths:
         "404":
           description: template not found
       x-openapi-router-controller: api.controllers.templates_controller
+  /v1/templates/bulk:
+    put:
+      tags:
+        - templates
+      summary: Update an existing template
+      operationId: bulk_update_templates
+      requestBody:
+        description: Bulk Update template object
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Template'
+      responses:
+        "400":
+          description: Invalid request supplied
+        "404":
+          description: template not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.templates_controller
   /v1/campaigns:
     get:
       tags:
