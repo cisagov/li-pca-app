@@ -69,7 +69,7 @@ const main = {
       id: "documentation",
       title: "Documentation",
       type: "item",
-      url: "https://codedthemes.gitbook.io/berry/",
+      url: "https://app.swaggerhub.com/apis-docs/Li-PCA/li-pca-api/1.0.0#",
       icon: icons.IconHelp,
       external: true,
       target: true,
