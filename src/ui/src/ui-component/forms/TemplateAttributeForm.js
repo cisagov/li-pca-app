@@ -29,7 +29,6 @@ const TemplateAttrForm = (props) => {
       props.setHasSubmitted(true);
     },
   });
-
   return (
     <form id="template-attr-form" onSubmit={formik.handleSubmit}>
       <Grid container spacing={2}>
@@ -184,7 +183,7 @@ const TemplateAttrForm = (props) => {
             Subscription Config:
           </Typography>
         </Grid>
-        <Grid item xs={11} sm={8} md={8} lg={8} xl={8}>
+        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
             select
             fullWidth
@@ -206,7 +205,7 @@ const TemplateAttrForm = (props) => {
             <MenuItem value={"Sending Profile 2"}>Value 2</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={11} sm={8} md={8} lg={8} xl={8}>
+        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
             select
             fullWidth
