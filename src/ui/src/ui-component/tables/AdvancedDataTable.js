@@ -3,13 +3,11 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // material-ui
-import AddIcon from "@mui/icons-material/AddCircle";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import ClearIcon from "@mui/icons-material/Clear";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
@@ -20,7 +18,6 @@ import {
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
-  GridToolbarExport,
 } from "@mui/x-data-grid";
 
 // Tabler icons
@@ -43,21 +40,15 @@ CustomToolbar.propTypes = {
 function CustomToolbar(props) {
   let navigate = useNavigate();
   const values = {};
-  // console.log(props.selectedRows);
-  // const [isDisabled, setDisabled] = React.useState(true);
+
   let isDisabled = true;
   if (props.selectedRows.length !== 0) {
-    // setDisabled(false);
     isDisabled = false;
   }
+
   return (
     <GridToolbarContainer>
-      <Box
-        sx={{
-          p: 0.5,
-          pb: 0,
-        }}
-      >
+      <Box sx={{ p: 0.5, pb: 0 }}>
         <TextField
           variant="standard"
           value={props.value}
@@ -78,14 +69,9 @@ function CustomToolbar(props) {
             ),
           }}
           sx={{
-            width: {
-              xs: 1,
-              sm: "auto",
-            },
+            width: { xs: 1, sm: "auto" },
             m: (theme) => theme.spacing(1, 0.5, 1.5),
-            "& .MuiSvgIcon-root": {
-              mr: 0.5,
-            },
+            "& .MuiSvgIcon-root": { mr: 0.5 },
             "& .MuiInput-underline:before": {
               borderBottom: 1,
               borderColor: "divider",
@@ -103,7 +89,6 @@ function CustomToolbar(props) {
         Export
       </Button>
       <Button
-        // variant="contained"
         size="small"
         startIcon={<IconPlus size={18} />}
         onClick={() => {
@@ -162,6 +147,7 @@ AdvancedDataTable.propTypes = {
   newEntryRoute: PropTypes.string,
   editEntryRoute: PropTypes.string,
   tableCategory: PropTypes.string,
+  filterModel: PropTypes.object,
 };
 
 export default function AdvancedDataTable(props) {
@@ -212,14 +198,13 @@ export default function AdvancedDataTable(props) {
     },
     flex: 0.5,
   });
+
   return (
     <DataGrid
       rows={rows}
       columns={columns}
       autoHeight
-      components={{
-        Toolbar: CustomToolbar,
-      }}
+      components={{ Toolbar: CustomToolbar }}
       pageSize={10}
       rowsPerPageOptions={[10]}
       componentsProps={{
@@ -238,6 +223,9 @@ export default function AdvancedDataTable(props) {
         const selectedIDs = new Set(ids);
         const selectedRows = rows.filter((row) => selectedIDs.has(row.id));
         setSelectedRows(selectedRows);
+      }}
+      initialState={{
+        filter: { filterModel: props.filterModel },
       }}
     />
   );
