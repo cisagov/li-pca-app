@@ -13,6 +13,8 @@ import TextField from "@mui/material/TextField";
 
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
+import ResultDialog from "ui-component/popups/ResultDialog";
+import { useSubmit, useDelete } from "services/api/Customers.js";
 
 //third party
 import { useFormik } from "formik";
@@ -52,6 +54,8 @@ const CustomerForm = (props) => {
   const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
   const [savebtnOpen, setSavebtnOpen] = React.useState(false);
   const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
+  const [hasSubmitted, setHasSubmitted] = React.useState(false);
+  const [getDelete, setDelete] = React.useState(false);
   const fieldsToValidate = {
     name: true,
     appendix_a_date: true,
@@ -74,12 +78,18 @@ const CustomerForm = (props) => {
       const appendixADate = new Date(props.custData.appendix_a_date);
       values.appendix_a_date = appendixADate.toISOString();
       props.setCustData(Object.assign(props.custData, values));
-      props.setHasSubmitted(true);
+      setHasSubmitted(true);
       setTimeout(() => {
         setSavebtnOpen(false);
       });
     },
   });
+  let getError = useSubmit(
+    props.custData,
+    props.custData._id,
+    hasSubmitted,
+    props.dataEntryType
+  );
   const didMount = React.useRef(false);
   React.useEffect(() => {
     if (didMount.current) {
@@ -108,17 +118,28 @@ const CustomerForm = (props) => {
       setSavebtnOpen(true);
     }
   };
+
   const confirmDelete = () => {
     setTimeout(() => {
       setDeletebtnOpen(false);
-      props.setDelete(true);
+      setDelete(true);
     });
   };
+
+  getError = useDelete(props.custData._id, getDelete);
+
   let subtitleConfirm =
     formik.values.name + " will be updated in the database.";
   if (props.dataEntryType == "New Customer") {
     subtitleConfirm = formik.values.name + " will be added to the database.";
   }
+  const closeDialog = () => {
+    setHasSubmitted(false);
+    setDelete(false);
+    if (!getError[0]) {
+      navigate("/li-pca-app/customers");
+    }
+  };
   return (
     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
       <form id="customer-form" onSubmit={formik.handleSubmit}>
@@ -387,6 +408,13 @@ const CustomerForm = (props) => {
             setIsOpen={setSavebtnOpen}
           />
         </form>
+        <ResultDialog
+          type={getDelete ? "Delete Customer" : props.dataEntryType}
+          hasSubmitted={hasSubmitted}
+          getDelete={getDelete}
+          error={getError}
+          closeDialog={closeDialog}
+        />
         {props.dataEntryType == "New Customer" ? (
           <React.Fragment />
         ) : (
@@ -442,9 +470,7 @@ CustomerForm.propTypes = {
   setCustData: PropTypes.func,
   custData: PropTypes.object,
   children: PropTypes.array,
-  setHasSubmitted: PropTypes.func,
   dataEntryType: PropTypes.string,
-  setDelete: PropTypes.func,
   identifiers: PropTypes.array,
 };
 
