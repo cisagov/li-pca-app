@@ -31,3 +31,31 @@ export const useGetAll = () => {
   }, []);
   return { isLoading, getData, getError };
 };
+
+export const useRetire = (retire, selectedRows) => {
+  const [getError, setError] = useState([false, ""]);
+
+  useEffect(() => {
+    if (retire) {
+      let toRetireArray = [];
+      selectedRows.forEach(function (entry) {
+        let id = entry._id;
+        toRetireArray.push({ _id: id, retired: true });
+      });
+      console.log(toRetireArray);
+      axios
+        .put(baseURL + "/bulk", toRetireArray, {
+          headers: headers,
+        })
+        .then((response) => {
+          console.log(response);
+          setError([false, ""]);
+        })
+        .catch((error) => {
+          setError([true, error.message]);
+          console.log(error);
+        });
+    }
+  }, [retire]);
+  return getError;
+};
