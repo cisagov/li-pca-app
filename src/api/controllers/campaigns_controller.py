@@ -28,7 +28,6 @@ def create_campaign(body=None):  # noqa: E501
     if connexion.request.is_json:
         body = connexion.request.get_json()
         logging.debug("Body: %s", body)
-        logging.debug("Body: %s", body)
         return jsonify(db_manager.save(body))
 
 

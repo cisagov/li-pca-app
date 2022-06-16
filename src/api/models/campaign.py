@@ -19,7 +19,6 @@ class Campaign(Model):
 
     def __init__(
         self,
-        uuid: str = None,
         assessment_uuid: str = None,
         target_template_uuid: str = None,
         email_template_uuid: str = None,
@@ -27,10 +26,8 @@ class Campaign(Model):
     ):  # noqa: E501
         """Initialize the Campaign model defined in Swagger.
 
-        :param uuid: The uuid of this Campaign.  # noqa: E501
-        :type uuid: str
-        :param assessment_uuid: The assessment_uuid of this Campaign.  # noqa: E501
-        :type assessment_uuid: str
+        :param parent_uuid: The parent_uuid of this Campaign.  # noqa: E501
+        :type parent_uuid: str
         :param target_template_uuid: The target_template_uuid of this Campaign.  # noqa: E501
         :type target_template_uuid: str
         :param email_template_uuid: The email_template_uuid of this Campaign.  # noqa: E501
@@ -39,7 +36,6 @@ class Campaign(Model):
         :type status: str
         """
         self.swagger_types = {
-            "uuid": str,
             "assessment_uuid": str,
             "target_template_uuid": str,
             "email_template_uuid": str,
@@ -47,13 +43,11 @@ class Campaign(Model):
         }  # type: ignore
 
         self.attribute_map = {
-            "uuid": "uuid",
-            "assessment_uuid": "assessment_uuid",
+            "assessment_uuid": "parent_uuid",
             "target_template_uuid": "target_template_uuid",
             "email_template_uuid": "email_template_uuid",
             "status": "status",
         }  # type: ignore
-        self._uuid = uuid
         self._assessment_uuid = assessment_uuid
         self._target_template_uuid = target_template_uuid
         self._email_template_uuid = email_template_uuid
@@ -69,33 +63,6 @@ class Campaign(Model):
         :rtype: Campaign
         """
         return util.deserialize_model(dikt, cls)
-
-    @property
-    def uuid(self) -> str:
-        """Get the uuid of this Campaign.
-
-        uuid string value  # noqa: E501
-
-        :return: The uuid of this Campaign.
-        :rtype: str
-        """
-        return self._uuid  # type: ignore
-
-    @uuid.setter
-    def uuid(self, uuid: str):
-        """Set the uuid of this Campaign.
-
-        uuid string value  # noqa: E501
-
-        :param uuid: The uuid of this Campaign.
-        :type uuid: str
-        """
-        if uuid is None:
-            raise ValueError(
-                "Invalid value for `uuid`, must not be `None`"
-            )  # noqa: E501
-
-        self._uuid = uuid
 
     @property
     def assessment_uuid(self) -> str:
@@ -115,7 +82,7 @@ class Campaign(Model):
         """
         if assessment_uuid is None:
             raise ValueError(
-                "Invalid value for `assessment_uuid`, must not be `None`"
+                "Invalid value for `parent_uuid`, must not be `None`"
             )  # noqa: E501
 
         self._assessment_uuid = assessment_uuid
