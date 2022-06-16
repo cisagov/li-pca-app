@@ -24,6 +24,10 @@ tags:
     description: Li-PCA Templates
   - name: documents
     description: Li-PCA Reports
+  - name: sending_profiles
+    description: Li-PCA Sending Profiles
+  - name: domains
+    description: Li-PCA Domains
 paths:
   /v1/assessments:
     get:
@@ -595,6 +599,157 @@ paths:
         "404":
           description: campaign not found
       x-openapi-router-controller: api.controllers.campaigns_controller
+  /vi/sending_profiles:
+    get:
+      tags:
+        - sending_profiles
+        - domains
+      summary: Get all sending profiles (domains)
+      description: Get All Sending Profiles (Domains)
+      operationId: get_all_sending_profiles
+      parameters:
+        - name: name
+          in: query
+          description: Domain name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sending_Profiles'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sending_Profiles'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Sending Profile not found
+        "405":
+          description: Validation Exception
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
+    post:
+      tags:
+        - sending_profiles
+        - domains
+      summary: Add new sending profile to the data store
+      operationId: create_sending_profile
+      requestBody:
+        description: created sending profile object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sending_Profile'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sending_Profiles'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Sending_Profiles'
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
+  /v1/sending_profiles/{uuid}:
+    get:
+      tag:
+        - sending_profiles
+        - domains
+      summary: Find sending profile by uuid
+      description: returns a single sending profile
+      operationId: get_sending_profile_by_id
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of sending profile to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sending_Profile'
+            application/xml:
+              schema:
+                $ref:
+                  '#/components/schemas/Sending_Profile'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: sending profile not found
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
+    put:
+      tags:
+        - sending_profiles
+        - domains
+      summary: Update an existing sending profile
+      operationId: update_sending_profile_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of sending profile to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      requestBody:
+        description: Updated sending profile object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sending_Profile'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: sending profile not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
+    delete:
+      tags:
+        - sending_profiles
+        - domains
+      summary: Deletes a sending profile
+      operationId: delete_sending_profile_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: sending profile not found
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
   /v1/documents:
     get:
       tags:
