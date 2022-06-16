@@ -5,7 +5,7 @@ import json
 # Third-Party Libraries
 import requests
 
-json_obj = json.load(open("/Users/cantuj/Documents/templates.json"))
+json_obj = json.load(open("./templates.json"))
 temp_list = []
 counter = 0
 url = "http://localhost:8080/li-pca/v1/templates"

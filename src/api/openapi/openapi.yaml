@@ -485,6 +485,10 @@ paths:
                   $ref: '#/components/schemas/Campaign'
         "400":
           description: Invalid name value
+        "404":
+          description: Campaign not found
+        "405":
+          description: Validation Exception
       x-openapi-router-controller: api.controllers.campaigns_controller
     post:
       tags:
@@ -492,10 +496,22 @@ paths:
       summary: Add a new campaign to the data store
       operationId: create_campaign
       requestBody:
-        $ref: '#/components/requestBodies/Campaign'
+        description: Created campaign object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+        required: true
       responses:
-        "405":
-          description: Invalid input
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Campaign'
       x-openapi-router-controller: api.controllers.campaigns_controller
   /v1/campaigns/{uuid}:
     get:
@@ -545,7 +561,11 @@ paths:
             type: string
             format: uuid4
       requestBody:
-        $ref: '#/components/requestBodies/Campaign'
+        description: Updated campaign object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
       responses:
         "400":
           description: Invalid uuid supplied
@@ -1079,15 +1099,6 @@ components:
       xml:
         name: Template
     Campaign:
-      required:
-        - assessment_uuid
-        - description
-        - end_datetime
-        - name
-        - start_datetime
-        - status
-        - template_uuid
-        - uuid
       type: object
       properties:
         uuid:
@@ -1103,10 +1114,6 @@ components:
           type: string
         description:
           type: string
-        template_uuid:
-          type: string
-          format: uuid4
-          example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
         target_template_uuid:
           type: string
           description: uuid of associated template
@@ -1207,7 +1214,7 @@ components:
             $ref: '#/components/schemas/Campaign'
         application/xml:
           schema:
-            $ref: '#/components/schemas/Customer'
+            $ref: '#/components/schemas/Campaign'
     Template:
       description: Campaign object to be added to data store
       content:
