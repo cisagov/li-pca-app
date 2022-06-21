@@ -5,7 +5,7 @@ from marshmallow import fields
 # cisagov Libraries
 from api.models.base import BaseSchema
 from api.models.fields import DateTimeField
-from api.models.stats_mongo import CycleStatsSchema
+from api.models.stats import CycleStatsSchema
 
 
 class CycleManualReportsSchema(BaseSchema):

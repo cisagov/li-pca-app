@@ -6,11 +6,10 @@ info:
     Li-PCA Apllication API Endpoints
   version: 1.0.0
 externalDocs:
-  - url: https://app.swaggerhub.com/apis-docs/Li-PCA/li-pca-api/1.0.0
-    description: Swagger Hosted Docs
+  url: https://app.swaggerhub.com/apis-docs/Li-PCA/li-pca-api/1.0.0
 servers:
-  - url: https://localhost:8080/li-pca
-    description: li-pca-api
+  - description: li-pca-api
+    url: https://localhost:8080/li-pca
 tags:
   - name: auth
     description: Li-PCA Authentication

@@ -10,18 +10,18 @@ import pymongo
 
 # cisagov Libraries
 from api.config.db import get_db
-from api.models.assessment_mongo import AssessmentSchema
-from api.models.campaign_mongo import CampaignSchema
-from api.models.config_mongo import ConfigSchema
-from api.models.customer_mongo import CustomerSchema
-from api.models.cycle_mongo import CycleSchema
-from api.models.landing_page_mongo import LandingPageSchema
-from api.models.nonhuman_mongo import NonHumanSchema
-from api.models.recommendation_mongo import RecommendationsSchema
-from api.models.sending_profile_mongo import SendingProfileSchema
-from api.models.subscription_manager_mongo import SubscriptionSchema
-from api.models.target_mongo import TargetSchema
-from api.models.template_mongo import TemplateSchema
+from api.models.assessment import AssessmentSchema
+from api.models.campaign import CampaignSchema
+from api.models.config import ConfigSchema
+from api.models.customer import CustomerSchema
+from api.models.cycle import CycleSchema
+from api.models.landing_page import LandingPageSchema
+from api.models.nonhuman import NonHumanSchema
+from api.models.recommendation import RecommendationsSchema
+from api.models.sending_profile import SendingProfileSchema
+from api.models.subscription_manager import SubscriptionSchema
+from api.models.target import TargetSchema
+from api.models.template import TemplateSchema
 
 
 class Manager:
