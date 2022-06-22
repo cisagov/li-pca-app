@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   title: li-pca-api
   description: |
-    Li-PCA Apllication API Endpoints
+    Li-PCA Application API Endpoints
   version: 1.0.0
 externalDocs:
   url: https://app.swaggerhub.com/apis-docs/Li-PCA/li-pca-api/1.0.0
@@ -599,7 +599,7 @@ paths:
         "404":
           description: campaign not found
       x-openapi-router-controller: api.controllers.campaigns_controller
-  /vi/sending_profiles:
+  /v1/sending_profiles:
     get:
       tags:
         - sending_profiles
@@ -626,13 +626,13 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Sending_Profiles'
+                  $ref: '#/components/schemas/Sending_Profile'
                 x-content-type: application/json
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Sending_Profiles'
+                  $ref: '#/components/schemas/Sending_Profile'
         "400":
           description: Invalid ID supplied
         "404":
@@ -659,19 +659,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Sending_Profiles'
+                $ref: '#/components/schemas/Sending_Profile'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Sending_Profiles'
+                $ref: '#/components/schemas/Sending_Profile'
       x-openapi-router-controller: api.controllers.sending_profiles_controller
   /v1/sending_profiles/{uuid}:
     get:
-      tag:
+      tags:
         - sending_profiles
         - domains
       summary: Find sending profile by uuid
       description: returns a single sending profile
-      operationId: get_sending_profile_by_id
+      operationId: get_sending_profile_by_uuid
       parameters:
         - name: uuid
           in: path
@@ -1160,13 +1160,13 @@ components:
       example:
         name: test customer 2
         identifier: test identifier 2
-        yaddress_1: 1234 Test Lane
-        address_2: 4567 Seconod Dr.
+        address_1: 1234 Test Lane
+        address_2: 4567 Second Dr.
         city: Test
         state: LA
         zip_code: '12344'
         customer_type: Federal
-        industry: Oil & Gashhhh
+        industry: Oil & Gas
         sector: Oil & Gas
         domain: test.com
         critical_infrastructure: Energy Sector
@@ -1300,6 +1300,48 @@ components:
         status: queued
       xml:
         name: Campaign
+    HeaderSchema:
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    Sending_Profile:
+      required:
+        - name
+        - landing_page_domain
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid64
+        name:
+          type: string
+        interface_type:
+          type: string
+        from_address:
+          type: string
+          format: email
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HeaderSchema'
+        landing_page_domain:
+          type: string
+        sending_ips:
+          type: string
+        smtp_username:
+          type: string
+        smtp_password:
+          type: string
+        smtp_host:
+          type: string
+        mailgun_domain:
+          type: string
+        mailgun_api_key:
+          type: string
+        ses_role_arn:
+          type: string
     Document:
       required:
         - description
@@ -1379,6 +1421,15 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Template'
+    Sending_Profile:
+      description: Sending Profile to be added to the data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Sending_Profile'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Sending_Profile'
     Document:
       description: Document object to be added to data store
       content:
