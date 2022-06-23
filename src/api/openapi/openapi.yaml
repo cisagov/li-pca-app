@@ -903,6 +903,149 @@ paths:
         "404":
           description: User not found
       x-openapi-router-controller: api.controllers.user_controller
+  /v1/landingPage:
+    get:
+      tags:
+        - landingPage
+      summary: Find all landing pages
+      description: Multiple status filters by adding separated strings
+      operationId: get_all_landing_pages
+      parameters:
+        - name: name
+          in: query
+          description: Customer name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LandingPage'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LandingPage'
+        "400":
+          description: Invalid id supplied
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiResponse'
+                x-content-type: application/json
+        "404":
+          description: Item not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.landing_page_controller
+    post:
+      x-openapi-router-controller: api.controllers.landing_page_controller
+      tags:
+        - landingPage
+      operationId: create_landing_page
+      requestBody:
+        description: Created object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LandingPage'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+  /v1/landingPage/{uuid}:
+    get:
+      tags:
+        - customers
+      summary: Find landing_page by uuid
+      description: Returns a single object
+      operationId: get_customer_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of object to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: Item not found
+      x-openapi-router-controller: api.controllers.landing_page_controller
+    put:
+      summary: Updated Object
+      description: Update landing_page by uuid
+      operationId: update_landing_page_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid that needs to be updated
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        description: Updated customer object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LandingPage'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: Item not found
+      x-openapi-router-controller: api.controllers.landing_page_controller
+    delete:
+      tags:
+        - customers
+      summary: Deletes an object
+      operationId: delete_landing_page_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid that needs to be updated
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        default:
+          description: successful operation
+      x-openapi-router-controller: api.controllers.landing_page_controller
 components:
   schemas:
     User:
@@ -1172,6 +1315,20 @@ components:
         uuid: uuid
       xml:
         name: Document
+    LandingPage:
+      type: object
+      properties:
+        _id:
+          type: string
+        uuid:
+          type: string
+          format: uuid4
+        name:
+          type: string
+        is_default_template:
+          type: boolean
+        html:
+          type: string
     ApiResponse:
       type: object
       properties:

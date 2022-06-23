@@ -15,7 +15,7 @@ from api.models.campaign_mongo import CampaignSchema
 from api.models.config_mongo import ConfigSchema
 from api.models.customer_mongo import CustomerSchema
 from api.models.cycle_mongo import CycleSchema
-from api.models.landing_page_mongo import LandingPageSchema
+from api.models.landing_page import LandingPageSchema
 from api.models.nonhuman_mongo import NonHumanSchema
 from api.models.recommendation_mongo import RecommendationsSchema
 from api.models.sending_profile_mongo import SendingProfileSchema
@@ -373,17 +373,6 @@ class CycleManager(Manager):
             schema=CycleSchema,
         )
 
-
-class LandingPageManager(Manager):
-    """LandingPageManager."""
-
-    def __init__(self):
-        """Super."""
-        return super().__init__(
-            collection="landing_page",
-            schema=LandingPageSchema,
-        )
-
     def clear_and_set_default(self, document_id):
         """Set Default Landing Page."""
         sub_query = {}
@@ -458,4 +447,15 @@ class TemplateManager(Manager):
         return super().__init__(
             collection="template",
             schema=TemplateSchema,
+        )
+
+
+class LandingPageManager(Manager):
+    """SubscriptionManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="landing_page",
+            schema=LandingPageSchema,
         )
