@@ -24,7 +24,9 @@ const LandingPagesPage = Loadable(lazy(() => import("views/landing-pages")));
 const SendingProfilesPage = Loadable(
   lazy(() => import("views/sending-profiles"))
 );
-
+const SPDataEntryPage = Loadable(
+  lazy(() => import("views/sending-profiles/dataentry"))
+);
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -58,6 +60,10 @@ const MainRoutes = {
     {
       path: "/sending-profiles",
       element: <SendingProfilesPage />,
+    },
+    {
+      path: "/sending-profiles/data-entry",
+      element: <SPDataEntryPage />,
     },
   ],
 };
