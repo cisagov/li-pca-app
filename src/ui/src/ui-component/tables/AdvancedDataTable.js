@@ -3,13 +3,11 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // material-ui
-import AddIcon from "@mui/icons-material/AddCircle";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import ClearIcon from "@mui/icons-material/Clear";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
@@ -20,11 +18,15 @@ import {
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
-  GridToolbarExport,
 } from "@mui/x-data-grid";
 
 // Tabler icons
 import { IconDownload, IconPlus } from "@tabler/icons";
+
+// project imports
+import ConfirmDialog from "ui-component/popups/ConfirmDialog";
+import ResultDialog from "ui-component/popups/ResultDialog";
+import { useRetire } from "services/api/Templates";
 
 function escapeRegExp(value) {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -43,21 +45,15 @@ CustomToolbar.propTypes = {
 function CustomToolbar(props) {
   let navigate = useNavigate();
   const values = {};
-  // console.log(props.selectedRows);
-  // const [isDisabled, setDisabled] = React.useState(true);
+
   let isDisabled = true;
   if (props.selectedRows.length !== 0) {
-    // setDisabled(false);
     isDisabled = false;
   }
+
   return (
     <GridToolbarContainer>
-      <Box
-        sx={{
-          p: 0.5,
-          pb: 0,
-        }}
-      >
+      <Box sx={{ p: 0.5, pb: 0 }}>
         <TextField
           variant="standard"
           value={props.value}
@@ -78,14 +74,9 @@ function CustomToolbar(props) {
             ),
           }}
           sx={{
-            width: {
-              xs: 1,
-              sm: "auto",
-            },
+            width: { xs: 1, sm: "auto" },
             m: (theme) => theme.spacing(1, 0.5, 1.5),
-            "& .MuiSvgIcon-root": {
-              mr: 0.5,
-            },
+            "& .MuiSvgIcon-root": { mr: 0.5 },
             "& .MuiInput-underline:before": {
               borderBottom: 1,
               borderColor: "divider",
@@ -103,7 +94,6 @@ function CustomToolbar(props) {
         Export
       </Button>
       <Button
-        // variant="contained"
         size="small"
         startIcon={<IconPlus size={18} />}
         onClick={() => {
@@ -118,11 +108,7 @@ function CustomToolbar(props) {
         color="error"
         size="small"
         startIcon={<ArchiveIcon />}
-        onClick={() => {
-          navigate(`${props.newEntryRoute}`, {
-            state: { row: values, dataEntryType: "new", rows: props.rows },
-          });
-        }}
+        onClick={props.confirmRetire}
         disabled={isDisabled}
       >
         Retire
@@ -131,11 +117,7 @@ function CustomToolbar(props) {
         color="inherit"
         size="small"
         startIcon={<ContentCopyIcon />}
-        onClick={() => {
-          navigate(`${props.newEntryRoute}`, {
-            state: { row: values, dataEntryType: "new", rows: props.rows },
-          });
-        }}
+        onClick={() => console.log(props.selectedRows)}
         disabled={isDisabled}
       >
         Duplicate
@@ -144,11 +126,7 @@ function CustomToolbar(props) {
         color="secondary"
         size="small"
         startIcon={<MailOutlineIcon />}
-        onClick={() => {
-          navigate(`${props.newEntryRoute}`, {
-            state: { row: values, dataEntryType: "new", rows: props.rows },
-          });
-        }}
+        onClick={() => console.log(props.selectedRows)}
         disabled={isDisabled}
       >
         Test
@@ -162,6 +140,7 @@ AdvancedDataTable.propTypes = {
   newEntryRoute: PropTypes.string,
   editEntryRoute: PropTypes.string,
   tableCategory: PropTypes.string,
+  filterModel: PropTypes.object,
 };
 
 export default function AdvancedDataTable(props) {
@@ -212,33 +191,70 @@ export default function AdvancedDataTable(props) {
     },
     flex: 0.5,
   });
+
+  const [retire, setRetire] = React.useState(false);
+  const [retirebtnOpen, setRetirebtnOpen] = React.useState(false);
+
+  const confirmRetire = () => {
+    setRetirebtnOpen(true);
+  };
+  const toRetire = () => {
+    setRetire(true);
+    setRetirebtnOpen(false);
+  };
+
+  let getError = useRetire(retire, selectedRows);
+  const closeDialog = () => {
+    setRetire(false);
+    if (!getError[0]) {
+      window.location.reload();
+    }
+  };
   return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      autoHeight
-      components={{
-        Toolbar: CustomToolbar,
-      }}
-      pageSize={10}
-      rowsPerPageOptions={[10]}
-      componentsProps={{
-        toolbar: {
-          value: searchText,
-          onChange: (event) => requestSearch(event.target.value),
-          clearSearch: () => requestSearch(""),
-          newEntryRoute: props.newEntryRoute,
-          rows: rows,
-          tableCategory: props.tableCategory,
-          selectedRows: selectedRows,
-        },
-      }}
-      checkboxSelection
-      onSelectionModelChange={(ids) => {
-        const selectedIDs = new Set(ids);
-        const selectedRows = rows.filter((row) => selectedIDs.has(row.id));
-        setSelectedRows(selectedRows);
-      }}
-    />
+    <React.Fragment>
+      <ConfirmDialog
+        subtitle="This action disables them from being used in any future subscriptions."
+        confirmType="Retire"
+        isOpen={retirebtnOpen}
+        setIsOpen={setRetirebtnOpen}
+        handleClick={toRetire}
+      />
+      <ResultDialog
+        type={"Retire template"}
+        hasSubmitted={retire}
+        getDelete={false}
+        error={getError}
+        closeDialog={closeDialog}
+      />
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        autoHeight
+        components={{ Toolbar: CustomToolbar }}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
+        componentsProps={{
+          toolbar: {
+            value: searchText,
+            onChange: (event) => requestSearch(event.target.value),
+            clearSearch: () => requestSearch(""),
+            newEntryRoute: props.newEntryRoute,
+            rows: rows,
+            tableCategory: props.tableCategory,
+            selectedRows: selectedRows,
+            confirmRetire: confirmRetire,
+          },
+        }}
+        checkboxSelection
+        onSelectionModelChange={(ids) => {
+          const selectedIDs = new Set(ids);
+          const selectedRows = rows.filter((row) => selectedIDs.has(row.id));
+          setSelectedRows(selectedRows);
+        }}
+        initialState={{
+          filter: { filterModel: props.filterModel },
+        }}
+      />
+    </React.Fragment>
   );
 }

@@ -3,10 +3,11 @@ openapi: 3.0.0
 info:
   title: li-pca-api
   description: |
-    Li-PCA Apllication API Endpoints
+    Li-PCA Application API Endpoints
   version: 1.0.0
 externalDocs:
   url: https://app.swaggerhub.com/apis-docs/Li-PCA/li-pca-api/1.0.0
+  description: Swagger Hosted Docs
 servers:
   - description: li-pca-api
     url: https://localhost:8080/li-pca
@@ -23,6 +24,10 @@ tags:
     description: Li-PCA Templates
   - name: documents
     description: Li-PCA Reports
+  - name: sending_profiles
+    description: Li-PCA Sending Profiles
+  - name: domains
+    description: Li-PCA Domains
 paths:
   /v1/assessments:
     get:
@@ -484,6 +489,10 @@ paths:
                   $ref: '#/components/schemas/Campaign'
         "400":
           description: Invalid name value
+        "404":
+          description: Campaign not found
+        "405":
+          description: Validation Exception
       x-openapi-router-controller: api.controllers.campaigns_controller
     post:
       tags:
@@ -491,10 +500,22 @@ paths:
       summary: Add a new campaign to the data store
       operationId: create_campaign
       requestBody:
-        $ref: '#/components/requestBodies/Campaign'
+        description: Created campaign object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+        required: true
       responses:
-        "405":
-          description: Invalid input
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Campaign'
       x-openapi-router-controller: api.controllers.campaigns_controller
   /v1/campaigns/{uuid}:
     get:
@@ -544,7 +565,11 @@ paths:
             type: string
             format: uuid4
       requestBody:
-        $ref: '#/components/requestBodies/Campaign'
+        description: Updated campaign object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
       responses:
         "400":
           description: Invalid uuid supplied
@@ -574,6 +599,157 @@ paths:
         "404":
           description: campaign not found
       x-openapi-router-controller: api.controllers.campaigns_controller
+  /v1/sending_profiles:
+    get:
+      tags:
+        - sending_profiles
+        - domains
+      summary: Get all sending profiles (domains)
+      description: Get All Sending Profiles (Domains)
+      operationId: get_all_sending_profiles
+      parameters:
+        - name: name
+          in: query
+          description: Domain name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sending_Profile'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sending_Profile'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Sending Profile not found
+        "405":
+          description: Validation Exception
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
+    post:
+      tags:
+        - sending_profiles
+        - domains
+      summary: Add new sending profile to the data store
+      operationId: create_sending_profile
+      requestBody:
+        description: created sending profile object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sending_Profile'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sending_Profile'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Sending_Profile'
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
+  /v1/sending_profiles/{uuid}:
+    get:
+      tags:
+        - sending_profiles
+        - domains
+      summary: Find sending profile by uuid
+      description: returns a single sending profile
+      operationId: get_sending_profile_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of sending profile to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sending_Profile'
+            application/xml:
+              schema:
+                $ref:
+                  '#/components/schemas/Sending_Profile'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: sending profile not found
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
+    put:
+      tags:
+        - sending_profiles
+        - domains
+      summary: Update an existing sending profile
+      operationId: update_sending_profile_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of sending profile to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      requestBody:
+        description: Updated sending profile object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sending_Profile'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: sending profile not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
+    delete:
+      tags:
+        - sending_profiles
+        - domains
+      summary: Deletes a sending profile
+      operationId: delete_sending_profile_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: sending profile not found
+      x-openapi-router-controller: api.controllers.sending_profiles_controller
   /v1/documents:
     get:
       tags:
@@ -984,13 +1160,13 @@ components:
       example:
         name: test customer 2
         identifier: test identifier 2
-        yaddress_1: 1234 Test Lane
-        address_2: 4567 Seconod Dr.
+        address_1: 1234 Test Lane
+        address_2: 4567 Second Dr.
         city: Test
         state: LA
         zip_code: '12344'
         customer_type: Federal
-        industry: Oil & Gashhhh
+        industry: Oil & Gas
         sector: Oil & Gas
         domain: test.com
         critical_infrastructure: Energy Sector
@@ -1078,15 +1254,6 @@ components:
       xml:
         name: Template
     Campaign:
-      required:
-        - assessment_uuid
-        - description
-        - end_datetime
-        - name
-        - start_datetime
-        - status
-        - template_uuid
-        - uuid
       type: object
       properties:
         uuid:
@@ -1102,10 +1269,6 @@ components:
           type: string
         description:
           type: string
-        template_uuid:
-          type: string
-          format: uuid4
-          example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
         target_template_uuid:
           type: string
           description: uuid of associated template
@@ -1137,6 +1300,48 @@ components:
         status: queued
       xml:
         name: Campaign
+    HeaderSchema:
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    Sending_Profile:
+      required:
+        - name
+        - landing_page_domain
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid64
+        name:
+          type: string
+        interface_type:
+          type: string
+        from_address:
+          type: string
+          format: email
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HeaderSchema'
+        landing_page_domain:
+          type: string
+        sending_ips:
+          type: string
+        smtp_username:
+          type: string
+        smtp_password:
+          type: string
+        smtp_host:
+          type: string
+        mailgun_domain:
+          type: string
+        mailgun_api_key:
+          type: string
+        ses_role_arn:
+          type: string
     Document:
       required:
         - description
@@ -1206,7 +1411,7 @@ components:
             $ref: '#/components/schemas/Campaign'
         application/xml:
           schema:
-            $ref: '#/components/schemas/Customer'
+            $ref: '#/components/schemas/Campaign'
     Template:
       description: Campaign object to be added to data store
       content:
@@ -1216,6 +1421,15 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Template'
+    Sending_Profile:
+      description: Sending Profile to be added to the data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Sending_Profile'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Sending_Profile'
     Document:
       description: Document object to be added to data store
       content:

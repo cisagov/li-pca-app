@@ -9,6 +9,7 @@ import Typography from "@mui/material/Grid";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
+import { useGetAll } from "services/api/Customers.js";
 
 // third party
 import axios from "axios";
@@ -53,30 +54,7 @@ BaseJSX.propTypes = {
 };
 
 function CustomersPage() {
-  const baseURL = "http://localhost:8080/li-pca/v1/customers";
-  const [isLoading, setLoading] = useState(true);
-  const [getData, setData] = useState([]);
-  const [getError, setError] = useState([false, ""]);
-
-  useEffect(() => {
-    axios
-      .get(baseURL, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-        setError([false, ""]);
-      })
-      .catch((error) => {
-        setError([true, error.message]);
-        setLoading(false);
-        console.log(error);
-      });
-  }, []);
+  const { isLoading, getData, getError } = useGetAll("getAll");
 
   const cusRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {
