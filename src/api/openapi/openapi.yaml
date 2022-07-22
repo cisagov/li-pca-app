@@ -1,0 +1,205 @@
+---
+openapi: 3.0.0
+info:
+  title: Li-PCA API
+  description: |
+    Li-PCA Apllication API Endpoints
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://virtserver.swaggerhub.com/li-pca
+    description: SwaggerHub API Auto Mocking
+tags:
+  - name: customers
+    description: Li-PCA Customers
+paths:
+  /v1/customers:
+    get:
+      tags:
+        - customers
+      summary: Find all customers
+      description: Multiple status filters by adding separated strings
+      operationId: get_all_customers
+      parameters:
+        - name: name
+          in: query
+          description: Customer name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        "400":
+          description: Invalid name value
+      x-openapi-router-controller: api.controllers.customers_controller
+    post:
+      tags:
+        - customers
+      summary: Add a new customer to the data store
+      operationId: create_customer
+      requestBody:
+        $ref: '#/components/requestBodies/Customer'
+      responses:
+        "405":
+          description: Invalid input
+      x-openapi-router-controller: api.controllers.customers_controller
+  /v1/customers/{uuid}:
+    get:
+      tags:
+        - customers
+      summary: Find customer by uuid
+      description: Returns a single customer
+      operationId: get_customer_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of customer to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid4
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Customer not found
+      x-openapi-router-controller: api.controllers.customers_controller
+    put:
+      tags:
+        - customers
+      summary: Update an existing customer
+      operationId: update_customer_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of customer to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid4
+      requestBody:
+        $ref: '#/components/requestBodies/Customer'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: Customer not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.customers_controller
+    delete:
+      tags:
+        - customers
+      summary: Deletes a customer
+      operationId: delete_customer_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid4
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: Customer not found
+      x-openapi-router-controller: api.controllers.customers_controller
+components:
+  schemas:
+    Customer:
+      required:
+        - customer_uuid
+        - name
+        - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid4
+        customer_uuid:
+          type: string
+          format: uuid4
+        name:
+          type: string
+        contact:
+          type: string
+        status:
+          type: string
+      example:
+        contact: contact
+        name: name
+        uuid: uuid
+        status: status
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+  requestBodies:
+    Customer:
+      description: Customer object to be added to data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Customer'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Customer'
+  securitySchemes:
+    lipca_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://petstore.swagger.io/oauth/dialog
+          scopes:
+            write:lipca: modify li-pca data
+            read:lipca: read li-pca data
+      x-tokenInfoFunc: api.controllers.authorization_controller.check_lipca_auth
+      x-scopeValidateFunc: "api.controllers.authorization_controller.\
+        validate_scope_lipca_auth"
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      x-apikeyInfoFunc: api.controllers.authorization_controller.check_api_key
