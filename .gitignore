@@ -9,6 +9,6 @@ __pycache__
 .pytest_cache
 .python-version
 *.egg-info
-
 *.DS_store
 *.vscode
+dist
