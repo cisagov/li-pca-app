@@ -14,7 +14,7 @@ CustomType = typing.TypeVar("CustomType")
 
 
 class Model:
-    """Mode Class."""
+    """Model class."""
 
     # swaggerTypes: The key is attribute name and the
     # value is attribute type.
