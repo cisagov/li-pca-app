@@ -19,8 +19,8 @@ from setuptools import find_packages, setup
 
 def readme():
     """Read in and return the contents of the project's README.md file."""
-    with open("README.md", encoding="utf-8") as in_file:
-        return in_file.read()
+    with open("README.md", encoding="utf-8") as f:
+        return f.read()
 
 
 # Below two methods were pulled from:
