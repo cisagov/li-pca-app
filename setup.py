@@ -28,8 +28,8 @@ def readme():
 def read(rel_path):
     """Open a file for reading from a given relative path."""
     here = abspath(dirname(__file__))
-    with codecs.open(join(here, rel_path), "r") as in_file:
-        return in_file.read()
+    with codecs.open(join(here, rel_path), "r") as fp:
+        return fp.read()
 
 
 def get_version(version_file):
