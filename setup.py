@@ -82,7 +82,7 @@ setup(
     ],
     python_requires=">=3.6",
     # What does your project relate to?
-    keywords="li-pca",
+    keywords="api li-pca pca phishing",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     package_data={"api": ["data/*.txt"]},
