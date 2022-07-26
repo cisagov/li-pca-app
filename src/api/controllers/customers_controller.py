@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Customers Controller Logic."""
+"""Customers controller logic."""
 
 # Third-Party Libraries
 import connexion
