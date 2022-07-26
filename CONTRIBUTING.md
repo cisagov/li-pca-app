@@ -146,9 +146,9 @@ can create and configure the Python virtual environment with these
 commands:
 
 ```console
-cd skeleton-generic
-pyenv virtualenv <python_version_to_use> skeleton-generic
-pyenv local skeleton-generic
+cd li-pca-app
+pyenv virtualenv <python_version_to_use> li-pca-app
+pyenv local li-pca-app
 pip install --requirement requirements-dev.txt
 ```
 
