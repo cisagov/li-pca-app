@@ -89,11 +89,11 @@ setup(
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
     install_requires=[
+        "connexion == 2.6.0",
         "docopt",
+        "python_dateutil == 2.6.0",
         "schema",
         "setuptools >= 24.2.0",
-        "connexion == 2.6.0",
-        "python_dateutil == 2.6.0",
     ],
     extras_require={
         "test": [
