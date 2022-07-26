@@ -9,15 +9,4 @@ from api.controllers import customers_controller
 
 __all__ = [
     "customers_controller",
-    # "api_response",
-    # "assessment",
-    # "base_model",
-    # "campaign",
-    # "customer",
-    # "document",
-    # "template",
-    # "user",
-    # "encoder",
-    # "type_util",
-    # "util"
 ]
