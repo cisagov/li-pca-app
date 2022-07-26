@@ -1,1 +1,1 @@
-"""Controllers Init."""
+"""The controllers subpackage."""
