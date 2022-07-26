@@ -1,5 +1,5 @@
 """
-This is the setup module for the li-pca-app api service.
+This is the setup module for the li-pca-app API service.
 
 Based on:
 
