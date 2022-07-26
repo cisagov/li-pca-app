@@ -1,4 +1,4 @@
-"""API Models Logic."""
+"""API models logic."""
 
 # Standard Python Libraries
 import pprint
