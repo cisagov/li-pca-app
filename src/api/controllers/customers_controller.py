@@ -5,7 +5,6 @@
 import connexion
 
 # cisagov Libraries
-# from api import util
 from api.models.customer import Customer  # noqa: E501
 
 
