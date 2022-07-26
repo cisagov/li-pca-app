@@ -1,5 +1,4 @@
-# coding: utf-8
-"""Customer Model."""
+"""Customer model."""
 
 from __future__ import absolute_import
 
