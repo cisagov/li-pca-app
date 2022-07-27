@@ -11,8 +11,6 @@ from api.models.customer import Customer  # noqa: E501
 def create_customer(body=None):  # noqa: E501
     """Add a new customer to the data store.
 
-     # noqa: E501
-
     :param body: Customer object to be added to data store
     :type body: dict | bytes
 
