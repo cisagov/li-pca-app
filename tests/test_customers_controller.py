@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 # cisagov Libraries
 # TODO: Uncomment when functional tests are ready to connect to DB
-# from api.models.customer import Customer  # noqa: E501
+# from api.models.customer import Customer
 from tests import BaseTestCase
 
 # TODO: Uncomment when functional tests are ready to connect to DB

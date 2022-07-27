@@ -14,16 +14,14 @@ class ApiResponse(Model):
     Do not edit the class manually.
     """
 
-    def __init__(
-        self, code: int = None, type: str = None, message: str = None
-    ):  # noqa: E501
+    def __init__(self, code: int = None, type: str = None, message: str = None):
         """Initialize the ApiResponse model defined in Swagger.
 
-        :param code: The code of this ApiResponse.   noqa: E501
+        :param code: The code of this ApiResponse.
         :type code: int
-        :param type: The type of this ApiResponse.   noqa: E501
+        :param type: The type of this ApiResponse.
         :type type: str
-        :param message: The message of this ApiResponse.  # noqa: E501
+        :param message: The message of this ApiResponse.
         :type message: str
         """
         self.swagger_types = {"code": int, "type": str, "message": str}  # type: ignore
@@ -43,7 +41,7 @@ class ApiResponse(Model):
 
         :param dikt: A dict.
         :type: dict
-        :return: The ApiResponse of this ApiResponse.  # noqa: E501
+        :return: The ApiResponse of this ApiResponse.
         :rtype: ApiResponse
         """
         return util.deserialize_model(dikt, cls)
@@ -82,8 +80,6 @@ class ApiResponse(Model):
         :param type: The type of this ApiResponse.
         :type type: str
         """
-        # noqa: E501
-
         self._type = type
 
     @property

@@ -5,10 +5,10 @@
 import connexion
 
 # cisagov Libraries
-from api.models.customer import Customer  # noqa: E501
+from api.models.customer import Customer
 
 
-def create_customer(body=None):  # noqa: E501
+def create_customer(body=None):
     """Add a new customer to the data store.
 
     :param body: Customer object to be added to data store
@@ -17,14 +17,12 @@ def create_customer(body=None):  # noqa: E501
     :rtype: None
     """
     if connexion.request.is_json:
-        body = Customer.from_dict(connexion.request.get_json())  # noqa: E501
+        body = Customer.from_dict(connexion.request.get_json())
     return body
 
 
-def delete_customer_by_uuid(uuid):  # noqa: E501
+def delete_customer_by_uuid(uuid):
     """Delete a customer.
-
-     # noqa: E501
 
     :param uuid: uuid to delete
     :type uuid: str
@@ -34,10 +32,11 @@ def delete_customer_by_uuid(uuid):  # noqa: E501
     return "do some magic!"
 
 
-def get_all_customers(name=None):  # noqa: E501
+def get_all_customers(name=None):
     """Find all customers.
 
-    Multiple status values can be provided with comma separated strings # noqa: E501
+    Multiple status values can be provided with
+    comma separated strings
 
     :param name: Customer name filter
     :type name: List[str]
@@ -47,10 +46,10 @@ def get_all_customers(name=None):  # noqa: E501
     return "do some magic!"
 
 
-def get_customer_by_uuid(uuid):  # noqa: E501
+def get_customer_by_uuid(uuid):
     """Find customer by uuid.
 
-    Returns a single customer # noqa: E501
+    Returns a single customer
 
     :param uuid: uuid of customer to return
     :type uuid: str
@@ -60,10 +59,8 @@ def get_customer_by_uuid(uuid):  # noqa: E501
     return "do some magic!"
 
 
-def update_customer_by_uuid(uuid, body=None):  # noqa: E501
+def update_customer_by_uuid(uuid, body=None):
     """Update an existing customer.
-
-     # noqa: E501
 
     :param uuid: uuid of customer to update
     :type uuid: str
@@ -73,6 +70,6 @@ def update_customer_by_uuid(uuid, body=None):  # noqa: E501
     :rtype: None
     """
     if connexion.request.is_json:
-        body = Customer.from_dict(connexion.request.get_json())  # noqa: E501
+        body = Customer.from_dict(connexion.request.get_json())
         return body
     return "do some magic!"

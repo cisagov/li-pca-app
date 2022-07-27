@@ -24,16 +24,15 @@ class Customer(Model):
     ):
         """Initialize Customer model defined in Swagger.
 
-        :param uuid: The uuid of this Customer.  # noqa: E501
+        :param uuid: The uuid of this Customer.
         :type uuid: str
-        :param name: The name of this Customer.  # noqa: E501
+        :param name: The name of this Customer.
         :type name: str
-        :param contact: The contact of this Customer.  # noqa: E501
+        :param contact: The contact of this Customer.
         :type contact: str
-        :param status: The status of this Customer.  # noqa: E501
+        :param status: The status of this Customer.
         :type status: str
         """
-        # noqa: E501
         self.swagger_types = {
             "uuid": str,
             "name": str,
@@ -58,7 +57,7 @@ class Customer(Model):
 
         :param dikt: A dict.
         :type: dict
-        :return: The Customer of this Customer.  # noqa: E501
+        :return: The Customer of this Customer.
         :rtype: Customer
         """
         return util.deserialize_model(dikt, cls)
@@ -80,9 +79,7 @@ class Customer(Model):
         :type uuid: str
         """
         if uuid is None:
-            raise ValueError(
-                "Invalid value for `uuid`, must not be `None`"
-            )  # noqa: E501
+            raise ValueError("Invalid value for `uuid`, must not be `None`")
 
         self._uuid = uuid
 
@@ -103,9 +100,7 @@ class Customer(Model):
         :type name: str
         """
         if name is None:
-            raise ValueError(
-                "Invalid value for `name`, must not be `None`"
-            )  # noqa: E501
+            raise ValueError("Invalid value for `name`, must not be `None`")
 
         self._name = name
 
