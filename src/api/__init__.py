@@ -4,8 +4,10 @@
 # although this import is not directly used, it populates the value
 # package_name.__version__, which is used to get version information about this
 # Python package.
-from ._version import __version__  # noqa: F401
+# cisagov Libraries
 from api.controllers import customers_controller
+
+from ._version import __version__  # noqa: F401
 
 __all__ = [
     "customers_controller",
