@@ -9,7 +9,7 @@ from api.models.base_model_ import Model
 
 
 class JSONEncoder(FlaskJSONEncoder):
-    """Encoding Class."""
+    """Encoding class."""
 
     include_nulls = False
     encoding_type = "UTF-8"
