@@ -1,4 +1,4 @@
-"""Encoding Utility Logic."""
+"""Encoding utility logic."""
 
 # Third-Party Libraries
 from connexion.apps.flask_app import FlaskJSONEncoder  # type: ignore
