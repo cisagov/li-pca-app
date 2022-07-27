@@ -15,7 +15,7 @@ class JSONEncoder(FlaskJSONEncoder):
     encoding_type = "UTF-8"
 
     def default(self, encode_target):
-        """Use default encooding logic."""
+        """Use default encoding logic."""
         if isinstance(encode_target, Model):
             dikt = {}
             for attr, _ in six.iteritems(encode_target.swagger_types):
