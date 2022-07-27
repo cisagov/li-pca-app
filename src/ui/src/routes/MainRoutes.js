@@ -20,6 +20,9 @@ const TemplateDataEntryPage = Loadable(
 );
 // landing-pages page routing
 const LandingPagesPage = Loadable(lazy(() => import("views/landing-pages")));
+const LPDataEntryPage = Loadable(
+  lazy(() => import("views/landing-pages/dataentry"))
+);
 // sending-profiles page routing
 const SendingProfilesPage = Loadable(
   lazy(() => import("views/sending-profiles"))
@@ -56,6 +59,10 @@ const MainRoutes = {
     {
       path: "/landing-pages",
       element: <LandingPagesPage />,
+    },
+    {
+      path: "/landing-pages/data-entry",
+      element: <LPDataEntryPage />,
     },
     {
       path: "/sending-profiles",
