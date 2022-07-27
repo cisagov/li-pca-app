@@ -17,7 +17,6 @@ import {
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
   GridToolbarExport,
-  GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
 
 function escapeRegExp(value) {
@@ -81,7 +80,6 @@ function CustomToolbar(props) {
       </Box>
       <GridToolbarColumnsButton />
       <GridToolbarFilterButton />
-      <GridToolbarDensitySelector />
       <GridToolbarExport />
       <Button
         size="small"
@@ -152,25 +150,27 @@ export default function MainDataTable(props) {
     flex: 0.5,
   });
   return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      autoHeight
-      components={{
-        Toolbar: CustomToolbar,
-      }}
-      pageSize={10}
-      rowsPerPageOptions={[10]}
-      componentsProps={{
-        toolbar: {
-          value: searchText,
-          onChange: (event) => requestSearch(event.target.value),
-          clearSearch: () => requestSearch(""),
-          newEntryRoute: props.newEntryRoute,
-          rows: rows,
-          tableCategory: props.tableCategory,
-        },
-      }}
-    />
+    <Box sx={{ width: "100%", maxWidth: 1500, minWidth: 750 }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        autoHeight
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
+        componentsProps={{
+          toolbar: {
+            value: searchText,
+            onChange: (event) => requestSearch(event.target.value),
+            clearSearch: () => requestSearch(""),
+            newEntryRoute: props.newEntryRoute,
+            rows: rows,
+            tableCategory: props.tableCategory,
+          },
+        }}
+      />
+    </Box>
   );
 }

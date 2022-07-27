@@ -226,35 +226,37 @@ export default function AdvancedDataTable(props) {
         error={getError}
         closeDialog={closeDialog}
       />
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        autoHeight
-        components={{ Toolbar: CustomToolbar }}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        componentsProps={{
-          toolbar: {
-            value: searchText,
-            onChange: (event) => requestSearch(event.target.value),
-            clearSearch: () => requestSearch(""),
-            newEntryRoute: props.newEntryRoute,
-            rows: rows,
-            tableCategory: props.tableCategory,
-            selectedRows: selectedRows,
-            confirmRetire: confirmRetire,
-          },
-        }}
-        checkboxSelection
-        onSelectionModelChange={(ids) => {
-          const selectedIDs = new Set(ids);
-          const selectedRows = rows.filter((row) => selectedIDs.has(row.id));
-          setSelectedRows(selectedRows);
-        }}
-        initialState={{
-          filter: { filterModel: props.filterModel },
-        }}
-      />
+      <Box sx={{ width: "100%", maxWidth: 1500, minWidth: 750 }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          autoHeight
+          components={{ Toolbar: CustomToolbar }}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          componentsProps={{
+            toolbar: {
+              value: searchText,
+              onChange: (event) => requestSearch(event.target.value),
+              clearSearch: () => requestSearch(""),
+              newEntryRoute: props.newEntryRoute,
+              rows: rows,
+              tableCategory: props.tableCategory,
+              selectedRows: selectedRows,
+              confirmRetire: confirmRetire,
+            },
+          }}
+          checkboxSelection
+          onSelectionModelChange={(ids) => {
+            const selectedIDs = new Set(ids);
+            const selectedRows = rows.filter((row) => selectedIDs.has(row.id));
+            setSelectedRows(selectedRows);
+          }}
+          initialState={{
+            filter: { filterModel: props.filterModel },
+          }}
+        />
+      </Box>
     </React.Fragment>
   );
 }
