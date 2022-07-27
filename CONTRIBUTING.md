@@ -15,12 +15,23 @@ all of which should be in this repository.
 
 If you want to report a bug or request a new feature, the most direct
 method is to [create an
-issue](https://github.com/cisagov/li-pca-app/issues) in
-this repository.  We recommend that you first search through existing
+issue](https://github.com/cisagov/li-pca-app/issues) in this
+repository.  We recommend that you first search through existing
 issues (both open and closed) to check if your particular issue has
 already been reported.  If it has then you might want to add a comment
 to the existing issue.  If it hasn't then feel free to create a new
 one.
+
+## Branches ##
+
+If you are a developer assigned to the PCA team, when creating a branch,
+reference the corresponding ticket in JIRA as a prefix to the branch name.
+
+For example: PCADEV-123_some_feature_branch
+
+When pushing from your local repo to a remote, push first to your
+remote branch and then create a pull request to merge back into develop.
+Pushes directly to develop are not allowed.
 
 ## Pull requests ##
 
@@ -152,17 +163,6 @@ pre-commit install
 At this point the pre-commit checks will run against any files that
 you attempt to commit.  If you want to run the checks against the
 entire repo, just execute `pre-commit run --all-files`.
-
-### Running unit and system tests ###
-
-In addition to the pre-commit checks the CI system will run the suite
-of unit and system tests that are included with this project.  To run
-these tests locally execute `pytest` from the root of the project.
-
-We encourage any updates to these tests to improve the overall code
-coverage.  If your pull request adds new functionality we would
-appreciate it if you extend existing test cases, or add new ones to
-exercise the newly added code.
 
 ## Public domain ##
 
