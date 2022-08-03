@@ -18,6 +18,7 @@ from api.models.cycle_mongo import CycleSchema
 from api.models.landing_page_mongo import LandingPageSchema
 from api.models.nonhuman_mongo import NonHumanSchema
 from api.models.recommendation_mongo import RecommendationsSchema
+from api.models.recon_query import ReconQuerySchema
 from api.models.sending_profile_mongo import SendingProfileSchema
 from api.models.subscription_manager_mongo import SubscriptionSchema
 from api.models.target_mongo import TargetSchema
@@ -372,6 +373,14 @@ class CycleManager(Manager):
             collection="cycle",
             schema=CycleSchema,
         )
+
+
+class ReconQueryManager(Manager):
+    """ReconManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(collection="recon", schema=ReconQuerySchema)
 
 
 class LandingPageManager(Manager):
