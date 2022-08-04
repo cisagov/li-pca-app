@@ -4,10 +4,10 @@ from marshmallow import Schema, fields, validate
 
 # cisagov Libraries
 from api.models.base import BaseSchema
-from api.models.customer_mongo import CustomerContactSchema
+from api.models.customer import CustomerContactSchema
 from api.models.fields import DateTimeField
-from api.models.target_mongo import TargetTimelineSchema
-from api.models.template_mongo import TemplateSchema
+from api.models.target import TargetTimelineSchema
+from api.models.template import TemplateSchema
 
 
 class SubscriptionNotificationSchema(Schema):
