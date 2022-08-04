@@ -3,8 +3,8 @@
 from marshmallow import Schema, fields
 
 # cisagov Libraries
-from api.models.recommendation_mongo import RecommendationsSchema
-from api.models.template_mongo import TemplateSchema
+from api.models.recommendation import RecommendationsSchema
+from api.models.template import TemplateSchema
 
 
 class CycleStatsEventMetricsSchema(Schema):

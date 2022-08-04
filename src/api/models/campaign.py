@@ -1,11 +1,12 @@
-# coding: utf-8
-"""Customer Model."""
-
-from __future__ import absolute_import
+"""Customer Schemas."""
+# Third-Party Libraries
+from marshmallow import fields, validate
 
 # cisagov Libraries
 from api import util
+from api.models.base import BaseSchema
 from api.models.base_model_ import Model
+from api.models.fields import DateTimeField
 
 # from datetime import date, datetime  # noqa: F401
 # from typing import Dict, List  # noqa: F401
@@ -144,19 +145,18 @@ class Campaign(Model):
 
     @status.setter
     def status(self, status: str):
-        """Set the status of this Campaign.
-
-        campaign status in the data store  # noqa: E501
-
-        :param status: The status of this Campaign.
-        :type status: str
-        """
-        allowed_values = ["queued", "running", "completed"]  # noqa: E501
-        if status not in allowed_values:
-            raise ValueError(
-                "Invalid value for `status` ({}), must be one of {}".format(
-                    status, allowed_values
-                )
-            )
-
+        """Set the status of this Campaign."""
         self._status = status
+
+
+class CampaignSchema(BaseSchema):
+    """Campaign Schema."""
+
+    assessment_uuid = fields.Str()
+    description = fields.Str()
+    end_datetime = DateTimeField()
+    name = fields.Str()
+    start_datetime = DateTimeField()
+    status = fields.Str(validate=validate.OneOf(["queued", "running", "completed"]))
+    target_template_uuid = fields.Str()
+    email_template_uuid = fields.Str()
