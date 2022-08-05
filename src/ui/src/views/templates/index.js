@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 // material-ui
 import { Grid } from "@mui/material";
-import Typography from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 // project imports
 import AdvancedDataTable from "ui-component/tables/AdvancedDataTable";

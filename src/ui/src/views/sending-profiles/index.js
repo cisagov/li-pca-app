@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 // material-ui
 import Alert from "@mui/material/Alert";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 // project imports
 import MainCard from "ui-component/cards/MainCard";
