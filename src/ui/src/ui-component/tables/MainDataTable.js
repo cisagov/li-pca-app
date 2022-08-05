@@ -35,52 +35,47 @@ CustomToolbar.propTypes = {
 function CustomToolbar(props) {
   let navigate = useNavigate();
   const values = {};
-  return (
-    <GridToolbarContainer>
-      <Box
-        sx={{
-          p: 0.5,
-          pb: 0,
+  const searchTextField = (
+    <Box sx={{ p: 0.5, pb: 0 }}>
+      <TextField
+        variant="standard"
+        value={props.value}
+        onChange={props.onChange}
+        placeholder="Search…"
+        InputProps={{
+          startAdornment: <SearchIcon fontSize="small" />,
+          endAdornment: (
+            <IconButton
+              title="Clear"
+              aria-label="Clear"
+              size="small"
+              style={{ visibility: props.value ? "visible" : "hidden" }}
+              onClick={props.clearSearch}
+            >
+              <ClearIcon fontSize="small" />
+            </IconButton>
+          ),
         }}
-      >
-        <TextField
-          variant="standard"
-          value={props.value}
-          onChange={props.onChange}
-          placeholder="Search…"
-          InputProps={{
-            startAdornment: <SearchIcon fontSize="small" />,
-            endAdornment: (
-              <IconButton
-                title="Clear"
-                aria-label="Clear"
-                size="small"
-                style={{ visibility: props.value ? "visible" : "hidden" }}
-                onClick={props.clearSearch}
-              >
-                <ClearIcon fontSize="small" />
-              </IconButton>
-            ),
-          }}
-          sx={{
-            width: {
-              xs: 1,
-              sm: "auto",
-            },
-            m: (theme) => theme.spacing(1, 0.5, 1.5),
-            "& .MuiSvgIcon-root": {
-              mr: 0.5,
-            },
-            "& .MuiInput-underline:before": {
-              borderBottom: 1,
-              borderColor: "divider",
-            },
-          }}
-        />
-      </Box>
-      <GridToolbarColumnsButton />
-      <GridToolbarFilterButton />
-      <GridToolbarExport />
+        sx={{
+          width: {
+            xs: 1,
+            sm: "auto",
+          },
+          m: (theme) => theme.spacing(1, 0.5, 1.5),
+          "& .MuiSvgIcon-root": {
+            mr: 0.5,
+          },
+          "& .MuiInput-underline:before": {
+            borderBottom: 1,
+            borderColor: "divider",
+          },
+        }}
+      />
+    </Box>
+  );
+  let newEntryButton;
+  if (props.tableCategory != "Phish Reconnaissance") {
+    newEntryButton = (
       <Button
         size="small"
         startIcon={<AddIcon fontSize="small" />}
@@ -92,6 +87,16 @@ function CustomToolbar(props) {
       >
         New {props.tableCategory}
       </Button>
+    );
+  }
+
+  return (
+    <GridToolbarContainer>
+      {searchTextField}
+      <GridToolbarColumnsButton />
+      <GridToolbarFilterButton />
+      <GridToolbarExport />
+      {newEntryButton}
     </GridToolbarContainer>
   );
 }
@@ -107,6 +112,8 @@ export default function MainDataTable(props) {
   let navigate = useNavigate();
   const [searchText, setSearchText] = React.useState("");
   const [rows, setRows] = React.useState(props.data.rows);
+  let pageSize = 10;
+  let density = "standard";
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
     const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
@@ -123,32 +130,38 @@ export default function MainDataTable(props) {
   }, [props.data.rows]);
 
   const columns = props.data.columns;
-  columns.push({
-    field: "edit",
-    headerName: "Edit",
-    sortable: false,
-    disableClickEventBubbling: true,
-    renderCell: (cellValues) => {
-      return (
-        <IconButton
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            navigate(`${props.editEntryRoute}`, {
-              state: {
-                row: cellValues.row,
-                dataEntryType: "edit",
-                rows: rows,
-              },
-            });
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-      );
-    },
-    flex: 0.5,
-  });
+  if (props.tableCategory != "Phish Reconnaissance") {
+    columns.push({
+      field: "edit",
+      headerName: "Edit",
+      sortable: false,
+      disableClickEventBubbling: true,
+      renderCell: (cellValues) => {
+        return (
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              navigate(`${props.editEntryRoute}`, {
+                state: {
+                  row: cellValues.row,
+                  dataEntryType: "edit",
+                  rows: rows,
+                },
+              });
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+        );
+      },
+      flex: 0.5,
+    });
+  }
+  if (props.tableCategory == "Phish Reconnaissance") {
+    pageSize = 5;
+    density = "compact";
+  }
   return (
     <Box sx={{ width: "100%", maxWidth: 1500, minWidth: 750 }}>
       <DataGrid
@@ -158,7 +171,8 @@ export default function MainDataTable(props) {
         components={{
           Toolbar: CustomToolbar,
         }}
-        pageSize={10}
+        pageSize={pageSize}
+        density={density}
         rowsPerPageOptions={[10]}
         componentsProps={{
           toolbar: {
