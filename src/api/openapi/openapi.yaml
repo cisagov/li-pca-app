@@ -1508,6 +1508,9 @@ components:
         uuid:
           type: string
           format: uuid64
+        customer_id:
+          type: string
+          format: uuid64
         domain:
           type: string
         recon_time:

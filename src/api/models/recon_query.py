@@ -4,14 +4,13 @@ from marshmallow import fields
 
 # cisagov Libraries
 from api.models.base import BaseSchema
-from api.models.fields import DateTimeField
 
 
 class ReconQuerySchema(BaseSchema):
     """The ReconQuerySchema model."""
 
+    customer_id = fields.UUID(required=True)
     domain = fields.Str()
-    recon_time = DateTimeField()
     asns = fields.List(fields.Str())
     interesting_urls = fields.List(fields.Str())
     twitter_people = fields.List(fields.Str())

@@ -2,6 +2,7 @@
 """Recon Query Controller Logic."""
 
 # Standard Python Libraries
+import json
 import logging
 
 # Third-Party Libraries
@@ -15,9 +16,10 @@ from api.db_manager import ReconQueryManager
 
 db_manager = ReconQueryManager()
 harvester_url = "localhost:9999/query"
+li_pca_api = "localhost:8080/"
 
 
-def call_harvester_query(domain):
+def call_harvester_query(customer_id, domain):
     """Call the Harvester's query API function.
 
     :param domain: a domain to run the query against
@@ -26,8 +28,15 @@ def call_harvester_query(domain):
     :rtype: query response.
     """
     params = {"domain": domain, "source": "all"}
+    cust_dict = {"customer_id": customer_id, "domain": domain}
     response = requests.get(harvester_url, params)
-    return response
+    logging.info("Harvester query response: %s", response)
+    response_dict = json.loads(response)
+    recon_result = {
+        key: value for (key, value) in cust_dict.items() + response_dict.items()
+    }
+    create_recon_query_results(jsonify(recon_result))
+    return recon_result
 
 
 def create_recon_query_results(body=None):  # noqa: E501
