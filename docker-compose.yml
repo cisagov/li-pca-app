@@ -8,7 +8,6 @@ services:
       dockerfile: ./Dockerfile
     container_name: li-pca-api
     hostname: li-pca-api
-    restart: on-failure
     depends_on:
       - li-pca-db
     volumes:
@@ -28,7 +27,7 @@ services:
   li-pca-db:
     container_name: li-pca-db
     hostname: li-pca-db
-    restart: always
+    restart: on-failure
     image: mongo
     ports:
       - 27017:27017
@@ -47,7 +46,6 @@ services:
       context: ./src/ui
     container_name: li-pca-web
     hostname: li-pca-web
-    restart: on-failure
     depends_on:
       - li-pca-api
     ports:
@@ -58,6 +56,20 @@ services:
     networks:
       - backend
       - frontend
+
+  li-pca-recon:
+    container_name: li-pca-recon
+    hostname: li-pca-recon
+    build:
+      context: ./src/theHarvester
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/app/theHarvester
+    ports:
+      - 9000:9000
+    networks:
+      - frontend
+      - backend
 
 networks:
   frontend:
