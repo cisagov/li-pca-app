@@ -312,20 +312,6 @@ function CustomerPOCForm(props) {
                       Add
                     </Button>
                   </Grid>
-                  <Grid item xs={10} sm={2} md={2} lg={2} xl={2}>
-                    <Button
-                      color="primary"
-                      size="large"
-                      fullWidth
-                      onClick={() => {
-                        formik.setValues(props.initialPOCValues);
-                        formik.setTouched({});
-                        setToggleCard(!isToggleCardOn);
-                      }}
-                    >
-                      Close
-                    </Button>
-                  </Grid>
                   <Grid item xs={2} sm={3} md={5} lg={6} xl={7}></Grid>
                   <Grid
                     item
@@ -344,6 +330,21 @@ function CustomerPOCForm(props) {
                       }}
                     >
                       Reset
+                    </Button>
+                  </Grid>
+                  <Grid item xs={10} sm={2} md={2} lg={2} xl={2}>
+                    <Button
+                      color="warning"
+                      variant="contained"
+                      size="large"
+                      fullWidth
+                      onClick={() => {
+                        formik.setValues(props.initialPOCValues);
+                        formik.setTouched({});
+                        setToggleCard(!isToggleCardOn);
+                      }}
+                    >
+                      Close
                     </Button>
                   </Grid>
                 </Grid>

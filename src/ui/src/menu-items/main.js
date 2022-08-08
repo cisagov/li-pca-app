@@ -1,21 +1,23 @@
 // assets
 import {
-  IconUser,
-  IconNotebook,
   IconBrowser,
-  IconSend,
-  IconMail,
   IconHelp,
+  IconListSearch,
+  IconMail,
+  IconNotebook,
+  IconSend,
+  IconUser,
 } from "@tabler/icons";
 
 // constant
 const icons = {
-  IconUser,
-  IconNotebook,
   IconBrowser,
-  IconSend,
-  IconMail,
   IconHelp,
+  IconListSearch,
+  IconMail,
+  IconNotebook,
+  IconSend,
+  IconUser,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -39,6 +41,14 @@ const main = {
       type: "item",
       url: "/customers",
       icon: icons.IconUser,
+      breadcrumbs: false,
+    },
+    {
+      id: "phish-reconn",
+      title: "Phish Reconn",
+      type: "item",
+      url: "/phish-reconn",
+      icon: icons.IconListSearch,
       breadcrumbs: false,
     },
     {

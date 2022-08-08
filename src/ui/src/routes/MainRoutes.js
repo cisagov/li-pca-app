@@ -12,6 +12,8 @@ const CustomersPage = Loadable(lazy(() => import("views/customers")));
 const CustDataEntryPage = Loadable(
   lazy(() => import("views/customers/dataentry"))
 );
+// phish-reconn page routing
+const PhishReconnPage = Loadable(lazy(() => import("views/phish-reconn")));
 // templates page routing
 const TemplatesPage = Loadable(lazy(() => import("views/templates")));
 // templates data entry page routing
@@ -47,6 +49,10 @@ const MainRoutes = {
     {
       path: "/customers/data-entry",
       element: <CustDataEntryPage />,
+    },
+    {
+      path: "/phish-reconn",
+      element: <PhishReconnPage />,
     },
     {
       path: "/templates",
