@@ -192,9 +192,10 @@ function CustomerPOCForm(props) {
               <Box sx={{ ml: 1 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={12} md={12} lg={12} xl={12} />
-                  <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
+                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
+                      size="small"
                       id="first_name"
                       name="first_name"
                       label="First Name *"
@@ -209,9 +210,10 @@ function CustomerPOCForm(props) {
                       }
                     />
                   </Grid>
-                  <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
+                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
+                      size="small"
                       id="last_name"
                       name="last_name"
                       label="Last Name *"
@@ -226,9 +228,10 @@ function CustomerPOCForm(props) {
                       }
                     />
                   </Grid>
-                  <Grid item xs={10} sm={4} md={4} lg={4} xl={4}>
+                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
+                      size="small"
                       id="title"
                       name="title"
                       label="Title"
@@ -236,9 +239,25 @@ function CustomerPOCForm(props) {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={10} sm={4} md={4} lg={4} xl={4}>
+                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
+                      size="small"
+                      id="email"
+                      name="email"
+                      label="Email *"
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                      error={
+                        formik.touched.email && Boolean(formik.errors.email)
+                      }
+                      helperText={formik.touched.email && formik.errors.email}
+                    />
+                  </Grid>
+                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
+                    <TextField
+                      fullWidth
+                      size="small"
                       id="office_phone"
                       name="office_phone"
                       label="Work Phone *"
@@ -254,9 +273,10 @@ function CustomerPOCForm(props) {
                       }
                     />
                   </Grid>
-                  <Grid item xs={10} sm={4} md={4} lg={4} xl={4}>
+                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
+                      size="small"
                       id="mobile_phone"
                       name="mobile_phone"
                       label="Mobile Phone"
@@ -275,20 +295,7 @@ function CustomerPOCForm(props) {
                   <Grid item xs={10} sm={10} md={7} lg={7} xl={7}>
                     <TextField
                       fullWidth
-                      id="email"
-                      name="email"
-                      label="Email *"
-                      value={formik.values.email}
-                      onChange={formik.handleChange}
-                      error={
-                        formik.touched.email && Boolean(formik.errors.email)
-                      }
-                      helperText={formik.touched.email && formik.errors.email}
-                    />
-                  </Grid>
-                  <Grid item xs={10} sm={10} md={7} lg={7} xl={7}>
-                    <TextField
-                      fullWidth
+                      size="small"
                       multiline
                       minRows={2}
                       id="contact_notes"
