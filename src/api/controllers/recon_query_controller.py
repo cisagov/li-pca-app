@@ -16,7 +16,6 @@ from api.db_manager import ReconQueryManager
 
 db_manager = ReconQueryManager()
 harvester_url = "localhost:9999/query"
-li_pca_api = "localhost:8080/"
 
 
 def call_harvester_query(customer_id, domain):
