@@ -31,6 +31,8 @@ const SendingProfileForm = (props) => {
       header_value: headerValue,
     };
     setHeaderArray((emailHeaderArray) => [...emailHeaderArray, newElement]);
+    setCustomHeader("");
+    setHeaderValue("");
   };
 
   if (Object.keys(emailHeaderArray).length !== 0) {
@@ -57,16 +59,18 @@ const SendingProfileForm = (props) => {
       />
     );
   };
-  console.log(props.initialValues);
+
   const formik = useFormik({
     initialValues: props.initialValues,
     validationSchema: validationSchema,
     validateOnChange: true,
     onSubmit: (values) => {
       // TODO: Add headers to values or whatever ends of being axiosed
+      values.email_headers = emailHeaderArray;
       console.log(values);
     },
   });
+
   const cols = [
     { field: "id", hide: true },
     { field: "custom_header", headerName: "Header", flex: 1 },
@@ -96,9 +100,10 @@ const SendingProfileForm = (props) => {
   const smtpFields = () => {
     return (
       <React.Fragment>
-        <Grid item xs={12} sm={12} md={10} lg={10} xl={9}>
+        <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
           <TextField
             fullWidth
+            size="small"
             id="smtp_host"
             name="smtp_host"
             label="SMTP Host"
@@ -111,6 +116,7 @@ const SendingProfileForm = (props) => {
         <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
           <TextField
             fullWidth
+            size="small"
             id="smtp_username"
             name="smtp_username"
             label="SMTP Username"
@@ -128,6 +134,7 @@ const SendingProfileForm = (props) => {
         <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
           <TextField
             fullWidth
+            size="small"
             id="smtp_password"
             name="smtp_password"
             label="SMTP Password"
@@ -148,26 +155,10 @@ const SendingProfileForm = (props) => {
   const mailgunFields = () => {
     return (
       <React.Fragment>
-        <Grid item xs={12} sm={12} md={10} lg={10} xl={9}>
+        <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
           <TextField
             fullWidth
-            id="mailgun_api_key"
-            name="mailgun_api_key"
-            label="Mailgun API Key"
-            value={formik.values.mailgun_api_key}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.mailgun_api_key &&
-              Boolean(formik.errors.mailgun_api_key)
-            }
-            helperText={
-              formik.touched.mailgun_api_key && formik.errors.mailgun_api_key
-            }
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={10} lg={10} xl={9}>
-          <TextField
-            fullWidth
+            size="small"
             id="mailgun_domain"
             name="mailgun_domain"
             label="Mailgun Domain"
@@ -182,6 +173,24 @@ const SendingProfileForm = (props) => {
             }
           />
         </Grid>
+        <Grid item xs={12} sm={12} md={10} lg={10} xl={9}>
+          <TextField
+            fullWidth
+            size="small"
+            id="mailgun_api_key"
+            name="mailgun_api_key"
+            label="Mailgun API Key"
+            value={formik.values.mailgun_api_key}
+            onChange={formik.handleChange}
+            error={
+              formik.touched.mailgun_api_key &&
+              Boolean(formik.errors.mailgun_api_key)
+            }
+            helperText={
+              formik.touched.mailgun_api_key && formik.errors.mailgun_api_key
+            }
+          />
+        </Grid>
       </React.Fragment>
     );
   };
@@ -193,6 +202,7 @@ const SendingProfileForm = (props) => {
           <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
             <TextField
               fullWidth
+              size="small"
               id="name"
               name="name"
               label="Domain Name *"
@@ -205,6 +215,7 @@ const SendingProfileForm = (props) => {
           <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
             <TextField
               fullWidth
+              size="small"
               id="from"
               name="from"
               label="From Email *"
@@ -217,6 +228,7 @@ const SendingProfileForm = (props) => {
           <Grid item xs={12} sm={12} md={10} lg={10} xl={9}>
             <TextField
               fullWidth
+              size="small"
               id="sending_ips"
               name="sending_ips"
               label="Sending IP[s] *"
@@ -230,10 +242,11 @@ const SendingProfileForm = (props) => {
               }
             />
           </Grid>
-          <Grid item xs={12} sm={12} md={10} lg={10} xl={9}>
+          <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
             <TextField
               select
               fullWidth
+              size="small"
               label="Interface Type *"
               id="interface_type"
               name="interface_type"
@@ -254,8 +267,7 @@ const SendingProfileForm = (props) => {
           {formik.values.interface_type == "SMTP"
             ? smtpFields()
             : mailgunFields()}
-          <Grid item md={12} sx={{ mt: 2 }} />
-          <Grid item xs={12} sm={12} md={10} lg={10} xl={11}>
+          <Grid item xs={12} md={12} xl={12} sx={{ mt: 1 }}>
             <Typography variant="h4" gutterBottom component="div">
               Email Headers
             </Typography>
@@ -263,6 +275,7 @@ const SendingProfileForm = (props) => {
           <Grid item xs={12} sm={6} md={5} lg={3.25} xl={3}>
             <TextField
               fullWidth
+              size="small"
               id="custom_header"
               name="custom_header"
               label="Custom Header"
@@ -273,6 +286,7 @@ const SendingProfileForm = (props) => {
           <Grid item xs={12} sm={6} md={5} lg={3.25} xl={3}>
             <TextField
               fullWidth
+              size="small"
               id="header_value"
               name="header_value"
               label="Header Value"
@@ -280,7 +294,7 @@ const SendingProfileForm = (props) => {
               onChange={(e) => setHeaderValue(e.target.value)}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={3.5} xl={3} sx={{ mt: 1 }}>
+          <Grid item xs={12} sm={6} md={4} lg={3.5} xl={3}>
             <Button
               fullWidth
               color="primary"
@@ -291,10 +305,10 @@ const SendingProfileForm = (props) => {
               Add Custom Header
             </Button>
           </Grid>
-          <Grid item xs={12} sm={12} md={10} lg={10} xl={9} sx={{ mt: 2 }}>
+          <Grid item xs={12} sm={12} md={10} lg={10} xl={9} sx={{ mt: 1 }}>
             {emailHeaders()}
           </Grid>
-          <Grid item xs={12} md={12} xl={12} sx={{ mt: 1 }} />
+          <Grid item xs={12} md={12} xl={12} />
           <Grid item xs={12} sm={7} md={4} lg={4} xl={4}>
             <TextField
               fullWidth
@@ -324,7 +338,7 @@ const SendingProfileForm = (props) => {
               color="primary"
               variant="text"
               size="large"
-              onClick={() => console.log("")}
+              // onClick={() => console.log("")}
             >
               Cancel
             </Button>
@@ -335,7 +349,8 @@ const SendingProfileForm = (props) => {
               color="primary"
               variant="contained"
               size="large"
-              onClick={() => console.log("")}
+              type="submit"
+              // onClick={() => console.log("")}
             >
               Save Profile
             </Button>
