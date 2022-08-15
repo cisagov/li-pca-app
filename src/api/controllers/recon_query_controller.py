@@ -2,7 +2,7 @@
 """Recon Query Controller Logic."""
 
 # Standard Python Libraries
-import json
+# import json
 import logging
 
 # Third-Party Libraries
@@ -14,11 +14,13 @@ import requests
 # cisagov Libraries
 from api.db_manager import ReconQueryManager
 
+logging.basicConfig(level=logging.DEBUG)
+
 db_manager = ReconQueryManager()
-harvester_url = "localhost:9999/query"
+harvester_url = "http://li-pca-recon:9000/query"
 
 
-def call_harvester_query(customer_id, domain):
+def call_harvester_query(domain):
     """Call the Harvester's query API function.
 
     :param domain: a domain to run the query against
@@ -27,15 +29,15 @@ def call_harvester_query(customer_id, domain):
     :rtype: query response.
     """
     params = {"domain": domain, "source": "all"}
-    cust_dict = {"customer_id": customer_id, "domain": domain}
+    # cust_dict = {"customer_id": customer_id, "domain": domain}
     response = requests.get(harvester_url, params)
-    logging.info("Harvester query response: %s", response)
-    response_dict = json.loads(response)
-    recon_result = {
-        key: value for (key, value) in cust_dict.items() + response_dict.items()
-    }
-    create_recon_query_results(jsonify(recon_result))
-    return recon_result
+    logging.debug("Harvester query response: %s", response)
+    # response_dict = json.loads(response)
+    # recon_result = {
+    #   key: value for (key, value) in cust_dict.items() + response_dict.items()
+    # }
+    # create_recon_query_results(jsonify(recon_result))
+    return response
 
 
 def create_recon_query_results(body=None):  # noqa: E501

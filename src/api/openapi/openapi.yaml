@@ -754,7 +754,7 @@ paths:
       x-openapi-router-controller: api.controllers.sending_profiles_controller
   /v1/recon:
     get:
-      tag:
+      tags:
         - recon
       summary: Get recon results
       description: Get All Recon Results
@@ -876,37 +876,37 @@ paths:
           description: Invalid uuid supplied
         "404":
           description: document not found
-      x-openapi-router-controller: api.controllers.recon_query_result_controller
-  /v1/recon/query:
+      x-openapi-router-controller: api.controllers.recon_query_controller
+  /v1/harvester:
     get:
-      tag:
+      tags:
         - recon
       summary: Run Harvester query for a domain
       description: Returns results from a recon query
       operationId: call_harvester_query
       parameters:
         - name: domain
-          in: path
+          in: query
           description: domain to run a Harvester recon query against
           required: true
-          style: simple
           explode: false
           schema:
-            type: list
+            type: array
+            items:
+              type: string
       responses:
         "200":
           description: successful operation
           content:
             application/json:
               schema:
-                type: string
-                x-content-type: application/json
-            application/xml:
-              schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReconQueryResult'
+                  x-content-type: application/json
         "400":
           description: Invalid domain supplied
-        x-openapi-router-controller: api.controllers.recon_query_controller
+      x-openapi-router-controller: api.controllers.recon_query_controller
   /v1/documents:
     get:
       tags:
@@ -1637,7 +1637,7 @@ components:
           schema:
             $ref: '#/components/schemas/Sending_Profile'
     ReconQueryResult:
-      descriptioon: Recon Query Result to be added to the data store
+      description: Recon Query Result to be added to the data store
       content:
         application/json:
           schema:
