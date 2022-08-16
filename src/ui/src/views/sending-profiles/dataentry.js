@@ -21,8 +21,8 @@ const spRowsTransform = (domainRows) => {
   if (!domainRows.hasOwnProperty("landing_page_domain")) {
     domainRows.landing_page_domain = "";
   }
-  if (!domainRows.hasOwnProperty("from")) {
-    domainRows.from = "";
+  if (!domainRows.hasOwnProperty("from_address")) {
+    domainRows.from_address = "";
   }
   if (!domainRows.hasOwnProperty("_of_customers_using")) {
     domainRows._of_customers_using = "";
@@ -54,8 +54,8 @@ const spRowsTransform = (domainRows) => {
   if (!domainRows.hasOwnProperty("smtp_password")) {
     domainRows.smtp_password = "";
   }
-  if (!domainRows.hasOwnProperty("email_headers")) {
-    domainRows.email_headers = [];
+  if (!domainRows.hasOwnProperty("headers")) {
+    domainRows.headers = [];
   }
   return domainRows;
 };
@@ -67,26 +67,22 @@ const newOrEdit = (dataEntryType) => {
   return "Edit Sending Profile";
 };
 
-const getOtherIdentifiers = (domainData, spValues) => {
-  const identifierArr = domainData.map(({ identifier }) => identifier);
-  return identifierArr.filter((identifier) => {
-    if (identifier != spValues.identifier) {
-      return identifier;
-    }
-  });
-};
-
 const SPDataEntryPage = () => {
   const { state } = useLocation();
   let spValues = spRowsTransform(state.row);
-  console.log(state);
   let mainCardTitle = newOrEdit(state.dataEntryType);
+  const [spData, setSpData] = React.useState(spValues);
 
   return (
     <MainCard title={mainCardTitle}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
         <Grid container spacing={2}>
-          <SendingProfileForm initialValues={spValues} />
+          <SendingProfileForm
+            setSpData={setSpData}
+            spData={spData}
+            initialValues={spValues}
+            dataEntryType={mainCardTitle}
+          />
         </Grid>
       </Box>
     </MainCard>

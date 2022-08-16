@@ -4,13 +4,13 @@
     "_id": "62324115fb20f2203a5645fc",
     "created": "2022-03-16T19:57:09.137000+00:00",
     "created_by": "bot",
-    "email_headers": [
+    "from_address": "mail@dev.inltesting.xyz",
+    "headers": [
       {
         "custom_header": "",
         "header_value": ""
       }
     ],
-    "from": "mail@dev.inltesting.xyz",
     "interface_type": "Mailgun",
     "landing_page_domain": "gp.dev.inltesting.xyz",
     "last_modified_date": "",
@@ -27,13 +27,13 @@
     "_id": "6234cbf1fb20f2203a5645fd",
     "created": "2022-03-16T19:57:09.137000+00:00",
     "created_by": "bot",
-    "email_headers": [
+    "from_address": "info@dev.test.com",
+    "headers": [
       {
         "custom_header": "",
         "header_value": ""
       }
     ],
-    "from": "info@dev.test.com",
     "interface_type": "Mailgun",
     "landing_page_domain": "www.dev.test.com",
     "last_modified_date": "",
@@ -50,13 +50,13 @@
     "_id": "6239efa99fd62bfb45aa7844",
     "created": "2022-03-16T19:57:09.137000+00:00",
     "created_by": "bot",
-    "email_headers": [
+    "from_address": "test@corporate.tech.org",
+    "headers": [
       {
         "custom_header": "",
         "header_value": ""
       }
     ],
-    "from": "test@corporate.tech.org",
     "interface_type": "SMTP",
     "landing_page_domain": "info.corporate.tech.org",
     "last_modified_date": "",
@@ -73,13 +73,13 @@
     "_id": "623cb36b9fd62bfb45aa7845",
     "created": "2022-03-16T19:57:09.137000+00:00",
     "created_by": "bot",
-    "email_headers": [
+    "from_address": "something@test.inltesting.xyz",
+    "headers": [
       {
         "custom_header": "",
         "header_value": ""
       }
     ],
-    "from": "something@test.inltesting.xyz",
     "interface_type": "SMTP",
     "landing_page_domain": "mail.test.inltesting.xyz",
     "last_modified_date": "",
@@ -96,13 +96,13 @@
     "_id": "623cd3f687a4d59dd4473552",
     "created": "2022-03-16T19:57:09.137000+00:00",
     "created_by": "bot",
-    "email_headers": [
+    "from_address": "info@dev.inltesting.xyz",
+    "headers": [
       {
         "custom_header": "",
         "header_value": ""
       }
     ],
-    "from": "info@dev.inltesting.xyz",
     "interface_type": "SMTP",
     "landing_page_domain": "gp.dev.inltesting.xyz",
     "last_modified_date": "",
@@ -119,13 +119,13 @@
     "_id": "623cd77987a4d59dd4473553",
     "created": "2022-03-16T19:57:09.137000+00:00",
     "created_by": "bot",
-    "email_headers": [
+    "from_address": "test@dev.inltesting.xyz",
+    "headers": [
       {
         "custom_header": "",
         "header_value": ""
       }
     ],
-    "from": "test@dev.inltesting.xyz",
     "interface_type": "SMTP",
     "landing_page_domain": "gp.dev.inltesting.xyz",
     "last_modified_date": "",
