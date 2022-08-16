@@ -66,7 +66,7 @@ services:
     volumes:
       - .:/app/theHarvester
     ports:
-      - 9000:9000
+      - 8889:8889
     networks:
       - frontend
       - backend

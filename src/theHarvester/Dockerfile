@@ -4,4 +4,5 @@ RUN python3 -m pip install --upgrade pip
 COPY . /app/theHarvester
 WORKDIR /app/theHarvester
 RUN python3 -m pip install -r requirements/dev.txt
-CMD bash -c "cd /app/theHarvester/src/theHarvester && python3 ./restfulHarvest.py -p 9000"
+EXPOSE 8889
+CMD bash -c "cd /app/theHarvester/src/theHarvester && python3 ./restfulHarvest.py -p 8889"
