@@ -39,6 +39,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
+            size="small"
             fullWidth
             id="subject"
             name="subject"
@@ -56,6 +57,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={5} md={5} lg={5} xl={4}>
           <TextField
+            size="small"
             fullWidth
             id="name"
             name="name"
@@ -68,6 +70,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={6} md={6} lg={5} xl={5}>
           <TextField
+            size="small"
             fullWidth
             id="from_address"
             name="from_address"
@@ -92,6 +95,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={5} md={5} lg={5} xl={4}>
           <TextField
+            size="small"
             fullWidth
             id="title"
             name="title"
@@ -104,6 +108,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={6} md={6} lg={5} xl={5}>
           <TextField
+            size="small"
             select
             fullWidth
             label="Type"
@@ -126,6 +131,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
+            size="small"
             fullWidth
             multiline
             minRows={3}
@@ -138,6 +144,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
+            size="small"
             select
             fullWidth
             label="Sophisticated"
@@ -159,6 +166,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
+            size="small"
             select
             fullWidth
             label="Red Flag"
@@ -185,6 +193,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
+            size="small"
             select
             fullWidth
             label="Sending Profile Selection"
@@ -207,6 +216,7 @@ const TemplateAttrForm = (props) => {
         </Grid>
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
+            size="small"
             select
             fullWidth
             label="Landing Page Selection"
