@@ -794,7 +794,11 @@ paths:
       summary: Add a Recon Query Result to the data store
       operationId: create_recon_query_results
       requestBody:
-        $ref: '#/components/requestBodies/ReconQueryResult'
+        description: created sending profile object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReconQueryResult'
       responses:
         "405":
           description: Invalid input
@@ -847,7 +851,11 @@ paths:
             type: string
             format: uuid4
       requestBody:
-        $ref: '#/components/requestBodies/ReconQueryResult'
+        description: update sending profile object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReconQueryResult'
       responses:
         "400":
           description: Invalid uuid supplied
@@ -1513,9 +1521,6 @@ components:
           format: uuid64
         domain:
           type: string
-        recon_time:
-          type: string
-          format: datetime
         asns:
           type: array
           items:
