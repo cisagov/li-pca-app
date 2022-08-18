@@ -6,7 +6,7 @@ from marshmallow import fields
 from api.models.base import BaseSchema
 
 
-class ReconQuerySchema(BaseSchema):
+class ReconResultSchema(BaseSchema):
     """The ReconQuerySchema model."""
 
     customer_id = fields.Str()

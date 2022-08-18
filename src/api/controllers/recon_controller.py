@@ -12,12 +12,11 @@ from flask import jsonify
 import requests
 
 # cisagov Libraries
-from api.db_manager import ReconQueryManager
+from api.db_manager import ReconManager
 
 logging.basicConfig(level=logging.DEBUG)
 
-db_manager = ReconQueryManager()
-harvester_url = "http://li-pca-recon:9000/query"
+db_manager = ReconManager()
 
 
 def call_harvester_query(domain):
@@ -28,9 +27,9 @@ def call_harvester_query(domain):
 
     :rtype: query response.
     """
-    params = {"domain": domain, "source": "all"}
+    harvester_url = f"http://li-pca-recon:8889/query?source=all&domain={domain}"
     # cust_dict = {"customer_id": customer_id, "domain": domain}
-    response = requests.get(harvester_url, params)
+    response = requests.get(harvester_url)
     logging.debug("Harvester query response: %s", response)
     # response_dict = json.loads(response)
     # recon_result = {
@@ -40,12 +39,12 @@ def call_harvester_query(domain):
     return response
 
 
-def create_recon_query_results(body=None):  # noqa: E501
-    """Add a new recon query results to the data store.
+def create_recon_results(body=None):  # noqa: E501
+    """Add a new recon results to the data store.
 
     # noqa: E501
 
-    :param body: Recon Query results object to be added to data store
+    :param body: Recon results object to be added to data store
     :type body: dict | bytes
 
     :rtype: None
@@ -57,7 +56,7 @@ def create_recon_query_results(body=None):  # noqa: E501
         return jsonify(db_manager.save(body))
 
 
-def delete_recon_query_result_by_uuid(uuid):  # noqa: E501
+def delete_recon_result_by_uuid(uuid):  # noqa: E501
     """Delete a recon query result.
 
      # noqa: E501
@@ -71,8 +70,8 @@ def delete_recon_query_result_by_uuid(uuid):  # noqa: E501
     return jsonify(db_manager.delete(document_id=uuid))
 
 
-def get_all_recon_query_results(filter_params=None):  # noqa: E501
-    """Find all recon query results.
+def get_all_recon_results(filter_params=None):  # noqa: E501
+    """Find all recon results.
 
     Multiple status values can be provided with comma separated strings # noqa: E501
 
@@ -86,12 +85,12 @@ def get_all_recon_query_results(filter_params=None):  # noqa: E501
     return jsonify(db_manager.all(params=db_manager.get_query(filter_params)))
 
 
-def get_recon_query_result_by_uuid(uuid):  # noqa: E501
-    """Find recon query result by uuid.
+def get_recon_result_by_uuid(uuid):  # noqa: E501
+    """Find recon result by uuid.
 
-    Returns a single recon query result # noqa: E501
+    Returns a single recon result # noqa: E501
 
-    :param uuid: uuid of recon query result to return
+    :param uuid: uuid of recon result to return
     :type uuid: str
 
     :rtype: Recon Query Result
@@ -100,14 +99,14 @@ def get_recon_query_result_by_uuid(uuid):  # noqa: E501
     return jsonify(db_manager.get(document_id=uuid))
 
 
-def update_recon_query_result_by_uuid(body, uuid):  # noqa: E501
-    """Update an existing recon query result.
+def update_recon_result_by_uuid(body, uuid):  # noqa: E501
+    """Update an existing recon result.
 
      # noqa: E501
 
-    :param uuid: uuid of recon query result to update
+    :param uuid: uuid of recon result to update
     :type uuid: str
-    :param body: Recon Query Result object to be added to data store
+    :param body: Recon Result object to be added to data store
     :type body: dict | bytes
 
     :rtype: None
