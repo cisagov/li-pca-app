@@ -65,11 +65,11 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - .:/app/theHarvester
-    ports:
-      - 8889:8889
     networks:
-      - frontend
       - backend
+    ports:
+      - 5000:5000
+      - 8889:8889
 
 networks:
   frontend:
