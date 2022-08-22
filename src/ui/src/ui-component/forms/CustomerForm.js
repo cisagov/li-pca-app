@@ -366,13 +366,13 @@ const CustomerForm = (props) => {
           <Grid
             item
             display={{ xs: "none", sm: "block" }}
-            sm={9}
+            sm={10}
             md={10}
-            lg={10}
+            lg={11}
             xl={11}
           />
-          <Grid item xs={10} sm={3} md={2} lg={2} xl={1}>
-            <Button size="large" fullWidth onClick={formik.handleReset}>
+          <Grid item xs={10} sm={2} md={2} lg={1} xl={1}>
+            <Button size="medium" fullWidth onClick={formik.handleReset}>
               Reset
             </Button>
           </Grid>
@@ -380,7 +380,7 @@ const CustomerForm = (props) => {
       </form>
       {props.children}
       <Grid container spacing={2}>
-        <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 5 }} />
+        <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 1 }} />
         {props.dataEntryType == "New Customer" ? (
           <Grid
             item

@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 // material-ui
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
@@ -18,6 +19,10 @@ import {
   GridToolbarFilterButton,
   GridToolbarExport,
 } from "@mui/x-data-grid";
+
+// project imports
+import ConfirmDialog from "ui-component/popups/ConfirmDialog";
+import ResultDialog from "ui-component/popups/ResultDialog";
 
 function escapeRegExp(value) {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -112,8 +117,12 @@ export default function MainDataTable(props) {
   let navigate = useNavigate();
   const [searchText, setSearchText] = React.useState("");
   const [rows, setRows] = React.useState(props.data.rows);
+  const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
+  const [getDelete, setDelete] = React.useState(false);
+  let [rowData, setRowData] = React.useState("");
   let pageSize = 10;
   let density = "standard";
+  let getError = [];
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
     const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
@@ -157,11 +166,51 @@ export default function MainDataTable(props) {
       },
       flex: 0.5,
     });
-  }
-  if (props.tableCategory == "Phish Reconnaissance") {
+  } else {
     pageSize = 5;
     density = "compact";
   }
+  if (
+    props.tableCategory == "Sending Profiles"
+    // || props.tableCategory == "Landing Pages"
+  ) {
+    columns.push({
+      field: "delete",
+      headerName: "Delete",
+      sortable: false,
+      disableClickEventBubbling: true,
+      renderCell: (cellValues) => {
+        return (
+          <IconButton
+            variant="contained"
+            color="error"
+            onClick={() => {
+              setRowData(cellValues.row);
+              setDeletebtnOpen(true);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        );
+      },
+      flex: 0.5,
+    });
+    getError = props.useDelete(rowData._id, getDelete);
+  }
+
+  const confirmDelete = () => {
+    setTimeout(() => {
+      setDeletebtnOpen(false);
+      setDelete(true);
+    });
+  };
+  const closeDialog = () => {
+    setDelete(false);
+    if (!getError[0]) {
+      window.location.reload();
+    }
+  };
+
   return (
     <Box sx={{ width: "100%", maxWidth: 1500, minWidth: 750 }}>
       <DataGrid
@@ -184,6 +233,19 @@ export default function MainDataTable(props) {
             tableCategory: props.tableCategory,
           },
         }}
+      />
+      <ConfirmDialog
+        subtitle={rowData.name + " will be deleted in the database."}
+        confirmType="Delete"
+        handleClick={confirmDelete}
+        isOpen={deletebtnOpen}
+        setIsOpen={setDeletebtnOpen}
+      />
+      <ResultDialog
+        type={getDelete ? "Delete" : "Edit"}
+        getDelete={getDelete}
+        error={getError}
+        closeDialog={closeDialog}
       />
     </Box>
   );

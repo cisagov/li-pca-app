@@ -6,10 +6,10 @@ from marshmallow import fields
 from api.models.base import BaseSchema
 
 
-class ReconQuerySchema(BaseSchema):
+class ReconResultSchema(BaseSchema):
     """The ReconQuerySchema model."""
 
-    customer_id = fields.UUID(required=True)
+    customer_id = fields.Str()
     domain = fields.Str()
     asns = fields.List(fields.Str())
     interesting_urls = fields.List(fields.Str())
