@@ -908,10 +908,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReconResult'
-                  x-content-type: application/json
+                $ref: '#/components/schemas/ReconResult'
         "400":
           description: Invalid domain supplied
       x-openapi-router-controller: api.controllers.recon_controller
@@ -1521,6 +1518,11 @@ components:
           format: uuid64
         domain:
           type: string
+        customer_name:
+          type: string
+        recon_time:
+          type: string
+          format: datetime
         asns:
           type: array
           items:

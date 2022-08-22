@@ -2,6 +2,8 @@
 """Recon Query Controller Logic."""
 
 # Standard Python Libraries
+
+# Standard Python Libraries
 # import json
 import logging
 
@@ -27,16 +29,13 @@ def call_harvester_query(domain):
 
     :rtype: query response.
     """
-    harvester_url = f"http://li-pca-recon:8889/query?source=all&domain={domain}"
+    harvester_url = f"http://li-pca-recon:5000/query?source=all&domain={domain}"
     # cust_dict = {"customer_id": customer_id, "domain": domain}
     response = requests.get(harvester_url)
+    query_json = response.json()
     logging.debug("Harvester query response: %s", response)
-    # response_dict = json.loads(response)
-    # recon_result = {
-    #   key: value for (key, value) in cust_dict.items() + response_dict.items()
-    # }
-    # create_recon_query_results(jsonify(recon_result))
-    return response
+
+    return jsonify(query_json)
 
 
 def create_recon_results(body=None):  # noqa: E501
