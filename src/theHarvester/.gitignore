@@ -13,5 +13,4 @@ venv
 build/
 dist/
 theHarvester.egg-info
-api-keys.yaml
 .DS_Store
