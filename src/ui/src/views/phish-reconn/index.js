@@ -10,11 +10,13 @@ import IconButton from "@mui/material/IconButton";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll } from "services/api/Customers.js";
+import { useGetAll } from "services/api/PhishRecon.js";
 
 // third party
 import axios from "axios";
@@ -27,7 +29,7 @@ function Results(props) {
       <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
         <Grid item xs={8} lg={12} xl={12}>
           <Typography variant="h5">
-            Display Results for {props.selectedRow.name}
+            Results for {props.selectedRow.customer_name}
           </Typography>
         </Grid>
         <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
@@ -84,7 +86,7 @@ function Results(props) {
   return (
     <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
       <Grid item xs={8} lg={12} xl={12}>
-        This is where the results will be displayed.
+        No domain has been selected.
       </Grid>
     </Grid>
   );
@@ -93,8 +95,35 @@ function BaseJSX(props) {
   const [selectedRow, setSelectedRow] = React.useState("");
   const cols = [
     { field: "id", hide: true },
-    { field: "name", headerName: "Name", flex: 2 },
-    { field: "domain", headerName: "Domain", flex: 2 },
+    { field: "domain", headerName: "Domain", flex: 1 },
+    { field: "customer_name", headerName: "Customer Name", flex: 1 },
+    { field: "recon_time", headerName: "Last Run Date (UTC)", flex: 1 },
+    {
+      field: "see_results",
+      headerName: "View Latest Results",
+      sortable: false,
+      disableClickEventBubbling: true,
+      renderCell: (cellValues) => {
+        let isDisabled = true;
+        if (cellValues.row.recon_time) {
+          isDisabled = false;
+        } else {
+          cellValues.row.recon_time = "-";
+        }
+        return (
+          <IconButton
+            variant="contained"
+            color="dark"
+            href="#section2"
+            disabled={isDisabled}
+            onClick={() => setSelectedRow(cellValues.row)}
+          >
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        );
+      },
+      flex: 0.8,
+    },
     {
       field: "run",
       headerName: "Run Harvester",
@@ -142,12 +171,12 @@ BaseJSX.propTypes = {
 function PhishReconnPage() {
   const { isLoading, getData, getError } = useGetAll("getAll");
 
-  const cusRows = (rowsArray) => {
+  const reconRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {
       let counter = 0;
-      let cusRows = [];
-      cusRows = Array.from(rowsArray);
-      cusRows.forEach((entry) => {
+      let reconRows = [];
+      reconRows = Array.from(rowsArray);
+      reconRows.forEach((entry) => {
         entry["id"] = counter;
         counter = counter + 1;
       });
@@ -156,9 +185,9 @@ function PhishReconnPage() {
     return [];
   };
   // Mock data test
-  // const jsonRows = require("./mockCusData.json");
-  // const rows = cusRows(jsonRows);
-  const rows = cusRows(getData);
+  // const jsonRows = require("./mockReconData.json");
+  // const rows = reconRows(jsonRows);
+  const rows = reconRows(getData);
 
   if (isLoading) {
     return (
@@ -184,7 +213,8 @@ function PhishReconnPage() {
   return (
     <BaseJSX rows={rows} dataEntry={"data-entry"}>
       <Typography variant="h5" sx={{ mb: 2 }}>
-        Select a customer from the database to run Reconnaissance on
+        Search for a domain from below to run Reconnaissance or view its latest
+        results
       </Typography>
     </BaseJSX>
   );
