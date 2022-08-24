@@ -16,7 +16,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll } from "services/api/PhishRecon.js";
+import { useGetAll, useGetHarvesterResults } from "services/api/PhishRecon.js";
 
 // third party
 import axios from "axios";
@@ -24,6 +24,9 @@ import axios from "axios";
 
 function Results(props) {
   const [notes, setNotes] = useState("");
+  const results = useGetHarvesterResults(props.domain);
+  console.log(results);
+
   if (props.selectedRow) {
     return (
       <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
@@ -93,6 +96,7 @@ function Results(props) {
 }
 function BaseJSX(props) {
   const [selectedRow, setSelectedRow] = React.useState("");
+  const [domain, setDomain] = useState("");
   const cols = [
     { field: "id", hide: true },
     { field: "domain", headerName: "Domain", flex: 1 },
@@ -135,7 +139,10 @@ function BaseJSX(props) {
             variant="contained"
             color="primary"
             href="#section2"
-            onClick={() => setSelectedRow(cellValues.row)}
+            //onClick={() => setSelectedRow(cellValues.row)}
+            //onClick={RunHarvester(cellValues.row.domain)}
+            //onClick={() => setDomain(cellValues.row.domain)}
+            onClick={() => setDomain("netflix.com")}
           >
             <PlayCircleFilledWhiteIcon />
           </IconButton>
@@ -157,7 +164,11 @@ function BaseJSX(props) {
           />
         </Grid>
       </Grid>
-      <Results selectedRow={selectedRow} />
+      <Results
+        selectedRow={selectedRow}
+        domain={domain}
+        setDomain={setDomain}
+      />
     </MainCard>
   );
 }

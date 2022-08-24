@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const baseURL = "http://localhost:8080/li-pca/v1/recon";
+const harvesterBaseUrl = "http://localhost:8080/li-pca/v1/harvester";
 const headers = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
@@ -96,4 +97,32 @@ export const useDelete = (cust_id, getDelete) => {
     }
   }, [getDelete]);
   return getError;
+};
+
+export const useGetHarvesterResults = (domain) => {
+  console.log(domain);
+  const [isLoading, setLoading] = useState(true);
+  const [getData, setData] = useState([]);
+  const [getError, setError] = useState([false, ""]);
+  useEffect(() => {
+    axios
+      .get(harvesterBaseUrl + "?domain=" + domain, {
+        headers: headers,
+      })
+      .then((response) => {
+        setData(response.data);
+        setLoading(false);
+        setError([false, ""]);
+      })
+      .catch((error) => {
+        setError([true, error.message]);
+        setLoading(false);
+        console.log(error);
+      });
+  }, []);
+  return {
+    isLoading,
+    getData,
+    getError,
+  };
 };
