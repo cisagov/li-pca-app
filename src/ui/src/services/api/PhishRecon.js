@@ -100,29 +100,31 @@ export const useDelete = (cust_id, getDelete) => {
 };
 
 export const useGetHarvesterResults = (domain) => {
-  console.log(domain);
   const [isLoading, setLoading] = useState(true);
   const [getData, setData] = useState([]);
   const [getError, setError] = useState([false, ""]);
   useEffect(() => {
-    axios
-      .get(harvesterBaseUrl + "?domain=" + domain, {
-        headers: headers,
-      })
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-        setError([false, ""]);
-      })
-      .catch((error) => {
-        setError([true, error.message]);
-        setLoading(false);
-        console.log(error);
-      });
-  }, []);
+    if (domain) {
+      axios
+        .get(harvesterBaseUrl + "?domain=" + domain, {
+          headers: headers,
+        })
+        .then((response) => {
+          setData(response.data);
+          setLoading(false);
+          setError([false, ""]);
+        })
+        .catch((error) => {
+          setError([true, error.message]);
+          setLoading(false);
+          console.log(error);
+        });
+    }
+  }, [domain]);
   return {
     isLoading,
     getData,
     getError,
+    domain,
   };
 };
