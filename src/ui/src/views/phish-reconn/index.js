@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 // material-ui
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
+import LinearProgress from "@mui/material/LinearProgress";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 // project imports
@@ -25,9 +26,110 @@ import axios from "axios";
 function Results(props) {
   const [notes, setNotes] = useState("");
   const results = useGetHarvesterResults(props.domain);
-  console.log(results);
-
-  if (props.selectedRow) {
+  // console.log(props.domain);
+  // console.log(results);
+  const exportData = () => {
+    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+      JSON.stringify(results.getData)
+    )}`;
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = props.domain + "_results.json";
+    link.click();
+  };
+  const webSearchFindings = (
+    <React.Fragment>
+      <Grid item xs={10} sm={10} md={10} lg={10} xl={10} sx={{ mt: 3 }}>
+        <Typography variant="h5">Web Search Findings</Typography>
+      </Grid>
+      <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+        <TextField
+          fullWidth
+          multiline
+          minRows={7}
+          id="notes"
+          name="notes"
+          label="Notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+      </Grid>
+      <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
+        <Button
+          fullWidth
+          color="info"
+          variant="contained"
+          size="large"
+          onClick={() => console.log()}
+        >
+          Save Notes
+        </Button>
+      </Grid>
+    </React.Fragment>
+  );
+  if (props.domain && results.isLoading) {
+    return (
+      <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Typography variant="h5">
+            Running theHarvester on {props.selectedRow.customer_name}
+          </Typography>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 2 }}>
+            <Box sx={{ width: "100%" }}>
+              <LinearProgress />
+            </Box>
+          </Grid>
+        </Grid>
+      </Grid>
+    );
+  } else if (results.getError[0]) {
+    return (
+      <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
+        <Grid item xs={8} lg={12} xl={12}>
+          Unable to retrieve results. {results.getError[0]}.
+        </Grid>
+      </Grid>
+    );
+  } else if (results.getData.length != 0) {
+    return (
+      <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
+        <Grid item xs={8} lg={12} xl={12}>
+          <Typography variant="h5">
+            Results for {props.selectedRow.customer_name}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <pre>{JSON.stringify(results.getData, null, 2)}</pre>
+        </Grid>
+        <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
+          <Button
+            color="primary"
+            variant="contained"
+            size="large"
+            fullWidth
+            onClick={() => console.log()}
+          >
+            Save Results
+          </Button>
+        </Grid>
+        <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
+        <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
+          <Button
+            color="warning"
+            variant="contained"
+            size="large"
+            fullWidth
+            onClick={exportData}
+            endIcon={<FileDownloadIcon />}
+          >
+            Download Results
+          </Button>
+        </Grid>
+        <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
+        {webSearchFindings}
+      </Grid>
+    );
+  } else if (props.selectedRow) {
     return (
       <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
         <Grid item xs={8} lg={12} xl={12}>
@@ -36,7 +138,7 @@ function Results(props) {
           </Typography>
         </Grid>
         <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
-          This is where the results will be displayed
+          This is where the latest results will be displayed
           <br />
           <br />
           <img
@@ -57,32 +159,7 @@ function Results(props) {
             Download Results
           </Button>
         </Grid>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10} sx={{ mt: 3 }}>
-          <Typography variant="h5">Web Search Findings</Typography>
-        </Grid>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
-          <TextField
-            fullWidth
-            multiline
-            minRows={7}
-            id="notes"
-            name="notes"
-            label="Notes"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
-          <Button
-            fullWidth
-            color="info"
-            variant="contained"
-            size="large"
-            onClick={() => console.log()}
-          >
-            Save Notes
-          </Button>
-        </Grid>
+        {webSearchFindings}
       </Grid>
     );
   }
@@ -139,10 +216,10 @@ function BaseJSX(props) {
             variant="contained"
             color="primary"
             href="#section2"
-            //onClick={() => setSelectedRow(cellValues.row)}
-            //onClick={RunHarvester(cellValues.row.domain)}
-            //onClick={() => setDomain(cellValues.row.domain)}
-            onClick={() => setDomain("netflix.com")}
+            onClick={() => {
+              setSelectedRow(cellValues.row);
+              setDomain(cellValues.row.domain);
+            }}
           >
             <PlayCircleFilledWhiteIcon />
           </IconButton>
