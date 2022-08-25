@@ -752,139 +752,6 @@ paths:
         "404":
           description: sending profile not found
       x-openapi-router-controller: api.controllers.sending_profiles_controller
-  /v1/recon:
-    get:
-      tags:
-        - recon
-      summary: Get recon results
-      description: Get All Recon Results
-      operationId: get_all_recon_results
-      parameters:
-        - name: domain
-          in: query
-          description: recon results domain filter
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReconResult'
-                  x-content-type: application/json
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReconResult'
-        "400":
-          description: Invalid name value
-      x-openapi-router-controller: api.controllers.recon_controller
-    post:
-      tags:
-        - recon
-      summary: Add a Recon Query Result to the data store
-      operationId: create_recon_results
-      requestBody:
-        description: created sending profile object
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReconResult'
-      responses:
-        "405":
-          description: Invalid input
-      x-openapi-router-controller: api.controllers.recon_controller
-  /v1/recon/{uuid}:
-    get:
-      tags:
-        - recon
-      summary: Get recon result by uuid
-      description: Returns a recon result
-      operationId: get_recon_result_by_uuid
-      parameters:
-        - name: uuid
-          in: path
-          description: uuid of recon result to return
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            format: uuid4
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReconResult'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/ReconResult'
-        "400":
-          description: Invalid ID supplied
-        "404":
-          description: document not found
-      x-openapi-router-controller: api.controllers.recon_controller
-    put:
-      tags:
-        - recon
-      summary: Update/Replace an existing recon result
-      operationId: update_recon_result_by_uuid
-      parameters:
-        - name: uuid
-          in: path
-          description: uuid of document to update/replace
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            format: uuid4
-      requestBody:
-        description: update sending profile object
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReconResult'
-      responses:
-        "400":
-          description: Invalid uuid supplied
-        "404":
-          description: document not found
-        "405":
-          description: Validation exception
-      x-openapi-router-controller: api.controllers.recon_controller
-    delete:
-      tags:
-        - recon
-      summary: Deletes a recon result
-      operationId: delete_recon_result_by_uuid
-      parameters:
-        - name: uuid
-          in: path
-          description: uuid of recon result to delete
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            format: uuid4
-      responses:
-        "400":
-          description: Invalid uuid supplied
-        "404":
-          description: document not found
-      x-openapi-router-controller: api.controllers.recon_controller
   /v1/harvester:
     get:
       tags:
@@ -1320,6 +1187,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Contact'
+        recon_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReconResult'
       example:
         name: test customer 2
         identifier: test identifier 2
@@ -1510,15 +1381,7 @@ components:
         - domain
       type: object
       properties:
-        uuid:
-          type: string
-          format: uuid64
-        customer_id:
-          type: string
-          format: uuid64
         domain:
-          type: string
-        customer_name:
           type: string
         recon_time:
           type: string

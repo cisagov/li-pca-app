@@ -22,6 +22,21 @@ class CustomerContactSchema(BaseSchema):
     active = fields.Bool(default=True)
 
 
+class CustomerReconResults(BaseSchema):
+    """Customer Recon."""
+
+    domain = fields.Str(required=True)
+    recon_time = DateTimeField(required=True)
+    asns = fields.List(fields.Str())
+    interesting_urls = fields.List(fields.Str())
+    twitter_people = fields.List(fields.Str())
+    linkedin_people = fields.List(fields.Str())
+    trello_urls = fields.List(fields.Str())
+    ips = fields.List(fields.Str())
+    emails = fields.List(fields.Str())
+    hosts = fields.List(fields.Str())
+
+
 class CustomerSchema(BaseSchema):
     """Customer Schema."""
 
@@ -66,3 +81,4 @@ class CustomerSchema(BaseSchema):
             ]
         ),
     )
+    recon_results = fields.List(fields.Nested(CustomerReconResults))
