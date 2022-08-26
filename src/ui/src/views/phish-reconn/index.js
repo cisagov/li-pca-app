@@ -19,15 +19,15 @@ import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
 import { useGetAll, useGetHarvesterResults } from "services/api/PhishRecon.js";
 
-// third party
-import axios from "axios";
 // ==============================|| Phish Reconn view ||============================== //
 
 function Results(props) {
   const [notes, setNotes] = useState("");
-  const results = useGetHarvesterResults(props.domain);
-  // console.log(props.domain);
-  // console.log(results);
+  const results = useGetHarvesterResults(
+    props.domain,
+    props.selectedRow,
+    props.triggerDataFetch
+  );
   const exportData = () => {
     const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
       JSON.stringify(results.getData)
@@ -72,12 +72,20 @@ function Results(props) {
       <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h5">
-            Running theHarvester on {props.selectedRow.customer_name}
+            Running theHarvester on {props.selectedRow.name}
           </Typography>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 2 }}>
             <Box sx={{ width: "100%" }}>
               <LinearProgress />
             </Box>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 2 }}>
+            <Typography variant="subtitle2">
+              Please wait while the Harvester runs...
+            </Typography>
+            <Typography variant="caption" sx={{ fontStyle: "italic" }}>
+              This may take a few minutes
+            </Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -92,27 +100,39 @@ function Results(props) {
     );
   } else if (results.getData.length != 0) {
     return (
-      <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
-        <Grid item xs={8} lg={12} xl={12}>
+      <Grid container spacing={2} sx={{ mb: 2, mt: 3 }}>
+        <Grid item xs={12} sm={12} md={12} xl={12} id="section2">
           <Typography variant="h5">
-            Results for {props.selectedRow.customer_name}
+            Results for {props.selectedRow.name}
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <pre>{JSON.stringify(results.getData, null, 2)}</pre>
         </Grid>
-        <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
-          <Button
-            color="primary"
-            variant="contained"
-            size="large"
-            fullWidth
-            onClick={() => console.log()}
-          >
-            Save Results
-          </Button>
-        </Grid>
-        <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
+        {results.getError[0] ? (
+          <React.Fragment>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              {results.getError[0]} Unable to save results to database. See
+              console log for more details.
+            </Grid>
+            <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
+              <Button
+                color="primary"
+                variant="contained"
+                size="large"
+                fullWidth
+                onClick={() => console.log()}
+              >
+                Save Results
+              </Button>
+            </Grid>
+            <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
+          </React.Fragment>
+        ) : (
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            Results have been saved successfully.
+          </Grid>
+        )}
         <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
           <Button
             color="warning"
@@ -129,23 +149,16 @@ function Results(props) {
         {webSearchFindings}
       </Grid>
     );
-  } else if (props.selectedRow) {
+  } else if (props.viewResults) {
     return (
-      <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
-        <Grid item xs={8} lg={12} xl={12}>
+      <Grid container spacing={2} sx={{ mt: 1 }} id="section2">
+        <Grid item xs={12} sm={12} md={12} xl={12}>
           <Typography variant="h5">
-            Results for {props.selectedRow.customer_name}
+            Results for {props.selectedRow.name}
           </Typography>
         </Grid>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
-          This is where the latest results will be displayed
-          <br />
-          <br />
-          <img
-            src="https://cdn.vectorstock.com/i/1000x1000/34/65/laptop-phishing-icon-outline-style-vector-22503465.webp"
-            alt="alternatetext"
-            width="100px"
-          />
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <pre>{JSON.stringify(props.selectedRow.recon_results, null, 2)}</pre>
         </Grid>
         <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
           <Button
@@ -173,31 +186,42 @@ function Results(props) {
 }
 function BaseJSX(props) {
   const [selectedRow, setSelectedRow] = React.useState("");
+  const [viewResults, setViewResults] = React.useState(false);
   const [domain, setDomain] = useState("");
+  const toScroll = setTimeout(function () {
+    const element = document.getElementById("section1");
+    console.log(element.getBoundingClientRect().height);
+    window.scrollTo({
+      top: element.getBoundingClientRect().height + 80,
+      behavior: "smooth",
+    });
+  }, 2);
+
   const cols = [
     { field: "id", hide: true },
     { field: "domain", headerName: "Domain", flex: 1 },
-    { field: "customer_name", headerName: "Customer Name", flex: 1 },
-    { field: "recon_time", headerName: "Last Run Date (UTC)", flex: 1 },
+    { field: "name", headerName: "Customer Name", flex: 1 },
+    { field: "last_recon_date", headerName: "Last Run Date (UTC)", flex: 1 },
     {
       field: "see_results",
-      headerName: "View Latest Results",
+      headerName: "View Harvester Results",
       sortable: false,
       disableClickEventBubbling: true,
       renderCell: (cellValues) => {
         let isDisabled = true;
-        if (cellValues.row.recon_time) {
+        if (cellValues.row.last_recon_date != "-") {
           isDisabled = false;
-        } else {
-          cellValues.row.recon_time = "-";
         }
         return (
           <IconButton
             variant="contained"
             color="dark"
-            href="#section2"
             disabled={isDisabled}
-            onClick={() => setSelectedRow(cellValues.row)}
+            onClick={() => {
+              toScroll;
+              setSelectedRow(cellValues.row);
+              setViewResults(true);
+            }}
           >
             <VisibilityOutlinedIcon />
           </IconButton>
@@ -217,6 +241,7 @@ function BaseJSX(props) {
             color="primary"
             href="#section2"
             onClick={() => {
+              setViewResults(false);
               setSelectedRow(cellValues.row);
               setDomain(cellValues.row.domain);
             }}
@@ -228,23 +253,28 @@ function BaseJSX(props) {
       flex: 0.6,
     },
   ];
+  let displayTable = (
+    <MainDataTable
+      data={{ rows: props.rows, columns: cols }}
+      newEntryRoute={props.dataEntry}
+      editEntryRoute={props.dataEntry}
+      tableCategory={"Phish Reconnaissance"}
+    />
+  );
   return (
     <MainCard title="Phish Reconnaissance">
       <Grid container spacing={2} id="section1">
         <Grid item xs={8} sm={12} md={12} lg={12} xl={12}>
           {props.children}
-          <MainDataTable
-            data={{ rows: props.rows, columns: cols }}
-            newEntryRoute={props.dataEntry}
-            editEntryRoute={props.dataEntry}
-            tableCategory={"Phish Reconnaissance"}
-          />
+          {displayTable}
         </Grid>
       </Grid>
       <Results
         selectedRow={selectedRow}
         domain={domain}
         setDomain={setDomain}
+        triggerDataFetch={props.triggerDataFetch}
+        viewResults={viewResults}
       />
     </MainCard>
   );
@@ -257,8 +287,9 @@ BaseJSX.propTypes = {
 };
 
 function PhishReconnPage() {
-  const { isLoading, getData, getError } = useGetAll("getAll");
-
+  const [fetchData, setFetchData] = useState(true);
+  const triggerDataFetch = () => setFetchData((t) => !t);
+  const { isLoading, getData, getError } = useGetAll(fetchData);
   const reconRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {
       let counter = 0;
@@ -267,8 +298,21 @@ function PhishReconnPage() {
       reconRows.forEach((entry) => {
         entry["id"] = counter;
         counter = counter + 1;
+        if (entry.hasOwnProperty("recon_results")) {
+          let getLastReconDate = entry.recon_results.reduce(function (
+            prev,
+            curr
+          ) {
+            let prev_date = new Date(prev.recon_time);
+            let curr_date = new Date(curr.recon_time);
+            return prev_date > curr_date ? prev.recon_time : curr.recon_time;
+          });
+          entry.last_recon_date = getLastReconDate.recon_time;
+        } else {
+          entry.last_recon_date = "-";
+        }
       });
-      return rowsArray;
+      return reconRows;
     }
     return [];
   };
@@ -276,7 +320,6 @@ function PhishReconnPage() {
   // const jsonRows = require("./mockReconData.json");
   // const rows = reconRows(jsonRows);
   const rows = reconRows(getData);
-
   if (isLoading) {
     return (
       <BaseJSX rows={[]} dataEntry={""}>
@@ -299,7 +342,11 @@ function PhishReconnPage() {
     );
   }
   return (
-    <BaseJSX rows={rows} dataEntry={"data-entry"}>
+    <BaseJSX
+      rows={rows}
+      dataEntry={"data-entry"}
+      triggerDataFetch={triggerDataFetch}
+    >
       <Typography variant="h5" sx={{ mb: 2 }}>
         Search for a domain from below to run Reconnaissance or view its latest
         results
