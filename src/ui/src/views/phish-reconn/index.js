@@ -190,7 +190,6 @@ function BaseJSX(props) {
   const [domain, setDomain] = useState("");
   const toScroll = setTimeout(function () {
     const element = document.getElementById("section1");
-    console.log(element.getBoundingClientRect().height);
     window.scrollTo({
       top: element.getBoundingClientRect().height + 80,
       behavior: "smooth",
