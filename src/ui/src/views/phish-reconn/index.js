@@ -17,28 +17,51 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll, useGetHarvesterResults } from "services/api/PhishRecon.js";
+import { useGetAll, fetchData } from "services/api/PhishRecon.js";
 
 // ==============================|| Phish Reconn view ||============================== //
 
+Results.propTypes = {
+  selectedRow: PropTypes.string,
+  triggerDataFetch: PropTypes.func,
+  viewResults: PropTypes.bool,
+  getData: PropTypes.object,
+  getError: PropTypes.array,
+  isLoading: PropTypes.bool,
+};
+
 function Results(props) {
   const [notes, setNotes] = useState("");
-  const results = useGetHarvesterResults(
-    props.domain,
-    props.selectedRow,
-    props.triggerDataFetch
-  );
   const exportData = () => {
+    const data = [];
+    if (props.viewResults) {
+      data = props.selectedRow.recon_results;
+    } else {
+      data = props.getData;
+    }
     const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-      JSON.stringify(results.getData)
+      JSON.stringify(data)
     )}`;
     const link = document.createElement("a");
     link.href = jsonString;
-    link.download = props.domain + "_results.json";
+    link.download = props.selectedRow.domain + "_results.json";
     link.click();
   };
-  const webSearchFindings = (
+  const reconExtras = (
     <React.Fragment>
+      <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
+        <Button
+          color="warning"
+          variant="contained"
+          size="large"
+          fullWidth
+          onClick={exportData}
+          endIcon={<FileDownloadIcon />}
+        >
+          Download Results
+        </Button>
+      </Grid>
+      <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
       <Grid item xs={10} sm={10} md={10} lg={10} xl={10} sx={{ mt: 3 }}>
         <Typography variant="h5">Web Search Findings</Typography>
       </Grid>
@@ -46,7 +69,7 @@ function Results(props) {
         <TextField
           fullWidth
           multiline
-          minRows={7}
+          minRows={5}
           id="notes"
           name="notes"
           label="Notes"
@@ -67,12 +90,26 @@ function Results(props) {
       </Grid>
     </React.Fragment>
   );
-  if (props.domain && results.isLoading) {
+  if (props.viewResults) {
+    return (
+      <Grid container spacing={2} sx={{ mt: 1 }} id="section2">
+        <Grid item xs={12} sm={12} md={12} xl={12}>
+          <Typography variant="h5">
+            Results for {props.selectedRow.name}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <pre>{JSON.stringify(props.selectedRow.recon_results, null, 2)}</pre>
+        </Grid>
+        {reconExtras}
+      </Grid>
+    );
+  } else if (props.isLoading) {
     return (
       <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h5">
-            Running theHarvester on {props.selectedRow.name}
+            Running the Harvester on {props.selectedRow.name}
           </Typography>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 2 }}>
             <Box sx={{ width: "100%" }}>
@@ -90,15 +127,15 @@ function Results(props) {
         </Grid>
       </Grid>
     );
-  } else if (results.getError[0]) {
+  } else if (props.getError[0]) {
     return (
       <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
         <Grid item xs={8} lg={12} xl={12}>
-          Unable to retrieve results. {results.getError[0]}.
+          Unable to retrieve results. {props.getError[0]}.
         </Grid>
       </Grid>
     );
-  } else if (results.getData.length != 0) {
+  } else if (props.getData.length != 0) {
     return (
       <Grid container spacing={2} sx={{ mb: 2, mt: 3 }}>
         <Grid item xs={12} sm={12} md={12} xl={12} id="section2">
@@ -107,24 +144,13 @@ function Results(props) {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <pre>{JSON.stringify(results.getData, null, 2)}</pre>
+          <pre>{JSON.stringify(props.getData, null, 2)}</pre>
         </Grid>
-        {results.getError[0] ? (
+        {props.getError[0] ? (
           <React.Fragment>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              {results.getError[0]} Unable to save results to database. See
+              {props.getError[0]} Unable to save results to database. See
               console log for more details.
-            </Grid>
-            <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
-              <Button
-                color="primary"
-                variant="contained"
-                size="large"
-                fullWidth
-                onClick={() => console.log()}
-              >
-                Save Results
-              </Button>
             </Grid>
             <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
           </React.Fragment>
@@ -133,46 +159,7 @@ function Results(props) {
             Results have been saved successfully.
           </Grid>
         )}
-        <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
-          <Button
-            color="warning"
-            variant="contained"
-            size="large"
-            fullWidth
-            onClick={exportData}
-            endIcon={<FileDownloadIcon />}
-          >
-            Download Results
-          </Button>
-        </Grid>
-        <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
-        {webSearchFindings}
-      </Grid>
-    );
-  } else if (props.viewResults) {
-    return (
-      <Grid container spacing={2} sx={{ mt: 1 }} id="section2">
-        <Grid item xs={12} sm={12} md={12} xl={12}>
-          <Typography variant="h5">
-            Results for {props.selectedRow.name}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <pre>{JSON.stringify(props.selectedRow.recon_results, null, 2)}</pre>
-        </Grid>
-        <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
-          <Button
-            color="warning"
-            variant="contained"
-            size="large"
-            fullWidth
-            onClick={() => console.log()}
-            endIcon={<FileDownloadIcon />}
-          >
-            Download Results
-          </Button>
-        </Grid>
-        {webSearchFindings}
+        {reconExtras}
       </Grid>
     );
   }
@@ -187,7 +174,9 @@ function Results(props) {
 function BaseJSX(props) {
   const [selectedRow, setSelectedRow] = React.useState("");
   const [viewResults, setViewResults] = React.useState(false);
-  const [domain, setDomain] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [getHarvesterData, setHarvesterData] = useState([]);
+  const [getError, setError] = useState([false, ""]);
   const toScroll = setTimeout(function () {
     const element = document.getElementById("section1");
     window.scrollTo({
@@ -195,6 +184,18 @@ function BaseJSX(props) {
       behavior: "smooth",
     });
   }, 2);
+  const handleHarvesterClick = (row) => {
+    setViewResults(false);
+    setSelectedRow(row);
+    setLoading(true);
+    fetchData(
+      row,
+      props.triggerDataFetch,
+      setLoading,
+      setHarvesterData,
+      setError
+    );
+  };
 
   const cols = [
     { field: "id", hide: true },
@@ -239,11 +240,7 @@ function BaseJSX(props) {
             variant="contained"
             color="primary"
             href="#section2"
-            onClick={() => {
-              setViewResults(false);
-              setSelectedRow(cellValues.row);
-              setDomain(cellValues.row.domain);
-            }}
+            onClick={() => handleHarvesterClick(cellValues.row)}
           >
             <PlayCircleFilledWhiteIcon />
           </IconButton>
@@ -270,10 +267,11 @@ function BaseJSX(props) {
       </Grid>
       <Results
         selectedRow={selectedRow}
-        domain={domain}
-        setDomain={setDomain}
         triggerDataFetch={props.triggerDataFetch}
         viewResults={viewResults}
+        isLoading={isLoading}
+        getData={getHarvesterData}
+        getError={getError}
       />
     </MainCard>
   );
@@ -283,6 +281,7 @@ BaseJSX.propTypes = {
   rows: PropTypes.array,
   children: PropTypes.object,
   dataEntry: PropTypes.string,
+  triggerDataFetch: PropTypes.func,
 };
 
 function PhishReconnPage() {
