@@ -22,7 +22,7 @@ import * as yup from "yup";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { useSubmit } from "services/api/SendingProfiles.js";
+import { submitSP, deleteSP } from "services/api/SendingProfiles.js";
 
 const fieldsToValidate = {
   name: true,
@@ -49,7 +49,7 @@ const SendingProfileForm = (props) => {
   const [savebtnOpen, setSavebtnOpen] = React.useState(false);
   const [hasSubmitted, setHasSubmitted] = React.useState(false);
   const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
-
+  const [getError, setError] = React.useState([false, ""]);
   const addHeader = () => {
     if (customHeader != "" && headerValue != "") {
       let newElement = {
@@ -85,17 +85,12 @@ const SendingProfileForm = (props) => {
       values.headers = emailHeaderArray;
       props.setSpData(Object.assign(props.spData, values));
       setHasSubmitted(true);
+      submitSP(props.spData, props.spData._id, props.dataEntryType, setError);
       setTimeout(() => {
         setSavebtnOpen(false);
       });
     },
   });
-  let getError = useSubmit(
-    props.spData,
-    props.spData._id,
-    hasSubmitted,
-    props.dataEntryType
-  );
   let subtitleConfirm =
     formik.values.name + " will be updated in the database.";
   if (props.dataEntryType == "New Sending Profile") {

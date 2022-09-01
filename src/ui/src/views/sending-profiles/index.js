@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll, useDelete } from "services/api/SendingProfiles.js";
+import { useGetAll, deleteSP } from "services/api/SendingProfiles.js";
 
 // third party
 import axios from "axios";
@@ -43,7 +43,7 @@ function BaseJSX(props) {
             newEntryRoute={props.dataEntry}
             editEntryRoute={props.dataEntry}
             tableCategory={"Sending Profiles"}
-            useDelete={useDelete}
+            deleteSP={deleteSP}
           />
         </Grid>
       </Grid>

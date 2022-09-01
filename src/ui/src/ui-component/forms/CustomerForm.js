@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { useSubmit, useDelete } from "services/api/Customers.js";
+import { submitCustomer, deleteCustomer } from "services/api/Customers.js";
 
 //third party
 import { useFormik } from "formik";
@@ -56,6 +56,7 @@ const CustomerForm = (props) => {
   const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
   const [hasSubmitted, setHasSubmitted] = React.useState(false);
   const [getDelete, setDelete] = React.useState(false);
+  const [getError, setError] = React.useState([false, ""]);
   const fieldsToValidate = {
     name: true,
     appendix_a_date: true,
@@ -79,17 +80,17 @@ const CustomerForm = (props) => {
       values.appendix_a_date = appendixADate.toISOString();
       props.setCustData(Object.assign(props.custData, values));
       setHasSubmitted(true);
+      submitCustomer(
+        props.custData,
+        props.custData._id,
+        props.dataEntryType,
+        setError
+      );
       setTimeout(() => {
         setSavebtnOpen(false);
       });
     },
   });
-  let getError = useSubmit(
-    props.custData,
-    props.custData._id,
-    hasSubmitted,
-    props.dataEntryType
-  );
   const didMount = React.useRef(false);
   React.useEffect(() => {
     if (didMount.current) {
@@ -120,13 +121,13 @@ const CustomerForm = (props) => {
   };
 
   const confirmDelete = () => {
+    deleteCustomer(props.custData._id, setError);
     setTimeout(() => {
       setDeletebtnOpen(false);
       setDelete(true);
+      setHasSubmitted(true);
     });
   };
-
-  getError = useDelete(props.custData._id, getDelete);
 
   let subtitleConfirm =
     formik.values.name + " will be updated in the database.";
@@ -424,7 +425,6 @@ const CustomerForm = (props) => {
         <ResultDialog
           type={getDelete ? "Delete Customer" : props.dataEntryType}
           hasSubmitted={hasSubmitted}
-          getDelete={getDelete}
           error={getError}
           closeDialog={closeDialog}
         />

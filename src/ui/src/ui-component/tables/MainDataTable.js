@@ -119,10 +119,10 @@ export default function MainDataTable(props) {
   const [rows, setRows] = React.useState(props.data.rows);
   const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
   const [getDelete, setDelete] = React.useState(false);
+  const [getError, setError] = React.useState([false, ""]);
   let [rowData, setRowData] = React.useState("");
   let pageSize = 10;
   let density = "standard";
-  let getError = [];
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
     const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
@@ -195,20 +195,20 @@ export default function MainDataTable(props) {
       },
       flex: 0.5,
     });
-    getError = props.useDelete(rowData._id, getDelete);
   }
 
   const confirmDelete = () => {
+    props.deleteSP(rowData._id, setError);
     setTimeout(() => {
       setDeletebtnOpen(false);
       setDelete(true);
     });
   };
   const closeDialog = () => {
-    setDelete(false);
     if (!getError[0]) {
       window.location.reload();
     }
+    setDelete(false);
   };
 
   return (
@@ -243,7 +243,7 @@ export default function MainDataTable(props) {
       />
       <ResultDialog
         type={getDelete ? "Delete" : "Edit"}
-        getDelete={getDelete}
+        hasSubmitted={getDelete}
         error={getError}
         closeDialog={closeDialog}
       />
