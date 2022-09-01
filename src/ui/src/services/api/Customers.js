@@ -36,64 +36,54 @@ export const useGetAll = () => {
   };
 };
 
-export const useSubmit = (custData, cust_id, hasSubmitted, dataEntryType) => {
-  const [getError, setError] = useState([false, ""]);
-  useEffect(() => {
-    if (hasSubmitted && dataEntryType == "New Customer") {
-      axios
-        .post(baseURL, custData, {
-          headers: headers,
-        })
-        .then((response) => {
-          console.log(response);
-          setError([false, ""]);
-        })
-        .catch((error) => {
-          setError([true, error.message]);
-          console.log("Error adding new customer entry.");
-          console.log(custData);
-          console.log(error);
-        });
-    }
-    if (hasSubmitted && dataEntryType == "Edit Customer") {
-      axios
-        .put(baseURL + "/" + cust_id, custData, {
-          headers: headers,
-        })
-        .then((response) => {
-          console.log(response);
-          setError([false, ""]);
-        })
-        .catch((error) => {
-          setError([true, error.message]);
-          console.log("Error updating customer entry.");
-          console.log(custData);
-          console.log(error);
-        });
-    }
-  }, [custData, hasSubmitted, dataEntryType]);
-  return getError;
+export const submitCustomer = (custData, cust_id, dataEntryType, setError) => {
+  if (dataEntryType == "New Customer") {
+    axios
+      .post(baseURL, custData, {
+        headers: headers,
+      })
+      .then((response) => {
+        console.log(response);
+        setError([false, ""]);
+      })
+      .catch((error) => {
+        setError([true, error.message]);
+        console.log("Error adding new customer entry.");
+        console.log(custData);
+        console.log(error);
+      });
+  }
+  if (dataEntryType == "Edit Customer") {
+    axios
+      .put(baseURL + "/" + cust_id, custData, {
+        headers: headers,
+      })
+      .then((response) => {
+        console.log(response);
+        setError([false, ""]);
+      })
+      .catch((error) => {
+        setError([true, error.message]);
+        console.log("Error updating customer entry.");
+        console.log(custData);
+        console.log(error);
+      });
+  }
 };
 
-export const useDelete = (cust_id, getDelete) => {
-  const [getError, setError] = useState([false, ""]);
-  useEffect(() => {
-    if (getDelete) {
-      axios
-        .delete(baseURL + "/" + cust_id, {
-          headers: headers,
-        })
-        .then((response) => {
-          console.log(response);
-          setError([false, ""]);
-        })
-        .catch((error) => {
-          setError([true, error.message]);
-          console.log("Error deleting data");
-          console.log(custData);
-          console.log(error);
-        });
-    }
-  }, [getDelete]);
-  return getError;
+export const deleteCustomer = (cust_id, setError) => {
+  axios
+    .delete(baseURL + "/" + cust_id, {
+      headers: headers,
+    })
+    .then((response) => {
+      console.log(response);
+      setError([false, ""]);
+    })
+    .catch((error) => {
+      setError([true, error.message]);
+      console.log("Error deleting data");
+      console.log(custData);
+      console.log(error);
+    });
 };
