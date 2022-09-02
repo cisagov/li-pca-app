@@ -199,7 +199,7 @@ function BaseJSX(props) {
 
   const cols = [
     { field: "id", hide: true },
-    { field: "domain", headerName: "Domain", flex: 1 },
+    { field: "domain", headerName: "Customer Domain", flex: 1 },
     { field: "name", headerName: "Customer Name", flex: 1 },
     { field: "last_recon_date", headerName: "Last Run Date (UTC)", flex: 1 },
     {
@@ -235,11 +235,16 @@ function BaseJSX(props) {
       sortable: false,
       disableClickEventBubbling: true,
       renderCell: (cellValues) => {
+        let isDisabled = true;
+        if (cellValues.row.domain) {
+          isDisabled = false;
+        }
         return (
           <IconButton
             variant="contained"
             color="primary"
             href="#section2"
+            disabled={isDisabled}
             onClick={() => handleHarvesterClick(cellValues.row)}
           >
             <PlayCircleFilledWhiteIcon />
@@ -346,7 +351,7 @@ function PhishReconnPage() {
       triggerDataFetch={triggerDataFetch}
     >
       <Typography variant="h5" sx={{ mb: 2 }}>
-        Search for a domain from below to run Reconnaissance or view its latest
+        Select a Customer Domain to run Reconnaissance on or view its past
         results
       </Typography>
     </BaseJSX>
