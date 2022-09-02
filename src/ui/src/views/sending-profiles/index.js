@@ -20,7 +20,7 @@ function BaseJSX(props) {
   let navigate = useNavigate();
   const cols = [
     { field: "id", hide: true },
-    { field: "name", headerName: "Name", flex: 1.25 },
+    { field: "name", headerName: "Sending Profile Domain", flex: 1.25 },
     { field: "interface_type", headerName: "Interface Type", flex: 0.75 },
     {
       field: "#_of_customers_using",
