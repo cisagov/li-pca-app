@@ -92,7 +92,7 @@ setup(
         "docopt",
         "schema",
         "setuptools >= 24.2.0",
-        "connexion == 2.6.0",
+        "connexion == 2.13.0",
         "python_dateutil == 2.6.0",
         "pymodm",
         "marshmallow",
