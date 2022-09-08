@@ -82,3 +82,4 @@ class CustomerSchema(BaseSchema):
         ),
     )
     recon_results = fields.List(fields.Nested(CustomerReconResults))
+    customer_notes = fields.Str()

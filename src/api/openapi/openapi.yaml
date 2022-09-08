@@ -1191,6 +1191,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReconResult'
+        customer_notes:
+          type: string
       example:
         name: test customer 2
         identifier: test identifier 2
