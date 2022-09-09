@@ -29,6 +29,12 @@ const PhishReconForm = (props) => {
   React.useEffect(() => {
     setNotes(props.selectedRow.customer_notes);
   }, [props.selectedRow.customer_notes]);
+  const validateNotes = () => {
+    if (notes === props.selectedRow.customer_notes) {
+      return true;
+    }
+    return false;
+  };
   const exportData = () => {
     let data = [];
     if (props.viewResults) {
@@ -109,7 +115,7 @@ const PhishReconForm = (props) => {
           color="info"
           variant="contained"
           size="large"
-          disabled={isDisabled}
+          disabled={isDisabled || validateNotes()}
           onClick={() => setSavebtnOpen(true)}
           endIcon={<SaveIcon />}
         >
