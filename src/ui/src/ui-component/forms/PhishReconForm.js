@@ -30,7 +30,7 @@ const PhishReconForm = (props) => {
     setNotes(props.selectedRow.customer_notes);
   }, [props.selectedRow.customer_notes]);
   const exportData = () => {
-    const data = [];
+    let data = [];
     if (props.viewResults) {
       data = props.selectedRow.recon_results;
     } else {
