@@ -145,7 +145,7 @@ const CustomerForm = (props) => {
     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
       <form id="customer-form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={10} sm={6} md={4.5} lg={4.5} xl={4.5}>
+          <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
             <TextField
               fullWidth
               size="small"
@@ -158,7 +158,7 @@ const CustomerForm = (props) => {
               helperText={formik.touched.name && formik.errors.name}
             />
           </Grid>
-          <Grid item xs={10} sm={6} md={4.5} lg={4.5} xl={4.5}>
+          <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
             <TextField
               fullWidth
               size="small"
@@ -171,7 +171,7 @@ const CustomerForm = (props) => {
               helperText={formik.touched.domain && formik.errors.domain}
             />
           </Grid>
-          <Grid item xs={10} sm={6} md={3} lg={3} xl={3}>
+          <Grid item xs={11} sm={6} md={3} lg={3} xl={3}>
             <TextField
               fullWidth
               size="small"
@@ -186,7 +186,7 @@ const CustomerForm = (props) => {
               helperText={formik.touched.identifier && formik.errors.identifier}
             />
           </Grid>
-          <Grid item xs={10} sm={6} md={4.5} lg={4.5} xl={4.5}>
+          <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
             <TextField
               select
               fullWidth
@@ -214,7 +214,7 @@ const CustomerForm = (props) => {
               <MenuItem value={"Private"}>Private</MenuItem>
             </TextField>
           </Grid>
-          <Grid item xs={10} sm={6} md={4.5} lg={4.5} xl={4.5}>
+          <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
             <TextField
               select
               fullWidth
@@ -277,7 +277,7 @@ const CustomerForm = (props) => {
               </MenuItem>
             </TextField>
           </Grid>
-          <Grid item xs={10} sm={6} md={3} lg={3} xl={3}>
+          <Grid item xs={11} sm={6} md={3} lg={3} xl={3}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 fullWidth
@@ -295,7 +295,7 @@ const CustomerForm = (props) => {
             </LocalizationProvider>
           </Grid>
           <Grid item xs={12} md={12} xl={12} />
-          <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
+          <Grid item xs={11} sm={6} md={6} lg={6} xl={6}>
             <TextField
               fullWidth
               size="small"
@@ -310,7 +310,7 @@ const CustomerForm = (props) => {
               helperText={formik.touched.address_1 && formik.errors.address_1}
             />
           </Grid>
-          <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
+          <Grid item xs={11} sm={6} md={6} lg={6} xl={6}>
             <TextField
               fullWidth
               size="small"
@@ -325,7 +325,7 @@ const CustomerForm = (props) => {
               helperText={formik.touched.address_2 && formik.errors.address_2}
             />
           </Grid>
-          <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
+          <Grid item xs={11} sm={6} md={6} lg={6} xl={6}>
             <TextField
               fullWidth
               size="small"
@@ -338,7 +338,7 @@ const CustomerForm = (props) => {
               helperText={formik.touched.city && formik.errors.city}
             />
           </Grid>
-          <Grid item xs={10} sm={6} md={3.5} lg={3.5} xl={3.5}>
+          <Grid item xs={11} sm={6} md={3.5} lg={3.5} xl={3.5}>
             <TextField
               fullWidth
               size="small"
@@ -351,7 +351,7 @@ const CustomerForm = (props) => {
               helperText={formik.touched.state && formik.errors.state}
             />
           </Grid>
-          <Grid item xs={10} sm={6} md={2.5} lg={2.5} xl={2.5}>
+          <Grid item xs={11} sm={6} md={2.5} lg={2.5} xl={2.5}>
             <TextField
               fullWidth
               size="small"
@@ -394,8 +394,7 @@ const CustomerForm = (props) => {
         ) : (
           <Grid
             item
-            display={{ xs: "none", sm: "block" }}
-            sm={1}
+            display={{ xs: "none", sm: "none", md: "block" }}
             md={4}
             lg={6}
             xl={6}
