@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React from "react";
 
 // material-ui
-import AddIcon from "@mui/icons-material/Add";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -14,7 +13,9 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
+
 // project imports
+import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import DisplayDataTable from "ui-component/tables/DisplayDataTable";
 
 // third party
@@ -42,6 +43,8 @@ function CustomerPOCForm(props) {
   const [cusContactsRows, setCusContactsRows] = React.useState(
     props.custPOCData
   );
+  const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
+  const [selectedRow, setSelectedRow] = React.useState({});
   let [entryToEdit, setEntryToEdit] = React.useState({});
   let initialPOCValues = {};
   let contactLen = props.custPOCData.length;
@@ -76,7 +79,10 @@ function CustomerPOCForm(props) {
             <IconButton
               variant="contained"
               color="error"
-              onClick={() => handleDelete(cellValues.row)}
+              onClick={() => {
+                setDeletebtnOpen(true);
+                setSelectedRow(cellValues.row);
+              }}
             >
               <DeleteIcon />
             </IconButton>
@@ -147,7 +153,7 @@ function CustomerPOCForm(props) {
     return true;
   };
 
-  const handleDelete = (entry) => {
+  const confirmDelete = (entry) => {
     updatedPOCData = cusContactsRows.filter((prevEntry) => {
       return prevEntry !== entry;
     });
@@ -157,6 +163,8 @@ function CustomerPOCForm(props) {
     });
     setTimeout(() => {
       setCusContactsRows(updatedPOCData);
+      setDeletebtnOpen(false);
+      setSelectedRow({});
     });
   };
   return (
@@ -192,7 +200,7 @@ function CustomerPOCForm(props) {
               <Box sx={{ ml: 1 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={12} md={12} lg={12} xl={12} />
-                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
+                  <Grid item xs={11} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
                       size="small"
@@ -210,7 +218,7 @@ function CustomerPOCForm(props) {
                       }
                     />
                   </Grid>
-                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
+                  <Grid item xs={11} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
                       size="small"
@@ -228,7 +236,7 @@ function CustomerPOCForm(props) {
                       }
                     />
                   </Grid>
-                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
+                  <Grid item xs={11} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
                       size="small"
@@ -239,7 +247,7 @@ function CustomerPOCForm(props) {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
+                  <Grid item xs={11} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
                       size="small"
@@ -254,7 +262,7 @@ function CustomerPOCForm(props) {
                       helperText={formik.touched.email && formik.errors.email}
                     />
                   </Grid>
-                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
+                  <Grid item xs={11} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
                       size="small"
@@ -273,7 +281,7 @@ function CustomerPOCForm(props) {
                       }
                     />
                   </Grid>
-                  <Grid item xs={10} sm={6} md={4} lg={4} xl={4}>
+                  <Grid item xs={11} sm={6} md={4} lg={4} xl={4}>
                     <TextField
                       fullWidth
                       size="small"
@@ -292,7 +300,7 @@ function CustomerPOCForm(props) {
                       }
                     />
                   </Grid>
-                  <Grid item xs={10} sm={10} md={7} lg={7} xl={7}>
+                  <Grid item xs={11} sm={10} md={7} lg={7} xl={7}>
                     <TextField
                       fullWidth
                       size="small"
@@ -305,29 +313,21 @@ function CustomerPOCForm(props) {
                       onChange={formik.handleChange}
                     />
                   </Grid>
-                  <Grid item xs={2} sm={2} md={5} lg={5} xl={5}></Grid>
-                  <Grid item xs={10} sm={4} md={3} lg={2} xl={2}>
+                  <Grid item xs={1} sm={2} md={5} lg={5} xl={5}></Grid>
+                  <Grid item xs={11} sm={5} md={3} lg={3} xl={2}>
                     <Button
                       color="primary"
                       variant="contained"
                       type="submit"
                       size="large"
                       fullWidth
-                      endIcon={<AddIcon />}
                       disabled={isDisabled()}
                     >
-                      Add
+                      Save Contact
                     </Button>
                   </Grid>
-                  <Grid item xs={2} sm={3} md={5} lg={6} xl={7}></Grid>
-                  <Grid
-                    item
-                    display={{ xs: "none", sm: "block" }}
-                    sm={3}
-                    md={2}
-                    lg={2}
-                    xl={1}
-                  >
+                  <Grid item xs={1} sm={1} md={5} lg={5} xl={7}></Grid>
+                  <Grid item xs={11} sm={3} md={2} lg={2} xl={1}>
                     <Button
                       size="large"
                       fullWidth
@@ -339,7 +339,7 @@ function CustomerPOCForm(props) {
                       Reset
                     </Button>
                   </Grid>
-                  <Grid item xs={10} sm={2} md={2} lg={2} xl={2}>
+                  <Grid item xs={11} sm={2} md={2} lg={2} xl={2}>
                     <Button
                       color="warning"
                       variant="contained"
@@ -399,6 +399,13 @@ function CustomerPOCForm(props) {
       ) : (
         <React.Fragment />
       )}
+      <ConfirmDialog
+        subtitle={selectedRow["name"] + " will be deleted."}
+        confirmType="Delete"
+        handleClick={() => confirmDelete(selectedRow)}
+        isOpen={deletebtnOpen}
+        setIsOpen={setDeletebtnOpen}
+      />
     </React.Fragment>
   );
 }
