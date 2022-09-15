@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 // material-ui
@@ -11,8 +10,6 @@ import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
 import { useGetAll } from "services/api/Customers.js";
 
-// third party
-import axios from "axios";
 // ==============================|| Customers view ||============================== //
 
 function BaseJSX(props) {
@@ -23,12 +20,9 @@ function BaseJSX(props) {
     {
       field: "critical_infrastructure",
       headerName: "Critical Infrastructure",
-      flex: 2,
+      flex: 1.5,
     },
-    { field: "address_1", headerName: "Address", flex: 2.5 },
-    { field: "city", headerName: "City", flex: 1.5 },
-    { field: "state", headerName: "State", flex: 1 },
-    { field: "zip_code", headerName: "Zip Code", flex: 1 },
+    { field: "primaryPOC", headerName: "Primary Point of Contact", flex: 1.5 },
   ];
   return (
     <MainCard title="Customers">
@@ -64,6 +58,10 @@ function CustomersPage() {
       cusRows.forEach((entry) => {
         entry["id"] = counter;
         counter = counter + 1;
+        entry["primaryPOC"] =
+          entry["contact_list"][0]["first_name"] +
+          " " +
+          entry["contact_list"][0]["last_name"];
       });
       return rowsArray;
     }
