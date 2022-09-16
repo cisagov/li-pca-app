@@ -1282,6 +1282,10 @@ components:
           type: array
           items:
             type: string
+        behavior:
+          type: string
+        category:
+          type: string
       example:
         name: "Order Details"
         description: "Contains fake order tracking information."

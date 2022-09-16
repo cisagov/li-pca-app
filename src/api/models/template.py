@@ -68,3 +68,9 @@ class TemplateSchema(BaseSchema):
     indicators = fields.List(fields.Str(), allow_none=True)
     campaigns = fields.List(fields.Str(), allow_none=True)
     recommendation_type = fields.Str()
+    behavior = fields.Str(
+        validate=validate.OneOf(["Greed", "Duty", "Fear"]),
+    )
+    category = fields.Str(
+        validate=validate.OneOf(["Social Media", "Vendors", "Internal"]),
+    )
