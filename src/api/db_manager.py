@@ -34,6 +34,10 @@ class Manager:
         self.other_indexes = other_indexes
         self.db = get_db()
 
+    def set_collection_name(self, collection_name):
+        """Set Collection Name."""
+        self.collection = collection_name
+
     def get_query(self, data):
         """Get query parameters from schema."""
         schema = self.schema()
@@ -103,7 +107,8 @@ class Manager:
     def create_indexes(self):
         """Create indexes for collection."""
         for index in self.other_indexes:
-            self.db.collection.create_index(index, unique=False)
+            target_collection = self.db.get_collection(name=self.collection)
+            target_collection.create_index(index, unique=False)
 
     def add_created(self, data):
         """Add created attribute to data on save."""
@@ -149,15 +154,18 @@ class Manager:
     def get(self, document_id=None, filter_data=None, fields=None):
         """Get item from collection by id or filter."""
         if document_id:
+
+            target_collection = self.db.get_collection(name=self.collection)
             return self.read_data(
-                self.db.collection.find_one(
+                target_collection.find_one(
                     self.document_query(document_id),
                     self.convert_fields(fields),
                 )
             )
         else:
+            target_collection = self.db.get_collection(name=self.collection)
             return self.read_data(
-                self.db.collection.find_one(
+                target_collection.find_one(
                     filter_data,
                     self.convert_fields(fields),
                 )
@@ -166,15 +174,17 @@ class Manager:
     def get_uuid(self, document_id=None, filter_data=None, fields=None):
         """Get item from collection by id or filter."""
         if document_id:
+            target_collection = self.db.get_collection(name=self.collection)
             return self.read_data(
-                self.db.collection.find_one(
+                target_collection.find_one(
                     self.document_query_uuid(document_id),
                     self.convert_fields(fields),
                 )
             )
         else:
+            target_collection = self.db.get_collection(name=self.collection)
             return self.read_data(
-                self.db.collection.find_one(
+                target_collection.find_one(
                     filter_data,
                     self.convert_fields(fields),
                 )
@@ -182,8 +192,9 @@ class Manager:
 
     def get_mongo_id(self, document_id=None, filter_data=None, fields=None):
         """Get item from collection by id or filter."""
+        target_collection = self.db.get_collection(name=self.collection)
         return self.read_data(
-            self.db.collection.find_one(
+            target_collection.find_one(
                 self.document_query(_id=document_id),
                 self.convert_fields(fields),
             )
@@ -191,7 +202,8 @@ class Manager:
 
     def all(self, params=None, fields=None, sortby=None, limit=None):
         """Get all items in a collection."""
-        query = self.db.collection.find(
+        target_collection = self.db.get_collection(name=self.collection)
+        query = target_collection.find(
             self.format_params(params), self.convert_fields(fields)
         )
         if sortby:
@@ -203,11 +215,13 @@ class Manager:
     def delete(self, document_id=None, params=None):
         """Delete item by object id."""
         if document_id:
-            return self.db.collection.delete_one(
+            target_collection = self.db.get_collection(name=self.collection)
+            return target_collection.delete_one(
                 self.document_query(document_id)
             ).raw_result
         if params or params == {}:
-            return self.db.delete_many(params).raw_result
+            target_collection = self.db.get_collection(name=self.collection)
+            return target_collection.delete_many(params).raw_result
         raise Exception(
             "Either a document id or params must be supplied when deleting."
         )
@@ -215,20 +229,23 @@ class Manager:
     def delete_uuid(self, document_id=None, params=None):
         """Delete item by object id."""
         if document_id:
-            return self.db.collection.delete_one(
+            target_collection = self.db.get_collection(name=self.collection)
+            return target_collection.delete_one(
                 self.document_query_uuid(document_id)
             ).raw_result
         if params or params == {}:
-            return self.db.delete_many(params).raw_result
+            target_collection = self.db.get_collection(name=self.collection)
+            return target_collection.delete_many(params).raw_result
         raise Exception(
             "Either a document id or params must be supplied when deleting."
         )
 
     def update(self, document_id, data):
         """Update item by id."""
+        target_collection = self.db.get_collection(name=self.collection)
         data = self.clean_data(data)
         data = self.add_updated(data)
-        self.db.collection.update_one(
+        target_collection.update_one(
             self.document_query(document_id),
             {"$set": self.load_data(data, partial=True)},
         ).raw_result
@@ -236,18 +253,20 @@ class Manager:
 
     def update_uuid(self, document_id, data):
         """Update item by id."""
+        target_collection = self.db.get_collection(name=self.collection)
         data = self.clean_data(data)
         data = self.add_updated(data)
-        self.db.collection.update_one(
+        target_collection.update_one(
             self.document_query_uuid(document_id),
             {"$set": self.load_data(data, partial=True)},
         ).raw_result
 
     def update_many(self, params, data):
         """Update many items with params."""
+        target_collection = self.db.get_collection(name=self.collection)
         data = self.clean_data(data)
         data = self.add_updated(data)
-        self.db.collection.update_many(
+        target_collection.update_many(
             params,
             {"$set": self.load_data(data, partial=True)},
         )
@@ -257,7 +276,8 @@ class Manager:
         self.create_indexes()
         data = self.clean_data(data)
         data = self.add_created(data)
-        result = self.db.collection.insert_one(self.load_data(data))
+        target_collection = self.db.create_collection(name=self.collection)
+        result = target_collection.insert_one(self.load_data(data))
         return {"_id": str(result.inserted_id)}
 
     def save_many(self, data):
@@ -265,33 +285,40 @@ class Manager:
         self.create_indexes()
         data = self.clean_data(data)
         data = self.add_created(data)
-        result = self.db.collection.insert_many(self.load_data(data, many=True))
+        target_collection = self.db.create_collection(name=self.collection)
+        result = target_collection.insert_many(self.load_data(data, many=True))
         return result.inserted_ids
 
     def add_to_list(self, document_id, field, data):
         """Add item to list in document."""
-        return self.db.collection.update_one(
-            self.document_query(document_id), {"$push": {field: data}}
-        ).raw_result
+        target_collection = self.db.get_collection(name=self.collection)
+        return (
+            target_collection()
+            .update_one(self.document_query(document_id), {"$push": {field: data}})
+            .raw_result
+        )
 
     def delete_from_list(self, document_id, field, data):
         """Delete item from list in document."""
-        return self.db.collection.update_one(
+        target_collection = self.db.get_collection(name=self.collection)
+        return target_collection.update_one(
             self.document_query(document_id), {"$pull": {field: data}}
         ).raw_result
 
     def update_in_list(self, document_id, field, data, params):
         """Update item in list from document."""
+        target_collection = self.db.get_collection(name=self.collection)
         query = self.document_query(document_id)
         query.update(params)
-        return self.db.collection.update_one(query, {"$set": {field: data}}).raw_result
+        return target_collection.update_one(query, {"$set": {field: data}}).raw_result
 
     def upsert(self, query, data):
         """Upsert documents into the database."""
         data = self.clean_data(data)
         data = self.add_created(data)
         data = self.add_updated(data)
-        self.db.collection.update_one(
+        target_collection = self.db.get_collection(name=self.collection)
+        target_collection.update_one(
             query,
             {"$set": self.load_data(data)},
             upsert=True,
@@ -299,19 +326,22 @@ class Manager:
 
     def random(self, count=1):
         """Select a random record from collection."""
-        return list(self.db.collection.aggregate([{"$sample": {"size": count}}]))
+        target_collection = self.db.get_collection(name=self.collection)
+        return list(target_collection.aggregate([{"$sample": {"size": count}}]))
 
     def exists(self, parameters=None):
         """Check if record exists."""
+        target_collection = self.db.get_collection(name=self.collection)
         fields = self.convert_fields(["_id"])
-        result = list(self.db.collection.find(parameters, fields))
+        result = list(target_collection.find(parameters, fields))
         return bool(result)
 
     def find_one_and_update(self, params, data, fields=None):
         """Find an object and update it."""
         data = self.clean_data(data)
         data = self.add_updated(data)
-        return self.db.collection.find_one_and_update(
+        target_collection = self.db.get_collection(name=self.collection)
+        return target_collection.find_one_and_update(
             params,
             {"$set": self.load_data(data, partial=True)},
             return_document=pymongo.ReturnDocument.AFTER,
@@ -325,7 +355,7 @@ class AssessmentManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="config",
+            collection="assessments",
             schema=AssessmentSchema,
         )
 
@@ -336,7 +366,7 @@ class CampaignManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="config",
+            collection="campaigns",
             schema=CampaignSchema,
         )
 
@@ -347,7 +377,7 @@ class ConfigManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="config",
+            collection="configs",
             schema=ConfigSchema,
         )
 
@@ -358,7 +388,7 @@ class CustomerManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="customer",
+            collection="customers",
             schema=CustomerSchema,
         )
 
@@ -369,7 +399,7 @@ class CycleManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="cycle",
+            collection="cycles",
             schema=CycleSchema,
         )
 
@@ -380,7 +410,7 @@ class LandingPageManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="landing_page",
+            collection="landing_pages",
             schema=LandingPageSchema,
         )
 
@@ -411,7 +441,7 @@ class RecommendationManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="recommendation",
+            collection="recommendations",
             schema=RecommendationsSchema,
         )
 
@@ -422,7 +452,7 @@ class SendingProfileManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="sending_profile",
+            collection="sending_profiles",
             schema=SendingProfileSchema,
         )
 
@@ -433,7 +463,7 @@ class SubscriptionManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="subscription",
+            collection="subscriptions",
             schema=SubscriptionSchema,
         )
 
@@ -444,7 +474,7 @@ class TargetManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="target",
+            collection="targets",
             schema=TargetSchema,
             other_indexes=["email"],
         )
@@ -456,6 +486,6 @@ class TemplateManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="template",
+            collection="templates",
             schema=TemplateSchema,
         )
