@@ -10,17 +10,17 @@ import Typography from "@mui/material/Typography";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll, deleteSP } from "services/api/SendingProfiles.js";
+import { useGetAll, deleteSP } from "services/api/SendingDomains.js";
 
 // third party
 import axios from "axios";
-// ==============================|| Sending Profiles view ||============================== //
+// ==============================|| Sending Domains view ||============================== //
 
 function BaseJSX(props) {
   let navigate = useNavigate();
   const cols = [
     { field: "id", hide: true },
-    { field: "name", headerName: "Sending Profile Domain", flex: 1.25 },
+    { field: "name", headerName: "Sending Domain", flex: 1.25 },
     { field: "interface_type", headerName: "Interface Type", flex: 0.75 },
     {
       field: "#_of_customers_using",
@@ -34,7 +34,7 @@ function BaseJSX(props) {
     },
   ];
   return (
-    <MainCard title="Sending Profiles">
+    <MainCard title="Sending Domains">
       <Grid container spacing={2}>
         <Grid item xs={8} sm={12} md={12} lg={12} xl={12}>
           {props.children}
@@ -42,7 +42,7 @@ function BaseJSX(props) {
             data={{ rows: props.rows, columns: cols }}
             newEntryRoute={props.dataEntry}
             editEntryRoute={props.dataEntry}
-            tableCategory={"Sending Profiles"}
+            tableCategory={"Sending Domains"}
             deleteSP={deleteSP}
           />
         </Grid>
@@ -57,7 +57,7 @@ BaseJSX.propTypes = {
   dataEntry: PropTypes.string,
 };
 
-function SendingProfilesPage() {
+function SendingDomainsPage() {
   const { isLoading, getData, getError } = useGetAll("getAll");
 
   const domainRows = (rowsArray) => {
@@ -111,4 +111,4 @@ function SendingProfilesPage() {
   );
 }
 
-export default SendingProfilesPage;
+export default SendingDomainsPage;

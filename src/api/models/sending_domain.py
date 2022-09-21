@@ -1,4 +1,4 @@
-"""Sending Profile Schemas."""
+"""Sending Domain Schemas."""
 
 # Third-Party Libraries
 from marshmallow import Schema, fields, validate
@@ -14,8 +14,8 @@ class HeaderSchema(Schema):
     value = fields.Str()
 
 
-class SendingProfileSchema(BaseSchema):
-    """SendingProfileSchema."""
+class SendingDomainSchema(BaseSchema):
+    """SendingDomainSchema."""
 
     name = fields.Str(required=True)
     interface_type = fields.Str(

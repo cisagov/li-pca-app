@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Sending Profile Controller Logic."""
+"""Sending Domain Controller Logic."""
 
 # Standard Python Libraries
 import logging
@@ -9,17 +9,17 @@ import connexion
 from flask import jsonify
 
 # cisagov Libraries
-from api.db_manager import SendingProfileManager
+from api.db_manager import SendingDomainManager
 
-db_manager = SendingProfileManager()
+db_manager = SendingDomainManager()
 
 
-def create_sending_profile(body=None):  # noqa: E501
-    """Add a new sending_profile to the data store.
+def create_sending_domain(body=None):  # noqa: E501
+    """Add a new sending_domain to the data store.
 
      # noqa: E501
 
-    :param body: Sending Profile object to be added to data store
+    :param body: Sending Domain object to be added to data store
     :type body: dict | bytes
 
     :rtype: None
@@ -31,8 +31,8 @@ def create_sending_profile(body=None):  # noqa: E501
         return jsonify(db_manager.save(body))
 
 
-def delete_sending_profile_by_uuid(uuid):  # noqa: E501
-    """Delete a Sending Profile.
+def delete_sending_domain_by_uuid(uuid):  # noqa: E501
+    """Delete a Sending Domain.
 
      # noqa: E501
 
@@ -45,8 +45,8 @@ def delete_sending_profile_by_uuid(uuid):  # noqa: E501
     return jsonify(db_manager.delete(uuid))
 
 
-def get_all_sending_profiles(filter_params=None):  # noqa: E501
-    """Find all Sending Profiles.
+def get_all_sending_domains(filter_params=None):  # noqa: E501
+    """Find all Sending Domains.
 
     Multiple status values can be provided with comma separated strings  # noqa: E501
 
@@ -60,10 +60,10 @@ def get_all_sending_profiles(filter_params=None):  # noqa: E501
     return jsonify(db_manager.all(params=db_manager.get_query(filter_params)))
 
 
-def get_sending_profile_by_uuid(uuid):  # noqa: E501
+def get_sending_domain_by_uuid(uuid):  # noqa: E501
     """Find template by uuid.
 
-    Returns a single Sending Profile # noqa: E501
+    Returns a single Sending Domain # noqa: E501
 
     :param uuid: uuid of template to return
     :type uuid: str
@@ -74,14 +74,14 @@ def get_sending_profile_by_uuid(uuid):  # noqa: E501
     return jsonify(db_manager.get(document_id=uuid))
 
 
-def update_sending_profile_by_uuid(uuid, body=None):  # noqa: E501
-    """Update an existing Sending Profile.
+def update_sending_domain_by_uuid(uuid, body=None):  # noqa: E501
+    """Update an existing Sending Domain.
 
      # noqa: E501
 
-    :param uuid: uuid of Sending Profile to update
+    :param uuid: uuid of Sending Domain to update
     :type uuid: str
-    :param body: Sending Profile object to be added to data store
+    :param body: Sending Domain object to be added to data store
     :type body: dict | bytes
 
     :rtype: None

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 // third party
 import axios from "axios";
 
-const baseURL = "http://localhost:8080/li-pca/v1/sending_profiles";
+const baseURL = "http://localhost:8080/li-pca/v1/sending_domains";
 const headers = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
@@ -37,7 +37,7 @@ export const useGetAll = () => {
 };
 
 export const submitSP = (spData, sp_id, dataEntryType, setError) => {
-  if (dataEntryType == "New Sending Profile") {
+  if (dataEntryType == "New Sending Domain") {
     axios
       .post(baseURL, spData, {
         headers: headers,
@@ -48,12 +48,12 @@ export const submitSP = (spData, sp_id, dataEntryType, setError) => {
       })
       .catch((error) => {
         setError([true, error.message]);
-        console.log("Error adding new sending profile entry.");
+        console.log("Error adding new sending domain entry.");
         console.log(spData);
         console.log(error);
       });
   }
-  if (dataEntryType == "Edit Sending Profile") {
+  if (dataEntryType == "Edit Sending Domain") {
     axios
       .put(baseURL + "/" + sp_id, spData, {
         headers: headers,
@@ -64,7 +64,7 @@ export const submitSP = (spData, sp_id, dataEntryType, setError) => {
       })
       .catch((error) => {
         setError([true, error.message]);
-        console.log("Error updating sending profile entry.");
+        console.log("Error updating sending domain entry.");
         console.log(spData);
         console.log(error);
       });

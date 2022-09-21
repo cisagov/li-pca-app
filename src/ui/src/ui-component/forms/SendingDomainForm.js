@@ -22,7 +22,7 @@ import * as yup from "yup";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { submitSP, deleteSP } from "services/api/SendingProfiles.js";
+import { submitSP, deleteSP } from "services/api/SendingDomains.js";
 
 const fieldsToValidate = {
   name: true,
@@ -41,7 +41,7 @@ const validationSchema = yup.object({
   sending_ips: yup.string().required("Sending IP[s] is required"),
 });
 
-const SendingProfileForm = (props) => {
+const SendingDomainForm = (props) => {
   let navigate = useNavigate();
   let [emailHeaderArray, setHeaderArray] = React.useState([]);
   let [customHeader, setCustomHeader] = React.useState("");
@@ -93,7 +93,7 @@ const SendingProfileForm = (props) => {
   });
   let subtitleConfirm =
     formik.values.name + " will be updated in the database.";
-  if (props.dataEntryType == "New Sending Profile") {
+  if (props.dataEntryType == "New Sending Domain") {
     subtitleConfirm = formik.values.name + " will be added to the database.";
   }
   const header_cols = [
@@ -441,7 +441,7 @@ const SendingProfileForm = (props) => {
               disabled={isDisabled()}
               onClick={handleSave}
             >
-              Save Profile
+              Save Domain
             </Button>
           </Grid>
         </Grid>
@@ -471,4 +471,4 @@ const SendingProfileForm = (props) => {
   );
 };
 
-export default SendingProfileForm;
+export default SendingDomainForm;
