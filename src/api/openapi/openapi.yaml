@@ -30,6 +30,8 @@ tags:
     description: Li-PCA Domains
   - name: recon
     description: Li-PCA Recon
+  - name: landing_pages
+    description: Li-PCA Landing Pages
 paths:
   /v1/assessments:
     get:
@@ -779,6 +781,152 @@ paths:
         "400":
           description: Invalid domain supplied
       x-openapi-router-controller: api.controllers.recon_controller
+  /v1/landing_pages:
+    get:
+      tags:
+        - landing_pages
+      summary: Get all landing page
+      description: Get All Landing Pages
+      operationId: get_all_landing_pages
+      parameters:
+        - name: name
+          in: query
+          description: Landing Page name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LandingPage'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LandingPage'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Sending Profile not found
+        "405":
+          description: Validation Exception
+      x-openapi-router-controller: api.controllers.landing_pages_controller
+    post:
+      tags:
+        - landing_pages
+      summary: Add new landing page to the data store
+      operationId: create_landing_page
+      requestBody:
+        description: created landing page object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LandingPage'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+      x-openapi-router-controller: api.controllers.landing_pages_controller
+  /v1/landing_pages/{uuid}:
+    get:
+      tags:
+        - landing_pages
+      summary: Find landing page by uuid
+      description: returns a single landing page
+      operationId: get_landing_page_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of landing page to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+            application/xml:
+              schema:
+                $ref:
+                  '#/components/schemas/LandingPage'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: landing page not found
+      x-openapi-router-controller: api.controllers.landing_pages_controller
+    put:
+      tags:
+        - landing_pages
+      summary: Update an existing landing page
+      operationId: update_landing_page_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of landing page to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      requestBody:
+        description: Updated landing page object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LandingPage'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: landing page not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.landing_pages_controller
+    delete:
+      tags:
+        - landing_pages
+      summary: Deletes a landing page
+      operationId: delete_landing_page_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: landing page not found
+      x-openapi-router-controller: api.controllers.landing_pages_controller
   /v1/documents:
     get:
       tags:
@@ -1461,6 +1609,17 @@ components:
           type: string
         message:
           type: string
+    LandingPage:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        is_default_template:
+          type: boolean
+        html:
+          type: string
   requestBodies:
     Customer:
       required: true
@@ -1538,4 +1697,14 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/User'
+      required: true
+    LandingPage:
+      description: A landing page object to be added to the data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LandingPage'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/LandingPage'
       required: true
