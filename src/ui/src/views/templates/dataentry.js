@@ -23,6 +23,7 @@ import Typography from "@mui/material/Typography";
 import WebIcon from "@mui/icons-material/Web";
 
 // project imports
+import DeceptionCalculator from "./deceptionCalculator";
 import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
 import TemplateTestingForm from "ui-component/forms/TemplateTestingForm";
 
@@ -401,7 +402,7 @@ const TemplateDataEntryPage = () => {
             flexItem
             style={{ marginRight: "-1px" }}
           />
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+          <Grid item xs={12} sm={12} md={3.7} lg={3.7} xl={3.7}>
             <Typography
               variant="h3"
               gutterBottom
@@ -410,7 +411,7 @@ const TemplateDataEntryPage = () => {
             >
               Deception Calculator
             </Typography>
-            This is where the Deception Calculator will go.
+            <DeceptionCalculator />
           </Grid>
         </Grid>
       </Box>
