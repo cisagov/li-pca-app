@@ -400,19 +400,9 @@ const TemplateDataEntryPage = () => {
             orientation="vertical"
             variant="middle"
             flexItem
-            style={{ marginRight: "-1px" }}
+            style={{ marginRight: "5px" }}
           />
-          <Grid item xs={12} sm={12} md={3.7} lg={3.7} xl={3.7}>
-            <Typography
-              variant="h3"
-              gutterBottom
-              component="div"
-              color="primary"
-            >
-              Deception Calculator
-            </Typography>
-            <DeceptionCalculator />
-          </Grid>
+          <DeceptionCalculator />
         </Grid>
       </Box>
     </MainCard>
