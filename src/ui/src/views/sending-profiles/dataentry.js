@@ -2,13 +2,10 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 // material-ui
-import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 
 // project imports
-import DisplayDataTable from "ui-component/tables/DisplayDataTable";
 import MainCard from "ui-component/cards/MainCard";
 import SendingProfileForm from "ui-component/forms/SendingProfileForm";
 
