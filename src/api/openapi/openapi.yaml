@@ -24,8 +24,8 @@ tags:
     description: Li-PCA Templates
   - name: documents
     description: Li-PCA Reports
-  - name: sending_profiles
-    description: Li-PCA Sending Profiles
+  - name: sending_domains
+    description: Li-PCA Sending Domains
   - name: domains
     description: Li-PCA Domains
   - name: recon
@@ -603,14 +603,14 @@ paths:
         "404":
           description: campaign not found
       x-openapi-router-controller: api.controllers.campaigns_controller
-  /v1/sending_profiles:
+  /v1/sending_domains:
     get:
       tags:
-        - sending_profiles
+        - sending_domains
         - domains
       summary: Get all sending profiles (domains)
-      description: Get All Sending Profiles (Domains)
-      operationId: get_all_sending_profiles
+      description: Get All Sending Domains (Domains)
+      operationId: get_all_sending_domains
       parameters:
         - name: name
           in: query
@@ -630,32 +630,32 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Sending_Profile'
+                  $ref: '#/components/schemas/SendingDomain'
                 x-content-type: application/json
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Sending_Profile'
+                  $ref: '#/components/schemas/SendingDomain'
         "400":
           description: Invalid ID supplied
         "404":
-          description: Sending Profile not found
+          description: Sending Domain not found
         "405":
           description: Validation Exception
-      x-openapi-router-controller: api.controllers.sending_profiles_controller
+      x-openapi-router-controller: api.controllers.sending_domains_controller
     post:
       tags:
-        - sending_profiles
+        - sending_domains
         - domains
       summary: Add new sending profile to the data store
-      operationId: create_sending_profile
+      operationId: create_sending_domain
       requestBody:
         description: created sending profile object
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Sending_Profile'
+              $ref: '#/components/schemas/SendingDomain'
         required: true
       responses:
         "200":
@@ -663,19 +663,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Sending_Profile'
+                $ref: '#/components/schemas/SendingDomain'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Sending_Profile'
-      x-openapi-router-controller: api.controllers.sending_profiles_controller
-  /v1/sending_profiles/{uuid}:
+                $ref: '#/components/schemas/SendingDomain'
+      x-openapi-router-controller: api.controllers.sending_domains_controller
+  /v1/sending_domains/{uuid}:
     get:
       tags:
-        - sending_profiles
+        - sending_domains
         - domains
       summary: Find sending profile by uuid
       description: returns a single sending profile
-      operationId: get_sending_profile_by_uuid
+      operationId: get_sending_domain_by_uuid
       parameters:
         - name: uuid
           in: path
@@ -692,22 +692,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Sending_Profile'
+                $ref: '#/components/schemas/SendingDomain'
             application/xml:
               schema:
                 $ref:
-                  '#/components/schemas/Sending_Profile'
+                  '#/components/schemas/SendingDomain'
         "400":
           description: Invalid ID supplied
         "404":
           description: sending profile not found
-      x-openapi-router-controller: api.controllers.sending_profiles_controller
+      x-openapi-router-controller: api.controllers.sending_domains_controller
     put:
       tags:
-        - sending_profiles
+        - sending_domains
         - domains
       summary: Update an existing sending profile
-      operationId: update_sending_profile_by_uuid
+      operationId: update_sending_domain_by_uuid
       parameters:
         - name: uuid
           in: path
@@ -723,7 +723,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Sending_Profile'
+              $ref: '#/components/schemas/SendingDomain'
       responses:
         "400":
           description: Invalid uuid supplied
@@ -731,13 +731,13 @@ paths:
           description: sending profile not found
         "405":
           description: Validation exception
-      x-openapi-router-controller: api.controllers.sending_profiles_controller
+      x-openapi-router-controller: api.controllers.sending_domains_controller
     delete:
       tags:
-        - sending_profiles
+        - sending_domains
         - domains
       summary: Deletes a sending profile
-      operationId: delete_sending_profile_by_uuid
+      operationId: delete_sending_domain_by_uuid
       parameters:
         - name: uuid
           in: path
@@ -753,7 +753,7 @@ paths:
           description: Invalid uuid supplied
         "404":
           description: sending profile not found
-      x-openapi-router-controller: api.controllers.sending_profiles_controller
+      x-openapi-router-controller: api.controllers.sending_domains_controller
   /v1/harvester:
     get:
       tags:
@@ -817,7 +817,7 @@ paths:
         "400":
           description: Invalid ID supplied
         "404":
-          description: Sending Profile not found
+          description: Sending Domain not found
         "405":
           description: Validation Exception
       x-openapi-router-controller: api.controllers.landing_pages_controller
@@ -1494,7 +1494,7 @@ components:
           type: string
         value:
           type: string
-    Sending_Profile:
+    SendingDomain:
       required:
         - name
         - landing_page_domain
@@ -1662,15 +1662,15 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Template'
-    Sending_Profile:
-      description: Sending Profile to be added to the data store
+    SendingDomain:
+      description: Sending Domain to be added to the data store
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Sending_Profile'
+            $ref: '#/components/schemas/SendingDomain'
         application/xml:
           schema:
-            $ref: '#/components/schemas/Sending_Profile'
+            $ref: '#/components/schemas/SendingDomain'
     ReconResult:
       description: Recon Result to be added to the data store
       content:

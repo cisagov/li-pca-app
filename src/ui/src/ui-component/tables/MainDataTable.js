@@ -171,7 +171,7 @@ export default function MainDataTable(props) {
     density = "compact";
   }
   if (
-    props.tableCategory == "Sending Profiles"
+    props.tableCategory == "Sending Domains"
     // || props.tableCategory == "Landing Pages"
   ) {
     columns.push({

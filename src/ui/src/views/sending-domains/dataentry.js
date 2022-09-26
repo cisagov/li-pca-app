@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 
 // project imports
 import MainCard from "ui-component/cards/MainCard";
-import SendingProfileForm from "ui-component/forms/SendingProfileForm";
+import SendingDomainForm from "ui-component/forms/SendingDomainForm";
 
 // ==============================|| Create/Update Customer View ||============================== //
 
@@ -59,9 +59,9 @@ const spRowsTransform = (domainRows) => {
 
 const newOrEdit = (dataEntryType) => {
   if (dataEntryType == "new") {
-    return "New Sending Profile";
+    return "New Sending Domain";
   }
-  return "Edit Sending Profile";
+  return "Edit Sending Domain";
 };
 
 const SPDataEntryPage = () => {
@@ -74,7 +74,7 @@ const SPDataEntryPage = () => {
     <MainCard title={mainCardTitle}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
         <Grid container spacing={2}>
-          <SendingProfileForm
+          <SendingDomainForm
             setSpData={setSpData}
             spData={spData}
             initialValues={spValues}

@@ -25,12 +25,12 @@ const LandingPagesPage = Loadable(lazy(() => import("views/landing-pages")));
 const LPDataEntryPage = Loadable(
   lazy(() => import("views/landing-pages/dataentry"))
 );
-// sending-profiles page routing
-const SendingProfilesPage = Loadable(
-  lazy(() => import("views/sending-profiles"))
+// sending-domains page routing
+const SendingDomainsPage = Loadable(
+  lazy(() => import("views/sending-domains"))
 );
 const SPDataEntryPage = Loadable(
-  lazy(() => import("views/sending-profiles/dataentry"))
+  lazy(() => import("views/sending-domains/dataentry"))
 );
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -71,11 +71,11 @@ const MainRoutes = {
       element: <LPDataEntryPage />,
     },
     {
-      path: "/sending-profiles",
-      element: <SendingProfilesPage />,
+      path: "/sending-domains",
+      element: <SendingDomainsPage />,
     },
     {
-      path: "/sending-profiles/data-entry",
+      path: "/sending-domains/data-entry",
       element: <SPDataEntryPage />,
     },
   ],

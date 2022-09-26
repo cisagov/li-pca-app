@@ -68,10 +68,10 @@ const main = {
       breadcrumbs: false,
     },
     {
-      id: "sending-profiles",
-      title: "Sending Profiles",
+      id: "sending-domains",
+      title: "Sending Domains",
       type: "item",
-      url: "/sending-profiles",
+      url: "/sending-domains",
       icon: icons.IconSend,
       breadcrumbs: false,
     },

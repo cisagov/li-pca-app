@@ -1,6 +1,6 @@
 # Note: Add any additional requirements to setup.py's install_requires field
 --editable .
-connexion == 2.6.0
+connexion == 2.13.0
 flask_cors
 flask_testing
 marshmallow

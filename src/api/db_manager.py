@@ -18,7 +18,7 @@ from api.models.cycle import CycleSchema
 from api.models.landing_page import LandingPageSchema
 from api.models.nonhuman import NonHumanSchema
 from api.models.recommendation import RecommendationsSchema
-from api.models.sending_profile import SendingProfileSchema
+from api.models.sending_domain import SendingDomainSchema
 from api.models.subscription_manager import SubscriptionSchema
 from api.models.target import TargetSchema
 from api.models.template import TemplateSchema
@@ -446,14 +446,14 @@ class RecommendationManager(Manager):
         )
 
 
-class SendingProfileManager(Manager):
-    """SendingProfileManager."""
+class SendingDomainManager(Manager):
+    """SendingDomainManager."""
 
     def __init__(self):
         """Super."""
         return super().__init__(
             collection="sending_profiles",
-            schema=SendingProfileSchema,
+            schema=SendingDomainSchema,
         )
 
 
