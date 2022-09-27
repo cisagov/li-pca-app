@@ -1434,6 +1434,10 @@ components:
           type: string
         category:
           type: string
+        industry:
+          type: array
+          items:
+            type: string
       example:
         name: "Order Details"
         description: "Contains fake order tracking information."

@@ -74,3 +74,28 @@ class TemplateSchema(BaseSchema):
     category = fields.Str(
         validate=validate.OneOf(["Social Media", "Vendors", "Internal"]),
     )
+    industry = fields.List(
+        fields.Str(
+            allow_none=True,
+            validate=validate.OneOf(
+                [
+                    "Chemical Sector",
+                    "Commercial Facilities Sector",
+                    "Communications Sector",
+                    "Critical Manufacturing Sector",
+                    "Dams Sector",
+                    "Defense Industrial Base Sector",
+                    "Emergency Services Sector",
+                    "Energy Sector",
+                    "Financial Services Sector",
+                    "Food and Agriculture Sector",
+                    "Government Facilities Sector",
+                    "Healthcare and Public Health Sector",
+                    "Information Technology Sector",
+                    "Nuclear Reactor, Materials, and Waste Sector",
+                    "Transportation Systems Sector",
+                    "Water and Wastewater Systems Sector",
+                ]
+            ),
+        )
+    )
