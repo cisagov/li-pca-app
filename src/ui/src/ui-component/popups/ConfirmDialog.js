@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 //material-ui
+import ArchiveIcon from "@mui/icons-material/Archive";
 import Button from "@mui/material/Button";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -43,6 +44,10 @@ const ConfirmDialog = (props) => {
     title = "Are you sure you want to delete this entry?";
     endIcon = <DeleteIcon />;
     color = "error";
+  }
+  if (confirmType == "Retire") {
+    title = "Are you sure you want to retire these template(s)?";
+    endIcon = <ArchiveIcon />;
   }
   if (confirmType == "Save") {
     confirmButton = (

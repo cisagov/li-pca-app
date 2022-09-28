@@ -12,6 +12,8 @@ const CustomersPage = Loadable(lazy(() => import("views/customers")));
 const CustDataEntryPage = Loadable(
   lazy(() => import("views/customers/dataentry"))
 );
+// phish-reconn page routing
+const PhishReconnPage = Loadable(lazy(() => import("views/phish-reconn")));
 // templates page routing
 const TemplatesPage = Loadable(lazy(() => import("views/templates")));
 // templates data entry page routing
@@ -20,11 +22,16 @@ const TemplateDataEntryPage = Loadable(
 );
 // landing-pages page routing
 const LandingPagesPage = Loadable(lazy(() => import("views/landing-pages")));
-// sending-profiles page routing
-const SendingProfilesPage = Loadable(
-  lazy(() => import("views/sending-profiles"))
+const LPDataEntryPage = Loadable(
+  lazy(() => import("views/landing-pages/dataentry"))
 );
-
+// sending-domains page routing
+const SendingDomainsPage = Loadable(
+  lazy(() => import("views/sending-domains"))
+);
+const SPDataEntryPage = Loadable(
+  lazy(() => import("views/sending-domains/dataentry"))
+);
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -44,6 +51,10 @@ const MainRoutes = {
       element: <CustDataEntryPage />,
     },
     {
+      path: "/phish-reconn",
+      element: <PhishReconnPage />,
+    },
+    {
       path: "/templates",
       element: <TemplatesPage />,
     },
@@ -56,8 +67,16 @@ const MainRoutes = {
       element: <LandingPagesPage />,
     },
     {
-      path: "/sending-profiles",
-      element: <SendingProfilesPage />,
+      path: "/landing-pages/data-entry",
+      element: <LPDataEntryPage />,
+    },
+    {
+      path: "/sending-domains",
+      element: <SendingDomainsPage />,
+    },
+    {
+      path: "/sending-domains/data-entry",
+      element: <SPDataEntryPage />,
     },
   ],
 };

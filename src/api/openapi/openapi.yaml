@@ -1,16 +1,16 @@
 ---
 openapi: 3.0.0
 info:
-  title: Li-PCA API
+  title: li-pca-api
   description: |
-    Li-PCA Apllication API Endpoints
+    Li-PCA Application API Endpoints
   version: 1.0.0
 externalDocs:
-  description: Find out more about Swagger
-  url: http://localhost:8080/li-pca/docs
+  url: https://app.swaggerhub.com/apis-docs/Li-PCA/li-pca-api/1.0.0
+  description: Swagger Hosted Docs
 servers:
-  - url: https://localhost:8080/li-pca
-    description: Li-PCA-APP API
+  - description: li-pca-api
+    url: https://localhost:8080/li-pca
 tags:
   - name: auth
     description: Li-PCA Authentication
@@ -24,6 +24,14 @@ tags:
     description: Li-PCA Templates
   - name: documents
     description: Li-PCA Reports
+  - name: sending_domains
+    description: Li-PCA Sending Domains
+  - name: domains
+    description: Li-PCA Domains
+  - name: recon
+    description: Li-PCA Recon
+  - name: landing_pages
+    description: Li-PCA Landing Pages
 paths:
   /v1/assessments:
     get:
@@ -427,6 +435,28 @@ paths:
         "404":
           description: template not found
       x-openapi-router-controller: api.controllers.templates_controller
+  /v1/templates/bulk:
+    put:
+      tags:
+        - templates
+      summary: Update an existing template
+      operationId: bulk_update_templates
+      requestBody:
+        description: Bulk Update template object
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Template'
+      responses:
+        "400":
+          description: Invalid request supplied
+        "404":
+          description: template not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.templates_controller
   /v1/campaigns:
     get:
       tags:
@@ -463,6 +493,10 @@ paths:
                   $ref: '#/components/schemas/Campaign'
         "400":
           description: Invalid name value
+        "404":
+          description: Campaign not found
+        "405":
+          description: Validation Exception
       x-openapi-router-controller: api.controllers.campaigns_controller
     post:
       tags:
@@ -470,10 +504,22 @@ paths:
       summary: Add a new campaign to the data store
       operationId: create_campaign
       requestBody:
-        $ref: '#/components/requestBodies/Campaign'
+        description: Created campaign object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+        required: true
       responses:
-        "405":
-          description: Invalid input
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Campaign'
       x-openapi-router-controller: api.controllers.campaigns_controller
   /v1/campaigns/{uuid}:
     get:
@@ -523,7 +569,11 @@ paths:
             type: string
             format: uuid4
       requestBody:
-        $ref: '#/components/requestBodies/Campaign'
+        description: Updated campaign object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
       responses:
         "400":
           description: Invalid uuid supplied
@@ -553,6 +603,330 @@ paths:
         "404":
           description: campaign not found
       x-openapi-router-controller: api.controllers.campaigns_controller
+  /v1/sending_domains:
+    get:
+      tags:
+        - sending_domains
+        - domains
+      summary: Get all sending profiles (domains)
+      description: Get All Sending Domains (Domains)
+      operationId: get_all_sending_domains
+      parameters:
+        - name: name
+          in: query
+          description: Domain name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendingDomain'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendingDomain'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Sending Domain not found
+        "405":
+          description: Validation Exception
+      x-openapi-router-controller: api.controllers.sending_domains_controller
+    post:
+      tags:
+        - sending_domains
+        - domains
+      summary: Add new sending profile to the data store
+      operationId: create_sending_domain
+      requestBody:
+        description: created sending profile object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendingDomain'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendingDomain'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SendingDomain'
+      x-openapi-router-controller: api.controllers.sending_domains_controller
+  /v1/sending_domains/{uuid}:
+    get:
+      tags:
+        - sending_domains
+        - domains
+      summary: Find sending profile by uuid
+      description: returns a single sending profile
+      operationId: get_sending_domain_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of sending profile to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendingDomain'
+            application/xml:
+              schema:
+                $ref:
+                  '#/components/schemas/SendingDomain'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: sending profile not found
+      x-openapi-router-controller: api.controllers.sending_domains_controller
+    put:
+      tags:
+        - sending_domains
+        - domains
+      summary: Update an existing sending profile
+      operationId: update_sending_domain_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of sending profile to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      requestBody:
+        description: Updated sending profile object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendingDomain'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: sending profile not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.sending_domains_controller
+    delete:
+      tags:
+        - sending_domains
+        - domains
+      summary: Deletes a sending profile
+      operationId: delete_sending_domain_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: sending profile not found
+      x-openapi-router-controller: api.controllers.sending_domains_controller
+  /v1/harvester:
+    get:
+      tags:
+        - recon
+      summary: Run Harvester query for a domain
+      description: Returns results from a harvester query
+      operationId: call_harvester_query
+      parameters:
+        - name: domain
+          in: query
+          description: domain to run a Harvester query against
+          required: true
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconResult'
+        "400":
+          description: Invalid domain supplied
+      x-openapi-router-controller: api.controllers.recon_controller
+  /v1/landing_pages:
+    get:
+      tags:
+        - landing_pages
+      summary: Get all landing page
+      description: Get All Landing Pages
+      operationId: get_all_landing_pages
+      parameters:
+        - name: name
+          in: query
+          description: Landing Page name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LandingPage'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LandingPage'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Sending Domain not found
+        "405":
+          description: Validation Exception
+      x-openapi-router-controller: api.controllers.landing_pages_controller
+    post:
+      tags:
+        - landing_pages
+      summary: Add new landing page to the data store
+      operationId: create_landing_page
+      requestBody:
+        description: created landing page object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LandingPage'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+      x-openapi-router-controller: api.controllers.landing_pages_controller
+  /v1/landing_pages/{uuid}:
+    get:
+      tags:
+        - landing_pages
+      summary: Find landing page by uuid
+      description: returns a single landing page
+      operationId: get_landing_page_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of landing page to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+            application/xml:
+              schema:
+                $ref:
+                  '#/components/schemas/LandingPage'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: landing page not found
+      x-openapi-router-controller: api.controllers.landing_pages_controller
+    put:
+      tags:
+        - landing_pages
+      summary: Update an existing landing page
+      operationId: update_landing_page_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of landing page to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      requestBody:
+        description: Updated landing page object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LandingPage'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: landing page not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.landing_pages_controller
+    delete:
+      tags:
+        - landing_pages
+      summary: Deletes a landing page
+      operationId: delete_landing_page_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: landing page not found
+      x-openapi-router-controller: api.controllers.landing_pages_controller
   /v1/documents:
     get:
       tags:
@@ -861,6 +1235,7 @@ paths:
         "404":
           description: User not found
       x-openapi-router-controller: api.controllers.user_controller
+
 components:
   schemas:
     User:
@@ -939,9 +1314,7 @@ components:
           type: string
         sector:
           type: string
-        Kcritical_infrastructur_id:
-          type: string
-        critical_infrastructur_name:
+        critical_infrastructure:
           type: string
         address_1:
           type: string
@@ -962,20 +1335,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Contact'
+        recon_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReconResult'
+        customer_notes:
+          type: string
       example:
         name: test customer 2
         identifier: test identifier 2
-        yaddress_1: 1234 Test Lane
-        address_2: 4567 Seconod Dr.
+        address_1: 1234 Test Lane
+        address_2: 4567 Second Dr.
         city: Test
         state: LA
         zip_code: '12344'
         customer_type: Federal
-        industry: Oil & Gashhhh
+        industry: Oil & Gas
         sector: Oil & Gas
         domain: test.com
-        critical_infrastructure_id: '1'
-        critical_infrastructure_name: Oil & Gas
+        critical_infrastructure: Energy Sector
         appendix_a_date: 2022-4-14
         contact_list:
           - first_name: Contact
@@ -1052,6 +1430,31 @@ components:
           type: array
           items:
             type: string
+        behavior:
+          type: string
+        category:
+          type: string
+        industry:
+          type: array
+          items:
+            type: string
+            enum:
+              - "Chemical Sector"
+              - "Commercial Facilities Sector"
+              - "Communications Sector"
+              - "Critical Manufacturing Sector"
+              - "Dams Sector"
+              - "Defense Industrial Base Sector"
+              - "Emergency Services Sector"
+              - "Energy Sector"
+              - "Financial Services Sector"
+              - "Food and Agriculture Sector"
+              - "Government Facilities Sector"
+              - "Healthcare and Public Health Sector"
+              - "Information Technology Sector"
+              - "Nuclear Reactor, Materials, and Waste Sector"
+              - "Transportation Systems Sector"
+              - "Water and Wastewater Systems Sector"
       example:
         name: "Order Details"
         description: "Contains fake order tracking information."
@@ -1060,15 +1463,6 @@ components:
       xml:
         name: Template
     Campaign:
-      required:
-        - assessment_uuid
-        - description
-        - end_datetime
-        - name
-        - start_datetime
-        - status
-        - template_uuid
-        - uuid
       type: object
       properties:
         uuid:
@@ -1084,10 +1478,6 @@ components:
           type: string
         description:
           type: string
-        template_uuid:
-          type: string
-          format: uuid4
-          example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
         target_template_uuid:
           type: string
           description: uuid of associated template
@@ -1119,6 +1509,90 @@ components:
         status: queued
       xml:
         name: Campaign
+    HeaderSchema:
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    SendingDomain:
+      required:
+        - name
+        - landing_page_domain
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid64
+        name:
+          type: string
+        interface_type:
+          type: string
+        from_address:
+          type: string
+          format: email
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HeaderSchema'
+        landing_page_domain:
+          type: string
+        sending_ips:
+          type: string
+        smtp_username:
+          type: string
+        smtp_password:
+          type: string
+        smtp_host:
+          type: string
+        mailgun_domain:
+          type: string
+        mailgun_api_key:
+          type: string
+        ses_role_arn:
+          type: string
+    ReconResult:
+      required:
+        - domain
+      type: object
+      properties:
+        domain:
+          type: string
+        recon_time:
+          type: string
+          format: datetime
+        asns:
+          type: array
+          items:
+            type: string
+        interesting_urls:
+          type: array
+          items:
+            type: string
+        twitter_people:
+          type: array
+          items:
+            type: string
+        linkedin_people:
+          type: array
+          items:
+            type: string
+        trello_urls:
+          type: array
+          items:
+            type: string
+        ips:
+          type: array
+          items:
+            type: string
+        emails:
+          type: array
+          items:
+            type: string
+        hosts:
+          type: array
+          items:
+            type: string
     Document:
       required:
         - description
@@ -1156,6 +1630,17 @@ components:
           type: string
         message:
           type: string
+    LandingPage:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        is_default_template:
+          type: boolean
+        html:
+          type: string
   requestBodies:
     Customer:
       required: true
@@ -1188,7 +1673,7 @@ components:
             $ref: '#/components/schemas/Campaign'
         application/xml:
           schema:
-            $ref: '#/components/schemas/Customer'
+            $ref: '#/components/schemas/Campaign'
     Template:
       description: Campaign object to be added to data store
       content:
@@ -1198,6 +1683,24 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Template'
+    SendingDomain:
+      description: Sending Domain to be added to the data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SendingDomain'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/SendingDomain'
+    ReconResult:
+      description: Recon Result to be added to the data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReconResult'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ReconResult'
     Document:
       description: Document object to be added to data store
       content:
@@ -1215,4 +1718,14 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/User'
+      required: true
+    LandingPage:
+      description: A landing page object to be added to the data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LandingPage'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/LandingPage'
       required: true

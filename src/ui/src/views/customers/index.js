@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 // material-ui
 import Alert from "@mui/material/Alert";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
+import { useGetAll } from "services/api/Customers.js";
 
-// third party
-import axios from "axios";
 // ==============================|| Customers view ||============================== //
 
 function BaseJSX(props) {
@@ -19,10 +17,12 @@ function BaseJSX(props) {
     { field: "id", hide: true },
     { field: "name", headerName: "Name", flex: 2 },
     { field: "identifier", headerName: "Identifier", flex: 1 },
-    { field: "address_1", headerName: "Address", flex: 2.5 },
-    { field: "city", headerName: "City", flex: 1.5 },
-    { field: "state", headerName: "State", flex: 1 },
-    { field: "zip_code", headerName: "Zip Code", flex: 1 },
+    {
+      field: "critical_infrastructure",
+      headerName: "Critical Infrastructure",
+      flex: 1.5,
+    },
+    { field: "primaryPOC", headerName: "Primary Point of Contact", flex: 1.5 },
   ];
   return (
     <MainCard title="Customers">
@@ -48,30 +48,7 @@ BaseJSX.propTypes = {
 };
 
 function CustomersPage() {
-  const baseURL = "http://localhost:8080/li-pca/v1/customers";
-  const [isLoading, setLoading] = useState(true);
-  const [getData, setData] = useState([]);
-  const [getError, setError] = useState([false, ""]);
-
-  useEffect(() => {
-    axios
-      .get(baseURL, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-        setError([false, ""]);
-      })
-      .catch((error) => {
-        setError([true, error.message]);
-        setLoading(false);
-        console.log(error);
-      });
-  }, []);
+  const { isLoading, getData, getError } = useGetAll("getAll");
 
   const cusRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {
@@ -81,6 +58,10 @@ function CustomersPage() {
       cusRows.forEach((entry) => {
         entry["id"] = counter;
         counter = counter + 1;
+        entry["primaryPOC"] =
+          entry["contact_list"][0]["first_name"] +
+          " " +
+          entry["contact_list"][0]["last_name"];
       });
       return rowsArray;
     }

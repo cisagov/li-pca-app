@@ -13,6 +13,8 @@ import TextField from "@mui/material/TextField";
 
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
+import ResultDialog from "ui-component/popups/ResultDialog";
+import { submitCustomer, deleteCustomer } from "services/api/Customers.js";
 
 //third party
 import { useFormik } from "formik";
@@ -42,6 +44,9 @@ const CustomerForm = (props) => {
     city: yup.string().required("City is required"),
     state: yup.string().required("State is required"),
     zip_code: yup.string().required("Zip Code is required"),
+    critical_infrastructure: yup
+      .string()
+      .required("Critical Infrastructure is required"),
   });
   let navigate = useNavigate();
   let contactLen = props.custData.contact_list.length;
@@ -49,6 +54,9 @@ const CustomerForm = (props) => {
   const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
   const [savebtnOpen, setSavebtnOpen] = React.useState(false);
   const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
+  const [hasSubmitted, setHasSubmitted] = React.useState(false);
+  const [getDelete, setDelete] = React.useState(false);
+  const [getError, setError] = React.useState([false, ""]);
   const fieldsToValidate = {
     name: true,
     appendix_a_date: true,
@@ -59,6 +67,7 @@ const CustomerForm = (props) => {
     city: true,
     state: true,
     zip_code: true,
+    critical_infrastructure: true,
   };
   const formik = useFormik({
     initialValues: props.initialCustValues,
@@ -70,7 +79,13 @@ const CustomerForm = (props) => {
       const appendixADate = new Date(props.custData.appendix_a_date);
       values.appendix_a_date = appendixADate.toISOString();
       props.setCustData(Object.assign(props.custData, values));
-      props.setHasSubmitted(true);
+      setHasSubmitted(true);
+      submitCustomer(
+        props.custData,
+        props.custData._id,
+        props.dataEntryType,
+        setError
+      );
       setTimeout(() => {
         setSavebtnOpen(false);
       });
@@ -104,24 +119,36 @@ const CustomerForm = (props) => {
       setSavebtnOpen(true);
     }
   };
+
   const confirmDelete = () => {
+    deleteCustomer(props.custData._id, setError);
     setTimeout(() => {
       setDeletebtnOpen(false);
-      props.setDelete(true);
+      setDelete(true);
+      setHasSubmitted(true);
     });
   };
+
   let subtitleConfirm =
     formik.values.name + " will be updated in the database.";
   if (props.dataEntryType == "New Customer") {
     subtitleConfirm = formik.values.name + " will be added to the database.";
   }
+  const closeDialog = () => {
+    setHasSubmitted(false);
+    setDelete(false);
+    if (!getError[0]) {
+      navigate("/li-pca-app/customers");
+    }
+  };
   return (
     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
       <form id="customer-form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={10} sm={7} md={7} lg={7} xl={7}>
+          <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
             <TextField
               fullWidth
+              size="small"
               id="name"
               name="name"
               label="Customer Name *"
@@ -131,9 +158,23 @@ const CustomerForm = (props) => {
               helperText={formik.touched.name && formik.errors.name}
             />
           </Grid>
-          <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
+          <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
             <TextField
               fullWidth
+              size="small"
+              id="domain"
+              name="domain"
+              label="Customer Domain *"
+              value={formik.values.domain}
+              onChange={formik.handleChange}
+              error={formik.touched.domain && Boolean(formik.errors.domain)}
+              helperText={formik.touched.domain && formik.errors.domain}
+            />
+          </Grid>
+          <Grid item xs={11} sm={6} md={3} lg={3} xl={3}>
+            <TextField
+              fullWidth
+              size="small"
               id="identifier"
               name="identifier"
               label="Customer Identifier *"
@@ -145,36 +186,11 @@ const CustomerForm = (props) => {
               helperText={formik.touched.identifier && formik.errors.identifier}
             />
           </Grid>
-          <Grid item xs={10} sm={7} md={7} lg={7} xl={7}>
-            <TextField
-              fullWidth
-              id="domain"
-              name="domain"
-              label="Customer Domain *"
-              value={formik.values.domain}
-              onChange={formik.handleChange}
-              error={formik.touched.domain && Boolean(formik.errors.domain)}
-              helperText={formik.touched.domain && formik.errors.domain}
-            />
-          </Grid>
-          <Grid item xs={10} sm={5} md={5} lg={5} xl={5}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                fullWidth
-                label="Appendix A Date"
-                value={props.custData.appendix_a_date}
-                onChange={(e) => {
-                  props.setCustData({ ...props.custData, appendix_a_date: e });
-                  formik.setFieldValue("appendix_a_date", e);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+          <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
             <TextField
               select
               fullWidth
+              size="small"
               label="Customer Type *"
               id="customer_type"
               name="customer_type"
@@ -198,10 +214,91 @@ const CustomerForm = (props) => {
               <MenuItem value={"Private"}>Private</MenuItem>
             </TextField>
           </Grid>
-          <Grid item xs={2} sm={4} md={5} lg={5} xl={5}></Grid>
-          <Grid item xs={10} sm={8} md={7} lg={7} xl={7}>
+          <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
+            <TextField
+              select
+              fullWidth
+              size="small"
+              label="Critical Infrastructure *"
+              id="critical_infrastructure"
+              name="critical_infrastructure"
+              value={formik.values.critical_infrastructure}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.critical_infrastructure &&
+                Boolean(formik.errors.critical_infrastructure)
+              }
+              helperText={
+                formik.touched.critical_infrastructure &&
+                formik.errors.critical_infrastructure
+              }
+            >
+              <MenuItem value={"Chemical Sector"}>Chemical Sector</MenuItem>
+              <MenuItem value={"Commercial Facilities Sector"}>
+                Commercial Facilities Sector
+              </MenuItem>
+              <MenuItem value={"Communications Sector"}>
+                Communications Sector
+              </MenuItem>
+              <MenuItem value={"Critical Manufacturing Sector"}>
+                Critical Manufacturing Sector
+              </MenuItem>
+              <MenuItem value={"Dams Sector"}>Dams Sector</MenuItem>
+              <MenuItem value={"Defense Industrial Base Sector"}>
+                Defense Industrial Base Sector
+              </MenuItem>
+              <MenuItem value={"Emergency Services Sector"}>
+                Emergency Services Sector
+              </MenuItem>
+              <MenuItem value={"Energy Sector"}>Energy Sector</MenuItem>
+              <MenuItem value={"Financial Services Sector"}>
+                Financial Services Sector
+              </MenuItem>
+              <MenuItem value={"Food and Agriculture Sector"}>
+                Food and Agriculture Sector
+              </MenuItem>
+              <MenuItem value={"Government Facilities Sector"}>
+                Government Facilities Sector
+              </MenuItem>
+              <MenuItem value={"Healthcare and Public Health Sector"}>
+                Healthcare and Public Health Sector
+              </MenuItem>
+              <MenuItem value={"Information Technology Sector"}>
+                Information Technology Sector
+              </MenuItem>
+              <MenuItem value={"Nuclear Reactor, Materials, and Waste Sector"}>
+                Nuclear Reactor, Materials, and Waste Sector
+              </MenuItem>
+              <MenuItem value={"Transportation Systems Sector"}>
+                Transportation Systems Sector
+              </MenuItem>
+              <MenuItem value={"Water and Wastewater Systems Sector"}>
+                Water and Wastewater Systems Sector
+              </MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={11} sm={6} md={3} lg={3} xl={3}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                fullWidth
+                size="small"
+                label="Appendix A Date"
+                value={props.custData.appendix_a_date}
+                onChange={(e) => {
+                  props.setCustData({ ...props.custData, appendix_a_date: e });
+                  formik.setFieldValue("appendix_a_date", e);
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} fullWidth size="small" />
+                )}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item xs={12} md={12} xl={12} />
+          <Grid item xs={11} sm={6} md={6} lg={6} xl={6}>
             <TextField
               fullWidth
+              size="small"
               id="address_1"
               name="address_1"
               label="Address 1 *"
@@ -213,9 +310,10 @@ const CustomerForm = (props) => {
               helperText={formik.touched.address_1 && formik.errors.address_1}
             />
           </Grid>
-          <Grid item xs={10} sm={4} md={5} lg={5} xl={5}>
+          <Grid item xs={11} sm={6} md={6} lg={6} xl={6}>
             <TextField
               fullWidth
+              size="small"
               id="address_2"
               name="address_2"
               label="Address 2"
@@ -227,9 +325,10 @@ const CustomerForm = (props) => {
               helperText={formik.touched.address_2 && formik.errors.address_2}
             />
           </Grid>
-          <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
+          <Grid item xs={11} sm={6} md={6} lg={6} xl={6}>
             <TextField
               fullWidth
+              size="small"
               id="city"
               name="city"
               label="City *"
@@ -239,9 +338,10 @@ const CustomerForm = (props) => {
               helperText={formik.touched.city && formik.errors.city}
             />
           </Grid>
-          <Grid item xs={10} sm={3} md={3} lg={3} xl={3}>
+          <Grid item xs={11} sm={6} md={3.5} lg={3.5} xl={3.5}>
             <TextField
               fullWidth
+              size="small"
               id="state"
               name="state"
               label="State *"
@@ -251,9 +351,10 @@ const CustomerForm = (props) => {
               helperText={formik.touched.state && formik.errors.state}
             />
           </Grid>
-          <Grid item xs={10} sm={3} md={3} lg={3} xl={3}>
+          <Grid item xs={11} sm={6} md={2.5} lg={2.5} xl={2.5}>
             <TextField
               fullWidth
+              size="small"
               id="zip_code"
               name="zip_code"
               label="Zip Code *"
@@ -266,13 +367,13 @@ const CustomerForm = (props) => {
           <Grid
             item
             display={{ xs: "none", sm: "block" }}
-            sm={9}
+            sm={10}
             md={10}
-            lg={10}
+            lg={11}
             xl={11}
           />
-          <Grid item xs={10} sm={3} md={2} lg={2} xl={1}>
-            <Button size="large" fullWidth onClick={formik.handleReset}>
+          <Grid item xs={10} sm={2} md={2} lg={1} xl={1}>
+            <Button size="medium" fullWidth onClick={formik.handleReset}>
               Reset
             </Button>
           </Grid>
@@ -280,7 +381,7 @@ const CustomerForm = (props) => {
       </form>
       {props.children}
       <Grid container spacing={2}>
-        <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 5 }} />
+        <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 1 }} />
         {props.dataEntryType == "New Customer" ? (
           <Grid
             item
@@ -293,8 +394,7 @@ const CustomerForm = (props) => {
         ) : (
           <Grid
             item
-            display={{ xs: "none", sm: "block" }}
-            sm={1}
+            display={{ xs: "none", sm: "none", md: "block" }}
             md={4}
             lg={6}
             xl={6}
@@ -321,6 +421,12 @@ const CustomerForm = (props) => {
             setIsOpen={setSavebtnOpen}
           />
         </form>
+        <ResultDialog
+          type={getDelete ? "Delete Customer" : props.dataEntryType}
+          hasSubmitted={hasSubmitted}
+          error={getError}
+          closeDialog={closeDialog}
+        />
         {props.dataEntryType == "New Customer" ? (
           <React.Fragment />
         ) : (
@@ -376,9 +482,7 @@ CustomerForm.propTypes = {
   setCustData: PropTypes.func,
   custData: PropTypes.object,
   children: PropTypes.array,
-  setHasSubmitted: PropTypes.func,
   dataEntryType: PropTypes.string,
-  setDelete: PropTypes.func,
   identifiers: PropTypes.array,
 };
 

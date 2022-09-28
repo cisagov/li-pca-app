@@ -25,7 +25,7 @@ const ResultDialog = (props) => {
   }
 
   return (
-    <Dialog open={props.hasSubmitted || props.getDelete}>
+    <Dialog open={props.hasSubmitted}>
       <Grid sx={{ textAlign: "center" }}>
         <DialogTitle sx={{ fontSize: 20 }}>
           <Grid item sx={{ mt: 2 }}>
@@ -58,7 +58,6 @@ const ResultDialog = (props) => {
 ResultDialog.propTypes = {
   type: PropTypes.string,
   hasSubmitted: PropTypes.bool,
-  getDelete: PropTypes.bool,
   error: PropTypes.array,
   closeDialog: PropTypes.func,
 };

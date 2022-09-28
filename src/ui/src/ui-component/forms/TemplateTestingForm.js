@@ -52,6 +52,7 @@ const TemplateTestingForm = () => {
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
             select
+            size="small"
             fullWidth
             label="Sending Profile"
             id="sending_profile"
@@ -81,6 +82,7 @@ const TemplateTestingForm = () => {
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
             select
+            size="small"
             fullWidth
             label="Customer"
             id="customer"
@@ -104,6 +106,7 @@ const TemplateTestingForm = () => {
         </Grid>
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
           <TextField
+            size="small"
             fullWidth
             id="email"
             name="email"
@@ -124,6 +127,7 @@ const TemplateTestingForm = () => {
         </Grid>
         <Grid item xs={11} sm={5} md={5} lg={5} xl={4}>
           <TextField
+            size="small"
             fullWidth
             id="first_name"
             name="first_name"
@@ -138,6 +142,7 @@ const TemplateTestingForm = () => {
         </Grid>
         <Grid item xs={11} sm={6} md={6} lg={5} xl={5}>
           <TextField
+            size="small"
             fullWidth
             id="last_name"
             name="last_name"
@@ -150,6 +155,7 @@ const TemplateTestingForm = () => {
         </Grid>
         <Grid item xs={11} sm={5} md={5} lg={5} xl={4}>
           <TextField
+            size="small"
             fullWidth
             id="role"
             name="role"
@@ -175,7 +181,7 @@ const TemplateTestingForm = () => {
         </Grid>
         <Grid item xs={10} sm={1} md={1} lg={1} xl={1} />
         <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
-          <TextField disabled fullWidth multiline minRows={3} label="" />
+          <TextField disabled fullWidth multiline minRows={2} label="" />
         </Grid>
       </Grid>
     </form>

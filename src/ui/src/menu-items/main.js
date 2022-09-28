@@ -1,21 +1,23 @@
 // assets
 import {
-  IconUser,
-  IconNotebook,
   IconBrowser,
-  IconSend,
-  IconMail,
   IconHelp,
+  IconListSearch,
+  IconMail,
+  IconNotebook,
+  IconSend,
+  IconUser,
 } from "@tabler/icons";
 
 // constant
 const icons = {
-  IconUser,
-  IconNotebook,
   IconBrowser,
-  IconSend,
-  IconMail,
   IconHelp,
+  IconListSearch,
+  IconMail,
+  IconNotebook,
+  IconSend,
+  IconUser,
 };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
@@ -42,6 +44,14 @@ const main = {
       breadcrumbs: false,
     },
     {
+      id: "phish-reconn",
+      title: "Phish Reconn",
+      type: "item",
+      url: "/phish-reconn",
+      icon: icons.IconListSearch,
+      breadcrumbs: false,
+    },
+    {
       id: "templates",
       title: "Templates",
       type: "item",
@@ -58,10 +68,10 @@ const main = {
       breadcrumbs: false,
     },
     {
-      id: "sending-profiles",
-      title: "Sending Profiles",
+      id: "sending-domains",
+      title: "Sending Domains",
       type: "item",
-      url: "/sending-profiles",
+      url: "/sending-domains",
       icon: icons.IconSend,
       breadcrumbs: false,
     },
@@ -69,7 +79,7 @@ const main = {
       id: "documentation",
       title: "Documentation",
       type: "item",
-      url: "https://codedthemes.gitbook.io/berry/",
+      url: "https://app.swaggerhub.com/apis-docs/Li-PCA/li-pca-api/1.0.0#",
       icon: icons.IconHelp,
       external: true,
       target: true,

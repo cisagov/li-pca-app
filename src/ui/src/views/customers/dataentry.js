@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // material-ui
 import Alert from "@mui/material/Alert";
@@ -12,10 +12,6 @@ import CustomerForm from "ui-component/forms/CustomerForm";
 import CustomerPOCForm from "ui-component/forms/CustomerPOCForm";
 import DisplayDataTable from "ui-component/tables/DisplayDataTable";
 import MainCard from "ui-component/cards/MainCard";
-import ResultDialog from "ui-component/popups/ResultDialog";
-
-// third party
-import axios from "axios";
 
 // ==============================|| Create/Update Customer View ||============================== //
 
@@ -66,6 +62,9 @@ const custRowsTransform = (custRows) => {
   if (!custRows.hasOwnProperty("contact_list")) {
     custRows.contact_list = [];
   }
+  if (!custRows.hasOwnProperty("critical_infrastructure")) {
+    custRows.critical_infrastructure = "";
+  }
   return custRows;
 };
 
@@ -87,76 +86,11 @@ const getOtherIdentifiers = (custData, custValues) => {
 
 const CustDataEntryPage = () => {
   const { state } = useLocation();
-  let navigate = useNavigate();
   let custValues = custRowsTransform(state.row);
   let mainCardTitle = custNewOrEdit(state.dataEntryType);
   const [custData, setCustData] = React.useState(custValues);
-  const [hasSubmitted, setHasSubmitted] = React.useState(false);
-  const [getError, setError] = React.useState([false, ""]);
-  const [getDelete, setDelete] = React.useState(false);
   const [hasCampaigns, setCampaigns] = React.useState(false);
 
-  React.useEffect(() => {
-    const baseURL = "http://localhost:8080/li-pca/v1/customers";
-    const cust_id = custData._id;
-    const headers = {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    };
-    if (hasSubmitted && mainCardTitle == "New Customer") {
-      axios
-        .post(baseURL, custData, {
-          headers: headers,
-        })
-        .then((response) => {
-          console.log(response);
-          setError([false, ""]);
-        })
-        .catch((error) => {
-          setError([true, error.message]);
-          console.log("Error adding data");
-          console.log(custData);
-          console.log(error);
-        });
-    } else if (hasSubmitted && mainCardTitle == "Edit Customer") {
-      axios
-        .put(baseURL + "/" + cust_id, custData, {
-          headers: headers,
-        })
-        .then((response) => {
-          console.log(response);
-          setError([false, ""]);
-        })
-        .catch((error) => {
-          setError([true, error.message]);
-          console.log("Error updating data");
-          console.log(custData);
-          console.log(error);
-        });
-    } else if (getDelete) {
-      axios
-        .delete(baseURL + "/" + cust_id, {
-          headers: headers,
-        })
-        .then((response) => {
-          console.log(response);
-          setError([false, ""]);
-        })
-        .catch((error) => {
-          setError([true, error.message]);
-          console.log("Error deleting data");
-          console.log(custData);
-          console.log(error);
-        });
-    }
-  }, [custData, hasSubmitted, mainCardTitle, getDelete]);
-  const closeDialog = () => {
-    setHasSubmitted(false);
-    setDelete(false);
-    if (!getError[0]) {
-      navigate("/li-pca-app/customers");
-    }
-  };
   const campaignCols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Name", flex: 2 },
@@ -195,13 +129,6 @@ const CustDataEntryPage = () => {
     <MainCard title={mainCardTitle}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
         <Grid container spacing={2}>
-          <ResultDialog
-            type={getDelete ? "Delete Customer" : mainCardTitle}
-            hasSubmitted={hasSubmitted}
-            getDelete={getDelete}
-            error={getError}
-            closeDialog={closeDialog}
-          />
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             <Typography variant="h4" gutterBottom component="div">
               Customer Information
@@ -211,9 +138,7 @@ const CustDataEntryPage = () => {
             initialCustValues={custValues}
             setCustData={setCustData}
             custData={custData}
-            setHasSubmitted={setHasSubmitted}
             dataEntryType={mainCardTitle}
-            setDelete={setDelete}
             identifiers={getOtherIdentifiers(state.rows, custValues)}
           >
             <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 2 }}>
