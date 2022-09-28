@@ -36,10 +36,10 @@ export const useGetAll = () => {
   };
 };
 
-export const submitSP = (spData, sp_id, dataEntryType, setError) => {
+export const submitSP = (sdData, sd_id, dataEntryType, setError) => {
   if (dataEntryType == "New Sending Domain") {
     axios
-      .post(baseURL, spData, {
+      .post(baseURL, sdData, {
         headers: headers,
       })
       .then((response) => {
@@ -49,13 +49,13 @@ export const submitSP = (spData, sp_id, dataEntryType, setError) => {
       .catch((error) => {
         setError([true, error.message]);
         console.log("Error adding new sending domain entry.");
-        console.log(spData);
+        console.log(sdData);
         console.log(error);
       });
   }
   if (dataEntryType == "Edit Sending Domain") {
     axios
-      .put(baseURL + "/" + sp_id, spData, {
+      .put(baseURL + "/" + sd_id, sdData, {
         headers: headers,
       })
       .then((response) => {
@@ -65,15 +65,15 @@ export const submitSP = (spData, sp_id, dataEntryType, setError) => {
       .catch((error) => {
         setError([true, error.message]);
         console.log("Error updating sending domain entry.");
-        console.log(spData);
+        console.log(sdData);
         console.log(error);
       });
   }
 };
 
-export const deleteSP = (sp_id, setError) => {
+export const deleteSP = (sd_id, setError) => {
   axios
-    .delete(baseURL + "/" + sp_id, {
+    .delete(baseURL + "/" + sd_id, {
       headers: headers,
     })
     .then((response) => {
@@ -83,7 +83,7 @@ export const deleteSP = (sp_id, setError) => {
     .catch((error) => {
       setError([true, error.message]);
       console.log("Error deleting data");
-      console.log(sp_id);
+      console.log(sd_id);
       console.log(error);
     });
 };
