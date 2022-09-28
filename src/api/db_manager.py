@@ -276,7 +276,9 @@ class Manager:
         self.create_indexes()
         data = self.clean_data(data)
         data = self.add_created(data)
-        target_collection = self.db.create_collection(name=self.collection)
+        target_collection = self.db.get_collection(name=self.collection)
+        if target_collection is None:
+            target_collection = self.db.create_collection(name=self.collection)
         result = target_collection.insert_one(self.load_data(data))
         return {"_id": str(result.inserted_id)}
 
@@ -285,7 +287,9 @@ class Manager:
         self.create_indexes()
         data = self.clean_data(data)
         data = self.add_created(data)
-        target_collection = self.db.create_collection(name=self.collection)
+        target_collection = self.db.get_collection(name=self.collection)
+        if target_collection is None:
+            target_collection = self.db.create_collection(name=self.collection)
         result = target_collection.insert_many(self.load_data(data, many=True))
         return result.inserted_ids
 
@@ -452,7 +456,7 @@ class SendingDomainManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="sending_profiles",
+            collection="sending_domains",
             schema=SendingDomainSchema,
         )
 
