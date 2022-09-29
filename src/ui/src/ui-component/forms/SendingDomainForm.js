@@ -22,7 +22,7 @@ import * as yup from "yup";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { submitSP, deleteSP } from "services/api/SendingDomains.js";
+import { submitSP, deleteSD } from "services/api/SendingDomains.js";
 
 const fieldsToValidate = {
   name: true,

@@ -248,4 +248,11 @@ const LandingPageForm = (props) => {
   );
 };
 
+LandingPageForm.propTypes = {
+  initialValues: PropTypes.object,
+  setSpData: PropTypes.func,
+  spData: PropTypes.object,
+  dataEntryType: PropTypes.string,
+};
+
 export default LandingPageForm;

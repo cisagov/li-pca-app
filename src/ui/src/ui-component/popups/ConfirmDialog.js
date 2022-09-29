@@ -127,7 +127,7 @@ ConfirmDialog.propTypes = {
   handleClick: PropTypes.func,
   formName: PropTypes.string,
   isOpen: PropTypes.bool,
-  setisOpen: PropTypes.func,
+  setIsOpen: PropTypes.func,
 };
 
 export default ConfirmDialog;
