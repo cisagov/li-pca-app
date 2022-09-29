@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 // material-ui
@@ -10,10 +9,8 @@ import Typography from "@mui/material/Grid";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-// import { useGetAll } from "services/api/SendingProfiles.js";
+import { useGetAll } from "services/api/LandingPages.js";
 
-// third party
-import axios from "axios";
 // ==============================|| Landing Page view ||============================== //
 
 function BaseJSX(props) {
@@ -26,7 +23,7 @@ function BaseJSX(props) {
       flex: 1,
     },
     {
-      field: "default_landing_page",
+      field: "is_default_template",
       headerName: "Default Landing Page",
       flex: 0.75,
       headerAlign: "center",
@@ -63,7 +60,7 @@ BaseJSX.propTypes = {
 };
 
 function LandingPagesPage() {
-  // const { isLoading, getData, getError } = useGetAll("getAll");
+  const { isLoading, getData, getError } = useGetAll("getAll");
 
   const landingpageRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {
@@ -79,35 +76,34 @@ function LandingPagesPage() {
     return [];
   };
   // Mock data test
-  const jsonRows = require("./mockLandingPageData.json");
-  const rows = landingpageRows(jsonRows);
+  // const jsonRows = require("./mockLandingPageData.json");
+  // const rows = landingpageRows(jsonRows);
 
-  // const rows = landingpageRows(getData);
+  const rows = landingpageRows(getData);
 
-  // if (isLoading) {
-  //   return (
-  //     <BaseJSX rows={[]} dataEntry={""}>
-  //       <Typography>Loading...</Typography>
-  //     </BaseJSX>
-  //   );
-  // } else if (getError[0]) {
-  //   return (
-  //     <BaseJSX rows={[]} dataEntry={""}>
-  //       <Alert severity="error" sx={{ mb: 2 }}>
-  //         {getError[1]}. Unable to load landing page data from the
-  //         database.
-  //       </Alert>
-  //     </BaseJSX>
-  //   );
-  // } else if (rows.length === 0) {
-  //   return (
-  //     <BaseJSX rows={[]} dataEntry={"data-entry"}>
-  //       <Typography sx={{ mb: 2 }}>
-  //         No landing page data entries found.
-  //       </Typography>
-  //     </BaseJSX>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <BaseJSX rows={[]} dataEntry={""}>
+        <Typography>Loading...</Typography>
+      </BaseJSX>
+    );
+  } else if (getError[0]) {
+    return (
+      <BaseJSX rows={[]} dataEntry={""}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {getError[1]}. Unable to load landing page data from the database.
+        </Alert>
+      </BaseJSX>
+    );
+  } else if (rows.length === 0) {
+    return (
+      <BaseJSX rows={[]} dataEntry={"data-entry"}>
+        <Typography sx={{ mb: 2 }}>
+          No landing page data entries found.
+        </Typography>
+      </BaseJSX>
+    );
+  }
   return (
     <BaseJSX rows={rows} dataEntry={"data-entry"}>
       <Typography sx={{ mb: 2 }}>
