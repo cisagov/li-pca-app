@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
 // material-ui
 import Alert from "@mui/material/Alert";
@@ -12,12 +10,9 @@ import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
 import { useGetAll, deleteSD } from "services/api/SendingDomains.js";
 
-// third party
-import axios from "axios";
 // ==============================|| Sending Domains view ||============================== //
 
 function BaseJSX(props) {
-  let navigate = useNavigate();
   const cols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Sending Domain", flex: 1.25 },
