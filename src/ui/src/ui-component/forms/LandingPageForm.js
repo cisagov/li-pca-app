@@ -19,6 +19,7 @@ import Typography from "@mui/material/Typography";
 
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
+import HtmlEditor from "ui-component/forms/HtmlEditor";
 import ResultDialog from "ui-component/popups/ResultDialog";
 
 //third party
@@ -130,7 +131,7 @@ const LandingPageForm = (props) => {
               </Tabs>
             </Box>
             <TabPanel value={tabValue} index={0}>
-              HTML Editor display
+              <HtmlEditor />
             </TabPanel>
             <TabPanel value={tabValue} index={1}>
               No templates are currently using this landing page

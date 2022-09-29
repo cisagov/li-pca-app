@@ -26,7 +26,8 @@ import WebIcon from "@mui/icons-material/Web";
 import DeceptionCalculator from "./deceptionCalculator";
 import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
 import TemplateTestingForm from "ui-component/forms/TemplateTestingForm";
-import TemplateHtmlEditor from "ui-component/forms/TemplateHtmlEditor";
+// import TemplateHtmlEditor from "ui-component/forms/TemplateHtmlEditor";
+import HtmlEditor from "ui-component/forms/HtmlEditor";
 
 const temRowsTransform = (templateRows) => {
   if (!templateRows.hasOwnProperty("name")) {
@@ -198,7 +199,7 @@ const TemplateDataEntryPage = () => {
 
   const stepContent = () => {
     if (activeStep == 0) {
-      return <TemplateHtmlEditor />;
+      return <HtmlEditor />;
     } else if (activeStep == 1) {
       return (
         <TemplateAttrForm
