@@ -250,9 +250,10 @@ const LandingPageForm = (props) => {
 
 LandingPageForm.propTypes = {
   initialValues: PropTypes.object,
-  setSpData: PropTypes.func,
-  spData: PropTypes.object,
   dataEntryType: PropTypes.string,
+  currentDefaultPage: PropTypes.object,
+  currentPageIsDefault: PropTypes.bool,
+  hasDefault: PropTypes.bool,
 };
 
 export default LandingPageForm;
