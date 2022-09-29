@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 // material-ui
@@ -68,7 +68,7 @@ const SPDataEntryPage = () => {
   const { state } = useLocation();
   let spValues = spRowsTransform(state.row);
   let mainCardTitle = newOrEdit(state.dataEntryType);
-  const [spData, setSpData] = React.useState(spValues);
+  const [spData, setSpData] = useState(spValues);
 
   return (
     <MainCard title={mainCardTitle}>

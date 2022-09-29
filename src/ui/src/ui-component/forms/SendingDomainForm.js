@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //material-ui
@@ -43,13 +43,13 @@ const validationSchema = yup.object({
 
 const SendingDomainForm = (props) => {
   let navigate = useNavigate();
-  let [emailHeaderArray, setHeaderArray] = React.useState([]);
-  let [customHeader, setCustomHeader] = React.useState("");
-  let [headerValue, setHeaderValue] = React.useState("");
-  const [savebtnOpen, setSavebtnOpen] = React.useState(false);
-  const [hasSubmitted, setHasSubmitted] = React.useState(false);
-  const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
-  const [getError, setError] = React.useState([false, ""]);
+  let [emailHeaderArray, setHeaderArray] = useState([]);
+  let [customHeader, setCustomHeader] = useState("");
+  let [headerValue, setHeaderValue] = useState("");
+  const [savebtnOpen, setSavebtnOpen] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [cancelbtnOpen, setCancelbtnOpen] = useState(false);
+  const [getError, setError] = useState([false, ""]);
   const addHeader = () => {
     if (customHeader != "" && headerValue != "") {
       let newElement = {
@@ -124,7 +124,7 @@ const SendingDomainForm = (props) => {
 
   const smtpFields = () => {
     return (
-      <React.Fragment>
+      <>
         <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
           <TextField
             fullWidth
@@ -174,12 +174,12 @@ const SendingDomainForm = (props) => {
             }
           />
         </Grid>
-      </React.Fragment>
+      </>
     );
   };
   const mailgunFields = () => {
     return (
-      <React.Fragment>
+      <>
         <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
           <TextField
             fullWidth
@@ -216,7 +216,7 @@ const SendingDomainForm = (props) => {
             }
           />
         </Grid>
-      </React.Fragment>
+      </>
     );
   };
 

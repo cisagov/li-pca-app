@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 // material-ui
@@ -88,8 +88,8 @@ const CustDataEntryPage = () => {
   const { state } = useLocation();
   let custValues = custRowsTransform(state.row);
   let mainCardTitle = custNewOrEdit(state.dataEntryType);
-  const [custData, setCustData] = React.useState(custValues);
-  const [hasCampaigns, setCampaigns] = React.useState(false);
+  const [custData, setCustData] = useState(custValues);
+  const [hasCampaigns, setCampaigns] = useState(false);
 
   const campaignCols = [
     { field: "id", hide: true },

@@ -1,6 +1,4 @@
-import React from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
 //material-ui
 import Button from "@mui/material/Button";
