@@ -36,7 +36,7 @@ export const useGetAll = () => {
   };
 };
 
-export const submitSP = (sdData, sd_id, dataEntryType, setError) => {
+export const submitSD = (sdData, sd_id, dataEntryType, setError) => {
   if (dataEntryType == "New Sending Domain") {
     axios
       .post(baseURL, sdData, {

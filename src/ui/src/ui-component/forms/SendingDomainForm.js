@@ -22,7 +22,7 @@ import * as yup from "yup";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { submitSP, deleteSD } from "services/api/SendingDomains.js";
+import { submitSD } from "services/api/SendingDomains.js";
 
 const fieldsToValidate = {
   name: true,
@@ -85,7 +85,7 @@ const SendingDomainForm = (props) => {
       values.headers = emailHeaderArray;
       props.setSpData(Object.assign(props.spData, values));
       setHasSubmitted(true);
-      submitSP(props.spData, props.spData._id, props.dataEntryType, setError);
+      submitSD(props.spData, props.spData._id, props.dataEntryType, setError);
       setTimeout(() => {
         setSavebtnOpen(false);
       });
@@ -469,6 +469,13 @@ const SendingDomainForm = (props) => {
       </form>
     </Grid>
   );
+};
+
+SendingDomainForm.propTypes = {
+  setSpData: PropTypes.func,
+  spData: PropTypes.object,
+  initialValues: PropTypes.object,
+  dataEntryType: PropTypes.string,
 };
 
 export default SendingDomainForm;
