@@ -40,6 +40,7 @@ CustomToolbar.propTypes = {
   rows: PropTypes.array,
   tableCategory: PropTypes.string,
   selectedRows: PropTypes.array,
+  confirmRetire: PropTypes.func,
 };
 
 function CustomToolbar(props) {

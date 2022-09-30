@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 // material-ui
@@ -21,12 +21,12 @@ import { submitCustomer } from "services/api/Customers.js";
 
 const PhishReconForm = (props) => {
   const name = props.selectedRow.name;
-  const [notes, setNotes] = React.useState(props.selectedRow.customer_notes);
-  const [getError, setError] = React.useState([false, ""]);
-  const [hasSubmitted, setHasSubmitted] = React.useState(false);
-  const [isDisabled, setIsDisabled] = React.useState(true);
-  const [savebtnOpen, setSavebtnOpen] = React.useState(false);
-  React.useEffect(() => {
+  const [notes, setNotes] = useState(props.selectedRow.customer_notes);
+  const [getError, setError] = useState([false, ""]);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [savebtnOpen, setSavebtnOpen] = useState(false);
+  useEffect(() => {
     setNotes(props.selectedRow.customer_notes);
   }, [props.selectedRow.customer_notes]);
   const validateNotes = () => {
@@ -61,7 +61,7 @@ const PhishReconForm = (props) => {
     }
   };
   const reconExtras = (
-    <React.Fragment>
+    <>
       <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
         <Button
           color="warning"
@@ -135,7 +135,7 @@ const PhishReconForm = (props) => {
         isOpen={savebtnOpen}
         setIsOpen={setSavebtnOpen}
       />
-    </React.Fragment>
+    </>
   );
   if (props.viewResults) {
     return (
@@ -188,13 +188,13 @@ const PhishReconForm = (props) => {
           <pre>{JSON.stringify(props.getData, null, 2)}</pre>
         </Grid>
         {props.getError[0] ? (
-          <React.Fragment>
+          <>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               {props.getError[0]} Unable to save results to database. See
               console log for more details.
             </Grid>
             <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
-          </React.Fragment>
+          </>
         ) : (
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             Results have been saved successfully.

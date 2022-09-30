@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 // import ReactDOM from 'react-dom';
 // import { useFormik } from 'formik';
 // import * as yup from "yup";
@@ -12,8 +12,8 @@ import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
 export default function TemplateForm() {
-  const [dateVal, setDateVal] = React.useState(null);
-  const [cusTypeVal, setCusTypeVal] = React.useState("");
+  const [dateVal, setDateVal] = useState(null);
+  const [cusTypeVal, setCusTypeVal] = useState("");
   return (
     <FormControl>
       <Grid container spacing={2}>

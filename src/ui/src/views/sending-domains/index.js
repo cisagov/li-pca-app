@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
 // material-ui
 import Alert from "@mui/material/Alert";
@@ -10,14 +8,11 @@ import Typography from "@mui/material/Typography";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll, deleteSP } from "services/api/SendingDomains.js";
+import { useGetAll, deleteSD } from "services/api/SendingDomains.js";
 
-// third party
-import axios from "axios";
 // ==============================|| Sending Domains view ||============================== //
 
 function BaseJSX(props) {
-  let navigate = useNavigate();
   const cols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Sending Domain", flex: 1.25 },
@@ -43,7 +38,7 @@ function BaseJSX(props) {
             newEntryRoute={props.dataEntry}
             editEntryRoute={props.dataEntry}
             tableCategory={"Sending Domains"}
-            deleteSP={deleteSP}
+            deleteEntry={deleteSD}
           />
         </Grid>
       </Grid>

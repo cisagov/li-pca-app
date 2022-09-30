@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 // third party
 import axios from "axios";
 
-const baseURL = "http://localhost:8080/li-pca/v1/sending_domains";
+const baseURL = "http://localhost:8080/li-pca/v1/landing_pages";
 const headers = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
@@ -36,10 +36,10 @@ export const useGetAll = () => {
   };
 };
 
-export const submitSD = (sdData, sd_id, dataEntryType, setError) => {
-  if (dataEntryType == "New Sending Domain") {
+export const submitLP = (lpData, lp_id, dataEntryType, setError) => {
+  if (dataEntryType == "New Landing Page") {
     axios
-      .post(baseURL, sdData, {
+      .post(baseURL, lpData, {
         headers: headers,
       })
       .then((response) => {
@@ -48,14 +48,14 @@ export const submitSD = (sdData, sd_id, dataEntryType, setError) => {
       })
       .catch((error) => {
         setError([true, error.message]);
-        console.log("Error adding new sending domain entry.");
-        console.log(sdData);
+        console.log("Error adding new landing page entry.");
+        console.log(lpData);
         console.log(error);
       });
   }
-  if (dataEntryType == "Edit Sending Domain") {
+  if (dataEntryType == "Edit Landing Page") {
     axios
-      .put(baseURL + "/" + sd_id, sdData, {
+      .put(baseURL + "/" + lp_id, lpData, {
         headers: headers,
       })
       .then((response) => {
@@ -64,16 +64,16 @@ export const submitSD = (sdData, sd_id, dataEntryType, setError) => {
       })
       .catch((error) => {
         setError([true, error.message]);
-        console.log("Error updating sending domain entry.");
-        console.log(sdData);
+        console.log("Error updating landing page entry.");
+        console.log(lpData);
         console.log(error);
       });
   }
 };
 
-export const deleteSD = (sd_id, setError) => {
+export const deleteLP = (lp_id, setError) => {
   axios
-    .delete(baseURL + "/" + sd_id, {
+    .delete(baseURL + "/" + lp_id, {
       headers: headers,
     })
     .then((response) => {
@@ -83,7 +83,7 @@ export const deleteSD = (sd_id, setError) => {
     .catch((error) => {
       setError([true, error.message]);
       console.log("Error deleting data");
-      console.log(sd_id);
+      console.log(lp_id);
       console.log(error);
     });
 };

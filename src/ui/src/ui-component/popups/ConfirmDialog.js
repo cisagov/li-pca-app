@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 
 //material-ui
@@ -19,7 +19,7 @@ import TextField from "@mui/material/TextField";
 import { IconAlertCircle } from "@tabler/icons";
 
 const ConfirmDialog = (props) => {
-  const [getDeleteText, setDeleteText] = React.useState("");
+  const [getDeleteText, setDeleteText] = useState("");
   let title = "Do you want to save changes to this entry?";
   let confirmType = props.confirmType;
   let endIcon = <CheckCircleOutlineIcon />;
@@ -107,7 +107,7 @@ const ConfirmDialog = (props) => {
               />
             </Grid>
           ) : (
-            <React.Fragment />
+            <></>
           )}
         </DialogContent>
         <DialogActions>
@@ -127,7 +127,7 @@ ConfirmDialog.propTypes = {
   handleClick: PropTypes.func,
   formName: PropTypes.string,
   isOpen: PropTypes.bool,
-  setisOpen: PropTypes.func,
+  setIsOpen: PropTypes.func,
 };
 
 export default ConfirmDialog;
