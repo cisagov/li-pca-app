@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import { Editor } from "@tinymce/tinymce-react";
 
-function SanitizeValue(content) {
-  content = "<html>" + content + "</html>";
-  return content;
-}
-
 function HtmlEditor(props) {
-  // const [value, setValue] = useState(props.initalValue ?? "");
+  const htmlTag = "<!DOCTYPE html>";
   return (
     <Editor
-      // initialValue={props.value}
       value={props.value}
-      onEditorChange={(newValue) => props.setValue(newValue)}
+      onEditorChange={(newValue) => props.setValue(htmlTag + newValue)}
       init={{
         height: 500,
         width: 800,
@@ -32,5 +26,10 @@ function HtmlEditor(props) {
     />
   );
 }
+
+HtmlEditor.propTypes = {
+  value: PropTypes.string,
+  setValue: PropTypes.func,
+};
 
 export default HtmlEditor;
