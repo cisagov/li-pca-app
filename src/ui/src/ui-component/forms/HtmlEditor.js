@@ -7,15 +7,13 @@ function SanitizeValue(content) {
   return content;
 }
 
-function HtmlEditor(initialValue) {
-  const [value, setValue] = useState(initialValue ?? "");
-  useEffect(() => setValue(initialValue ?? ""), [initialValue]);
-
+function HtmlEditor(props) {
+  // const [value, setValue] = useState(props.initalValue ?? "");
   return (
     <Editor
-      initialValue={initialValue}
-      value={value}
-      onEditorChange={(newValue, editor) => setValue(newValue)}
+      // initialValue={props.value}
+      value={props.value}
+      onEditorChange={(newValue) => props.setValue(newValue)}
       init={{
         height: 500,
         width: 800,
