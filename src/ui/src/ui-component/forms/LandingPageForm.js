@@ -61,27 +61,28 @@ const LandingPageForm = (props) => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [getDelete, setDelete] = useState(false);
   const [getError, setError] = useState([false, ""]);
+  const [htmlValue, setHtmlValue] = useState(props.initialValues.html);
   const [tabValue, setTabValue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
-    console.log(event);
+    // console.log(event);
   };
   const formik = useFormik({
     initialValues: props.initialValues,
     validationSchema: validationSchema,
     validateOnChange: true,
     onSubmit: (values) => {
+      values["html"] = htmlValue;
       submitLP(values, values._id, props.dataEntryType, setError);
       const wasNotDefault = !props.currentPageIsDefault;
       const isDefaultChanged =
-        props.initialValues.is_default_template !=
-        formik.values.is_default_template;
+        props.initialValues.is_default_template != values.is_default_template;
       if (props.hasDefault && wasNotDefault && isDefaultChanged) {
         props.currentDefaultPage["is_default_template"] = false;
         submitLP(
           props.currentDefaultPage,
           props.currentDefaultPage._id,
-          props.dataEntryType,
+          "Edit Landing Page",
           setError
         );
       }
@@ -93,7 +94,7 @@ const LandingPageForm = (props) => {
   });
 
   const isDisabled = () => {
-    if (formik.dirty) {
+    if (formik.dirty || props.initialValues.html != htmlValue) {
       return false;
     }
     return true;
@@ -116,8 +117,7 @@ const LandingPageForm = (props) => {
   };
 
   const handleSave = () => {
-    // formik.setTouched(fieldsToValidate);
-    if (formik.isValid && formik.dirty) {
+    if (formik.dirty || props.initialValues.html != htmlValue) {
       setSavebtnOpen(true);
     }
   };
@@ -163,7 +163,7 @@ const LandingPageForm = (props) => {
               </Tabs>
             </Box>
             <TabPanel value={tabValue} index={0}>
-              <HtmlEditor />
+              <HtmlEditor value={htmlValue} setValue={setHtmlValue} />
             </TabPanel>
             <TabPanel value={tabValue} index={1}>
               No templates are currently using this landing page
