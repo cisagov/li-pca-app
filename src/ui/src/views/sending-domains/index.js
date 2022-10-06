@@ -83,8 +83,7 @@ function SendingDomainsPage() {
     return (
       <BaseJSX rows={[]} dataEntry={""}>
         <Alert severity="error" sx={{ mb: 2 }}>
-          {getError[1]}. Unable to load sending profile (domain) data from the
-          database.
+          {getError[1]}. Unable to load sending domain data from the database.
         </Alert>
       </BaseJSX>
     );
@@ -92,7 +91,7 @@ function SendingDomainsPage() {
     return (
       <BaseJSX rows={[]} dataEntry={"data-entry"}>
         <Typography sx={{ mb: 2 }}>
-          No sending profile (domain) data entries found.
+          No sending domain data entries found.
         </Typography>
       </BaseJSX>
     );
@@ -100,7 +99,7 @@ function SendingDomainsPage() {
   return (
     <BaseJSX rows={rows} dataEntry={"data-entry"}>
       <Typography sx={{ mb: 2 }}>
-        Sending profile (domain) data from the database shown below.
+        Sending domain data from the database shown below.
       </Typography>
     </BaseJSX>
   );

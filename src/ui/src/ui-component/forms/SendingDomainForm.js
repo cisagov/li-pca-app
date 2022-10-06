@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 //material-ui
 import Accordion from "@mui/material/Accordion";
@@ -83,9 +84,9 @@ const SendingDomainForm = (props) => {
     onSubmit: (values) => {
       // TODO: Add headers to values or whatever ends of being axiosed
       values.headers = emailHeaderArray;
-      props.setSpData(Object.assign(props.spData, values));
+      props.setSdData(Object.assign(props.sdData, values));
       setHasSubmitted(true);
-      submitSD(props.spData, props.spData._id, props.dataEntryType, setError);
+      submitSD(props.sdData, props.sdData._id, props.dataEntryType, setError);
       setTimeout(() => {
         setSavebtnOpen(false);
       });
@@ -472,8 +473,8 @@ const SendingDomainForm = (props) => {
 };
 
 SendingDomainForm.propTypes = {
-  setSpData: PropTypes.func,
-  spData: PropTypes.object,
+  setSdData: PropTypes.func,
+  sdData: PropTypes.object,
   initialValues: PropTypes.object,
   dataEntryType: PropTypes.string,
 };

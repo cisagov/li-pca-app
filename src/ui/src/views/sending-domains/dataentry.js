@@ -11,7 +11,7 @@ import SendingDomainForm from "ui-component/forms/SendingDomainForm";
 
 // ==============================|| Create/Update Customer View ||============================== //
 
-const spRowsTransform = (domainRows) => {
+const sdRowsTransform = (domainRows) => {
   if (!domainRows.hasOwnProperty("name")) {
     domainRows.name = "";
   }
@@ -64,20 +64,20 @@ const newOrEdit = (dataEntryType) => {
   return "Edit Sending Domain";
 };
 
-const SPDataEntryPage = () => {
+const SDDataEntryPage = () => {
   const { state } = useLocation();
-  let spValues = spRowsTransform(state.row);
+  let sdValues = sdRowsTransform(state.row);
   let mainCardTitle = newOrEdit(state.dataEntryType);
-  const [spData, setSpData] = useState(spValues);
+  const [sdData, setSdData] = useState(sdValues);
 
   return (
     <MainCard title={mainCardTitle}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
         <Grid container spacing={2}>
           <SendingDomainForm
-            setSpData={setSpData}
-            spData={spData}
-            initialValues={spValues}
+            setSdData={setSdData}
+            sdData={sdData}
+            initialValues={sdValues}
             dataEntryType={mainCardTitle}
           />
         </Grid>
@@ -86,4 +86,4 @@ const SPDataEntryPage = () => {
   );
 };
 
-export default SPDataEntryPage;
+export default SDDataEntryPage;

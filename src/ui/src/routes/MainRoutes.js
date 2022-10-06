@@ -29,7 +29,7 @@ const LPDataEntryPage = Loadable(
 const SendingDomainsPage = Loadable(
   lazy(() => import("views/sending-domains"))
 );
-const SPDataEntryPage = Loadable(
+const SDDataEntryPage = Loadable(
   lazy(() => import("views/sending-domains/dataentry"))
 );
 // ==============================|| MAIN ROUTING ||============================== //
@@ -76,7 +76,7 @@ const MainRoutes = {
     },
     {
       path: "/sending-domains/data-entry",
-      element: <SPDataEntryPage />,
+      element: <SDDataEntryPage />,
     },
   ],
 };
