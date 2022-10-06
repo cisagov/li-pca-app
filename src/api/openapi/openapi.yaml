@@ -1464,6 +1464,7 @@ components:
           items:
             type: string
             enum:
+              - "Academia"
               - "Chemical Sector"
               - "Commercial Facilities Sector"
               - "Communications Sector"

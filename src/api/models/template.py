@@ -79,6 +79,7 @@ class TemplateSchema(BaseSchema):
             allow_none=True,
             validate=validate.OneOf(
                 [
+                    "Academia",
                     "Chemical Sector",
                     "Commercial Facilities Sector",
                     "Communications Sector",
