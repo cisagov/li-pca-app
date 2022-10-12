@@ -10,8 +10,10 @@ function HtmlEditor(props) {
       onEditorChange={(newValue) => props.setValue(htmlTag + newValue)}
       init={{
         height: 500,
-        width: 800,
+        width: "100%",
+        max_width: 800,
         menubar: true,
+        resize: true,
         plugins:
           "print preview powerpaste casechange importcss \
             searchreplace autolink autosave save directionality \
