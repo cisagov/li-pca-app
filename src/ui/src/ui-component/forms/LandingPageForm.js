@@ -104,7 +104,7 @@ const LandingPageForm = (props) => {
     if (formik.dirty) {
       setCancelbtnOpen(true);
     } else {
-      navigate("/li-pca-app/landing-pages");
+      navigate("/cat-phishing/landing-pages");
     }
   };
 
@@ -126,7 +126,7 @@ const LandingPageForm = (props) => {
     setHasSubmitted(false);
     setDelete(false);
     if (!getError[0]) {
-      navigate("/li-pca-app/landing-pages");
+      navigate("/cat-phishing/landing-pages");
     }
   };
   return (
@@ -231,7 +231,7 @@ const LandingPageForm = (props) => {
             <ConfirmDialog
               subtitle="Unsaved changes will be discarded."
               confirmType="Leave"
-              handleClick={() => navigate("/li-pca-app/landing-pages")}
+              handleClick={() => navigate("/cat-phishing/landing-pages")}
               isOpen={cancelbtnOpen}
               setIsOpen={setCancelbtnOpen}
             />

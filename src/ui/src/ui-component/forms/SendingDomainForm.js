@@ -301,7 +301,7 @@ const SendingDomainForm = (props) => {
     if (formik.dirty) {
       setCancelbtnOpen(true);
     } else {
-      navigate("/li-pca-app/sending-domains");
+      navigate("/cat-phishing/sending-domains");
     }
   };
   const isDisabled = () => {
@@ -319,7 +319,7 @@ const SendingDomainForm = (props) => {
   const closeDialog = () => {
     setHasSubmitted(false);
     if (!getError[0]) {
-      navigate("/li-pca-app/sending-domains");
+      navigate("/cat-phishing/sending-domains");
     }
   };
   return (
@@ -449,7 +449,7 @@ const SendingDomainForm = (props) => {
         <ConfirmDialog
           subtitle="Unsaved changes will be discarded."
           confirmType="Leave"
-          handleClick={() => navigate("/li-pca-app/sending-domains")}
+          handleClick={() => navigate("/cat-phishing/sending-domains")}
           isOpen={cancelbtnOpen}
           setIsOpen={setCancelbtnOpen}
         />
