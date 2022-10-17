@@ -103,7 +103,7 @@ const CustomerForm = (props) => {
     if (contactUpdated || formik.dirty) {
       setCancelbtnOpen(true);
     } else {
-      navigate("/li-pca-app/customers");
+      navigate("/cat-phishing/customers");
     }
   };
   const isDisabled = () => {
@@ -138,7 +138,7 @@ const CustomerForm = (props) => {
     setHasSubmitted(false);
     setDelete(false);
     if (!getError[0]) {
-      navigate("/li-pca-app/customers");
+      navigate("/cat-phishing/customers");
     }
   };
   return (
@@ -467,7 +467,7 @@ const CustomerForm = (props) => {
           <ConfirmDialog
             subtitle="Unsaved changes will be discarded."
             confirmType="Leave"
-            handleClick={() => navigate("/li-pca-app/customers")}
+            handleClick={() => navigate("/cat-phishing/customers")}
             isOpen={cancelbtnOpen}
             setIsOpen={setCancelbtnOpen}
           />

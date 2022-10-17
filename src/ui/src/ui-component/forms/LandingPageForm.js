@@ -104,7 +104,7 @@ const LandingPageForm = (props) => {
     if (formik.dirty) {
       setCancelbtnOpen(true);
     } else {
-      navigate("/li-pca-app/landing-pages");
+      navigate("/cat-phishing/landing-pages");
     }
   };
 
@@ -126,7 +126,7 @@ const LandingPageForm = (props) => {
     setHasSubmitted(false);
     setDelete(false);
     if (!getError[0]) {
-      navigate("/li-pca-app/landing-pages");
+      navigate("/cat-phishing/landing-pages");
     }
   };
   return (
@@ -154,7 +154,7 @@ const LandingPageForm = (props) => {
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} md={12} xl={12} sx={{ mt: 2 }} />
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} />
           <Box sx={{ width: "100%", mb: 3 }}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <Tabs value={tabValue} onChange={handleTabChange}>
@@ -231,7 +231,7 @@ const LandingPageForm = (props) => {
             <ConfirmDialog
               subtitle="Unsaved changes will be discarded."
               confirmType="Leave"
-              handleClick={() => navigate("/li-pca-app/landing-pages")}
+              handleClick={() => navigate("/cat-phishing/landing-pages")}
               isOpen={cancelbtnOpen}
               setIsOpen={setCancelbtnOpen}
             />
