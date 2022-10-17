@@ -64,8 +64,8 @@ class TemplateSchema(BaseSchema):
     subject = fields.Str()
     text = fields.Str()
     html = fields.Str()
-    # indicators = fields.Nested(TemplateIndicatorSchema)
-    indicators = fields.List(fields.Str(), allow_none=True)
+    indicators = fields.Nested(TemplateIndicatorSchema)
+    # indicators = fields.List(fields.Str(), allow_none=True)
     campaigns = fields.List(fields.Str(), allow_none=True)
     recommendation_type = fields.Str()
     behavior = fields.Str(

@@ -1444,9 +1444,9 @@ components:
           items:
             type: string
         indicators:
-          type: array
+          type: object
           items:
-            type: string
+            $ref: '#/components/schemas/TemplateIndicators'
         behavior:
           type: string
           enum:
@@ -1488,6 +1488,65 @@ components:
         deception_score: 1
       xml:
         name: Template
+    TemplateIndicators:
+      type: object
+      properties:
+        appearance:
+          $ref: '#/components/schemas/TemplateAppearance'
+        sender:
+          $ref: '#/components/schemas/TemplateSender'
+        relevancy:
+          $ref: '#/components/schemas/TemplateRelevancy'
+        behavior:
+          $ref: '#/components/schemas/TemplateBehavior'
+    TemplateAppearance:
+      type: object
+      properties:
+        grammar:
+          type: integer
+          format: int32
+        link_domain:
+          type: integer
+          format: int32
+        logo_graphics:
+          type: integer
+          format: int32
+    TemplateSender:
+      type: object
+      properties:
+        external:
+          type: integer
+          format: int32
+        internal:
+          type: integer
+          format: int32
+        authoritative:
+          type: integer
+          format: int32
+    TemplateRelevancy:
+      type: object
+      properties:
+        organization:
+          type: integer
+          format: int32
+        public_news:
+          type: integer
+          format: int32
+    TemplateBehavior:
+      type: object
+      properties:
+        fear:
+          type: integer
+          format: int32
+        duty_obligation:
+          type: integer
+          format: int32
+        curiosity:
+          type: integer
+          format: int32
+        greed:
+          type: integer
+          format: int32
     Campaign:
       type: object
       properties:
