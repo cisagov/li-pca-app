@@ -32,10 +32,10 @@ class TemplateRelevancySchema(Schema):
 class TemplateBehaviorSchema(Schema):
     """TemplateBehaviorSchema."""
 
-    fear = fields.Integer()
-    duty_obligation = fields.Integer()
-    curiosity = fields.Integer()
-    greed = fields.Integer()
+    fear = fields.Bool()
+    duty_obligation = fields.Bool()
+    curiosity = fields.Bool()
+    greed = fields.Bool()
 
 
 class TemplateIndicatorSchema(Schema):
@@ -68,9 +68,6 @@ class TemplateSchema(BaseSchema):
     # indicators = fields.List(fields.Str(), allow_none=True)
     campaigns = fields.List(fields.Str(), allow_none=True)
     recommendation_type = fields.Str()
-    behavior = fields.Str(
-        validate=validate.OneOf(["Greed", "Duty", "Fear"]),
-    )
     category = fields.Str(
         validate=validate.OneOf(["Social Media", "Vendors", "Internal"]),
     )

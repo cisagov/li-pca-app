@@ -1447,12 +1447,6 @@ components:
           type: object
           items:
             $ref: '#/components/schemas/TemplateIndicators'
-        behavior:
-          type: string
-          enum:
-            - "Greed"
-            - "Duty"
-            - "Fear"
         category:
           type: string
           enum:
@@ -1536,17 +1530,17 @@ components:
       type: object
       properties:
         fear:
-          type: integer
-          format: int32
+          type: boolean
+          default: false
         duty_obligation:
-          type: integer
-          format: int32
+          type: boolean
+          default: false
         curiosity:
-          type: integer
-          format: int32
+          type: boolean
+          default: false
         greed:
-          type: integer
-          format: int32
+          type: boolean
+          default: false
     Campaign:
       type: object
       properties:
