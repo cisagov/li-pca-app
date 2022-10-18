@@ -1,3 +1,4 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
 
 //material-ui
@@ -11,7 +12,32 @@ import Typography from "@mui/material/Typography";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+// project imports
+import MultipleSelectChip from "../user-input/MultipleSelectChip";
+
+const sophValues = [
+  "Emotional triggers (FEAR/DUTY)",
+  "Emotional triggers (CURIOSITY-QUESTIONS)",
+  "Emotional triggers (GREED)",
+  "Context alignment",
+  "Spoofed hyperlinks and websites",
+  "Authoritative tone",
+  "Spelling and layout",
+];
+const redFlagValues = [
+  "Externally hosted resource",
+  "Generic greeting",
+  "Generic signature",
+  "Unusual business process",
+  "Requirement to click",
+  "Content irregularities",
+  "Generic terms",
+];
+
 const TemplateAttrForm = (props) => {
+  const [sophTags, setSophTags] = useState([]);
+  const [redFlagTags, setRFTags] = useState([]);
+
   const validationSchema = yup.object({
     subject: yup.string().required("Subject is required"),
     name: yup.string().required("Template Name is required"),
@@ -35,7 +61,7 @@ const TemplateAttrForm = (props) => {
             Subject:
           </Typography>
         </Grid>
-        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
+        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
           <TextField
             size="small"
             fullWidth
@@ -53,7 +79,7 @@ const TemplateAttrForm = (props) => {
             From Address:
           </Typography>
         </Grid>
-        <Grid item xs={11} sm={5} md={5} lg={5} xl={4}>
+        <Grid item xs={12} sm={5} md={5} lg={5} xl={4}>
           <TextField
             size="small"
             fullWidth
@@ -66,7 +92,7 @@ const TemplateAttrForm = (props) => {
             helperText={formik.touched.name && formik.errors.name}
           />
         </Grid>
-        <Grid item xs={11} sm={6} md={6} lg={5} xl={5}>
+        <Grid item xs={12} sm={6} md={6} lg={5} xl={5}>
           <TextField
             size="small"
             fullWidth
@@ -91,7 +117,7 @@ const TemplateAttrForm = (props) => {
             Recommendations:
           </Typography>
         </Grid>
-        <Grid item xs={11} sm={5} md={5} lg={5} xl={4}>
+        <Grid item xs={12} sm={6} md={5} lg={5} xl={4}>
           <TextField
             size="small"
             fullWidth
@@ -104,7 +130,7 @@ const TemplateAttrForm = (props) => {
             helperText={formik.touched.title && formik.errors.title}
           />
         </Grid>
-        <Grid item xs={11} sm={6} md={6} lg={5} xl={5}>
+        <Grid item xs={12} sm={6} md={6} lg={5} xl={5}>
           <TextField
             size="small"
             select
@@ -127,7 +153,7 @@ const TemplateAttrForm = (props) => {
             <MenuItem value={"Sophisticated"}>Sophisticated</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
+        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
           <TextField
             size="small"
             fullWidth
@@ -140,56 +166,28 @@ const TemplateAttrForm = (props) => {
             onChange={formik.handleChange}
           />
         </Grid>
-        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
-          <TextField
-            size="small"
-            select
-            fullWidth
+        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
+          <MultipleSelectChip
+            values={sophValues}
+            selected={sophTags}
+            setSelected={setSophTags}
             label="Sophisticated"
-            id="sophisticated"
-            name="sophisticated"
-            value={formik.values.sophisticated}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.sophisticated &&
-              Boolean(formik.errors.sophisticated)
-            }
-            helperText={
-              formik.touched.sophisticated && formik.errors.sophisticated
-            }
-          >
-            <MenuItem value={"Sophisticated 1"}>Value 1</MenuItem>
-            <MenuItem value={"Sophisticated 2"}>Value 2</MenuItem>
-          </TextField>
+          />
         </Grid>
-        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
-          <TextField
-            size="small"
-            select
-            fullWidth
+        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
+          <MultipleSelectChip
+            values={redFlagValues}
+            selected={redFlagTags}
+            setSelected={setRFTags}
             label="Red Flag"
-            id="red_flag"
-            name="red_flag"
-            value={formik.values.red_flag}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.sophisticated &&
-              Boolean(formik.errors.sophisticated)
-            }
-            helperText={
-              formik.touched.sophisticated && formik.errors.sophisticated
-            }
-          >
-            <MenuItem value={"Red Flag 1"}>Value 1</MenuItem>
-            <MenuItem value={"Red Flag 2"}>Value 2</MenuItem>
-          </TextField>
+          />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h4" gutterBottom component="div">
             Subscription Config:
           </Typography>
         </Grid>
-        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
+        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
           <TextField
             size="small"
             select
@@ -212,7 +210,7 @@ const TemplateAttrForm = (props) => {
             <MenuItem value={"Sending Profile 2"}>Value 2</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={11} sm={11} md={11} lg={10} xl={9}>
+        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
           <TextField
             size="small"
             select
@@ -234,7 +232,7 @@ const TemplateAttrForm = (props) => {
             <MenuItem value={"Landing Page 2"}>Value 2</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={11} sm={5} md={5} lg={5} xl={5}>
+        <Grid item xs={12} sm={5} md={5} lg={5} xl={5}>
           <Button
             fullWidth
             color="info"
