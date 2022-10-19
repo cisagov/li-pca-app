@@ -1428,9 +1428,13 @@ components:
         retired_description:
           type: string
         sophisticated:
-          type: string
+          type: array
+          items:
+            type: string
         red_flag:
-          type: string
+          type: array
+          items:
+            type: string
         subject:
           type: string
         text:
