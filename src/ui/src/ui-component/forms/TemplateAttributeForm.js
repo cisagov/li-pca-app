@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 //material-ui
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
@@ -13,240 +14,193 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 // project imports
-import MultipleSelectChip from "../user-input/MultipleSelectChip";
+import TemplateMultiSelectChip from "../user-input/TemplateMultiSelectChip";
+import TemplateAttrRecsForm from "./TemplateAttrRecsForm";
 
-const sophValues = [
-  "Emotional triggers (FEAR/DUTY)",
-  "Emotional triggers (CURIOSITY-QUESTIONS)",
-  "Emotional triggers (GREED)",
-  "Context alignment",
-  "Spoofed hyperlinks and websites",
-  "Authoritative tone",
-  "Spelling and layout",
-];
-const redFlagValues = [
-  "Externally hosted resource",
-  "Generic greeting",
-  "Generic signature",
-  "Unusual business process",
-  "Requirement to click",
-  "Content irregularities",
-  "Generic terms",
-];
+const sophJson = require("views/templates/sophisticatedTags.json");
+const redFlagJson = require("views/templates/sophisticatedTags.json");
 
 const TemplateAttrForm = (props) => {
-  const [sophTags, setSophTags] = useState([]);
-  const [redFlagTags, setRFTags] = useState([]);
+  const [sophisticatedArray, setSophArray] = useState(sophJson);
+  const [redFlagArray, setRFArray] = useState(redFlagJson);
+  const [selectedSophTags, setSophTags] = useState([]);
+  const [selectedRFTags, setRFTags] = useState([]);
 
   const validationSchema = yup.object({
     subject: yup.string().required("Subject is required"),
     name: yup.string().required("Template Name is required"),
     from_address: yup.string().required("Sender is required"),
   });
-
   const formik = useFormik({
     initialValues: props.initialTemplateValues,
     validationSchema: validationSchema,
     validateOnChange: true,
     onSubmit: (values) => {
+      values["sophisticated"] = selectedSophTags;
+      values["red_flag"] = selectedRFTags;
       props.setTemplateData(Object.assign(props.templateData, values));
       props.setHasSubmitted(true);
     },
   });
   return (
-    <form id="template-attr-form" onSubmit={formik.handleSubmit}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h4" gutterBottom component="div">
-            Subject:
-          </Typography>
+    <Box sx={{ midWidth: 300, maxWidth: 1000 }}>
+      <form id="template-attr-form" onSubmit={formik.handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Typography variant="h4" gutterBottom component="div">
+              Subject:
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
+            <TextField
+              size="small"
+              fullWidth
+              id="subject"
+              name="subject"
+              label="Subject *"
+              value={formik.values.subject}
+              onChange={formik.handleChange}
+              error={formik.touched.subject && Boolean(formik.errors.subject)}
+              helperText={formik.touched.subject && formik.errors.subject}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Typography variant="h4" gutterBottom component="div">
+              From Address:
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={5} lg={5} xl={4}>
+            <TextField
+              size="small"
+              fullWidth
+              id="name"
+              name="name"
+              label="Display Name *"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={5} xl={5}>
+            <TextField
+              size="small"
+              fullWidth
+              id="from_address"
+              name="from_address"
+              label="Sender *"
+              value={formik.values.from_address}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.from_address &&
+                Boolean(formik.errors.from_address)
+              }
+              helperText={
+                formik.touched.from_address && formik.errors.from_address
+              }
+            />
+          </Grid>
+          <Grid item xs={12} xl={11}>
+            {formik.values.name} &#60;{formik.values.from_address}@domain.com
+            &#62;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Typography variant="h4" gutterBottom component="div">
+              Recommendations:
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
+            <TemplateMultiSelectChip
+              values={sophisticatedArray}
+              selection={selectedSophTags}
+              setSelection={setSophTags}
+              label="Sophisticated"
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
+            <TemplateMultiSelectChip
+              values={redFlagArray}
+              selection={selectedRFTags}
+              setSelection={setRFTags}
+              label="Red Flag"
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
-          <TextField
-            size="small"
-            fullWidth
-            id="subject"
-            name="subject"
-            label="Subject *"
-            value={formik.values.subject}
-            onChange={formik.handleChange}
-            error={formik.touched.subject && Boolean(formik.errors.subject)}
-            helperText={formik.touched.subject && formik.errors.subject}
-          />
+      </form>
+      <TemplateAttrRecsForm
+        sophisticatedArray={sophisticatedArray}
+        redFlagArray={redFlagArray}
+        setSophArray={setSophArray}
+        setRFArray={setRFArray}
+      />
+      <form id="template-attr-form" onSubmit={formik.handleSubmit}>
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Typography variant="h4" gutterBottom component="div">
+              Subscription Config:
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
+            <TextField
+              size="small"
+              select
+              fullWidth
+              label="Sending Profile Selection"
+              id="sending_profile_id"
+              name="sending_profile_id"
+              value={formik.values.sending_profile_id}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.sending_profile_id &&
+                Boolean(formik.errors.sending_profile_id)
+              }
+              helperText={
+                formik.touched.sending_profile_id &&
+                formik.errors.sending_profile_id
+              }
+            >
+              <MenuItem value={"Sending Profile 1"}>Value 1</MenuItem>
+              <MenuItem value={"Sending Profile 2"}>Value 2</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
+            <TextField
+              size="small"
+              select
+              fullWidth
+              label="Landing Page Selection"
+              id="landing_page_id"
+              name="landing_page_id"
+              value={formik.values.landing_page_id}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.landing_page_id &&
+                Boolean(formik.errors.landing_page_id)
+              }
+              helperText={
+                formik.touched.landing_page_id && formik.errors.landing_page_id
+              }
+            >
+              <MenuItem value={"Landing Page 1"}>Value 1</MenuItem>
+              <MenuItem value={"Landing Page 2"}>Value 2</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={12} sm={5} md={5} lg={5} xl={5}>
+            <Button
+              fullWidth
+              color="info"
+              variant="contained"
+              size="large"
+              disabled={!formik.dirty}
+              type="submit"
+            >
+              Save Template
+            </Button>
+          </Grid>
+          <Grid item xs={10} sm={1} md={1} lg={1} xl={1} />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h4" gutterBottom component="div">
-            From Address:
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={5} md={5} lg={5} xl={4}>
-          <TextField
-            size="small"
-            fullWidth
-            id="name"
-            name="name"
-            label="Display Name *"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-            error={formik.touched.name && Boolean(formik.errors.name)}
-            helperText={formik.touched.name && formik.errors.name}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={6} lg={5} xl={5}>
-          <TextField
-            size="small"
-            fullWidth
-            id="from_address"
-            name="from_address"
-            label="Sender *"
-            value={formik.values.from_address}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.from_address && Boolean(formik.errors.from_address)
-            }
-            helperText={
-              formik.touched.from_address && formik.errors.from_address
-            }
-          />
-        </Grid>
-        <Grid item xs={12} xl={11}>
-          {formik.values.name} &#60;{formik.values.from_address}@domain.com&#62;
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h4" gutterBottom component="div">
-            Recommendations:
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={5} xl={4}>
-          <TextField
-            size="small"
-            fullWidth
-            id="title"
-            name="title"
-            label="Title *"
-            value={formik.values.title}
-            onChange={formik.handleChange}
-            error={formik.touched.title && Boolean(formik.errors.title)}
-            helperText={formik.touched.title && formik.errors.title}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={6} lg={5} xl={5}>
-          <TextField
-            size="small"
-            select
-            fullWidth
-            label="Type"
-            id="recommendation_type"
-            name="recommendation_type"
-            value={formik.values.recommendation_type}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.recommendation_type &&
-              Boolean(formik.errors.recommendation_type)
-            }
-            helperText={
-              formik.touched.recommendation_type &&
-              formik.errors.recommendation_type
-            }
-          >
-            <MenuItem value={"Red Flag"}>Red Flag</MenuItem>
-            <MenuItem value={"Sophisticated"}>Sophisticated</MenuItem>
-          </TextField>
-        </Grid>
-        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
-          <TextField
-            size="small"
-            fullWidth
-            multiline
-            minRows={3}
-            id="recommendation_description"
-            name="recommendation_description"
-            label="Description"
-            value={formik.values.recommendation_description}
-            onChange={formik.handleChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
-          <MultipleSelectChip
-            values={sophValues}
-            selected={sophTags}
-            setSelected={setSophTags}
-            label="Sophisticated"
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
-          <MultipleSelectChip
-            values={redFlagValues}
-            selected={redFlagTags}
-            setSelected={setRFTags}
-            label="Red Flag"
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h4" gutterBottom component="div">
-            Subscription Config:
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
-          <TextField
-            size="small"
-            select
-            fullWidth
-            label="Sending Profile Selection"
-            id="sending_profile_id"
-            name="sending_profile_id"
-            value={formik.values.sending_profile_id}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.sending_profile_id &&
-              Boolean(formik.errors.sending_profile_id)
-            }
-            helperText={
-              formik.touched.sending_profile_id &&
-              formik.errors.sending_profile_id
-            }
-          >
-            <MenuItem value={"Sending Profile 1"}>Value 1</MenuItem>
-            <MenuItem value={"Sending Profile 2"}>Value 2</MenuItem>
-          </TextField>
-        </Grid>
-        <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
-          <TextField
-            size="small"
-            select
-            fullWidth
-            label="Landing Page Selection"
-            id="landing_page_id"
-            name="landing_page_id"
-            value={formik.values.landing_page_id}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.landing_page_id &&
-              Boolean(formik.errors.landing_page_id)
-            }
-            helperText={
-              formik.touched.landing_page_id && formik.errors.landing_page_id
-            }
-          >
-            <MenuItem value={"Landing Page 1"}>Value 1</MenuItem>
-            <MenuItem value={"Landing Page 2"}>Value 2</MenuItem>
-          </TextField>
-        </Grid>
-        <Grid item xs={12} sm={5} md={5} lg={5} xl={5}>
-          <Button
-            fullWidth
-            color="info"
-            variant="contained"
-            size="large"
-            disabled={!formik.dirty}
-            type="submit"
-          >
-            Save Template
-          </Button>
-        </Grid>
-        <Grid item xs={10} sm={1} md={1} lg={1} xl={1} />
-      </Grid>
-    </form>
+      </form>
+    </Box>
   );
 };
 
