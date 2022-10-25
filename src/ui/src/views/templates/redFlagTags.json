@@ -1,0 +1,42 @@
+[
+  {
+    "recommendation_description": "Using an unknown external sending address to send an internal message that should have come from the <<ORG DOMAIN>> or another known and trusted domain. Trusted organizations send from known domains or provide advance notice that a new domain will provide important communications to set expectations.",
+    "recommendation_type": "Red Flag",
+    "title": "Unfamiliar sender"
+  },
+  {
+    "recommendation_description": "Requiring the recipient to click an unfamiliar and externally hosted link when the message content is describing an internally hosted resource.",
+    "recommendation_type": "Red Flag",
+    "title": "Externally hosted resource"
+  },
+  {
+    "recommendation_description": "Not personally addressing the recipient for what looks to be a personalized message. A trusted organization will normally address the recipient by name and provide their contact information.",
+    "recommendation_type": "Red Flag",
+    "title": "Generic greeting"
+  },
+  {
+    "recommendation_description": "Not providing organizationally relevant contact information in the signature block. A trusted organization or sender will typically provide their contact information or be verifiable through out-of-band information resources.",
+    "recommendation_type": "Red Flag",
+    "title": "Generic signature"
+  },
+  {
+    "recommendation_description": "Citing non-compliance of a previously unknown requirement or document. A legitimate alert or notification would follow known processes, reference well-known requirements or documents, or be verifiable through trusted information resources.",
+    "recommendation_type": "Red Flag",
+    "title": "Unusual business process"
+  },
+  {
+    "recommendation_description": "Requiring the recipient to click a link to complete the request and not setting expectations as to where the link is hosted. A trusted organization would provide sufficient details about the request without requiring the recipient to follow links or download attachments if the message was unsolicited or unexpected.",
+    "recommendation_type": "Red Flag",
+    "title": "Requirement to click"
+  },
+  {
+    "recommendation_description": "Providing information throughout the message, in the display name, and the signature block that are inconsistent or contradictory.",
+    "recommendation_type": "Red Flag",
+    "title": "Content irregularities"
+  },
+  {
+    "recommendation_description": "Using generic phrases instead of known system names or office groups, and referencing topics and/or deadlines that cannot be verified by requesting confirmation from the related department points of contact or viewing website content.",
+    "recommendation_type": "Red Flag",
+    "title": "Generic terms"
+  }
+]
