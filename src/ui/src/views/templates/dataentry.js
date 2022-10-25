@@ -26,7 +26,6 @@ import WebIcon from "@mui/icons-material/Web";
 import DeceptionCalculator from "./deceptionCalculator";
 import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
 import TemplateTestingForm from "ui-component/forms/TemplateTestingForm";
-// import TemplateHtmlEditor from "ui-component/forms/TemplateHtmlEditor";
 import HtmlEditor from "ui-component/forms/HtmlEditor";
 
 const temRowsTransform = (templateRows) => {
@@ -52,10 +51,10 @@ const temRowsTransform = (templateRows) => {
     templateRows.retired_description = "";
   }
   if (!templateRows.hasOwnProperty("sophisticated")) {
-    templateRows.sophisticated = "";
+    templateRows.sophisticated = [];
   }
   if (!templateRows.hasOwnProperty("red_flag")) {
-    templateRows.red_flag = "";
+    templateRows.red_flag = [];
   }
   if (!templateRows.hasOwnProperty("subject")) {
     templateRows.subject = "";
