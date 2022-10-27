@@ -283,7 +283,7 @@ class Manager:
             result = target_collection.insert_one(self.load_data(data))
             return {"_id": str(result.inserted_id)}
         except pymongo.errors.DuplicateKeyError as e:
-            return str(e)
+            return {"error": str(e.details["errmsg"])}
 
     def save_many(self, data):
         """Save list to collection."""
