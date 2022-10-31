@@ -1714,6 +1714,8 @@ components:
           type: string
         subject:
           type: string
+        html:
+          type: string
         text:
           type: string
         attachment:

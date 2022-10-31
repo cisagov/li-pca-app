@@ -30,24 +30,9 @@ def send_email(body=None):
 
     :rtype: None
     """
-    # logging.debug("Conn request: %s", connexion.request.get_json())
-    # if connexion.request.is_json:
-    #     body = connexion.request.get_json()
-    #     logging.debug("Body: %s", body)
-    #     resp = db_manager.save(body)
-    #     resp.update()
     body = connexion.request.get_json()
     url = body.get("url")
     api_key = body.get("api_key")
-
-    # Setting static address as requested
-    # from_address = body.get("from_address")
-
-    # to_address = body.get("to_address")
-    # subject = body.get("subject")
-    # text = body.get("text")
-    # url = "https://api.mailgun.net/v3/sandbox7e1c5b454331400980a544a447f31145.mailgun.org/messages"
-    # api_key = "5cb3eb406752690b871e1bfb9f4d89b4-1b237f8b-f38944de"
 
     # if body.get("template_id", False):
     #     template = get_template_data_by_id(body.get("template_id"))
@@ -55,11 +40,11 @@ def send_email(body=None):
     # uploaded_file = connexion.request.files['fileName']
     # uploaded_file.save("/tmp/upgrade_bundle")h
 
+    # Setting static address as requested. Determine Default
     from_address = body.get("from_address")
     to_address = body.get("to_address")
     subject = body.get("subject")
     text = body.get("text")
-    html = body.get("html")
 
     resp = send_simple_message(
         url=url,
@@ -68,7 +53,6 @@ def send_email(body=None):
         to_address=to_address,
         subject=subject,
         text=text,
-        html=html,
     )
 
     logging.debug("Resp: %s", str(resp.json))
