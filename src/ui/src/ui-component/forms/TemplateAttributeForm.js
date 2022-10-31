@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 //material-ui
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 //third party
@@ -16,15 +18,19 @@ import * as yup from "yup";
 // project imports
 import TemplateMultiSelectChip from "../user-input/TemplateMultiSelectChip";
 import TemplateAttrRecsForm from "./TemplateAttrRecsForm";
+import { useGetAll as domainGetAll } from "services/api/SendingDomains";
+import { useGetAll as landingPgGetAll } from "services/api/LandingPages";
 
 const sophJson = require("views/templates/sophisticatedTags.json");
-const redFlagJson = require("views/templates/sophisticatedTags.json");
+const redFlagJson = require("views/templates/redFlagTags.json");
 
 const TemplateAttrForm = (props) => {
   const [sophisticatedArray, setSophArray] = useState(sophJson);
   const [redFlagArray, setRFArray] = useState(redFlagJson);
   const [selectedSophTags, setSophTags] = useState([]);
   const [selectedRFTags, setRFTags] = useState([]);
+  let domain = domainGetAll();
+  let landingPage = landingPgGetAll();
 
   const validationSchema = yup.object({
     subject: yup.string().required("Subject is required"),
@@ -42,6 +48,19 @@ const TemplateAttrForm = (props) => {
       props.setHasSubmitted(true);
     },
   });
+  const message = (str) => {
+    let msg =
+      "Either no " +
+      str +
+      " have been created in the system or there was an error fetching them.";
+    return (
+      <Tooltip placement="right" title={msg}>
+        <Alert severity="error" size="small">
+          No {str} found.
+        </Alert>
+      </Tooltip>
+    );
+  };
   return (
     <Box sx={{ midWidth: 300, maxWidth: 1000 }}>
       <form id="template-attr-form" onSubmit={formik.handleSubmit}>
@@ -141,49 +160,70 @@ const TemplateAttrForm = (props) => {
             </Typography>
           </Grid>
           <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
-            <TextField
-              size="small"
-              select
-              fullWidth
-              label="Sending Profile Selection"
-              id="sending_profile_id"
-              name="sending_profile_id"
-              value={formik.values.sending_profile_id}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.sending_profile_id &&
-                Boolean(formik.errors.sending_profile_id)
-              }
-              helperText={
-                formik.touched.sending_profile_id &&
-                formik.errors.sending_profile_id
-              }
-            >
-              <MenuItem value={"Sending Profile 1"}>Value 1</MenuItem>
-              <MenuItem value={"Sending Profile 2"}>Value 2</MenuItem>
-            </TextField>
+            {domain.getError[0] || domain.getData.length == 0 ? (
+              message("sending domains")
+            ) : (
+              <TextField
+                size="small"
+                select
+                fullWidth
+                label="Sending Domain Selection"
+                id="sending_profile_id"
+                name="sending_profile_id"
+                value={formik.values.sending_profile_id}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.sending_profile_id &&
+                  Boolean(formik.errors.sending_profile_id)
+                }
+                helperText={
+                  formik.touched.sending_profile_id &&
+                  formik.errors.sending_profile_id
+                }
+              >
+                {domain.getData.map((entry) => {
+                  const title = entry.name;
+                  return (
+                    <MenuItem key={title} value={title}>
+                      {title}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
+            )}
           </Grid>
           <Grid item xs={12} sm={12} md={11} lg={10} xl={9}>
-            <TextField
-              size="small"
-              select
-              fullWidth
-              label="Landing Page Selection"
-              id="landing_page_id"
-              name="landing_page_id"
-              value={formik.values.landing_page_id}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.landing_page_id &&
-                Boolean(formik.errors.landing_page_id)
-              }
-              helperText={
-                formik.touched.landing_page_id && formik.errors.landing_page_id
-              }
-            >
-              <MenuItem value={"Landing Page 1"}>Value 1</MenuItem>
-              <MenuItem value={"Landing Page 2"}>Value 2</MenuItem>
-            </TextField>
+            {landingPage.getError[0] || landingPage.getData.length == 0 ? (
+              message("landing pages")
+            ) : (
+              <TextField
+                size="small"
+                select
+                fullWidth
+                label="Landing Page Selection"
+                id="landing_page_id"
+                name="landing_page_id"
+                value={formik.values.landing_page_id}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.landing_page_id &&
+                  Boolean(formik.errors.landing_page_id)
+                }
+                helperText={
+                  formik.touched.landing_page_id &&
+                  formik.errors.landing_page_id
+                }
+              >
+                {landingPage.getData.map((entry) => {
+                  const title = entry.name;
+                  return (
+                    <MenuItem key={title} value={title}>
+                      {title}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
+            )}
           </Grid>
           <Grid item xs={12} sm={5} md={5} lg={5} xl={5}>
             <Button
