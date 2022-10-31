@@ -6,6 +6,7 @@ function HtmlEditor(props) {
   const htmlTag = "<!DOCTYPE html>";
   return (
     <Editor
+      apiKey="93v3azvbr0e5gg10ha39h4nehsyg1f2orfiw6mp22qjr6j6j"
       value={props.value}
       onEditorChange={(newValue) => props.setValue(htmlTag + newValue)}
       init={{
@@ -14,15 +15,6 @@ function HtmlEditor(props) {
         max_width: 800,
         menubar: true,
         resize: true,
-        plugins:
-          "print preview powerpaste casechange importcss \
-            searchreplace autolink autosave save directionality \
-            advcode visualblocks visualchars fullscreen image link \
-            media mediaembed template codesample table charmap hr \
-            pagebreak nonbreaking anchor toc insertdatetime advlist \
-            lists checklist wordcount tinymcespellchecker a11ychecker \
-            textpattern noneditable help formatpainter pageembed charmap \
-            mentions linkchecker emoticons advtable",
         toolbar: true,
       }}
     />
