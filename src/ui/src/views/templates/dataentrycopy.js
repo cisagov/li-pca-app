@@ -1,5 +1,5 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // material-ui
@@ -103,7 +103,7 @@ const TemplateDataEntryPage = () => {
   const { state } = useLocation();
   let mainCardTitle = temNewOrEdit(state.dataEntryType);
   let templateValues = temRowsTransform(state.row);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   };

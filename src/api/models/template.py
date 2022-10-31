@@ -32,10 +32,10 @@ class TemplateRelevancySchema(Schema):
 class TemplateBehaviorSchema(Schema):
     """TemplateBehaviorSchema."""
 
-    fear = fields.Integer()
-    duty_obligation = fields.Integer()
-    curiosity = fields.Integer()
-    greed = fields.Integer()
+    fear = fields.Bool()
+    duty_obligation = fields.Bool()
+    curiosity = fields.Bool()
+    greed = fields.Bool()
 
 
 class TemplateIndicatorSchema(Schema):
@@ -57,20 +57,14 @@ class TemplateSchema(BaseSchema):
     deception_score = fields.Int(validate=validate.Range(min=1, max=6))
     retired = fields.Bool(missing=False)
     retired_description = fields.Str(default="", allow_none=True)
-    # sophisticated = fields.List(fields.Str(), allow_none=True)
-    # red_flag = fields.List(fields.Str(), allow_none=True)
-    sophisticated = fields.Str()
-    red_flag = fields.Str()
+    sophisticated = fields.List(fields.Str(), allow_none=True)
+    red_flag = fields.List(fields.Str(), allow_none=True)
     subject = fields.Str()
     text = fields.Str()
     html = fields.Str()
-    # indicators = fields.Nested(TemplateIndicatorSchema)
-    indicators = fields.List(fields.Str(), allow_none=True)
+    indicators = fields.Nested(TemplateIndicatorSchema)
     campaigns = fields.List(fields.Str(), allow_none=True)
     recommendation_type = fields.Str()
-    behavior = fields.Str(
-        validate=validate.OneOf(["Greed", "Duty", "Fear"]),
-    )
     category = fields.Str(
         validate=validate.OneOf(["Social Media", "Vendors", "Internal"]),
     )
@@ -79,6 +73,7 @@ class TemplateSchema(BaseSchema):
             allow_none=True,
             validate=validate.OneOf(
                 [
+                    "Academia",
                     "Chemical Sector",
                     "Commercial Facilities Sector",
                     "Communications Sector",

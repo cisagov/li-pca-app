@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
+import { useState } from "react";
 
 // material-ui
 import Alert from "@mui/material/Alert";
@@ -38,14 +38,12 @@ const validationSchema = yup.object({
 });
 
 function CustomerPOCForm(props) {
-  const [isToggleCardOn, setToggleCard] = React.useState(true);
-  const [editContact, setEditContact] = React.useState(false);
-  const [cusContactsRows, setCusContactsRows] = React.useState(
-    props.custPOCData
-  );
-  const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
-  const [selectedRow, setSelectedRow] = React.useState({});
-  let [entryToEdit, setEntryToEdit] = React.useState({});
+  const [isToggleCardOn, setToggleCard] = useState(true);
+  const [editContact, setEditContact] = useState(false);
+  const [cusContactsRows, setCusContactsRows] = useState(props.custPOCData);
+  const [deletebtnOpen, setDeletebtnOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState({});
+  let [entryToEdit, setEntryToEdit] = useState({});
   let initialPOCValues = {};
   let contactLen = props.custPOCData.length;
   if (!editContact) {
@@ -168,9 +166,9 @@ function CustomerPOCForm(props) {
     });
   };
   return (
-    <React.Fragment>
+    <>
       {isToggleCardOn ? (
-        <React.Fragment>
+        <>
           <Grid item xs={10} sm={6} md={5} lg={4} xl={3} sx={{ mb: 1 }}>
             <Button
               color="warning"
@@ -192,7 +190,7 @@ function CustomerPOCForm(props) {
             lg={8}
             xl={9}
           ></Grid>
-        </React.Fragment>
+        </>
       ) : (
         <Card variant="outlined">
           <CardContent>
@@ -375,7 +373,7 @@ function CustomerPOCForm(props) {
           />
         </Grid>
       ) : (
-        <React.Fragment />
+        <></>
       )}
       {contactLen < 2 ? (
         <Grid
@@ -397,7 +395,7 @@ function CustomerPOCForm(props) {
           </Tooltip>
         </Grid>
       ) : (
-        <React.Fragment />
+        <></>
       )}
       <ConfirmDialog
         subtitle={selectedRow["name"] + " will be deleted."}
@@ -406,7 +404,7 @@ function CustomerPOCForm(props) {
         isOpen={deletebtnOpen}
         setIsOpen={setDeletebtnOpen}
       />
-    </React.Fragment>
+    </>
   );
 }
 

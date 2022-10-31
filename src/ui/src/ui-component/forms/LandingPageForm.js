@@ -61,27 +61,28 @@ const LandingPageForm = (props) => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [getDelete, setDelete] = useState(false);
   const [getError, setError] = useState([false, ""]);
+  const [htmlValue, setHtmlValue] = useState(props.initialValues.html);
   const [tabValue, setTabValue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
-    console.log(event);
+    // console.log(event);
   };
   const formik = useFormik({
     initialValues: props.initialValues,
     validationSchema: validationSchema,
     validateOnChange: true,
     onSubmit: (values) => {
+      values["html"] = htmlValue;
       submitLP(values, values._id, props.dataEntryType, setError);
       const wasNotDefault = !props.currentPageIsDefault;
       const isDefaultChanged =
-        props.initialValues.is_default_template !=
-        formik.values.is_default_template;
+        props.initialValues.is_default_template != values.is_default_template;
       if (props.hasDefault && wasNotDefault && isDefaultChanged) {
         props.currentDefaultPage["is_default_template"] = false;
         submitLP(
           props.currentDefaultPage,
           props.currentDefaultPage._id,
-          props.dataEntryType,
+          "Edit Landing Page",
           setError
         );
       }
@@ -93,7 +94,7 @@ const LandingPageForm = (props) => {
   });
 
   const isDisabled = () => {
-    if (formik.dirty) {
+    if (formik.dirty || props.initialValues.html != htmlValue) {
       return false;
     }
     return true;
@@ -103,7 +104,7 @@ const LandingPageForm = (props) => {
     if (formik.dirty) {
       setCancelbtnOpen(true);
     } else {
-      navigate("/li-pca-app/landing-pages");
+      navigate("/cat-phishing/landing-pages");
     }
   };
 
@@ -116,8 +117,7 @@ const LandingPageForm = (props) => {
   };
 
   const handleSave = () => {
-    // formik.setTouched(fieldsToValidate);
-    if (formik.isValid && formik.dirty) {
+    if (formik.dirty || props.initialValues.html != htmlValue) {
       setSavebtnOpen(true);
     }
   };
@@ -126,7 +126,7 @@ const LandingPageForm = (props) => {
     setHasSubmitted(false);
     setDelete(false);
     if (!getError[0]) {
-      navigate("/li-pca-app/landing-pages");
+      navigate("/cat-phishing/landing-pages");
     }
   };
   return (
@@ -154,7 +154,7 @@ const LandingPageForm = (props) => {
               onChange={formik.handleChange}
             />
           </Grid>
-          <Grid item xs={12} md={12} xl={12} sx={{ mt: 2 }} />
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} />
           <Box sx={{ width: "100%", mb: 3 }}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <Tabs value={tabValue} onChange={handleTabChange}>
@@ -163,7 +163,7 @@ const LandingPageForm = (props) => {
               </Tabs>
             </Box>
             <TabPanel value={tabValue} index={0}>
-              <HtmlEditor />
+              <HtmlEditor value={htmlValue} setValue={setHtmlValue} />
             </TabPanel>
             <TabPanel value={tabValue} index={1}>
               No templates are currently using this landing page
@@ -231,7 +231,7 @@ const LandingPageForm = (props) => {
             <ConfirmDialog
               subtitle="Unsaved changes will be discarded."
               confirmType="Leave"
-              handleClick={() => navigate("/li-pca-app/landing-pages")}
+              handleClick={() => navigate("/cat-phishing/landing-pages")}
               isOpen={cancelbtnOpen}
               setIsOpen={setCancelbtnOpen}
             />
@@ -246,6 +246,14 @@ const LandingPageForm = (props) => {
       </form>
     </Grid>
   );
+};
+
+LandingPageForm.propTypes = {
+  initialValues: PropTypes.object,
+  dataEntryType: PropTypes.string,
+  currentDefaultPage: PropTypes.object,
+  currentPageIsDefault: PropTypes.bool,
+  hasDefault: PropTypes.bool,
 };
 
 export default LandingPageForm;

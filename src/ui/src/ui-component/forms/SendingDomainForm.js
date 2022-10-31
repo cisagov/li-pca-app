@@ -1,5 +1,6 @@
-import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 //material-ui
 import Accordion from "@mui/material/Accordion";
@@ -22,7 +23,7 @@ import * as yup from "yup";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { submitSP, deleteSP } from "services/api/SendingDomains.js";
+import { submitSD } from "services/api/SendingDomains.js";
 
 const fieldsToValidate = {
   name: true,
@@ -43,13 +44,13 @@ const validationSchema = yup.object({
 
 const SendingDomainForm = (props) => {
   let navigate = useNavigate();
-  let [emailHeaderArray, setHeaderArray] = React.useState([]);
-  let [customHeader, setCustomHeader] = React.useState("");
-  let [headerValue, setHeaderValue] = React.useState("");
-  const [savebtnOpen, setSavebtnOpen] = React.useState(false);
-  const [hasSubmitted, setHasSubmitted] = React.useState(false);
-  const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
-  const [getError, setError] = React.useState([false, ""]);
+  let [emailHeaderArray, setHeaderArray] = useState([]);
+  let [customHeader, setCustomHeader] = useState("");
+  let [headerValue, setHeaderValue] = useState("");
+  const [savebtnOpen, setSavebtnOpen] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [cancelbtnOpen, setCancelbtnOpen] = useState(false);
+  const [getError, setError] = useState([false, ""]);
   const addHeader = () => {
     if (customHeader != "" && headerValue != "") {
       let newElement = {
@@ -83,9 +84,9 @@ const SendingDomainForm = (props) => {
     onSubmit: (values) => {
       // TODO: Add headers to values or whatever ends of being axiosed
       values.headers = emailHeaderArray;
-      props.setSpData(Object.assign(props.spData, values));
+      props.setSdData(Object.assign(props.sdData, values));
       setHasSubmitted(true);
-      submitSP(props.spData, props.spData._id, props.dataEntryType, setError);
+      submitSD(props.sdData, props.sdData._id, props.dataEntryType, setError);
       setTimeout(() => {
         setSavebtnOpen(false);
       });
@@ -124,7 +125,7 @@ const SendingDomainForm = (props) => {
 
   const smtpFields = () => {
     return (
-      <React.Fragment>
+      <>
         <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
           <TextField
             fullWidth
@@ -174,12 +175,12 @@ const SendingDomainForm = (props) => {
             }
           />
         </Grid>
-      </React.Fragment>
+      </>
     );
   };
   const mailgunFields = () => {
     return (
-      <React.Fragment>
+      <>
         <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
           <TextField
             fullWidth
@@ -216,7 +217,7 @@ const SendingDomainForm = (props) => {
             }
           />
         </Grid>
-      </React.Fragment>
+      </>
     );
   };
 
@@ -300,7 +301,7 @@ const SendingDomainForm = (props) => {
     if (formik.dirty) {
       setCancelbtnOpen(true);
     } else {
-      navigate("/li-pca-app/sending-domains");
+      navigate("/cat-phishing/sending-domains");
     }
   };
   const isDisabled = () => {
@@ -318,7 +319,7 @@ const SendingDomainForm = (props) => {
   const closeDialog = () => {
     setHasSubmitted(false);
     if (!getError[0]) {
-      navigate("/li-pca-app/sending-domains");
+      navigate("/cat-phishing/sending-domains");
     }
   };
   return (
@@ -448,7 +449,7 @@ const SendingDomainForm = (props) => {
         <ConfirmDialog
           subtitle="Unsaved changes will be discarded."
           confirmType="Leave"
-          handleClick={() => navigate("/li-pca-app/sending-domains")}
+          handleClick={() => navigate("/cat-phishing/sending-domains")}
           isOpen={cancelbtnOpen}
           setIsOpen={setCancelbtnOpen}
         />
@@ -469,6 +470,13 @@ const SendingDomainForm = (props) => {
       </form>
     </Grid>
   );
+};
+
+SendingDomainForm.propTypes = {
+  setSdData: PropTypes.func,
+  sdData: PropTypes.object,
+  initialValues: PropTypes.object,
+  dataEntryType: PropTypes.string,
 };
 
 export default SendingDomainForm;

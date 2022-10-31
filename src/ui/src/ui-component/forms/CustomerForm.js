@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
@@ -50,13 +50,13 @@ const CustomerForm = (props) => {
   });
   let navigate = useNavigate();
   let contactLen = props.custData.contact_list.length;
-  const [contactUpdated, setContactUpdate] = React.useState(false);
-  const [cancelbtnOpen, setCancelbtnOpen] = React.useState(false);
-  const [savebtnOpen, setSavebtnOpen] = React.useState(false);
-  const [deletebtnOpen, setDeletebtnOpen] = React.useState(false);
-  const [hasSubmitted, setHasSubmitted] = React.useState(false);
-  const [getDelete, setDelete] = React.useState(false);
-  const [getError, setError] = React.useState([false, ""]);
+  const [contactUpdated, setContactUpdate] = useState(false);
+  const [cancelbtnOpen, setCancelbtnOpen] = useState(false);
+  const [savebtnOpen, setSavebtnOpen] = useState(false);
+  const [deletebtnOpen, setDeletebtnOpen] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [getDelete, setDelete] = useState(false);
+  const [getError, setError] = useState([false, ""]);
   const fieldsToValidate = {
     name: true,
     appendix_a_date: true,
@@ -91,8 +91,8 @@ const CustomerForm = (props) => {
       });
     },
   });
-  const didMount = React.useRef(false);
-  React.useEffect(() => {
+  const didMount = useRef(false);
+  useEffect(() => {
     if (didMount.current) {
       setContactUpdate(true);
     } else {
@@ -103,7 +103,7 @@ const CustomerForm = (props) => {
     if (contactUpdated || formik.dirty) {
       setCancelbtnOpen(true);
     } else {
-      navigate("/li-pca-app/customers");
+      navigate("/cat-phishing/customers");
     }
   };
   const isDisabled = () => {
@@ -138,7 +138,7 @@ const CustomerForm = (props) => {
     setHasSubmitted(false);
     setDelete(false);
     if (!getError[0]) {
-      navigate("/li-pca-app/customers");
+      navigate("/cat-phishing/customers");
     }
   };
   return (
@@ -428,9 +428,9 @@ const CustomerForm = (props) => {
           closeDialog={closeDialog}
         />
         {props.dataEntryType == "New Customer" ? (
-          <React.Fragment />
+          <></>
         ) : (
-          <React.Fragment>
+          <>
             <Grid item xs={10} sm={4} md={3} lg={2} xl={2}>
               <Button
                 fullWidth
@@ -452,7 +452,7 @@ const CustomerForm = (props) => {
               isOpen={deletebtnOpen}
               setIsOpen={setDeletebtnOpen}
             />
-          </React.Fragment>
+          </>
         )}
         <Grid item xs={10} sm={1} md={1} lg={1} xl={1}>
           <Button
@@ -467,7 +467,7 @@ const CustomerForm = (props) => {
           <ConfirmDialog
             subtitle="Unsaved changes will be discarded."
             confirmType="Leave"
-            handleClick={() => navigate("/li-pca-app/customers")}
+            handleClick={() => navigate("/cat-phishing/customers")}
             isOpen={cancelbtnOpen}
             setIsOpen={setCancelbtnOpen}
           />

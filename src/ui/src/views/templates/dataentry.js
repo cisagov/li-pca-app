@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -26,7 +26,6 @@ import WebIcon from "@mui/icons-material/Web";
 import DeceptionCalculator from "./deceptionCalculator";
 import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
 import TemplateTestingForm from "ui-component/forms/TemplateTestingForm";
-// import TemplateHtmlEditor from "ui-component/forms/TemplateHtmlEditor";
 import HtmlEditor from "ui-component/forms/HtmlEditor";
 
 const temRowsTransform = (templateRows) => {
@@ -52,10 +51,10 @@ const temRowsTransform = (templateRows) => {
     templateRows.retired_description = "";
   }
   if (!templateRows.hasOwnProperty("sophisticated")) {
-    templateRows.sophisticated = "";
+    templateRows.sophisticated = [];
   }
   if (!templateRows.hasOwnProperty("red_flag")) {
-    templateRows.red_flag = "";
+    templateRows.red_flag = [];
   }
   if (!templateRows.hasOwnProperty("subject")) {
     templateRows.subject = "";
@@ -127,12 +126,12 @@ const TemplateDataEntryPage = () => {
   let navigate = useNavigate();
   let mainCardTitle = temNewOrEdit(state.dataEntryType);
   let templateValues = temRowsTransform(state.row);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [templateData, setTemplateData] = React.useState(templateValues);
-  const [hasSubmitted, setHasSubmitted] = React.useState(false);
+  const [templateData, setTemplateData] = useState(templateValues);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const steps = [
     "HTML View",
@@ -141,8 +140,8 @@ const TemplateDataEntryPage = () => {
     "Template Testing",
   ];
 
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
+  const [activeStep, setActiveStep] = useState(0);
+  const [completed, setCompleted] = useState({});
 
   const stepIcons = [
     <WebIcon color={activeStep == 0 ? "dark" : "primary"} />,
@@ -252,9 +251,9 @@ const TemplateDataEntryPage = () => {
       <Box>
         <Grid container spacing={3}>
           {mainCardTitle == "New Template" ? (
-            <React.Fragment />
+            <></>
           ) : (
-            <React.Fragment>
+            <>
               <Grid item xs={6} sm={5} md={4} lg={3} xl={3}>
                 <Button
                   color="warning"
@@ -286,7 +285,7 @@ const TemplateDataEntryPage = () => {
                 </Button>
               </Grid>
               <Grid item xs={12} xl={12} sx={{ mt: 2 }} />
-            </React.Fragment>
+            </>
           )}
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8} sx={{ mr: 2 }}>
             <Grid container spacing={3}>
@@ -323,7 +322,7 @@ const TemplateDataEntryPage = () => {
                   </Stepper>
                   <div>
                     {allStepsCompleted() ? (
-                      <React.Fragment>
+                      <>
                         <Box
                           display="flex"
                           alignItems="center"
@@ -340,9 +339,9 @@ const TemplateDataEntryPage = () => {
                           <Box sx={{ flex: "1 1 auto" }} />
                           <Button onClick={handleReset}>Reset</Button>
                         </Box>
-                      </React.Fragment>
+                      </>
                     ) : (
-                      <React.Fragment>
+                      <>
                         <Box
                           display="flex"
                           alignItems="center"
@@ -387,7 +386,7 @@ const TemplateDataEntryPage = () => {
                               </Button>
                             ))}
                         </Box>
-                      </React.Fragment>
+                      </>
                     )}
                   </div>
                 </Box>

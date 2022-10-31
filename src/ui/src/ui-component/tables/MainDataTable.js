@@ -111,6 +111,7 @@ MainDataTable.propTypes = {
   newEntryRoute: PropTypes.string,
   editEntryRoute: PropTypes.string,
   tableCategory: PropTypes.string,
+  deleteEntry: PropTypes.func,
 };
 
 export default function MainDataTable(props) {
@@ -198,7 +199,7 @@ export default function MainDataTable(props) {
   }
 
   const confirmDelete = () => {
-    props.deleteSP(rowData._id, setError);
+    props.deleteEntry(rowData._id, setError);
     setTimeout(() => {
       setDeletebtnOpen(false);
       setDelete(true);

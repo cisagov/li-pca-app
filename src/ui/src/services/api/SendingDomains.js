@@ -36,7 +36,7 @@ export const useGetAll = () => {
   };
 };
 
-export const submitSP = (sdData, sd_id, dataEntryType, setError) => {
+export const submitSD = (sdData, sd_id, dataEntryType, setError) => {
   if (dataEntryType == "New Sending Domain") {
     axios
       .post(baseURL, sdData, {
@@ -71,7 +71,7 @@ export const submitSP = (sdData, sd_id, dataEntryType, setError) => {
   }
 };
 
-export const deleteSP = (sd_id, setError) => {
+export const deleteSD = (sd_id, setError) => {
   axios
     .delete(baseURL + "/" + sd_id, {
       headers: headers,

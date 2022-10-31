@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.10
 RUN apt update && apt install -qy openssl python3 python3-pip libffi-dev libxml2-dev libxslt1-dev && pip3 install --upgrade pip && apt autoremove -qy
 RUN python3 -m pip install --upgrade pip
 COPY . /app/theHarvester

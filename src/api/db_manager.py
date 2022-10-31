@@ -104,11 +104,11 @@ class Manager:
         schema = self.schema(many=many)
         return schema.load(data, partial=partial)
 
-    def create_indexes(self):
+    def create_indexes(self, unique=False):
         """Create indexes for collection."""
         for index in self.other_indexes:
             target_collection = self.db.get_collection(name=self.collection)
-            target_collection.create_index(index, unique=False)
+            target_collection.create_index(index, unique=True)
 
     def add_created(self, data):
         """Add created attribute to data on save."""
@@ -279,8 +279,11 @@ class Manager:
         target_collection = self.db.get_collection(name=self.collection)
         if target_collection is None:
             target_collection = self.db.create_collection(name=self.collection)
-        result = target_collection.insert_one(self.load_data(data))
-        return {"_id": str(result.inserted_id)}
+        try:
+            result = target_collection.insert_one(self.load_data(data))
+            return {"_id": str(result.inserted_id)}
+        except pymongo.errors.DuplicateKeyError as e:
+            return {"error": str(e.details["errmsg"])}
 
     def save_many(self, data):
         """Save list to collection."""
@@ -359,8 +362,7 @@ class AssessmentManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="assessments",
-            schema=AssessmentSchema,
+            collection="assessments", schema=AssessmentSchema, other_indexes=["rv_id"]
         )
 
 
@@ -394,6 +396,7 @@ class CustomerManager(Manager):
         return super().__init__(
             collection="customers",
             schema=CustomerSchema,
+            other_indexes=["name", "identifier"],
         )
 
 
@@ -414,8 +417,7 @@ class LandingPageManager(Manager):
     def __init__(self):
         """Super."""
         return super().__init__(
-            collection="landing_pages",
-            schema=LandingPageSchema,
+            collection="landing_pages", schema=LandingPageSchema, other_indexes=["name"]
         )
 
     def clear_and_set_default(self, document_id):
@@ -458,6 +460,7 @@ class SendingDomainManager(Manager):
         return super().__init__(
             collection="sending_domains",
             schema=SendingDomainSchema,
+            other_indexes=["name"],
         )
 
 
@@ -492,6 +495,7 @@ class TemplateManager(Manager):
         return super().__init__(
             collection="templates",
             schema=TemplateSchema,
+            other_indexes=["name", "from_address"],
         )
 
 

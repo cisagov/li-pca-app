@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
 // material-ui
 import Alert from "@mui/material/Alert";
@@ -10,14 +8,11 @@ import Typography from "@mui/material/Typography";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll, deleteSP } from "services/api/SendingDomains.js";
+import { useGetAll, deleteSD } from "services/api/SendingDomains.js";
 
-// third party
-import axios from "axios";
 // ==============================|| Sending Domains view ||============================== //
 
 function BaseJSX(props) {
-  let navigate = useNavigate();
   const cols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Sending Domain", flex: 1.25 },
@@ -43,7 +38,7 @@ function BaseJSX(props) {
             newEntryRoute={props.dataEntry}
             editEntryRoute={props.dataEntry}
             tableCategory={"Sending Domains"}
-            deleteSP={deleteSP}
+            deleteEntry={deleteSD}
           />
         </Grid>
       </Grid>
@@ -88,8 +83,7 @@ function SendingDomainsPage() {
     return (
       <BaseJSX rows={[]} dataEntry={""}>
         <Alert severity="error" sx={{ mb: 2 }}>
-          {getError[1]}. Unable to load sending profile (domain) data from the
-          database.
+          {getError[1]}. Unable to load sending domain data from the database.
         </Alert>
       </BaseJSX>
     );
@@ -97,7 +91,7 @@ function SendingDomainsPage() {
     return (
       <BaseJSX rows={[]} dataEntry={"data-entry"}>
         <Typography sx={{ mb: 2 }}>
-          No sending profile (domain) data entries found.
+          No sending domain data entries found.
         </Typography>
       </BaseJSX>
     );
@@ -105,7 +99,7 @@ function SendingDomainsPage() {
   return (
     <BaseJSX rows={rows} dataEntry={"data-entry"}>
       <Typography sx={{ mb: 2 }}>
-        Sending profile (domain) data from the database shown below.
+        Sending domain data from the database shown below.
       </Typography>
     </BaseJSX>
   );
