@@ -103,16 +103,8 @@ def get_all_email_events(filter_params=None):
             "pretty": "yes",
         }
     )
-    url = (
-        filter_params.get(
-            "url",
-            "https://api.mailgun.net/v3/\
-        sandbox7e1c5b454331400980a544a447f31145.mailgun.org/messages",
-        ),
-    )
-    api_key = filter_params.get(
-        "api_key", "5cb3eb406752690b871e1bfb9f4d89b4-1b237f8b-f38944de"
-    )
+    url = (filter_params.get("url"),)
+    api_key = filter_params.get("api_key")
     resp = get_events(url=url, api_key=api_key, params=filter_params)
     return resp.json()
 
