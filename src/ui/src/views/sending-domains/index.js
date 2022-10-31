@@ -53,7 +53,7 @@ BaseJSX.propTypes = {
 };
 
 function SendingDomainsPage() {
-  const { isLoading, getData, getError } = useGetAll("getAll");
+  const { isLoading, getData, getError } = useGetAll();
 
   const domainRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {

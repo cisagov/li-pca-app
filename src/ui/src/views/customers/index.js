@@ -48,7 +48,7 @@ BaseJSX.propTypes = {
 };
 
 function CustomersPage() {
-  const { isLoading, getData, getError } = useGetAll("getAll");
+  const { isLoading, getData, getError } = useGetAll();
 
   const cusRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {

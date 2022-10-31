@@ -80,7 +80,7 @@ function TemplatesPage() {
     return [];
   };
 
-  const { isLoading, getData, getError } = useGetAll("getAll");
+  const { isLoading, getData, getError } = useGetAll();
 
   //  Mock data test
   // const jsonRows = require("./mockTemData.json");

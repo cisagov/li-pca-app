@@ -60,7 +60,7 @@ BaseJSX.propTypes = {
 };
 
 function LandingPagesPage() {
-  const { isLoading, getData, getError } = useGetAll("getAll");
+  const { isLoading, getData, getError } = useGetAll();
 
   const landingpageRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {
