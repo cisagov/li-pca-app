@@ -32,6 +32,8 @@ tags:
     description: Li-PCA Recon
   - name: landing_pages
     description: Li-PCA Landing Pages
+  - name: emails
+    description: Li-PCA Emails
 paths:
   /v1/assessments:
     get:
@@ -1235,7 +1237,65 @@ paths:
         "404":
           description: User not found
       x-openapi-router-controller: api.controllers.user_controller
-
+  /v1/emails:
+    post:
+      summary: Add new landing page to the data store
+      requestBody:
+        description: Email info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Email'
+          # Uncomment below for uploading attachments
+          # multipart/form-data:
+          #   schema:
+          #     type: object
+          #     properties:
+          #       fileName:
+          #         type: string
+          #         format: binary
+      x-openapi-router-controller: api.controllers.emails_controller
+      tags:
+        - emails
+      operationId: send_email
+      responses:
+        "200":
+          description: successful operation
+    get:
+      tags:
+        - emails
+      summary: Find all email events
+      description: Multiple status filters by adding separated strings
+      x-openapi-router-controller: api.controllers.emails_controller
+      operationId: get_all_email_events
+      parameters:
+        - name: target_address
+          in: query
+          description: Target address filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+      # requestBody:
+      #   description: Mailgun Email Response
+      #   content:
+      #     application/json:
+      #       schema:
+      #         $ref: '#/components/schemas/Email'
+      #   required: true
+      #     content:
+      #       application/json:
+      #         schema:
+      #           $ref: '#/components/schemas/Email'
+      #       application/xml:
+      #         schema:
+      #           $ref: '#/components/schemas/Email'
 components:
   schemas:
     User:
@@ -1728,6 +1788,25 @@ components:
           type: boolean
         html:
           type: string
+    Email:
+      type: object
+      properties:
+        url:
+          type: string
+        api_key:
+          type: string
+        from_address:
+          type: string
+        to_address:
+          type: string
+        subject:
+          type: string
+        html:
+          type: string
+        text:
+          type: string
+        attachment:
+          type: string
   requestBodies:
     Customer:
       required: true
@@ -1815,4 +1894,14 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/LandingPage'
+      required: true
+    Email:
+      description: A landing page object to be added to the data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Email'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Email'
       required: true
