@@ -493,3 +493,14 @@ class TemplateManager(Manager):
             collection="templates",
             schema=TemplateSchema,
         )
+
+
+class EmailManager(Manager):
+    """Email Manager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="templates",
+            schema=TemplateSchema,
+        )
