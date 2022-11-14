@@ -3,7 +3,7 @@
 from marshmallow import Schema, fields
 
 # cisagov Libraries
-from api.models.recommendation import RecommendationsSchema
+from api.models.recommendation import RecommendationSchema
 from api.models.template import TemplateSchema
 
 
@@ -90,7 +90,7 @@ class TimeStatsTypeSchema(Schema):
 class RecommendationStatsSchema(CycleStatsEventsSchema):
     """RecommendationStatsSchema."""
 
-    recommendation = fields.Nested(RecommendationsSchema)
+    recommendation = fields.Nested(RecommendationSchema)
     templates = fields.List(fields.Nested(TemplateSchema))
 
 
