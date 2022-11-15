@@ -6,7 +6,7 @@ from marshmallow import fields, validate
 from api.models.base import BaseSchema
 
 
-class RecommendationsSchema(BaseSchema):
+class RecommendationSchema(BaseSchema):
     """
     RecommendationsSchema.
 

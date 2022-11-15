@@ -34,6 +34,8 @@ tags:
     description: Li-PCA Landing Pages
   - name: emails
     description: Li-PCA Emails
+  - name: recommendation
+    description: Li-PCA Recommendation
 paths:
   /v1/assessments:
     get:
@@ -1296,6 +1298,149 @@ paths:
       #       application/xml:
       #         schema:
       #           $ref: '#/components/schemas/Email'
+  /v1/recommendations:
+    get:
+      tags:
+        - recommendation
+      summary: Find all recommendations
+      description: Multiple status filters by adding separated strings
+      operationId: get_all_recommendations
+      parameters:
+        - name: name
+          in: query
+          description: recommendation name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recommendation'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recommendation'
+        "400":
+          description: Invalid id supplied
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiResponse'
+                x-content-type: application/json
+        "404":
+          description: Assessment not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.recommendations_controller
+    post:
+      x-openapi-router-controller: api.controllers.recommendations_controller
+      tags:
+        - recommendations
+      operationId: create_recommendation
+      requestBody:
+        description: Created recommendation object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recommendation'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recommendation'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Recommendation'
+  /v1/recommendations/{uuid}:
+    get:
+      tags:
+        - recommendations
+      summary: Find recommendation by uuid
+      description: Returns a single recommendation
+      operationId: get_recommendation_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of recommendation to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recommendation'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Recommendation'
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: Recommendation not found
+      x-openapi-router-controller: api.controllers.recommendations_controller
+    put:
+      summary: Updated recommendation
+      description: Update recommendation by uuid
+      operationId: update_recommendation_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid that needs to be updated
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        description: Updated recommendation object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recommendation'
+      responses:
+        "400":
+          description: Invalid Recommendation supplied
+        "404":
+          description: Recommendation not found
+      x-openapi-router-controller: api.controllers.recommendations_controller
+    delete:
+      tags:
+        - recommendations
+      summary: Deletes a recommendation
+      operationId: delete_recommendation_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid that needs to be updated
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        default:
+          description: successful operation
+      x-openapi-router-controller: api.controllers.recommendations_controller
 components:
   schemas:
     User:
@@ -1807,6 +1952,20 @@ components:
           type: string
         attachment:
           type: string
+    Recommendation:
+      type: object
+      properties:
+        _id:
+          type: string
+        uuid:
+          type: string
+          format: uuid4
+        title:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
   requestBodies:
     Customer:
       required: true
@@ -1905,3 +2064,16 @@ components:
           schema:
             $ref: '#/components/schemas/Email'
       required: true
+    Recommendation:
+      required: true
+      description: Recommendation object to be added to data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Recommendation'
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/Recommendation'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Recommendation'
