@@ -1475,7 +1475,7 @@ components:
           type: string
         description:
           type: string
-        sender_profile_id:
+        sender_domain_id:
           type: string
         landing_page_id:
           type: string

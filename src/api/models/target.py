@@ -28,8 +28,8 @@ class TargetTimelineSchema(Schema):
 class TargetSchema(BaseSchema):
     """CycleTargetSchema."""
 
-    cycle_id = fields.Str()
-    subscription_id = fields.Str()
+    # cycle_id = fields.Str()
+    # subscription_id = fields.Str()
     template_id = fields.Str()
     email = fields.Email(required=True)
     first_name = fields.Str(required=False, allow_none=True)
