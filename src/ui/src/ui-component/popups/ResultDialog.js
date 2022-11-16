@@ -21,7 +21,7 @@ const ResultDialog = (props) => {
     title = props.error[1];
     subtitle = [props.type + " changes were unable to be saved."];
     subtitle.push(<br key="1" />);
-    subtitle.push("Check the console log for more details.");
+    subtitle.push("Check docker or console logs for more details.");
   }
 
   return (
