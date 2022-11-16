@@ -189,7 +189,9 @@ function PhishReconnPage() {
   } else if (rows.length === 0) {
     return (
       <BaseJSX rows={[]} dataEntry={"data-entry"}>
-        <Typography sx={{ mb: 2 }}>No data entries found.</Typography>
+        <Typography sx={{ mb: 2 }}>
+          No Phish Reconnaissance entries found.
+        </Typography>
       </BaseJSX>
     );
   }
