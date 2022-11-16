@@ -32,6 +32,41 @@ export const useGetAll = () => {
   return { isLoading, getData, getError };
 };
 
+export const submitTemplate = (templateData, id, dataEntryType, setError) => {
+  if (dataEntryType == "New Template") {
+    axios
+      .post(baseURL, templateData, {
+        headers: headers,
+      })
+      .then((response) => {
+        console.log(response);
+        setError([false, ""]);
+      })
+      .catch((error) => {
+        setError([true, error.message]);
+        console.log("Error adding new template entry.");
+        console.log(templateData);
+        console.log(error);
+      });
+  }
+  if (dataEntryType == "Edit Template") {
+    axios
+      .put(baseURL + "/" + id, templateData, {
+        headers: headers,
+      })
+      .then((response) => {
+        console.log(response);
+        setError([false, ""]);
+      })
+      .catch((error) => {
+        setError([true, error.message]);
+        console.log("Error updating template entry.");
+        console.log(templateData);
+        console.log(error);
+      });
+  }
+};
+
 export const useRetire = (retire, selectedRows) => {
   const [getError, setError] = useState([false, ""]);
 
@@ -56,6 +91,6 @@ export const useRetire = (retire, selectedRows) => {
           console.log(error);
         });
     }
-  }, [retire]);
+  }, [retire, selectedRows]);
   return getError;
 };
