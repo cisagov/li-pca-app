@@ -214,7 +214,7 @@ export default function AdvancedDataTable(props) {
   return (
     <React.Fragment>
       <ConfirmDialog
-        subtitle="This action disables them from being used in any future subscriptions."
+        subtitle="This action disables them from being used in any future campaigns."
         confirmType="Retire"
         isOpen={retirebtnOpen}
         setIsOpen={setRetirebtnOpen}
