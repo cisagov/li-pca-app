@@ -60,7 +60,7 @@ const TemplateAttrRecsForm = (props) => {
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {!toggleOn ? (
           <>
-            <Grid item xs={12} sm={7} md={6} lg={6} xl={4}>
+            <Grid item xs={12} sm={7} md={7} lg={6} xl={5}>
               <Button
                 color="warning"
                 variant="contained"
