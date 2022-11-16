@@ -17,7 +17,7 @@ const AlertDialog = (props) => {
       <Grid sx={{ textAlign: "center" }}>
         <DialogTitle sx={{ fontSize: 20 }}>
           <Grid item sx={{ mt: 2 }}>
-            <IconAlertCircle color="#2196f3" size={100} stroke={1} />
+            <IconAlertCircle color="#ffc107" size={100} stroke={1} />
           </Grid>
           <Grid item>{props.title}</Grid>
         </DialogTitle>
