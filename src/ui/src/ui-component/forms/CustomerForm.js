@@ -78,14 +78,10 @@ const CustomerForm = (props) => {
       values.contact_list = props.custData.contact_list;
       const appendixADate = new Date(props.custData.appendix_a_date);
       values.appendix_a_date = appendixADate.toISOString();
-      props.setCustData(Object.assign(props.custData, values));
+      const custData = Object.assign(props.custData, values);
+      props.setCustData(custData);
       setHasSubmitted(true);
-      submitCustomer(
-        props.custData,
-        props.custData._id,
-        props.dataEntryType,
-        setError
-      );
+      submitCustomer(custData, custData._id, props.dataEntryType, setError);
       setTimeout(() => {
         setSavebtnOpen(false);
       });
