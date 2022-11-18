@@ -8,7 +8,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import ClearIcon from "@mui/icons-material/Clear";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -54,84 +56,90 @@ function CustomToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Box sx={{ p: 0.5, pb: 0 }}>
-        <TextField
-          variant="standard"
-          value={props.value}
-          onChange={props.onChange}
-          placeholder="Search…"
-          InputProps={{
-            startAdornment: <SearchIcon fontSize="small" />,
-            endAdornment: (
-              <IconButton
-                title="Clear"
-                aria-label="Clear"
-                size="small"
-                style={{ visibility: props.value ? "visible" : "hidden" }}
-                onClick={props.clearSearch}
-              >
-                <ClearIcon fontSize="small" />
-              </IconButton>
-            ),
-          }}
-          sx={{
-            width: { xs: 1, sm: "auto" },
-            m: (theme) => theme.spacing(1, 0.5, 1.5),
-            "& .MuiSvgIcon-root": { mr: 0.5 },
-            "& .MuiInput-underline:before": {
-              borderBottom: 1,
-              borderColor: "divider",
-            },
-          }}
-        />
-      </Box>
-      <GridToolbarColumnsButton />
-      <GridToolbarFilterButton />
-      <Button
-        size="small"
-        startIcon={<IconDownload size={18} />}
-        onClick={() => confirm("Download all templates?")}
-      >
-        Export
-      </Button>
-      <Button
-        size="small"
-        startIcon={<IconPlus size={18} />}
-        onClick={() => {
-          navigate(`${props.newEntryRoute}`, {
-            state: { row: values, dataEntryType: "new", rows: props.rows },
-          });
-        }}
-      >
-        New {props.tableCategory}
-      </Button>
-      <Button
-        color="error"
-        size="small"
-        startIcon={<ArchiveIcon />}
-        onClick={props.confirmRetire}
-        disabled={isDisabled}
-      >
-        Retire
-      </Button>
-      <Button
-        color="inherit"
-        size="small"
-        startIcon={<ContentCopyIcon />}
-        onClick={() => console.log(props.selectedRows)}
-        disabled={isDisabled}
-      >
-        Duplicate
-      </Button>
-      <Button
-        color="secondary"
-        size="small"
-        startIcon={<MailOutlineIcon />}
-        onClick={() => console.log(props.selectedRows)}
-        disabled={isDisabled}
-      >
-        Test
-      </Button>
+      <Grid container>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Box sx={{ p: 0.5, pb: 0 }}>
+            <TextField
+              variant="standard"
+              value={props.value}
+              onChange={props.onChange}
+              placeholder="Search…"
+              InputProps={{
+                startAdornment: <SearchIcon fontSize="small" />,
+                endAdornment: (
+                  <IconButton
+                    title="Clear"
+                    aria-label="Clear"
+                    size="small"
+                    style={{ visibility: props.value ? "visible" : "hidden" }}
+                    onClick={props.clearSearch}
+                  >
+                    <ClearIcon fontSize="small" />
+                  </IconButton>
+                ),
+              }}
+              sx={{
+                width: { xs: 1, sm: "auto" },
+                m: (theme) => theme.spacing(1, 0.5, 1.5),
+                "& .MuiSvgIcon-root": { mr: 0.5 },
+                "& .MuiInput-underline:before": {
+                  borderBottom: 1,
+                  borderColor: "divider",
+                },
+              }}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <Button
+            size="small"
+            startIcon={<IconDownload size={18} />}
+            onClick={() => confirm("Download all templates?")}
+          >
+            Export
+          </Button>
+          <Button
+            size="small"
+            startIcon={<IconPlus size={18} />}
+            onClick={() => {
+              navigate(`${props.newEntryRoute}`, {
+                state: { row: values, dataEntryType: "new", rows: props.rows },
+              });
+            }}
+          >
+            New {props.tableCategory}
+          </Button>
+          <Button
+            color="error"
+            size="small"
+            startIcon={<ArchiveIcon />}
+            onClick={props.confirmRetire}
+            disabled={isDisabled}
+          >
+            Retire
+          </Button>
+          <Button
+            color="inherit"
+            size="small"
+            startIcon={<ContentCopyIcon />}
+            onClick={() => console.log(props.selectedRows)}
+            disabled={isDisabled}
+          >
+            Duplicate
+          </Button>
+          <Button
+            color="secondary"
+            size="small"
+            startIcon={<MailOutlineIcon />}
+            onClick={() => console.log(props.selectedRows)}
+            disabled={isDisabled}
+          >
+            Test
+          </Button>
+        </Grid>
+      </Grid>
     </GridToolbarContainer>
   );
 }
@@ -166,33 +174,52 @@ export default function AdvancedDataTable(props) {
   }, [props.data.rows]);
 
   const columns = props.data.columns;
-  columns.push({
-    field: "edit",
-    headerName: "Edit",
-    sortable: false,
-    disableClickEventBubbling: true,
-    renderCell: (cellValues) => {
-      return (
-        <IconButton
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            navigate(`${props.editEntryRoute}`, {
-              state: {
-                row: cellValues.row,
-                dataEntryType: "edit",
-                rows: rows,
-              },
-            });
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-      );
+  columns.push(
+    {
+      field: "edit",
+      headerName: "Edit",
+      sortable: false,
+      disableClickEventBubbling: true,
+      renderCell: (cellValues) => {
+        return (
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              navigate(`${props.editEntryRoute}`, {
+                state: {
+                  row: cellValues.row,
+                  dataEntryType: "edit",
+                  rows: rows,
+                },
+              });
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+        );
+      },
+      width: 80,
     },
-    flex: 0.5,
-  });
-
+    {
+      field: "delete",
+      headerName: "Delete",
+      sortable: false,
+      disableClickEventBubbling: true,
+      renderCell: (cellValues) => {
+        return (
+          <IconButton
+            variant="contained"
+            color="error"
+            onClick={() => console.log("TODO")}
+          >
+            <DeleteIcon />
+          </IconButton>
+        );
+      },
+      width: 80,
+    }
+  );
   const [retire, setRetire] = React.useState(false);
   const [retirebtnOpen, setRetirebtnOpen] = React.useState(false);
 
@@ -221,13 +248,13 @@ export default function AdvancedDataTable(props) {
         handleClick={toRetire}
       />
       <ResultDialog
-        type={"Retire template"}
+        type={"Retiring record(s)"}
         hasSubmitted={retire}
         getDelete={false}
         error={getError}
         closeDialog={closeDialog}
       />
-      <Box sx={{ width: "100%", maxWidth: 1500, minWidth: 750 }}>
+      <Box sx={{ width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
