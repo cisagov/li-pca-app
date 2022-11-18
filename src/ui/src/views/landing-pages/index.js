@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 
 // material-ui
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Grid";
@@ -16,15 +17,17 @@ import { useGetAll } from "services/api/LandingPages.js";
 function BaseJSX(props) {
   const cols = [
     { field: "id", hide: true },
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "name", headerName: "Name", midWidth: 100, flex: 1 },
     {
       field: "created_by",
       headerName: "Created By",
+      midWidth: 100,
       flex: 1,
     },
     {
       field: "is_default_template",
       headerName: "Default Landing Page",
+      midWidth: 100,
       flex: 0.75,
       headerAlign: "center",
       align: "center",
@@ -40,13 +43,15 @@ function BaseJSX(props) {
   return (
     <MainCard title="Landing Pages">
       <Grid container spacing={2}>
-        <Grid item xs={8} sm={12} md={12} lg={12} xl={12}>
-          <MainDataTable
-            data={{ rows: props.rows, columns: cols }}
-            newEntryRoute={props.dataEntry}
-            editEntryRoute={props.dataEntry}
-            tableCategory={"Landing Pages"}
-          />
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Box sx={{ maxWidth: 1000 }}>
+            <MainDataTable
+              data={{ rows: props.rows, columns: cols }}
+              newEntryRoute={props.dataEntry}
+              editEntryRoute={props.dataEntry}
+              tableCategory={"Landing Pages"}
+            />
+          </Box>
         </Grid>
       </Grid>
     </MainCard>

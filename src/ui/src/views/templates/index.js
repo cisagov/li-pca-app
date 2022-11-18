@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 
 // material-ui
+import Box from "@mui/material/Box";
 import { Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
@@ -14,23 +15,25 @@ import { useGetAll } from "services/api/Templates.js";
 function BaseJSX(props) {
   const cols = [
     { field: "id", hide: true },
-    { field: "name", headerName: "Template Name", flex: 3 },
-    { field: "deception_score", headerName: "Deception Score", flex: 1 },
-    { field: "domain", headerName: "Domain", flex: 2 },
-    { field: "created_by", headerName: "Created By", flex: 1.5 },
-    { field: "campaigns", hide: true },
-    { field: "from_address", hide: true },
-    { field: "html", hide: true },
-    { field: "indicators", hide: true },
-    { field: "landing_page_id", hide: true },
-    { field: "recommendation_type", hide: true },
-    { field: "red_flag", hide: true },
-    { field: "retired", hide: true },
-    { field: "retired_description", hide: true },
-    { field: "sending_profile_id", hide: true },
-    { field: "sophisticated", hide: true },
-    { field: "subject", hide: true },
-    { field: "text", hide: true },
+    { field: "name", headerName: "Template Name", minWidth: 140, flex: 2.5 },
+    {
+      field: "deception_score",
+      headerName: "Deception Score",
+      minWidth: 110,
+      flex: 1.5,
+    },
+    {
+      field: "domain",
+      headerName: "Domain",
+      minWidth: 100,
+      flex: 2,
+    },
+    {
+      field: "created_by",
+      headerName: "Created By",
+      minWidth: 100,
+      flex: 1.5,
+    },
   ];
   const filterModel = {
     items: [
@@ -44,15 +47,17 @@ function BaseJSX(props) {
   return (
     <MainCard title="Templates">
       <Grid container spacing={2}>
-        <Grid item xs={8} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {props.children}
-          <AdvancedDataTable
-            data={{ rows: props.rows, columns: cols }}
-            filterModel={filterModel}
-            newEntryRoute={props.dataEntry}
-            editEntryRoute={props.dataEntry}
-            tableCategory={"Template"}
-          />
+          <Box sx={{ maxWidth: 1000 }}>
+            <AdvancedDataTable
+              data={{ rows: props.rows, columns: cols }}
+              filterModel={filterModel}
+              newEntryRoute={props.dataEntry}
+              editEntryRoute={props.dataEntry}
+              tableCategory={"Template"}
+            />
+          </Box>
         </Grid>
       </Grid>
     </MainCard>

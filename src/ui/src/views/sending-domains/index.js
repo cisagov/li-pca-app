@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 
 // material-ui
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
@@ -15,31 +16,40 @@ import { useGetAll, deleteSD } from "services/api/SendingDomains.js";
 function BaseJSX(props) {
   const cols = [
     { field: "id", hide: true },
-    { field: "name", headerName: "Sending Domain", flex: 1.25 },
-    { field: "interface_type", headerName: "Interface Type", flex: 0.75 },
+    { field: "name", headerName: "Sending Domain", midWidth: 100, flex: 1.25 },
+    {
+      field: "interface_type",
+      headerName: "Interface Type",
+      midWidth: 100,
+      flex: 0.75,
+    },
     {
       field: "#_of_customers_using",
       headerName: "# of Customers Using",
+      midWidth: 100,
       flex: 1,
     },
     {
       field: "#last_modified_date",
       headerName: "Last Modified Date",
+      midWidth: 100,
       flex: 1,
     },
   ];
   return (
     <MainCard title="Sending Domains">
       <Grid container spacing={2}>
-        <Grid item xs={8} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {props.children}
-          <MainDataTable
-            data={{ rows: props.rows, columns: cols }}
-            newEntryRoute={props.dataEntry}
-            editEntryRoute={props.dataEntry}
-            tableCategory={"Sending Domains"}
-            deleteEntry={deleteSD}
-          />
+          <Box sx={{ maxWidth: 1000 }}>
+            <MainDataTable
+              data={{ rows: props.rows, columns: cols }}
+              newEntryRoute={props.dataEntry}
+              editEntryRoute={props.dataEntry}
+              tableCategory={"Sending Domains"}
+              deleteEntry={deleteSD}
+            />
+          </Box>
         </Grid>
       </Grid>
     </MainCard>

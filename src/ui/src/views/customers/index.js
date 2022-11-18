@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 
 // material-ui
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
@@ -15,26 +16,34 @@ import { useGetAll } from "services/api/Customers.js";
 function BaseJSX(props) {
   const cols = [
     { field: "id", hide: true },
-    { field: "name", headerName: "Name", flex: 2 },
-    { field: "identifier", headerName: "Identifier", flex: 1 },
+    { field: "name", headerName: "Name", minWidth: 100, flex: 2 },
+    { field: "identifier", headerName: "Identifier", minWidth: 100, flex: 1 },
     {
       field: "critical_infrastructure",
       headerName: "Critical Infrastructure",
+      minWidth: 100,
       flex: 1.5,
     },
-    { field: "primaryPOC", headerName: "Primary Point of Contact", flex: 1.5 },
+    {
+      field: "primaryPOC",
+      headerName: "Primary Point of Contact",
+      minWidth: 100,
+      flex: 1.5,
+    },
   ];
   return (
     <MainCard title="Customers">
       <Grid container spacing={2}>
-        <Grid item xs={8} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {props.children}
-          <MainDataTable
-            data={{ rows: props.rows, columns: cols }}
-            newEntryRoute={props.dataEntry}
-            editEntryRoute={props.dataEntry}
-            tableCategory={"Customer"}
-          />
+          <Box sx={{ maxWidth: 1000 }}>
+            <MainDataTable
+              data={{ rows: props.rows, columns: cols }}
+              newEntryRoute={props.dataEntry}
+              editEntryRoute={props.dataEntry}
+              tableCategory={"Customer"}
+            />
+          </Box>
         </Grid>
       </Grid>
     </MainCard>
