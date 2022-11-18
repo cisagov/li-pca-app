@@ -14,12 +14,12 @@ import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 const ResultDialog = (props) => {
   let bigIcon = <IconCircleCheck color="#00b341" size={100} stroke={1} />;
   let title = "Success";
-  let subtitle = [props.type + " changes have been made successfully."];
+  let subtitle = [props.type + " database changes were successful."];
 
   if (props.error[0]) {
     bigIcon = <IconCircleX color="#E62C22" size={100} stroke={1} />;
     title = props.error[1];
-    subtitle = [props.type + " changes were unable to be saved."];
+    subtitle = [props.type + " database changes were unsuccessful."];
     subtitle.push(<br key="1" />);
     subtitle.push("Check docker or console logs for more details.");
   }
