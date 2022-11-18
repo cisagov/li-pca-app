@@ -165,7 +165,7 @@ export default function MainDataTable(props) {
           </IconButton>
         );
       },
-      flex: 0.5,
+      width: 80,
     });
   } else {
     pageSize = 5;
@@ -211,9 +211,8 @@ export default function MainDataTable(props) {
     }
     setDelete(false);
   };
-
   return (
-    <Box sx={{ width: "100%", maxWidth: 1500, minWidth: 750 }}>
+    <Box sx={{ width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
