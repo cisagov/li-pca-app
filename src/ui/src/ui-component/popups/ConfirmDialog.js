@@ -46,7 +46,7 @@ const ConfirmDialog = (props) => {
     color = "error";
   }
   if (confirmType == "Retire") {
-    title = "Are you sure you want to retire these template(s)?";
+    title = "Are you sure you want to retire these record(s)?";
     endIcon = <ArchiveIcon />;
   }
   if (confirmType == "Save") {
