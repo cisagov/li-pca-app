@@ -1783,12 +1783,19 @@ components:
             - queued
             - running
             - completed
+            - error
         start_datetime:
           type: string
           format: datetime
         end_datetime:
           type: string
           format: datetime
+        target_count:
+          type: integer
+          format: int32
+        archived:
+          type: boolean
+          default: true
       example:
         assessment_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
         email_template_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed5

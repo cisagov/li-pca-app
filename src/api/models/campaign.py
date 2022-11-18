@@ -157,6 +157,10 @@ class CampaignSchema(BaseSchema):
     end_datetime = DateTimeField()
     name = fields.Str()
     start_datetime = DateTimeField()
-    status = fields.Str(validate=validate.OneOf(["queued", "running", "completed"]))
+    status = fields.Str(
+        validate=validate.OneOf(["queued", "running", "completed", "error"])
+    )
     target_template_uuid = fields.Str()
     email_template_uuid = fields.Str()
+    target_count = fields.Int()
+    archived = fields.Bool()
