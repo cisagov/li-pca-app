@@ -6,6 +6,9 @@ import MainLayout from "layout/MainLayout";
 
 // campaigns page routing
 const CampaignsPage = Loadable(lazy(() => import("views/campaigns")));
+const CampaignDataEntryPage = Loadable(
+  lazy(() => import("views/campaigns/dataentry"))
+);
 // customers page routing
 const CustomersPage = Loadable(lazy(() => import("views/customers")));
 // customer data entry page routing
@@ -41,6 +44,10 @@ const MainRoutes = {
     {
       path: "/campaigns",
       element: <CampaignsPage />,
+    },
+    {
+      path: "/campaigns/data-entry",
+      element: <CampaignDataEntryPage />,
     },
     {
       path: "/customers",
