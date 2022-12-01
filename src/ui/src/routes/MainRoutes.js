@@ -6,6 +6,7 @@ import MainLayout from "layout/MainLayout";
 
 // campaigns page routing
 const CampaignsPage = Loadable(lazy(() => import("views/campaigns")));
+// campaign data entry page routing
 const CampaignDataEntryPage = Loadable(
   lazy(() => import("views/campaigns/dataentry"))
 );
