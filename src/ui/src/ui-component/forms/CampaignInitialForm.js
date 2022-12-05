@@ -104,7 +104,7 @@ const CampaignInitialForm = () => {
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h3" gutterBottom component="div">
+          <Typography color="black" fontSize={18} component="div">
             <Box sx={{ fontWeight: "regular" }}>Campaign Assignment</Box>
           </Typography>
         </Grid>
@@ -332,7 +332,7 @@ const CampaignInitialForm = () => {
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h3" gutterBottom component="div">
+          <Typography fontSize={18} color="black" component="div">
             <Box sx={{ fontWeight: "regular" }}>Target Emails</Box>
           </Typography>
         </Grid>
