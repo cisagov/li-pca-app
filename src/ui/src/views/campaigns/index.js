@@ -51,7 +51,7 @@ function BaseJSX(props) {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {props.children}
-          <Box sx={{ maxWidth: 1000 }}>
+          <Box sx={{ maxWidth: 1300 }}>
             <AdvancedDataTable
               data={{ rows: props.rows, columns: cols }}
               // filterModel={filterModel}
