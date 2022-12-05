@@ -23,8 +23,8 @@ function BaseJSX(props) {
       flex: 1.5,
     },
     {
-      field: "domain",
-      headerName: "Domain",
+      field: "from_address",
+      headerName: "From Address",
       minWidth: 100,
       flex: 2,
     },
@@ -32,7 +32,7 @@ function BaseJSX(props) {
       field: "created_by",
       headerName: "Created By",
       minWidth: 100,
-      flex: 1.5,
+      flex: 1,
     },
   ];
   const filterModel = {
