@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 
 // project imports
 import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
-// import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
+import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
 import MainCard from "ui-component/cards/MainCard";
 
 // ==============================|| Create/Update Campaign View ||============================== //
@@ -106,7 +106,7 @@ const CampaignDataEntryPage = () => {
                 </>
               ) : activeStep == 1 ? (
                 <>
-                  {/* <CampaignTemplateForm /> */}
+                  <CampaignTemplateForm />
                   {stepButtons}
                 </>
               ) : activeStep == 2 ? (
