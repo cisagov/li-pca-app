@@ -30,3 +30,23 @@ def call_harvester_query(domain):
     logging.debug("Harvester query response: %s", response)
 
     return jsonify(query_json)
+
+
+def call_hunter_query(domain, api_key):
+    """Call Hunter.io.
+
+    :param domain: a domain to run the query against
+    :type domain: basestring
+    :param api_key: an api_key for a Hunter.io user
+    :type api_key: basestring
+
+    :rtype: query response
+    """
+    hunter_url = (
+        f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key={api_key}"
+    )
+    response = requests.get(hunter_url)
+    query_json = response.json()
+    logging.debug("Hunter IO response: %s", response)
+
+    return jsonify(query_json)

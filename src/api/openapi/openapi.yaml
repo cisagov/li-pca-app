@@ -785,6 +785,42 @@ paths:
         "400":
           description: Invalid domain supplied
       x-openapi-router-controller: api.controllers.recon_controller
+  /v1/hunter:
+    get:
+      tags:
+        - recon
+      summary: Run Hunter query for a domain
+      description: Returns results from a hunter query
+      operationId: call_hunter_query
+      parameters:
+        - name: domain
+          in: query
+          description: domain to run a Hunter query against
+          required: true
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: api_key
+          in: query
+          description: the API Key for Hunter IO
+          required: true
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconResult'
+        "400":
+          description: Invalid domain supplied
+      x-openapi-router-controller: api.controllers.recon_controller
   /v1/landing_pages:
     get:
       tags:
