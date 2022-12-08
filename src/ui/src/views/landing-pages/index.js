@@ -22,13 +22,13 @@ function BaseJSX(props) {
       field: "created_by",
       headerName: "Created By",
       midWidth: 100,
-      flex: 1,
+      flex: 0.75,
     },
     {
       field: "is_default_template",
       headerName: "Default Landing Page",
       midWidth: 100,
-      flex: 0.75,
+      flex: 0.5,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
@@ -44,7 +44,7 @@ function BaseJSX(props) {
     <MainCard title="Landing Pages">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Box sx={{ maxWidth: 1000 }}>
+          <Box sx={{ maxWidth: 1200 }}>
             <MainDataTable
               data={{ rows: props.rows, columns: cols }}
               newEntryRoute={props.dataEntry}

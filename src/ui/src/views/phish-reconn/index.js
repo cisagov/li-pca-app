@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 // material-ui
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
@@ -101,12 +102,14 @@ function BaseJSX(props) {
     },
   ];
   let displayTable = (
-    <MainDataTable
-      data={{ rows: props.rows, columns: cols }}
-      newEntryRoute={props.dataEntry}
-      editEntryRoute={props.dataEntry}
-      tableCategory={"Phish Reconnaissance"}
-    />
+    <Box sx={{ maxWidth: 1200 }}>
+      <MainDataTable
+        data={{ rows: props.rows, columns: cols }}
+        newEntryRoute={props.dataEntry}
+        editEntryRoute={props.dataEntry}
+        tableCategory={"Phish Reconnaissance"}
+      />
+    </Box>
   );
   return (
     <MainCard title="Phish Reconnaissance">

@@ -23,7 +23,7 @@ function BaseJSX(props) {
       flex: 1,
     },
     { field: "target_count", headerName: "Target Count", minWidth: 100 },
-    { field: "status", headerName: "Status", minWidth: 80, flex: 0.5 },
+    { field: "status", headerName: "Status", minWidth: 70, flex: 0.5 },
     {
       field: "date_scheduled",
       headerName: "Date Scheduled",

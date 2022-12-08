@@ -57,40 +57,38 @@ function CustomToolbar(props) {
   return (
     <GridToolbarContainer>
       <Grid container>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Box sx={{ p: 0.5, pb: 0 }}>
-            <TextField
-              variant="standard"
-              value={props.value}
-              onChange={props.onChange}
-              placeholder="Search…"
-              InputProps={{
-                startAdornment: <SearchIcon fontSize="small" />,
-                endAdornment: (
-                  <IconButton
-                    title="Clear"
-                    aria-label="Clear"
-                    size="small"
-                    style={{ visibility: props.value ? "visible" : "hidden" }}
-                    onClick={props.clearSearch}
-                  >
-                    <ClearIcon fontSize="small" />
-                  </IconButton>
-                ),
-              }}
-              sx={{
-                width: { xs: 1, sm: "auto" },
-                m: (theme) => theme.spacing(1, 0.5, 1.5),
-                "& .MuiSvgIcon-root": { mr: 0.5 },
-                "& .MuiInput-underline:before": {
-                  borderBottom: 1,
-                  borderColor: "divider",
-                },
-              }}
-            />
-          </Box>
+        <Grid item xs={11} sm={7} md={5} lg={5} xl={4} sx={{ p: 0.5 }}>
+          <TextField
+            fullWidth
+            variant="standard"
+            value={props.value}
+            onChange={props.onChange}
+            placeholder="Search…"
+            InputProps={{
+              startAdornment: <SearchIcon fontSize="small" />,
+              endAdornment: (
+                <IconButton
+                  title="Clear"
+                  aria-label="Clear"
+                  size="small"
+                  style={{ visibility: props.value ? "visible" : "hidden" }}
+                  onClick={props.clearSearch}
+                >
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              ),
+            }}
+            sx={{
+              m: (theme) => theme.spacing(1, 0.5, 1.5),
+              "& .MuiSvgIcon-root": { mr: 0.5 },
+              "& .MuiInput-underline:before": {
+                borderBottom: 1,
+                borderColor: "divider",
+              },
+            }}
+          />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={11} lg={11} xl={7} sx={{ p: 1, pl: 1 }}>
           <GridToolbarColumnsButton />
           <GridToolbarFilterButton />
           <Button
