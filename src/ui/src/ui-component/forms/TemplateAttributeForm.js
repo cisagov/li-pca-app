@@ -159,17 +159,17 @@ const TemplateAttrForm = (props) => {
                 select
                 fullWidth
                 label="Sending Domain Selection"
-                id="sending_profile_id"
-                name="sending_profile_id"
-                value={props.formik.values.sending_profile_id}
+                id="sending_domain_id"
+                name="sending_domain_id"
+                value={props.formik.values.sending_domain_id}
                 onChange={props.formik.handleChange}
                 error={
-                  props.formik.touched.sending_profile_id &&
-                  Boolean(props.formik.errors.sending_profile_id)
+                  props.formik.touched.sending_domain_id &&
+                  Boolean(props.formik.errors.sending_domain_id)
                 }
                 helperText={
-                  props.formik.touched.sending_profile_id &&
-                  props.formik.errors.sending_profile_id
+                  props.formik.touched.sending_domain_id &&
+                  props.formik.errors.sending_domain_id
                 }
               >
                 {domain.getData.map((entry) => {
