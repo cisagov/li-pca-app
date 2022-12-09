@@ -89,7 +89,8 @@ const CustDataEntryPage = () => {
   let custValues = custRowsTransform(state.row);
   let mainCardTitle = custNewOrEdit(state.dataEntryType);
   const [custData, setCustData] = useState(custValues);
-  const [hasCampaigns, setCampaigns] = useState(false);
+  // const [hasCampaigns, setCampaigns] = useState(false);
+  const hasCampaigns = false;
 
   const campaignCols = [
     { field: "id", hide: true },

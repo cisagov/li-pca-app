@@ -209,7 +209,7 @@ export default function AdvancedDataTable(props) {
           <IconButton
             variant="contained"
             color="error"
-            onClick={() => console.log("TODO")}
+            onClick={() => console.log(cellValues)}
           >
             <DeleteIcon />
           </IconButton>
