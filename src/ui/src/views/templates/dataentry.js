@@ -45,8 +45,8 @@ const temRowsTransform = (templateRows) => {
   if (!templateRows.hasOwnProperty("landing_page_id")) {
     templateRows.landing_page_id = "";
   }
-  if (!templateRows.hasOwnProperty("sending_profile_id")) {
-    templateRows.sending_profile_id = "";
+  if (!templateRows.hasOwnProperty("sending_domain_id")) {
+    templateRows.sending_domain_id = "";
   }
   if (!templateRows.hasOwnProperty("deception_score")) {
     templateRows.deception_score = 0;
@@ -99,16 +99,13 @@ const temRowsTransform = (templateRows) => {
   if (!templateRows.hasOwnProperty("campaigns")) {
     templateRows.campaigns = [];
   }
-  if (!templateRows.hasOwnProperty("recommendation_type")) {
-    templateRows.recommendation_type = "";
-  }
   return templateRows;
 };
 
 const campaignColumns = [
   { field: "id", hide: true },
-  { field: "name", headerName: "Campaign Name", flex: 4 },
-  { field: "status", headerName: "Status", flex: 4 },
+  { field: "name", headerName: "Campaign Name", minWidth: 100, flex: 1 },
+  { field: "status", headerName: "Status", minWidth: 100, flex: 1 },
 ];
 
 function TabPanel(props) {
@@ -202,9 +199,9 @@ const TemplateDataEntryPage = () => {
     },
   });
   let subtitleConfirm = (
-    <p>
+    <>
       <b>{formik.values.name}</b> will be updated in the database.
-    </p>
+    </>
   );
   let formTouched =
     JSON.stringify(templateValues) == JSON.stringify(formik.values) &&
@@ -312,8 +309,8 @@ const TemplateDataEntryPage = () => {
                 <Grid item display={{ xs: "none", xl: "block" }} xl={2} />
               </Grid>
             </form>
-            <Grid container>
-              <Grid item xs={12} md={12} xl={12} sx={{ mt: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 2 }}>
                 <Box sx={{ width: "100%" }}>
                   <Tabs
                     value={tabValue}
@@ -361,25 +358,34 @@ const TemplateDataEntryPage = () => {
                   </TabPanel>
                   <TabPanel value={tabValue} index={2}>
                     {templateValues.campaigns.length === 0 ? (
-                      <Typography>
+                      <Typography component="div" sx={{ mb: 2 }}>
                         No campaigns are currently using this template.
                       </Typography>
                     ) : (
+                      <></>
+                    )}
+                    {tabValue == 2 ? (
                       <DataGrid
                         autoHeight
                         pageSize={5}
                         rowsPerPageOptions={[5]}
-                        rows={templateValues.campaigns}
+                        rows={templateValues.campaigns.map((item, index) => ({
+                          id: index,
+                          name: item,
+                          status: "",
+                        }))}
                         columns={campaignColumns}
                         density="compact"
-                        onSelectionModelChange={(id) => {
-                          const item = templateValues.campaigns.find(
-                            (row) => row.id === id[0]
-                          );
-                          console.log(item);
-                          // TODO: Navigate to campaign page
-                        }}
+                        // onSelectionModelChange={(id) => {
+                        //   const item = templateValues.campaigns.find(
+                        //     (row) => row.id === id[0]
+                        //   );
+                        //   console.log(item);
+                        //   // TODO: Navigate to campaign page
+                        // }}
                       />
+                    ) : (
+                      <></>
                     )}
                   </TabPanel>
                   <TabPanel value={tabValue} index={3}>
