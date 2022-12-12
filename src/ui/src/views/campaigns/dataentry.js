@@ -61,7 +61,7 @@ const CampaignDataEntryPage = () => {
       </Button>
       <Box sx={{ flex: "1 1 auto" }} />
       <Button onClick={handleNext}>
-        {activeStep === steps.length - 1 ? "Create Campaign" : "Next"}
+        {activeStep === steps.length - 1 ? "Send Campaign" : "Next"}
       </Button>
     </Box>
   );
