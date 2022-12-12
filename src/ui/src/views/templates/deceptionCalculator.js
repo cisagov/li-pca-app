@@ -78,7 +78,7 @@ const DeceptionCalculator = (props) => {
         <FormLabel>Grammar</FormLabel>
         <RadioGroup
           row={isSmall}
-          defaultValue={indicators.appearance["grammar"]}
+          value={indicators.appearance["grammar"]}
           onChange={(e) =>
             changeVal("appearance", "grammar", parseInt(e.target.value))
           }
@@ -105,7 +105,7 @@ const DeceptionCalculator = (props) => {
         <FormLabel>Link / Domain</FormLabel>
         <RadioGroup
           row={isSmall}
-          defaultValue={indicators.appearance["link_domain"]}
+          value={indicators.appearance["link_domain"]}
           onChange={(e) =>
             changeVal("appearance", "link_domain", parseInt(e.target.value))
           }
@@ -126,7 +126,7 @@ const DeceptionCalculator = (props) => {
         <FormLabel>Logo / Graphics</FormLabel>
         <RadioGroup
           row={isSmall}
-          defaultValue={indicators.appearance["logo_graphics"]}
+          value={indicators.appearance["logo_graphics"]}
           onChange={(e) =>
             changeVal("appearance", "logo_graphics", parseInt(e.target.value))
           }
@@ -156,7 +156,7 @@ const DeceptionCalculator = (props) => {
         <FormLabel>External</FormLabel>
         <RadioGroup
           row={isSmall}
-          defaultValue={indicators.sender["external"]}
+          value={indicators.sender["external"]}
           onChange={(e) =>
             changeVal("sender", "external", parseInt(e.target.value))
           }
@@ -177,7 +177,7 @@ const DeceptionCalculator = (props) => {
         <FormLabel>Internal</FormLabel>
         <RadioGroup
           row={isSmall}
-          defaultValue={indicators.sender["internal"]}
+          value={indicators.sender["internal"]}
           onChange={(e) =>
             changeVal("sender", "internal", parseInt(e.target.value))
           }
@@ -204,7 +204,7 @@ const DeceptionCalculator = (props) => {
         <FormLabel>Authoritative</FormLabel>
         <RadioGroup
           row={isSmall}
-          defaultValue={indicators.sender["authoritative"]}
+          value={indicators.sender["authoritative"]}
           onChange={(e) =>
             changeVal("sender", "authoritative", parseInt(e.target.value))
           }
@@ -234,7 +234,7 @@ const DeceptionCalculator = (props) => {
         <FormLabel>Organization</FormLabel>
         <RadioGroup
           row
-          defaultValue={indicators.relevancy["organization"]}
+          value={indicators.relevancy["organization"]}
           onChange={(e) =>
             changeVal("relevancy", "organization", parseInt(e.target.value))
           }
@@ -255,7 +255,7 @@ const DeceptionCalculator = (props) => {
         <FormLabel>Public News</FormLabel>
         <RadioGroup
           row
-          defaultValue={indicators.relevancy["public_news"]}
+          value={indicators.relevancy["public_news"]}
           onChange={(e) =>
             changeVal("relevancy", "public_news", parseInt(e.target.value))
           }
