@@ -164,8 +164,10 @@ const TemplateDataEntryPage = () => {
   const [tabValue, setTabValue] = useState(0);
   const [savebtnOpen, setSavebtnOpen] = useState(false);
   const [alertbtnOpen, setAlertbtnOpen] = useState(false);
-  const [selectedSophTags, setSophTags] = useState([]);
-  const [selectedRFTags, setRFTags] = useState([]);
+  const [selectedSophTags, setSophTags] = useState(
+    templateData["sophisticated"]
+  );
+  const [selectedRFTags, setRFTags] = useState(templateData["red_flag"]);
   const [getError, setError] = useState([false, ""]);
   const [cancelbtnOpen, setCancelbtnOpen] = useState(false);
   const alertSubtitle = (
@@ -204,11 +206,14 @@ const TemplateDataEntryPage = () => {
     </>
   );
   let formTouched =
-    JSON.stringify(templateValues) == JSON.stringify(formik.values) &&
-    JSON.stringify(templateValues) == JSON.stringify(templateData) &&
-    templateValues.html == htmlValue &&
-    selectedRFTags.length < 1 &&
-    selectedSophTags.length < 1;
+    JSON.stringify(templateValues) != JSON.stringify(formik.values) ||
+    JSON.stringify(templateValues) != JSON.stringify(templateData) ||
+    templateValues.html != htmlValue ||
+    // selectedRFTags !== templateData["red_flag"] &&
+    JSON.stringify(selectedRFTags) !==
+      JSON.stringify(templateData["red_flag"]) ||
+    JSON.stringify(selectedSophTags) !==
+      JSON.stringify(templateData["sophisticated"]);
   const handleSave = () => {
     formik.setTouched(fieldsToValidate);
     if (
@@ -232,13 +237,13 @@ const TemplateDataEntryPage = () => {
     setHasSubmitted(false);
   };
   const isDisabled = () => {
-    if (formTouched) {
+    if (!formTouched) {
       return true;
     }
     return false;
   };
   const handleCancel = () => {
-    if (!formTouched) {
+    if (formTouched) {
       setCancelbtnOpen(true);
     } else {
       navigate("/cat-phishing/templates");
@@ -476,7 +481,7 @@ const TemplateDataEntryPage = () => {
             <ConfirmDialog
               subtitle="Unsaved changes will be discarded."
               confirmType="Leave"
-              handleClick={handleCancel}
+              handleClick={() => navigate("/cat-phishing/templates")}
               isOpen={cancelbtnOpen}
               setIsOpen={setCancelbtnOpen}
             />
