@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll, deleteSD } from "services/api/SendingDomains.js";
+import { useGetAll, deleteEntry } from "services/api.js";
 
 // ==============================|| Sending Domains view ||============================== //
 
@@ -47,7 +47,8 @@ function BaseJSX(props) {
               newEntryRoute={props.dataEntry}
               editEntryRoute={props.dataEntry}
               tableCategory={"Sending Domains"}
-              deleteEntry={deleteSD}
+              deleteEntry={deleteEntry}
+              apiType={"sending_domains"}
             />
           </Box>
         </Grid>
@@ -63,7 +64,7 @@ BaseJSX.propTypes = {
 };
 
 function SendingDomainsPage() {
-  const { isLoading, getData, getError } = useGetAll();
+  const { isLoading, getData, getError } = useGetAll("sending_domains");
 
   const domainRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {

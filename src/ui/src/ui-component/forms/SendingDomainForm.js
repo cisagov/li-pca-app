@@ -23,7 +23,7 @@ import * as yup from "yup";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { submitSD } from "services/api/SendingDomains.js";
+import { submitEntry } from "services/api.js";
 
 const fieldsToValidate = {
   name: true,
@@ -82,11 +82,13 @@ const SendingDomainForm = (props) => {
     validateOnMount: true,
     validateOnChange: true,
     onSubmit: (values) => {
+      const sd = "sending_domains";
+      const dType = props.dataEntryType;
       // TODO: Add headers to values or whatever ends of being axiosed
       values.headers = emailHeaderArray;
       props.setSdData(Object.assign(props.sdData, values));
       setHasSubmitted(true);
-      submitSD(props.sdData, props.sdData._id, props.dataEntryType, setError);
+      submitEntry(sd, props.sdData, props.sdData._id, dType, setError);
       setTimeout(() => {
         setSavebtnOpen(false);
       });
@@ -126,7 +128,7 @@ const SendingDomainForm = (props) => {
   const smtpFields = () => {
     return (
       <>
-        <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
+        <Grid item xs={12} sm={6} md={5} lg={5} xl={5}>
           <TextField
             fullWidth
             size="small"
@@ -139,7 +141,7 @@ const SendingDomainForm = (props) => {
             helperText={formik.touched.smtp_host && formik.errors.smtp_host}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
+        <Grid item xs={12} sm={6} md={5} lg={5} xl={5}>
           <TextField
             fullWidth
             size="small"
@@ -157,7 +159,7 @@ const SendingDomainForm = (props) => {
             }
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
+        <Grid item xs={12} sm={6} md={5} lg={5} xl={5}>
           <TextField
             fullWidth
             size="small"
@@ -181,7 +183,7 @@ const SendingDomainForm = (props) => {
   const mailgunFields = () => {
     return (
       <>
-        <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
+        <Grid item xs={12} sm={6} md={5} lg={5} xl={5}>
           <TextField
             fullWidth
             size="small"
@@ -199,7 +201,7 @@ const SendingDomainForm = (props) => {
             }
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={10} lg={10} xl={9}>
+        <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
           <TextField
             fullWidth
             size="small"
@@ -326,7 +328,7 @@ const SendingDomainForm = (props) => {
     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
       <form id="sp-form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
+          <Grid item xs={12} sm={6} md={5} lg={5} xl={5}>
             <TextField
               fullWidth
               size="small"
@@ -339,7 +341,7 @@ const SendingDomainForm = (props) => {
               helperText={formik.touched.name && formik.errors.name}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
+          <Grid item xs={12} sm={6} md={5} lg={5} xl={5}>
             <TextField
               fullWidth
               size="small"
@@ -357,11 +359,11 @@ const SendingDomainForm = (props) => {
               }
             />
           </Grid>
-          <Grid item xs={12} sm={12} md={10} lg={10} xl={9}>
+          <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
             <TextField
               fullWidth
               multiline
-              minRows={1}
+              minRows={2}
               size="small"
               id="sending_ips"
               name="sending_ips"
@@ -376,7 +378,7 @@ const SendingDomainForm = (props) => {
               }
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={5} lg={5} xl={4.5}>
+          <Grid item xs={12} sm={6} md={5} lg={5} xl={5}>
             <TextField
               select
               fullWidth
@@ -421,7 +423,7 @@ const SendingDomainForm = (props) => {
             </Accordion>
           </Grid>
           <Grid item xs={12} md={12} xl={12} sx={{ mt: 3 }} />
-          <Grid item xs={12} sm={4} md={5} lg={5} xl={4} />
+          <Grid item xs={12} sm={4} md={5} lg={5} xl={5} />
           <Grid item xs={12} sm={3} md={2} lg={2} xl={2}>
             <Button
               fullWidth

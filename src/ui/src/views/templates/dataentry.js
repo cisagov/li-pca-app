@@ -29,7 +29,7 @@ import HtmlEditor from "ui-component/forms/HtmlEditor";
 import ResultDialog from "ui-component/popups/ResultDialog";
 import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
 import TemplateTestingForm from "ui-component/forms/TemplateTestingForm";
-import { submitTemplate } from "services/api/Templates.js";
+import { submitEntry } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
@@ -195,7 +195,8 @@ const TemplateDataEntryPage = () => {
       values["indicators"] = templateData["indicators"];
       values["deception_score"] = templateData["deception_score"];
       setTemplateData(values);
-      submitTemplate(values, values._id, dataEntryType, setError);
+      // submitTemplate(values, values._id, dataEntryType, setError);
+      submitEntry("templates", values, values._id, dataEntryType, setError);
       setHasSubmitted(true);
       setTimeout(() => setSavebtnOpen(false));
     },

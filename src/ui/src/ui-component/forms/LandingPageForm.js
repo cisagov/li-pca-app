@@ -17,7 +17,7 @@ import Typography from "@mui/material/Typography";
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import HtmlEditor from "ui-component/forms/HtmlEditor";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { submitLP, deleteLP } from "services/api/LandingPages.js";
+import { submitEntry, deleteEntry } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
@@ -72,14 +72,16 @@ const LandingPageForm = (props) => {
     validationSchema: validationSchema,
     validateOnChange: true,
     onSubmit: (values) => {
+      const dType = props.dataEntryType;
       values["html"] = htmlValue;
-      submitLP(values, values._id, props.dataEntryType, setError);
+      submitEntry("landing_pages", values, values._id, dType, setError);
       const wasNotDefault = !props.currentPageIsDefault;
       const isDefaultChanged =
         props.initialValues.is_default_template != values.is_default_template;
       if (props.hasDefault && wasNotDefault && isDefaultChanged) {
         props.currentDefaultPage["is_default_template"] = false;
-        submitLP(
+        submitEntry(
+          "landing_pages",
           props.currentDefaultPage,
           props.currentDefaultPage._id,
           "Edit Landing Page",
@@ -109,7 +111,7 @@ const LandingPageForm = (props) => {
   };
 
   const confirmDelete = () => {
-    deleteLP(props.initialValues._id, setError);
+    deleteEntry("landing_pages", props.initialValues._id, setError);
     setTimeout(() => {
       setDeletebtnOpen(false);
       setDelete(true);

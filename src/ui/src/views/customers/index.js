@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll } from "services/api/Customers.js";
+import { useGetAll } from "services/api.js";
 
 // ==============================|| Customers view ||============================== //
 
@@ -57,7 +57,7 @@ BaseJSX.propTypes = {
 };
 
 function CustomersPage() {
-  const { isLoading, getData, getError } = useGetAll();
+  const { isLoading, getData, getError } = useGetAll("customers");
 
   const cusRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {

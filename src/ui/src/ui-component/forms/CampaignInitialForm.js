@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 
 // project imports
 import AdvancedSimpleDataTable from "ui-component/tables/AdvancedSimpleDataTable";
-import { useGetAll } from "services/api/Customers.js";
+import { useGetAll } from "services/api.js";
 
 const cols = [
   { field: "id", hide: true },
@@ -47,8 +47,10 @@ const cusRows = (rowsArray) => {
 // const getData = require("views/customers/mockCusData.json");
 
 const CampaignInitialForm = () => {
-  const { isLoading, getData, getError } = useGetAll();
-  const rows = cusRows(getData);
+  const customers = useGetAll("customers");
+  const sending_domains = useGetAll("sending_domains");
+  const landing_pages = useGetAll("landing_pages");
+  const rows = cusRows(customers.getData);
   const [cusShown, showCus] = useState(false);
   const [cusSelected, selectCus] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
@@ -70,9 +72,9 @@ const CampaignInitialForm = () => {
         <Typography variant="caption" sx={{ mb: 0.5 }} component="div">
           Select a customer by clicking on a row.
         </Typography>
-        {isLoading ? (
+        {customers.isLoading ? (
           <>Loading...</>
-        ) : getError[0] ? (
+        ) : customers.getError[0] ? (
           <>Unable to load customer data from the database.</>
         ) : (
           <AdvancedSimpleDataTable

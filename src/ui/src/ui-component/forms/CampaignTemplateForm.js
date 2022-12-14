@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import AdvancedSimpleDataTable from "ui-component/tables/AdvancedSimpleDataTable";
 import HtmlEditor from "./HtmlEditor";
-import { useGetAll } from "services/api/Templates.js";
+import { useGetAll } from "services/api.js";
 
 const cols = [
   { field: "id", hide: true },
@@ -47,7 +47,7 @@ const temRows = (rowsArray) => {
 
 export default function CampaignTemplateForm() {
   // const getData = require("views/templates/mockTemData.json");
-  const { isLoading, getData, getError } = useGetAll();
+  const { isLoading, getData, getError } = useGetAll("templates");
   const rows = temRows(getData);
   const [selectedRow, setRow] = useState({});
   const [htmlValue, setHTMLValue] = useState("");

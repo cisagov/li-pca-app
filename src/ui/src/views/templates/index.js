@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import AdvancedDataTable from "ui-component/tables/AdvancedDataTable";
 import MainCard from "ui-component/cards/MainCard";
-import { useGetAll } from "services/api/Templates.js";
+import { useGetAll } from "services/api.js";
 
 // ==============================|| Templates view ||============================== //
 
@@ -34,6 +34,7 @@ function BaseJSX(props) {
       minWidth: 100,
       flex: 1,
     },
+    { field: "retired", hide: true },
   ];
   const filterModel = {
     items: [
@@ -56,6 +57,7 @@ function BaseJSX(props) {
               newEntryRoute={props.dataEntry}
               editEntryRoute={props.dataEntry}
               tableCategory={"Template"}
+              apiType={"templates"}
             />
           </Box>
         </Grid>
@@ -85,7 +87,7 @@ function TemplatesPage() {
     return [];
   };
 
-  const { isLoading, getData, getError } = useGetAll();
+  const { isLoading, getData, getError } = useGetAll("templates");
 
   //  Mock data test
   // const jsonRows = require("./mockTemData.json");

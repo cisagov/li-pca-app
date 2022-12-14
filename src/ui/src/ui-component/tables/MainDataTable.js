@@ -114,6 +114,7 @@ MainDataTable.propTypes = {
   editEntryRoute: PropTypes.string,
   tableCategory: PropTypes.string,
   deleteEntry: PropTypes.func,
+  apiType: PropTypes.string,
 };
 
 export default function MainDataTable(props) {
@@ -125,6 +126,7 @@ export default function MainDataTable(props) {
   const [getError, setError] = React.useState([false, ""]);
   let [rowData, setRowData] = React.useState("");
   let pageSize = 10;
+  let rowsPerPage = 10;
   let density = "standard";
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
@@ -171,6 +173,7 @@ export default function MainDataTable(props) {
     });
   } else {
     pageSize = 5;
+    rowsPerPage = 5;
     density = "compact";
   }
   if (
@@ -201,7 +204,7 @@ export default function MainDataTable(props) {
   }
 
   const confirmDelete = () => {
-    props.deleteEntry(rowData._id, setError);
+    props.deleteEntry(props.apiType, rowData._id, setError);
     setTimeout(() => {
       setDeletebtnOpen(false);
       setDelete(true);
@@ -224,7 +227,7 @@ export default function MainDataTable(props) {
         }}
         pageSize={pageSize}
         density={density}
-        rowsPerPageOptions={[10]}
+        rowsPerPageOptions={[rowsPerPage]}
         componentsProps={{
           toolbar: {
             value: searchText,

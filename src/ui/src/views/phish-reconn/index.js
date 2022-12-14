@@ -14,12 +14,12 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
 import PhishReconForm from "ui-component/forms/PhishReconForm";
-import { useGetAll, fetchData } from "services/api/PhishRecon.js";
+import { useGetAll, fetchData } from "services/api.js";
 
 // ==============================|| Phish Reconn view ||============================== //
 
 function BaseJSX(props) {
-  const [selectedRow, setSelectedRow] = React.useState("");
+  const [selectedRow, setSelectedRow] = React.useState({});
   const [viewResults, setViewResults] = React.useState(false);
   const [isLoading, setLoading] = useState(false);
   const [getHarvesterData, setHarvesterData] = useState([]);
@@ -141,7 +141,7 @@ BaseJSX.propTypes = {
 function PhishReconnPage() {
   const [fetchData, setFetchData] = useState(true);
   const triggerDataFetch = () => setFetchData((t) => !t);
-  const { isLoading, getData, getError } = useGetAll(fetchData);
+  const { isLoading, getData, getError } = useGetAll("customers");
   const reconRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {
       let counter = 0;

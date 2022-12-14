@@ -28,7 +28,7 @@ import { IconDownload, IconPlus } from "@tabler/icons";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { useRetire } from "services/api/Templates";
+import { useRetire } from "services/api.js";
 
 function escapeRegExp(value) {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -148,6 +148,7 @@ AdvancedDataTable.propTypes = {
   editEntryRoute: PropTypes.string,
   tableCategory: PropTypes.string,
   filterModel: PropTypes.object,
+  apiType: PropTypes.string,
 };
 
 export default function AdvancedDataTable(props) {
@@ -229,7 +230,7 @@ export default function AdvancedDataTable(props) {
     setRetirebtnOpen(false);
   };
 
-  let getError = useRetire(retire, selectedRows);
+  let getError = useRetire(props.apiType, retire, selectedRows);
   const closeDialog = () => {
     setRetire(false);
     if (!getError[0]) {

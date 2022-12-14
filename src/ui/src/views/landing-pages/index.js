@@ -10,7 +10,7 @@ import Typography from "@mui/material/Grid";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll } from "services/api/LandingPages.js";
+import { useGetAll } from "services/api.js";
 
 // ==============================|| Landing Page view ||============================== //
 
@@ -65,7 +65,7 @@ BaseJSX.propTypes = {
 };
 
 function LandingPagesPage() {
-  const { isLoading, getData, getError } = useGetAll();
+  const { isLoading, getData, getError } = useGetAll("landing_pages");
 
   const landingpageRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {

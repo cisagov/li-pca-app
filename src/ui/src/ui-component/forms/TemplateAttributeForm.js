@@ -13,8 +13,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import TemplateMultiSelectChip from "../user-input/TemplateMultiSelectChip";
 import TemplateAttrRecsForm from "./TemplateAttrRecsForm";
-import { useGetAll as domainGetAll } from "services/api/SendingDomains";
-import { useGetAll as landingPgGetAll } from "services/api/LandingPages";
+import { useGetAll } from "services/api.js";
 
 const recsJson = require("views/templates/recommendations.json");
 const sophJson = recsJson.filter(
@@ -27,8 +26,8 @@ const redFlagJson = recsJson.filter(
 const TemplateAttrForm = (props) => {
   const [sophisticatedArray, setSophArray] = useState(sophJson);
   const [redFlagArray, setRFArray] = useState(redFlagJson);
-  let domain = domainGetAll();
-  let landingPage = landingPgGetAll();
+  const domain = useGetAll("sending_domains");
+  const landingPage = useGetAll("landing_pages");
 
   const message = (str) => {
     let msg =
