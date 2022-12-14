@@ -8,7 +8,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import ClearIcon from "@mui/icons-material/Clear";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -173,52 +172,32 @@ export default function AdvancedDataTable(props) {
   }, [props.data.rows]);
 
   const columns = props.data.columns;
-  columns.push(
-    {
-      field: "edit",
-      headerName: "Edit",
-      sortable: false,
-      disableClickEventBubbling: true,
-      renderCell: (cellValues) => {
-        return (
-          <IconButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              navigate(`${props.editEntryRoute}`, {
-                state: {
-                  row: cellValues.row,
-                  dataEntryType: "edit",
-                  rows: rows,
-                },
-              });
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        );
-      },
-      width: 80,
+  columns.push({
+    field: "edit",
+    headerName: "Edit",
+    sortable: false,
+    disableClickEventBubbling: true,
+    renderCell: (cellValues) => {
+      return (
+        <IconButton
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            navigate(`${props.editEntryRoute}`, {
+              state: {
+                row: cellValues.row,
+                dataEntryType: "edit",
+                rows: rows,
+              },
+            });
+          }}
+        >
+          <EditIcon />
+        </IconButton>
+      );
     },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      disableClickEventBubbling: true,
-      renderCell: (cellValues) => {
-        return (
-          <IconButton
-            variant="contained"
-            color="error"
-            onClick={() => console.log(cellValues)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        );
-      },
-      width: 80,
-    }
-  );
+    width: 80,
+  });
   const [retire, setRetire] = React.useState(false);
   const [retirebtnOpen, setRetirebtnOpen] = React.useState(false);
 

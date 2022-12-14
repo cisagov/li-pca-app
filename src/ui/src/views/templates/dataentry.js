@@ -29,7 +29,7 @@ import HtmlEditor from "ui-component/forms/HtmlEditor";
 import ResultDialog from "ui-component/popups/ResultDialog";
 import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
 import TemplateTestingForm from "ui-component/forms/TemplateTestingForm";
-import { submitEntry } from "services/api.js";
+import { submitEntry, deleteEntry } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
@@ -170,6 +170,8 @@ const TemplateDataEntryPage = () => {
   const [selectedRFTags, setRFTags] = useState(templateData["red_flag"]);
   const [getError, setError] = useState([false, ""]);
   const [cancelbtnOpen, setCancelbtnOpen] = useState(false);
+  const [deletebtnOpen, setDeletebtnOpen] = useState(false);
+  const [getDelete, setDelete] = useState(false);
   const alertSubtitle = (
     <p>
       Please check that <b>Template Name</b>, <b>HTML</b>, <b>Subject</b>,
@@ -195,7 +197,6 @@ const TemplateDataEntryPage = () => {
       values["indicators"] = templateData["indicators"];
       values["deception_score"] = templateData["deception_score"];
       setTemplateData(values);
-      // submitTemplate(values, values._id, dataEntryType, setError);
       submitEntry("templates", values, values._id, dataEntryType, setError);
       setHasSubmitted(true);
       setTimeout(() => setSavebtnOpen(false));
@@ -210,7 +211,6 @@ const TemplateDataEntryPage = () => {
     JSON.stringify(templateValues) != JSON.stringify(formik.values) ||
     JSON.stringify(templateValues) != JSON.stringify(templateData) ||
     templateValues.html != htmlValue ||
-    // selectedRFTags !== templateData["red_flag"] &&
     JSON.stringify(selectedRFTags) !==
       JSON.stringify(templateData["red_flag"]) ||
     JSON.stringify(selectedSophTags) !==
@@ -231,8 +231,8 @@ const TemplateDataEntryPage = () => {
   const closeDialog = () => {
     setAlertbtnOpen(false);
     setError([false, ""]);
-    // setDelete(false);
-    if (!getError[0] && hasSubmitted) {
+    setDelete(false);
+    if (!getError[0]) {
       navigate("/cat-phishing/templates");
     }
     setHasSubmitted(false);
@@ -249,6 +249,13 @@ const TemplateDataEntryPage = () => {
     } else {
       navigate("/cat-phishing/templates");
     }
+  };
+  const confirmDelete = () => {
+    deleteEntry("templates", templateValues._id, setError);
+    setTimeout(() => {
+      setDeletebtnOpen(false);
+      setDelete(true);
+    });
   };
   return (
     <MainCard title={dataEntryType}>
@@ -420,14 +427,41 @@ const TemplateDataEntryPage = () => {
             setTemplateData={setTemplateData}
             templateData={templateData}
           />
-          <Grid
-            item
-            display={{ xs: "none", sm: "block" }}
-            sm={4}
-            md={3}
-            lg={4}
-            xl={5}
-          />
+          {dataEntryType == "New Template" ? (
+            <Grid
+              item
+              display={{ xs: "none", sm: "block" }}
+              sm={4}
+              md={3}
+              lg={4}
+              xl={5}
+            />
+          ) : (
+            <>
+              <Grid item xs={10} sm={4} md={3} lg={3} xl={2}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  size="large"
+                  color="error"
+                  disabled={false}
+                  onClick={() => setDeletebtnOpen(true)}
+                >
+                  Delete Page
+                </Button>
+              </Grid>
+              <ConfirmDialog
+                subtitle={
+                  formik.values.name + " will be deleted in the database."
+                }
+                confirmType="Delete"
+                handleClick={confirmDelete}
+                isOpen={deletebtnOpen}
+                setIsOpen={setDeletebtnOpen}
+              />
+              <Grid item xs={10} sm={1} md={1} lg={1} xl={3} />
+            </>
+          )}
           <Grid item xs={10} sm={5} md={3} lg={3} xl={2}>
             <form id="template-form" onSubmit={formik.handleSubmit}>
               <Button
@@ -467,9 +501,15 @@ const TemplateDataEntryPage = () => {
                 error={getError}
                 closeDialog={closeDialog}
               />
+              <ResultDialog
+                type={getDelete ? "Delete Template" : dataEntryType}
+                hasSubmitted={getDelete || hasSubmitted}
+                error={getError}
+                closeDialog={closeDialog}
+              />
             </form>
           </Grid>
-          <Grid item xs={10} sm={2} md={2} lg={1} xl={1}>
+          <Grid item xs={10} sm={2} md={1} lg={1} xl={1}>
             <Button
               fullWidth
               color="dark"
