@@ -175,7 +175,7 @@ const LandingPageForm = (props) => {
             <Grid item xs={10} sm={7} md={8} lg={8} xl={9} />
           ) : (
             <>
-              <Grid item xs={10} sm={4} md={3} lg={3} xl={2}>
+              <Grid item xs={11} sm={4} md={3} lg={3} xl={2}>
                 <Button
                   fullWidth
                   variant="outlined"
@@ -196,10 +196,10 @@ const LandingPageForm = (props) => {
                 isOpen={deletebtnOpen}
                 setIsOpen={setDeletebtnOpen}
               />
-              <Grid item xs={10} sm={3} md={5} lg={5} xl={7} />
+              <Grid item xs={10} sm={2} md={4} lg={4} xl={6} />
             </>
           )}
-          <Grid item xs={10} sm={4} md={3} lg={3} xl={2}>
+          <Grid item xs={11} sm={4} md={3} lg={3} xl={2}>
             <Button
               fullWidth
               color="info"
@@ -211,7 +211,7 @@ const LandingPageForm = (props) => {
               Save Page
             </Button>
           </Grid>
-          <Grid item xs={10} sm={1} md={1} lg={1} xl={1}>
+          <Grid item xs={11} sm={2} md={2} lg={2} xl={2}>
             <Button
               color="dark"
               variant="text"
