@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 // material-ui
 import Box from "@mui/material/Box";
@@ -8,7 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 import UploadIcon from "@mui/icons-material/Upload";
 import Grid from "@mui/material/Grid";
-// import MenuItem from "@mui/material/MenuItem";
+import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
@@ -46,10 +47,10 @@ const cusRows = (rowsArray) => {
 };
 // const getData = require("views/customers/mockCusData.json");
 
-const CampaignInitialForm = () => {
+const CampaignInitialForm = (props) => {
   const customers = useGetAll("customers");
-  const sending_domains = useGetAll("sending_domains");
-  const landing_pages = useGetAll("landing_pages");
+  const domains = useGetAll("sending_domains");
+  const landingPages = useGetAll("landing_pages");
   const rows = cusRows(customers.getData);
   const [cusShown, showCus] = useState(false);
   const [cusSelected, selectCus] = useState(false);
@@ -107,6 +108,7 @@ const CampaignInitialForm = () => {
       </Card>
     </Grid>
   );
+
   return (
     <>
       <Divider color="gray" sx={{ height: 2 }} />
@@ -129,15 +131,12 @@ const CampaignInitialForm = () => {
             name="name"
             label="Campaign Name"
             placeholder="Enter a unique campaign name"
-            // value={props.formik.values.subject}
-            // onChange={props.formik.handleChange}
-            // error={
-            //   props.formik.touched.subject &&
-            //   Boolean(props.formik.errors.subject)
-            // }
-            // helperText={
-            //   props.formik.touched.subject && props.formik.errors.subject
-            // }
+            value={props.formik.values.name}
+            onChange={props.formik.handleChange}
+            error={
+              props.formik.touched.name && Boolean(props.formik.errors.name)
+            }
+            helperText={props.formik.touched.name && props.formik.errors.name}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -148,20 +147,30 @@ const CampaignInitialForm = () => {
           </Box>
           <TextField
             size="small"
+            select
             fullWidth
-            id="domain"
-            name="domain"
-            label="Sending Domain"
-            // value={props.formik.values.subject}
-            // onChange={props.formik.handleChange}
-            // error={
-            //   props.formik.touched.subject &&
-            //   Boolean(props.formik.errors.subject)
-            // }
-            // helperText={
-            //   props.formik.touched.subject && props.formik.errors.subject
-            // }
-          />
+            label="Sending Domain Selection"
+            id="sending_domain_id"
+            name="sending_domain_id"
+            value={props.formik.values.sending_domain_id}
+            onChange={props.formik.handleChange}
+            error={
+              props.formik.touched.sending_domain_id &&
+              Boolean(props.formik.errors.sending_domain_id)
+            }
+            helperText={
+              props.formik.touched.sending_domain_id &&
+              props.formik.errors.sending_domain_id
+            }
+          >
+            {domains.getData.map((entry) => {
+              return (
+                <MenuItem key={entry._id} value={entry._id}>
+                  {entry.name}
+                </MenuItem>
+              );
+            })}
+          </TextField>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Box sx={{ mb: 2 }}>
@@ -222,16 +231,26 @@ const CampaignInitialForm = () => {
             id="landing_page_id"
             name="landing_page_id"
             label="Landing Page Selection"
-            // value={props.formik.values.subject}
-            // onChange={props.formik.handleChange}
-            // error={
-            //   props.formik.touched.subject &&
-            //   Boolean(props.formik.errors.subject)
-            // }
-            // helperText={
-            //   props.formik.touched.subject && props.formik.errors.subject
-            // }
-          />
+            select
+            value={props.formik.values.landing_page_id}
+            onChange={props.formik.handleChange}
+            error={
+              props.formik.touched.landing_page_id &&
+              Boolean(props.formik.errors.landing_page_id)
+            }
+            helperText={
+              props.formik.touched.landing_page_id &&
+              props.formik.errors.landing_page_id
+            }
+          >
+            {landingPages.getData.map((entry) => {
+              return (
+                <MenuItem key={entry._id} value={entry._id}>
+                  {entry.name}
+                </MenuItem>
+              );
+            })}
+          </TextField>
           <Typography variant="caption" sx={{ mt: 1 }} component="div">
             If a customer hosted landing page is requested, an optional url can
             be provided to redirect clicks after our server is hit for click
@@ -243,18 +262,19 @@ const CampaignInitialForm = () => {
             sx={{ mt: -1 }}
             size="small"
             fullWidth
-            id="landing_page_ext"
-            name="landing_page_ext"
+            id="landing_page_url"
+            name="landing_page_url"
             label="Landing Page URL"
-            // value={props.formik.values.subject}
-            // onChange={props.formik.handleChange}
-            // error={
-            //   props.formik.touched.subject &&
-            //   Boolean(props.formik.errors.subject)
-            // }
-            // helperText={
-            //   props.formik.touched.subject && props.formik.errors.subject
-            // }
+            value={props.formik.values.landing_page_url}
+            onChange={props.formik.handleChange}
+            error={
+              props.formik.touched.landing_page_url &&
+              Boolean(props.formik.errors.landing_page_url)
+            }
+            helperText={
+              props.formik.touched.landing_page_url &&
+              props.formik.errors.landing_page_url
+            }
           />
           <Typography variant="caption" sx={{ mt: 1 }} component="div">
             Optional link to an external landing page. <br />
@@ -429,8 +449,8 @@ const CampaignInitialForm = () => {
   );
 };
 
-// CampaignInitialForm.propTypes = {
-//   formik: PropTypes.object,
-// };
+CampaignInitialForm.propTypes = {
+  formik: PropTypes.object,
+};
 
 export default CampaignInitialForm;
