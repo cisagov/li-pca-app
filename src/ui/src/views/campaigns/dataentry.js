@@ -11,6 +11,7 @@ import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 
 // project imports
+import CampaignDeliveryForm from "ui-component/forms/CampaignDeliveryForm";
 import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
 import CampaignReviewForm from "ui-component/forms/CampaignReviewForm";
 import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
@@ -112,9 +113,7 @@ const CampaignDataEntryPage = () => {
                 </>
               ) : activeStep == 2 ? (
                 <>
-                  <Typography sx={{ mt: 2, mb: 1 }}>
-                    Step {activeStep + 1}
-                  </Typography>
+                  <CampaignDeliveryForm />
                   {stepButtons}
                 </>
               ) : (
