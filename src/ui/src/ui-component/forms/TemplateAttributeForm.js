@@ -26,8 +26,8 @@ const redFlagJson = recsJson.filter(
 const TemplateAttrForm = (props) => {
   const [sophisticatedArray, setSophArray] = useState(sophJson);
   const [redFlagArray, setRFArray] = useState(redFlagJson);
-  const domain = useGetAll("sending_domains");
-  const landingPage = useGetAll("landing_pages");
+  const domains = useGetAll("sending_domains");
+  const landingPages = useGetAll("landing_pages");
 
   const message = (str) => {
     let msg =
@@ -150,7 +150,7 @@ const TemplateAttrForm = (props) => {
             </Typography>
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={11} xl={10}>
-            {domain.getError[0] || domain.getData.length == 0 ? (
+            {domains.getError[0] || domains.getData.length == 0 ? (
               message("sending domains")
             ) : (
               <TextField
@@ -171,11 +171,10 @@ const TemplateAttrForm = (props) => {
                   props.formik.errors.sending_domain_id
                 }
               >
-                {domain.getData.map((entry) => {
-                  const title = entry.name;
+                {domains.getData.map((entry) => {
                   return (
-                    <MenuItem key={title} value={title}>
-                      {title}
+                    <MenuItem key={entry._id} value={entry._id}>
+                      {entry.name}
                     </MenuItem>
                   );
                 })}
@@ -183,7 +182,7 @@ const TemplateAttrForm = (props) => {
             )}
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={11} xl={10}>
-            {landingPage.getError[0] || landingPage.getData.length == 0 ? (
+            {landingPages.getError[0] || landingPages.getData.length == 0 ? (
               message("landing pages")
             ) : (
               <TextField
@@ -204,11 +203,10 @@ const TemplateAttrForm = (props) => {
                   props.formik.errors.landing_page_id
                 }
               >
-                {landingPage.getData.map((entry) => {
-                  const title = entry.name;
+                {landingPages.getData.map((entry) => {
                   return (
-                    <MenuItem key={title} value={title}>
-                      {title}
+                    <MenuItem key={entry._id} value={entry._id}>
+                      {entry.name}
                     </MenuItem>
                   );
                 })}
