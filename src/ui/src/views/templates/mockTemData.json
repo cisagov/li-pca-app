@@ -4,10 +4,12 @@
     "created": "2022-04-07T15:55:01.081000+00:00",
     "created_by": "bot",
     "deception_score": 5,
-    "from_address": "1",
-    "name": "Delayed Order",
+    "from_address": "jonathan.smith@organization.com",
+    "html": "<p>Employee,<br /><br />Email exceeds limit. Please delete 2GB of space.</p>",
+    "name": "Email Quota Exceeded",
     "retired": false,
     "retired_description": "",
+    "subject": "Your Email Quota has been Exceeded",
     "uuid": "3913708c-4c0c-437a-820f-2898833ac6e8"
   },
   {
@@ -16,9 +18,11 @@
     "created_by": "bot",
     "deception_score": 4,
     "from_address": "test@test.com",
+    "html": "<p>To Our dearest Employees,<br /><br />We are organizing a sponsored volunteer trip. Please vote now on your preferred location.</p>",
     "name": "Volunteer Interest",
     "retired": false,
     "retired_description": "",
+    "subject": "We need your help!",
     "uuid": "006e2558-4d77-4b22-88ee-5fe32365aaaa"
   },
   {
@@ -27,9 +31,11 @@
     "created_by": "bot",
     "deception_score": 4,
     "from_address": "test@test.com",
+    "html": "<p>test</p>",
     "name": "Shipping Details",
     "retired": false,
     "retired_description": "",
+    "subject": "Shipping Details missing",
     "uuid": "95f02030-67d0-4a5a-9bb1-a6696a847b53"
   },
   {
@@ -38,9 +44,11 @@
     "created_by": "bot",
     "deception_score": 6,
     "from_address": "test@test.com",
+    "html": "<p>test</p>",
     "name": "Pending Order",
     "retired": false,
     "retired_description": "",
+    "subject": "Pending Order issue",
     "uuid": "fd5db3b0-9433-40bd-8764-6d33a500b6f1"
   },
   {
@@ -49,9 +57,11 @@
     "created_by": "bot",
     "deception_score": 5,
     "from_address": "test@test.com",
+    "html": "<p>test</p>",
     "name": "Order Processing Issue",
     "retired": false,
     "retired_description": "",
+    "subject": "Order Processing Issue",
     "uuid": "fd5db3b0-9433-40bd-8764-6d33a500b6f2"
   },
   {
@@ -60,9 +70,63 @@
     "created_by": "bot",
     "deception_score": 4,
     "from_address": "test@test.com",
+    "html": "<p>test</p>",
     "name": "Weekly Finances Report",
     "retired": false,
     "retired_description": "",
+    "subject": "Weekly Finances Report",
+    "uuid": "fd5db3b0-9433-40bd-8764-6d33a500b6f3"
+  },
+  {
+    "_id": "6271905a171c7dc09b0a1b52",
+    "created": "2022-05-03T20:28:10.777000+00:00",
+    "created_by": "bot",
+    "deception_score": 5,
+    "from_address": "test@test.com",
+    "html": "<p>test</p>",
+    "name": "Travel Expenses issued",
+    "retired": false,
+    "retired_description": "",
+    "subject": "Travel Expenses issued: Action required",
+    "uuid": "fd5db3b0-9433-40bd-8764-6d33a500b6f3"
+  },
+  {
+    "_id": "6271905a171c7dc09b0a1b53",
+    "created": "2022-05-03T20:28:10.777000+00:00",
+    "created_by": "bot",
+    "deception_score": 4,
+    "from_address": "test@test.com",
+    "html": "<p>test</p>",
+    "name": "Corporate Credit Card Statement",
+    "retired": false,
+    "retired_description": "",
+    "subject": "Corporate Credit Card Statement",
+    "uuid": "fd5db3b0-9433-40bd-8764-6d33a500b6f3"
+  },
+  {
+    "_id": "6271905a171c7dc09b0a1b54",
+    "created": "2022-05-03T20:28:10.777000+00:00",
+    "created_by": "bot",
+    "deception_score": 4,
+    "from_address": "test@test.com",
+    "html": "<p>test</p>",
+    "name": "Holiday Party this year",
+    "retired": false,
+    "retired_description": "",
+    "subject": "Holiday Party this year",
+    "uuid": "fd5db3b0-9433-40bd-8764-6d33a500b6f3"
+  },
+  {
+    "_id": "6271905a171c7dc09b0a1b55",
+    "created": "2022-05-03T20:28:10.777000+00:00",
+    "created_by": "bot",
+    "deception_score": 6,
+    "from_address": "test@test.com",
+    "html": "<p>To whom it may concern,<br /><br />Please go to the link below.</p>",
+    "name": "Resume Update Needed",
+    "retired": false,
+    "retired_description": "",
+    "subject": "Resume Update Needed",
     "uuid": "fd5db3b0-9433-40bd-8764-6d33a500b6f3"
   }
 ]

@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { submitCustomer } from "services/api/Customers.js";
+import { submitEntry } from "services/api.js";
 
 // ==============================|| Phish Reconn Form view ||============================== //
 
@@ -52,7 +52,7 @@ const PhishReconForm = (props) => {
   };
   const saveNotes = () => {
     const data = { customer_notes: notes };
-    submitCustomer(data, props.selectedRow._id, "Edit Customer", setError);
+    submitEntry("customers", data, props.selectedRow._id, "Edit", setError);
     setHasSubmitted(true);
     setSavebtnOpen(false);
     if (!getError[0]) {
@@ -214,10 +214,10 @@ const PhishReconForm = (props) => {
 };
 
 PhishReconForm.propTypes = {
-  selectedRow: PropTypes.string,
+  selectedRow: PropTypes.object,
   triggerDataFetch: PropTypes.func,
   viewResults: PropTypes.bool,
-  getData: PropTypes.object,
+  getData: PropTypes.array,
   getError: PropTypes.array,
   isLoading: PropTypes.bool,
 };

@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import AdvancedSimpleDataTable from "ui-component/tables/AdvancedSimpleDataTable";
 import HtmlEditor from "./HtmlEditor";
-import { useGetAll } from "services/api/Templates.js";
+import { useGetAll } from "services/api.js";
 
 const cols = [
   { field: "id", hide: true },
@@ -47,7 +47,7 @@ const temRows = (rowsArray) => {
 
 export default function CampaignTemplateForm() {
   // const getData = require("views/templates/mockTemData.json");
-  const { isLoading, getData, getError } = useGetAll();
+  const { isLoading, getData, getError } = useGetAll("templates");
   const rows = temRows(getData);
   const [selectedRow, setRow] = useState({});
   const [htmlValue, setHTMLValue] = useState("");
@@ -94,8 +94,12 @@ export default function CampaignTemplateForm() {
               <Typography fontSize={16} display="inline" fontWeight="medium">
                 {selectedRow.subject}
               </Typography>
-              <Typography fontSize={16}>
-                From: {selectedRow.from_address}
+              <br />
+              <Typography fontSize={16} display="inline">
+                From:&nbsp;
+              </Typography>
+              <Typography fontSize={16} display="inline" fontWeight="medium">
+                {selectedRow.from_address}
               </Typography>
               <Box sx={{ mt: 2 }} />
               <HtmlEditor
@@ -108,11 +112,12 @@ export default function CampaignTemplateForm() {
           )}
         </Grid>
         <Grid item>
-          <Typography>
+          <Typography fontSize={15}>
+            Selected Template:&nbsp;
             {JSON.stringify(selectedRow) === "{}" ? (
-              <>Selected Template: (No selection)</>
+              <b>(None selected)</b>
             ) : (
-              <>Selected Template: ({selectedRow.name})</>
+              <b>{selectedRow.name}</b>
             )}
           </Typography>
         </Grid>

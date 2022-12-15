@@ -5,13 +5,16 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { DataGrid } from "@mui/x-data-grid";
 import Divider from "@mui/material/Divider";
 import UploadIcon from "@mui/icons-material/Upload";
 import Grid from "@mui/material/Grid";
-import MenuItem from "@mui/material/MenuItem";
+// import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+
+// project imports
+import AdvancedSimpleDataTable from "ui-component/tables/AdvancedSimpleDataTable";
+import { useGetAll } from "services/api.js";
 
 const cols = [
   { field: "id", hide: true },
@@ -41,9 +44,13 @@ const cusRows = (rowsArray) => {
   }
   return [];
 };
-const jsonRows = require("views/customers/mockCusData.json");
-const rows = cusRows(jsonRows);
+// const getData = require("views/customers/mockCusData.json");
+
 const CampaignInitialForm = () => {
+  const customers = useGetAll("customers");
+  const sending_domains = useGetAll("sending_domains");
+  const landing_pages = useGetAll("landing_pages");
+  const rows = cusRows(customers.getData);
   const [cusShown, showCus] = useState(false);
   const [cusSelected, selectCus] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
@@ -65,15 +72,16 @@ const CampaignInitialForm = () => {
         <Typography variant="caption" sx={{ mb: 0.5 }} component="div">
           Select a customer by clicking on a row.
         </Typography>
-        <DataGrid
-          autoHeight
-          rows={rows}
-          columns={cols}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          density="compact"
-          onRowClick={handleRowClick}
-        />
+        {customers.isLoading ? (
+          <>Loading...</>
+        ) : customers.getError[0] ? (
+          <>Unable to load customer data from the database.</>
+        ) : (
+          <AdvancedSimpleDataTable
+            data={{ rows: rows, columns: cols }}
+            handleRowClick={handleRowClick}
+          />
+        )}
       </Grid>
       <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
         <Button variant="contained" fullWidth onClick={cancelCusSelect}>
@@ -102,14 +110,14 @@ const CampaignInitialForm = () => {
   return (
     <>
       <Divider color="gray" sx={{ height: 2 }} />
-      <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
+      <Grid container spacing={2} sx={{ mt: 0.1, mb: 2.5 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography color="black" fontSize={18} component="div">
             <Box sx={{ fontWeight: "regular" }}>Campaign Assignment</Box>
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          <Box sx={{ mt: 1, mb: 2 }}>
+          <Box sx={{ mb: 2 }}>
             <Typography variant="h5" gutterBottom component="div">
               Specify the Campaign Name
             </Typography>
@@ -133,7 +141,7 @@ const CampaignInitialForm = () => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          <Box sx={{ mt: 1, mb: 2 }}>
+          <Box sx={{ mb: 2 }}>
             <Typography variant="h5" gutterBottom component="div">
               Select the Sending Domain
             </Typography>
@@ -156,7 +164,7 @@ const CampaignInitialForm = () => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          <Box sx={{ mt: 1, mb: 2 }}>
+          <Box sx={{ mb: 2 }}>
             <Typography variant="h5" gutterBottom component="div">
               Assign the Administrator
             </Typography>
@@ -179,7 +187,7 @@ const CampaignInitialForm = () => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          <Box sx={{ mt: 1, mb: 2 }}>
+          <Box sx={{ mb: 2 }}>
             <Typography variant="h5" gutterBottom component="div">
               Assign the Operator
             </Typography>
@@ -201,13 +209,14 @@ const CampaignInitialForm = () => {
             // }
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 1 }}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h5" gutterBottom component="div">
             Select the Landing Page
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <TextField
+            sx={{ mt: -1 }}
             size="small"
             fullWidth
             id="landing_page_id"
@@ -231,6 +240,7 @@ const CampaignInitialForm = () => {
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <TextField
+            sx={{ mt: -1 }}
             size="small"
             fullWidth
             id="landing_page_ext"
@@ -251,7 +261,7 @@ const CampaignInitialForm = () => {
             (e.g., https://internal.example.org/)
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: -1 }}>
           <Typography variant="h5" gutterBottom component="div">
             Assign the Customer
           </Typography>
@@ -330,13 +340,13 @@ const CampaignInitialForm = () => {
         <Grid item sx={{ mb: 2 }} />
       </Grid>
       <Divider color="gray" sx={{ height: 2 }} />
-      <Grid container spacing={2} sx={{ mt: 1 }}>
+      <Grid container spacing={2} sx={{ mt: 0.1 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography fontSize={18} color="black" component="div">
-            <Box sx={{ fontWeight: "regular" }}>Target Emails</Box>
+            <Box sx={{ fontWeight: "regular" }}>Target Email Selection</Box>
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: -1 }}>
           <Typography variant="h5" gutterBottom component="div">
             Target Email Domain
           </Typography>
@@ -365,7 +375,7 @@ const CampaignInitialForm = () => {
             Format: @domainOne.com, @domainTwo.com, @domainThree.com
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: -1 }}>
           <Typography variant="h5" gutterBottom component="div">
             Target Recipients
           </Typography>
@@ -393,7 +403,7 @@ const CampaignInitialForm = () => {
           <TextField
             size="small"
             multiline
-            minRows={4}
+            minRows={2}
             fullWidth
             id="target_emails"
             name="target_emails"

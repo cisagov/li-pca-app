@@ -122,7 +122,7 @@ const ConfirmDialog = (props) => {
 };
 
 ConfirmDialog.propTypes = {
-  subtitle: PropTypes.string,
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   confirmType: PropTypes.string,
   handleClick: PropTypes.func,
   formName: PropTypes.string,

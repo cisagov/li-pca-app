@@ -49,7 +49,7 @@ export default function TemplateMultiSelectChip(props) {
                 });
                 let description = entry[0].recommendation_description;
                 return (
-                  <Tooltip title={description} placement="right">
+                  <Tooltip title={description} key={value} placement="right">
                     <Chip key={value} label={value} />
                   </Tooltip>
                 );

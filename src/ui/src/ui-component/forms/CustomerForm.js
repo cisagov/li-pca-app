@@ -14,8 +14,7 @@ import TextField from "@mui/material/TextField";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { submitCustomer, deleteCustomer } from "services/api/Customers.js";
-
+import { submitEntry, deleteEntry } from "services/api.js";
 //third party
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -75,13 +74,14 @@ const CustomerForm = (props) => {
     validateOnMount: true,
     validateOnChange: true,
     onSubmit: (values) => {
+      const dType = props.dataEntryType;
       values.contact_list = props.custData.contact_list;
       const appendixADate = new Date(props.custData.appendix_a_date);
       values.appendix_a_date = appendixADate.toISOString();
       const custData = Object.assign(props.custData, values);
       props.setCustData(custData);
       setHasSubmitted(true);
-      submitCustomer(custData, custData._id, props.dataEntryType, setError);
+      submitEntry("customers", custData, custData._id, dType, setError);
       setTimeout(() => {
         setSavebtnOpen(false);
       });
@@ -117,7 +117,7 @@ const CustomerForm = (props) => {
   };
 
   const confirmDelete = () => {
-    deleteCustomer(props.custData._id, setError);
+    deleteEntry("customers", props.custData._id, setError);
     setTimeout(() => {
       setDeletebtnOpen(false);
       setDelete(true);

@@ -8,7 +8,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import ClearIcon from "@mui/icons-material/Clear";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -28,7 +27,7 @@ import { IconDownload, IconPlus } from "@tabler/icons";
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { useRetire } from "services/api/Templates";
+import { useRetire } from "services/api.js";
 
 function escapeRegExp(value) {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -57,40 +56,38 @@ function CustomToolbar(props) {
   return (
     <GridToolbarContainer>
       <Grid container>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Box sx={{ p: 0.5, pb: 0 }}>
-            <TextField
-              variant="standard"
-              value={props.value}
-              onChange={props.onChange}
-              placeholder="Search…"
-              InputProps={{
-                startAdornment: <SearchIcon fontSize="small" />,
-                endAdornment: (
-                  <IconButton
-                    title="Clear"
-                    aria-label="Clear"
-                    size="small"
-                    style={{ visibility: props.value ? "visible" : "hidden" }}
-                    onClick={props.clearSearch}
-                  >
-                    <ClearIcon fontSize="small" />
-                  </IconButton>
-                ),
-              }}
-              sx={{
-                width: { xs: 1, sm: "auto" },
-                m: (theme) => theme.spacing(1, 0.5, 1.5),
-                "& .MuiSvgIcon-root": { mr: 0.5 },
-                "& .MuiInput-underline:before": {
-                  borderBottom: 1,
-                  borderColor: "divider",
-                },
-              }}
-            />
-          </Box>
+        <Grid item xs={11} sm={7} md={5} lg={5} xl={4} sx={{ p: 0.5 }}>
+          <TextField
+            fullWidth
+            variant="standard"
+            value={props.value}
+            onChange={props.onChange}
+            placeholder="Search…"
+            InputProps={{
+              startAdornment: <SearchIcon fontSize="small" />,
+              endAdornment: (
+                <IconButton
+                  title="Clear"
+                  aria-label="Clear"
+                  size="small"
+                  style={{ visibility: props.value ? "visible" : "hidden" }}
+                  onClick={props.clearSearch}
+                >
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              ),
+            }}
+            sx={{
+              m: (theme) => theme.spacing(1, 0.5, 1.5),
+              "& .MuiSvgIcon-root": { mr: 0.5 },
+              "& .MuiInput-underline:before": {
+                borderBottom: 1,
+                borderColor: "divider",
+              },
+            }}
+          />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={11} lg={11} xl={7} sx={{ p: 1, pl: 1 }}>
           <GridToolbarColumnsButton />
           <GridToolbarFilterButton />
           <Button
@@ -150,6 +147,7 @@ AdvancedDataTable.propTypes = {
   editEntryRoute: PropTypes.string,
   tableCategory: PropTypes.string,
   filterModel: PropTypes.object,
+  apiType: PropTypes.string,
 };
 
 export default function AdvancedDataTable(props) {
@@ -174,52 +172,32 @@ export default function AdvancedDataTable(props) {
   }, [props.data.rows]);
 
   const columns = props.data.columns;
-  columns.push(
-    {
-      field: "edit",
-      headerName: "Edit",
-      sortable: false,
-      disableClickEventBubbling: true,
-      renderCell: (cellValues) => {
-        return (
-          <IconButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              navigate(`${props.editEntryRoute}`, {
-                state: {
-                  row: cellValues.row,
-                  dataEntryType: "edit",
-                  rows: rows,
-                },
-              });
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        );
-      },
-      width: 80,
+  columns.push({
+    field: "edit",
+    headerName: "Edit",
+    sortable: false,
+    disableClickEventBubbling: true,
+    renderCell: (cellValues) => {
+      return (
+        <IconButton
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            navigate(`${props.editEntryRoute}`, {
+              state: {
+                row: cellValues.row,
+                dataEntryType: "edit",
+                rows: rows,
+              },
+            });
+          }}
+        >
+          <EditIcon />
+        </IconButton>
+      );
     },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      disableClickEventBubbling: true,
-      renderCell: (cellValues) => {
-        return (
-          <IconButton
-            variant="contained"
-            color="error"
-            onClick={() => console.log("TODO")}
-          >
-            <DeleteIcon />
-          </IconButton>
-        );
-      },
-      width: 80,
-    }
-  );
+    width: 80,
+  });
   const [retire, setRetire] = React.useState(false);
   const [retirebtnOpen, setRetirebtnOpen] = React.useState(false);
 
@@ -231,7 +209,7 @@ export default function AdvancedDataTable(props) {
     setRetirebtnOpen(false);
   };
 
-  let getError = useRetire(retire, selectedRows);
+  let getError = useRetire(props.apiType, retire, selectedRows);
   const closeDialog = () => {
     setRetire(false);
     if (!getError[0]) {

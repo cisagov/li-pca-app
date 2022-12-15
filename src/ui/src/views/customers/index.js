@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll } from "services/api/Customers.js";
+import { useGetAll } from "services/api.js";
 
 // ==============================|| Customers view ||============================== //
 
@@ -36,7 +36,7 @@ function BaseJSX(props) {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {props.children}
-          <Box sx={{ maxWidth: 1000 }}>
+          <Box sx={{ maxWidth: 1200 }}>
             <MainDataTable
               data={{ rows: props.rows, columns: cols }}
               newEntryRoute={props.dataEntry}
@@ -57,7 +57,7 @@ BaseJSX.propTypes = {
 };
 
 function CustomersPage() {
-  const { isLoading, getData, getError } = useGetAll();
+  const { isLoading, getData, getError } = useGetAll("customers");
 
   const cusRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {

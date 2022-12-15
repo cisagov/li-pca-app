@@ -17,7 +17,7 @@ import Typography from "@mui/material/Typography";
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import HtmlEditor from "ui-component/forms/HtmlEditor";
 import ResultDialog from "ui-component/popups/ResultDialog";
-import { submitLP, deleteLP } from "services/api/LandingPages.js";
+import { submitEntry, deleteEntry } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
@@ -72,14 +72,16 @@ const LandingPageForm = (props) => {
     validationSchema: validationSchema,
     validateOnChange: true,
     onSubmit: (values) => {
+      const dType = props.dataEntryType;
       values["html"] = htmlValue;
-      submitLP(values, values._id, props.dataEntryType, setError);
+      submitEntry("landing_pages", values, values._id, dType, setError);
       const wasNotDefault = !props.currentPageIsDefault;
       const isDefaultChanged =
         props.initialValues.is_default_template != values.is_default_template;
       if (props.hasDefault && wasNotDefault && isDefaultChanged) {
         props.currentDefaultPage["is_default_template"] = false;
-        submitLP(
+        submitEntry(
+          "landing_pages",
           props.currentDefaultPage,
           props.currentDefaultPage._id,
           "Edit Landing Page",
@@ -109,7 +111,7 @@ const LandingPageForm = (props) => {
   };
 
   const confirmDelete = () => {
-    deleteLP(props.initialValues._id, setError);
+    deleteEntry("landing_pages", props.initialValues._id, setError);
     setTimeout(() => {
       setDeletebtnOpen(false);
       setDelete(true);
@@ -173,7 +175,7 @@ const LandingPageForm = (props) => {
             <Grid item xs={10} sm={7} md={8} lg={8} xl={9} />
           ) : (
             <>
-              <Grid item xs={10} sm={4} md={3} lg={3} xl={2}>
+              <Grid item xs={11} sm={4} md={3} lg={3} xl={2}>
                 <Button
                   fullWidth
                   variant="outlined"
@@ -194,10 +196,10 @@ const LandingPageForm = (props) => {
                 isOpen={deletebtnOpen}
                 setIsOpen={setDeletebtnOpen}
               />
-              <Grid item xs={10} sm={3} md={5} lg={5} xl={7} />
+              <Grid item xs={10} sm={2} md={4} lg={4} xl={6} />
             </>
           )}
-          <Grid item xs={10} sm={4} md={3} lg={3} xl={2}>
+          <Grid item xs={11} sm={4} md={3} lg={3} xl={2}>
             <Button
               fullWidth
               color="info"
@@ -209,7 +211,7 @@ const LandingPageForm = (props) => {
               Save Page
             </Button>
           </Grid>
-          <Grid item xs={10} sm={1} md={1} lg={1} xl={1}>
+          <Grid item xs={11} sm={2} md={2} lg={2} xl={2}>
             <Button
               color="dark"
               variant="text"

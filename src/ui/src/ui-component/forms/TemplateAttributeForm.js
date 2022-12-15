@@ -13,8 +13,7 @@ import Typography from "@mui/material/Typography";
 // project imports
 import TemplateMultiSelectChip from "../user-input/TemplateMultiSelectChip";
 import TemplateAttrRecsForm from "./TemplateAttrRecsForm";
-import { useGetAll as domainGetAll } from "services/api/SendingDomains";
-import { useGetAll as landingPgGetAll } from "services/api/LandingPages";
+import { useGetAll } from "services/api.js";
 
 const recsJson = require("views/templates/recommendations.json");
 const sophJson = recsJson.filter(
@@ -27,8 +26,8 @@ const redFlagJson = recsJson.filter(
 const TemplateAttrForm = (props) => {
   const [sophisticatedArray, setSophArray] = useState(sophJson);
   const [redFlagArray, setRFArray] = useState(redFlagJson);
-  let domain = domainGetAll();
-  let landingPage = landingPgGetAll();
+  const domain = useGetAll("sending_domains");
+  const landingPage = useGetAll("landing_pages");
 
   const message = (str) => {
     let msg =
@@ -159,17 +158,17 @@ const TemplateAttrForm = (props) => {
                 select
                 fullWidth
                 label="Sending Domain Selection"
-                id="sending_profile_id"
-                name="sending_profile_id"
-                value={props.formik.values.sending_profile_id}
+                id="sending_domain_id"
+                name="sending_domain_id"
+                value={props.formik.values.sending_domain_id}
                 onChange={props.formik.handleChange}
                 error={
-                  props.formik.touched.sending_profile_id &&
-                  Boolean(props.formik.errors.sending_profile_id)
+                  props.formik.touched.sending_domain_id &&
+                  Boolean(props.formik.errors.sending_domain_id)
                 }
                 helperText={
-                  props.formik.touched.sending_profile_id &&
-                  props.formik.errors.sending_profile_id
+                  props.formik.touched.sending_domain_id &&
+                  props.formik.errors.sending_domain_id
                 }
               >
                 {domain.getData.map((entry) => {

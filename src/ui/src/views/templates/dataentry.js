@@ -29,7 +29,7 @@ import HtmlEditor from "ui-component/forms/HtmlEditor";
 import ResultDialog from "ui-component/popups/ResultDialog";
 import TemplateAttrForm from "ui-component/forms/TemplateAttributeForm";
 import TemplateTestingForm from "ui-component/forms/TemplateTestingForm";
-import { submitTemplate } from "services/api/Templates.js";
+import { submitEntry, deleteEntry } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
@@ -45,8 +45,8 @@ const temRowsTransform = (templateRows) => {
   if (!templateRows.hasOwnProperty("landing_page_id")) {
     templateRows.landing_page_id = "";
   }
-  if (!templateRows.hasOwnProperty("sending_profile_id")) {
-    templateRows.sending_profile_id = "";
+  if (!templateRows.hasOwnProperty("sending_domain_id")) {
+    templateRows.sending_domain_id = "";
   }
   if (!templateRows.hasOwnProperty("deception_score")) {
     templateRows.deception_score = 0;
@@ -99,16 +99,13 @@ const temRowsTransform = (templateRows) => {
   if (!templateRows.hasOwnProperty("campaigns")) {
     templateRows.campaigns = [];
   }
-  if (!templateRows.hasOwnProperty("recommendation_type")) {
-    templateRows.recommendation_type = "";
-  }
   return templateRows;
 };
 
 const campaignColumns = [
   { field: "id", hide: true },
-  { field: "name", headerName: "Campaign Name", flex: 4 },
-  { field: "status", headerName: "Status", flex: 4 },
+  { field: "name", headerName: "Campaign Name", minWidth: 100, flex: 1 },
+  { field: "status", headerName: "Status", minWidth: 100, flex: 1 },
 ];
 
 function TabPanel(props) {
@@ -167,10 +164,14 @@ const TemplateDataEntryPage = () => {
   const [tabValue, setTabValue] = useState(0);
   const [savebtnOpen, setSavebtnOpen] = useState(false);
   const [alertbtnOpen, setAlertbtnOpen] = useState(false);
-  const [selectedSophTags, setSophTags] = useState([]);
-  const [selectedRFTags, setRFTags] = useState([]);
+  const [selectedSophTags, setSophTags] = useState(
+    templateData["sophisticated"]
+  );
+  const [selectedRFTags, setRFTags] = useState(templateData["red_flag"]);
   const [getError, setError] = useState([false, ""]);
   const [cancelbtnOpen, setCancelbtnOpen] = useState(false);
+  const [deletebtnOpen, setDeletebtnOpen] = useState(false);
+  const [getDelete, setDelete] = useState(false);
   const alertSubtitle = (
     <p>
       Please check that <b>Template Name</b>, <b>HTML</b>, <b>Subject</b>,
@@ -196,22 +197,24 @@ const TemplateDataEntryPage = () => {
       values["indicators"] = templateData["indicators"];
       values["deception_score"] = templateData["deception_score"];
       setTemplateData(values);
-      submitTemplate(values, values._id, dataEntryType, setError);
+      submitEntry("templates", values, values._id, dataEntryType, setError);
       setHasSubmitted(true);
       setTimeout(() => setSavebtnOpen(false));
     },
   });
   let subtitleConfirm = (
-    <p>
+    <>
       <b>{formik.values.name}</b> will be updated in the database.
-    </p>
+    </>
   );
   let formTouched =
-    JSON.stringify(templateValues) == JSON.stringify(formik.values) &&
-    JSON.stringify(templateValues) == JSON.stringify(templateData) &&
-    templateValues.html == htmlValue &&
-    selectedRFTags.length < 1 &&
-    selectedSophTags.length < 1;
+    JSON.stringify(templateValues) != JSON.stringify(formik.values) ||
+    JSON.stringify(templateValues) != JSON.stringify(templateData) ||
+    templateValues.html != htmlValue ||
+    JSON.stringify(selectedRFTags) !==
+      JSON.stringify(templateData["red_flag"]) ||
+    JSON.stringify(selectedSophTags) !==
+      JSON.stringify(templateData["sophisticated"]);
   const handleSave = () => {
     formik.setTouched(fieldsToValidate);
     if (
@@ -228,24 +231,31 @@ const TemplateDataEntryPage = () => {
   const closeDialog = () => {
     setAlertbtnOpen(false);
     setError([false, ""]);
-    // setDelete(false);
-    if (!getError[0] && hasSubmitted) {
+    setDelete(false);
+    if (!getError[0]) {
       navigate("/cat-phishing/templates");
     }
     setHasSubmitted(false);
   };
   const isDisabled = () => {
-    if (formTouched) {
+    if (!formTouched) {
       return true;
     }
     return false;
   };
   const handleCancel = () => {
-    if (!formTouched) {
+    if (formTouched) {
       setCancelbtnOpen(true);
     } else {
       navigate("/cat-phishing/templates");
     }
+  };
+  const confirmDelete = () => {
+    deleteEntry("templates", templateValues._id, setError);
+    setTimeout(() => {
+      setDeletebtnOpen(false);
+      setDelete(true);
+    });
   };
   return (
     <MainCard title={dataEntryType}>
@@ -312,8 +322,8 @@ const TemplateDataEntryPage = () => {
                 <Grid item display={{ xs: "none", xl: "block" }} xl={2} />
               </Grid>
             </form>
-            <Grid container>
-              <Grid item xs={12} md={12} xl={12} sx={{ mt: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 2 }}>
                 <Box sx={{ width: "100%" }}>
                   <Tabs
                     value={tabValue}
@@ -361,25 +371,34 @@ const TemplateDataEntryPage = () => {
                   </TabPanel>
                   <TabPanel value={tabValue} index={2}>
                     {templateValues.campaigns.length === 0 ? (
-                      <Typography>
+                      <Typography component="div" sx={{ mb: 2 }}>
                         No campaigns are currently using this template.
                       </Typography>
                     ) : (
+                      <></>
+                    )}
+                    {tabValue == 2 ? (
                       <DataGrid
                         autoHeight
                         pageSize={5}
                         rowsPerPageOptions={[5]}
-                        rows={templateValues.campaigns}
+                        rows={templateValues.campaigns.map((item, index) => ({
+                          id: index,
+                          name: item,
+                          status: "",
+                        }))}
                         columns={campaignColumns}
                         density="compact"
-                        onSelectionModelChange={(id) => {
-                          const item = templateValues.campaigns.find(
-                            (row) => row.id === id[0]
-                          );
-                          console.log(item);
-                          // TODO: Navigate to campaign page
-                        }}
+                        // onSelectionModelChange={(id) => {
+                        //   const item = templateValues.campaigns.find(
+                        //     (row) => row.id === id[0]
+                        //   );
+                        //   console.log(item);
+                        //   // TODO: Navigate to campaign page
+                        // }}
                       />
+                    ) : (
+                      <></>
                     )}
                   </TabPanel>
                   <TabPanel value={tabValue} index={3}>
@@ -408,14 +427,41 @@ const TemplateDataEntryPage = () => {
             setTemplateData={setTemplateData}
             templateData={templateData}
           />
-          <Grid
-            item
-            display={{ xs: "none", sm: "block" }}
-            sm={4}
-            md={3}
-            lg={4}
-            xl={5}
-          />
+          {dataEntryType == "New Template" ? (
+            <Grid
+              item
+              display={{ xs: "none", sm: "block" }}
+              sm={4}
+              md={3}
+              lg={4}
+              xl={5}
+            />
+          ) : (
+            <>
+              <Grid item xs={10} sm={4} md={3} lg={3} xl={2}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  size="large"
+                  color="error"
+                  disabled={false}
+                  onClick={() => setDeletebtnOpen(true)}
+                >
+                  Delete Page
+                </Button>
+              </Grid>
+              <ConfirmDialog
+                subtitle={
+                  formik.values.name + " will be deleted in the database."
+                }
+                confirmType="Delete"
+                handleClick={confirmDelete}
+                isOpen={deletebtnOpen}
+                setIsOpen={setDeletebtnOpen}
+              />
+              <Grid item xs={10} sm={1} md={1} lg={1} xl={3} />
+            </>
+          )}
           <Grid item xs={10} sm={5} md={3} lg={3} xl={2}>
             <form id="template-form" onSubmit={formik.handleSubmit}>
               <Button
@@ -455,9 +501,15 @@ const TemplateDataEntryPage = () => {
                 error={getError}
                 closeDialog={closeDialog}
               />
+              <ResultDialog
+                type={getDelete ? "Delete Template" : dataEntryType}
+                hasSubmitted={getDelete || hasSubmitted}
+                error={getError}
+                closeDialog={closeDialog}
+              />
             </form>
           </Grid>
-          <Grid item xs={10} sm={2} md={2} lg={1} xl={1}>
+          <Grid item xs={10} sm={2} md={1} lg={1} xl={1}>
             <Button
               fullWidth
               color="dark"
@@ -470,7 +522,7 @@ const TemplateDataEntryPage = () => {
             <ConfirmDialog
               subtitle="Unsaved changes will be discarded."
               confirmType="Leave"
-              handleClick={handleCancel}
+              handleClick={() => navigate("/cat-phishing/templates")}
               isOpen={cancelbtnOpen}
               setIsOpen={setCancelbtnOpen}
             />

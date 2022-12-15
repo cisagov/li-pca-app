@@ -45,7 +45,7 @@ const AlertDialog = (props) => {
 
 AlertDialog.propTypes = {
   title: PropTypes.string,
-  subtitle: PropTypes.string,
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   isOpen: PropTypes.bool,
   closeDialog: PropTypes.func,
   setIsOpen: PropTypes.func,

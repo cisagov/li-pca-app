@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
@@ -41,42 +42,37 @@ function CustomToolbar(props) {
   let navigate = useNavigate();
   const values = {};
   const searchTextField = (
-    <Box sx={{ p: 0.5, pb: 0 }}>
-      <TextField
-        variant="standard"
-        value={props.value}
-        onChange={props.onChange}
-        placeholder="Search…"
-        InputProps={{
-          startAdornment: <SearchIcon fontSize="small" />,
-          endAdornment: (
-            <IconButton
-              title="Clear"
-              aria-label="Clear"
-              size="small"
-              style={{ visibility: props.value ? "visible" : "hidden" }}
-              onClick={props.clearSearch}
-            >
-              <ClearIcon fontSize="small" />
-            </IconButton>
-          ),
-        }}
-        sx={{
-          width: {
-            xs: 1,
-            sm: "auto",
-          },
-          m: (theme) => theme.spacing(1, 0.5, 1.5),
-          "& .MuiSvgIcon-root": {
-            mr: 0.5,
-          },
-          "& .MuiInput-underline:before": {
-            borderBottom: 1,
-            borderColor: "divider",
-          },
-        }}
-      />
-    </Box>
+    <TextField
+      fullWidth
+      variant="standard"
+      value={props.value}
+      onChange={props.onChange}
+      placeholder="Search…"
+      InputProps={{
+        startAdornment: <SearchIcon fontSize="small" />,
+        endAdornment: (
+          <IconButton
+            title="Clear"
+            aria-label="Clear"
+            size="small"
+            style={{ visibility: props.value ? "visible" : "hidden" }}
+            onClick={props.clearSearch}
+          >
+            <ClearIcon fontSize="small" />
+          </IconButton>
+        ),
+      }}
+      sx={{
+        m: (theme) => theme.spacing(1, 0.5, 1.5),
+        "& .MuiSvgIcon-root": {
+          mr: 0.5,
+        },
+        "& .MuiInput-underline:before": {
+          borderBottom: 1,
+          borderColor: "divider",
+        },
+      }}
+    />
   );
   let newEntryButton;
   if (props.tableCategory != "Phish Reconnaissance") {
@@ -97,11 +93,17 @@ function CustomToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      {searchTextField}
-      <GridToolbarColumnsButton />
-      <GridToolbarFilterButton />
-      <GridToolbarExport />
-      {newEntryButton}
+      <Grid container>
+        <Grid item xs={11} sm={7} md={5} lg={5} xl={4} sx={{ p: 0.5, pb: 0 }}>
+          {searchTextField}
+        </Grid>
+        <Grid item xs={12} sm={12} md={7} lg={7} xl={7} sx={{ p: 1, pl: 1 }}>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarExport />
+          {newEntryButton}
+        </Grid>
+      </Grid>
     </GridToolbarContainer>
   );
 }
@@ -112,6 +114,7 @@ MainDataTable.propTypes = {
   editEntryRoute: PropTypes.string,
   tableCategory: PropTypes.string,
   deleteEntry: PropTypes.func,
+  apiType: PropTypes.string,
 };
 
 export default function MainDataTable(props) {
@@ -123,6 +126,7 @@ export default function MainDataTable(props) {
   const [getError, setError] = React.useState([false, ""]);
   let [rowData, setRowData] = React.useState("");
   let pageSize = 10;
+  let rowsPerPage = 10;
   let density = "standard";
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
@@ -169,6 +173,7 @@ export default function MainDataTable(props) {
     });
   } else {
     pageSize = 5;
+    rowsPerPage = 5;
     density = "compact";
   }
   if (
@@ -199,7 +204,7 @@ export default function MainDataTable(props) {
   }
 
   const confirmDelete = () => {
-    props.deleteEntry(rowData._id, setError);
+    props.deleteEntry(props.apiType, rowData._id, setError);
     setTimeout(() => {
       setDeletebtnOpen(false);
       setDelete(true);
@@ -222,7 +227,7 @@ export default function MainDataTable(props) {
         }}
         pageSize={pageSize}
         density={density}
-        rowsPerPageOptions={[10]}
+        rowsPerPageOptions={[rowsPerPage]}
         componentsProps={{
           toolbar: {
             value: searchText,

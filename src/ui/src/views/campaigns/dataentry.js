@@ -4,6 +4,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
+import MainCard from "ui-component/cards/MainCard";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
@@ -11,8 +12,8 @@ import Typography from "@mui/material/Typography";
 
 // project imports
 import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
+import CampaignReviewForm from "ui-component/forms/CampaignReviewForm";
 import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
-import MainCard from "ui-component/cards/MainCard";
 
 // ==============================|| Create/Update Campaign View ||============================== //
 
@@ -60,7 +61,7 @@ const CampaignDataEntryPage = () => {
       </Button>
       <Box sx={{ flex: "1 1 auto" }} />
       <Button onClick={handleNext}>
-        {activeStep === steps.length - 1 ? "Finish" : "Next"}
+        {activeStep === steps.length - 1 ? "Send Campaign" : "Next"}
       </Button>
     </Box>
   );
@@ -118,9 +119,7 @@ const CampaignDataEntryPage = () => {
                 </>
               ) : (
                 <>
-                  <Typography sx={{ mt: 2, mb: 1 }}>
-                    Step {activeStep + 1}
-                  </Typography>
+                  <CampaignReviewForm />
                   {stepButtons}
                 </>
               )}
