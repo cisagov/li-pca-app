@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 // material-ui
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import MainCard from "ui-component/cards/MainCard";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
@@ -16,6 +16,7 @@ import CampaignDeliveryForm from "ui-component/forms/CampaignDeliveryForm";
 import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
 import CampaignReviewForm from "ui-component/forms/CampaignReviewForm";
 import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
+import MainCard from "ui-component/cards/MainCard";
 
 //third party
 import { useFormik } from "formik";
@@ -37,10 +38,10 @@ const camRowsTransform = (campaignRows) => {
     campaignRows.status = false;
   }
   if (!campaignRows.hasOwnProperty("admin_email")) {
-    campaignRows.fed_admin = "";
+    campaignRows.admin_email = "";
   }
   if (!campaignRows.hasOwnProperty("operator_email")) {
-    campaignRows.operator = "";
+    campaignRows.operator_email = "";
   }
   if (!campaignRows.hasOwnProperty("sending_domain_id")) {
     campaignRows.sending_domain_id = "";
@@ -55,13 +56,13 @@ const camRowsTransform = (campaignRows) => {
     campaignRows.customer_id = "";
   }
   if (!campaignRows.hasOwnProperty("customer_poc")) {
-    campaignRows.operator = {};
+    campaignRows.customer_poc = {};
   }
   if (!campaignRows.hasOwnProperty("target_emails")) {
     campaignRows.target_emails = [];
   }
   if (!campaignRows.hasOwnProperty("target_email_domains")) {
-    campaignRows.target_emails = [];
+    campaignRows.target_email_domains = [];
   }
   if (!campaignRows.hasOwnProperty("target_count")) {
     campaignRows.target_count = "";
@@ -100,12 +101,17 @@ const validationSchema = yup.object({
     .required("Operator email is required"),
 });
 
+const initialFieldsToValidate = {
+  name: true,
+  admin_email: true,
+  operator_email: true,
+};
+
 const CampaignDataEntryPage = () => {
   const { state } = useLocation();
   const campaignValues = camRowsTransform(state.row);
   const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set());
-
+  const [invalidAert, setInvalidAlert] = useState(false);
   const formik = useFormik({
     initialValues: campaignValues,
     validationSchema: validationSchema,
@@ -116,17 +122,8 @@ const CampaignDataEntryPage = () => {
     },
   });
 
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
   const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
   };
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -137,22 +134,41 @@ const CampaignDataEntryPage = () => {
   const handleStep = (step) => () => {
     setActiveStep(step);
   };
-  const stepButtons = (
-    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-      <Button
-        color="inherit"
-        disabled={activeStep === 0}
-        onClick={handleBack}
-        sx={{ mr: 1 }}
-      >
-        Back
-      </Button>
-      <Box sx={{ flex: "1 1 auto" }} />
-      <Button onClick={handleNext}>
-        {activeStep === steps.length - 1 ? "Send Campaign" : "Next"}
-      </Button>
-    </Box>
+  const backButton = (
+    <Button
+      color="inherit"
+      disabled={activeStep === 0}
+      onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)}
+      sx={{ mr: 1 }}
+    >
+      Back
+    </Button>
   );
+
+  const invalidAlertJSX = (
+    <>
+      {invalidAert ? (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          Some fields are incomplete or incorrect. Please address them before
+          continuing.
+        </Alert>
+      ) : (
+        <></>
+      )}
+    </>
+  );
+  const [value, setValue] = useState(0);
+  const handleInitialNext = (event, newValue) => {
+    formik.setTouched(initialFieldsToValidate);
+    if (formik.isValid) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setValue(newValue);
+      setInvalidAlert(false);
+    } else {
+      setInvalidAlert(true);
+    }
+  };
+
   return (
     <MainCard title={"Campaign" + " Wizard"}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1300 }}>
@@ -166,12 +182,8 @@ const CampaignDataEntryPage = () => {
                   alternativeLabel
                 >
                   {steps.map((label, index) => {
-                    const stepProps = {};
-                    if (isStepSkipped(index)) {
-                      stepProps.completed = false;
-                    }
                     return (
-                      <Step key={label} {...stepProps}>
+                      <Step key={label}>
                         <StepButton color="inherit" onClick={handleStep(index)}>
                           {label}
                         </StepButton>
@@ -192,22 +204,40 @@ const CampaignDataEntryPage = () => {
                 ) : activeStep == 0 ? (
                   <>
                     <CampaignInitialForm formik={formik} />
-                    {stepButtons}
+                    {invalidAlertJSX}
+                    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                      {backButton}
+                      <Box sx={{ flex: "1 1 auto" }} />
+                      <Button onClick={handleInitialNext}>Next</Button>
+                    </Box>
                   </>
                 ) : activeStep == 1 ? (
                   <>
                     <CampaignTemplateForm />
-                    {stepButtons}
+                    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                      {backButton}
+                      <Box sx={{ flex: "1 1 auto" }} />
+                      <Button onClick={handleNext}>Next</Button>
+                    </Box>
                   </>
                 ) : activeStep == 2 ? (
                   <>
                     <CampaignDeliveryForm />
-                    {stepButtons}
+                    {invalidAlertJSX}
+                    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                      {backButton}
+                      <Box sx={{ flex: "1 1 auto" }} />
+                      <Button onClick={handleNext}>Next</Button>
+                    </Box>
                   </>
                 ) : (
                   <>
                     <CampaignReviewForm />
-                    {stepButtons}
+                    <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                      {backButton}
+                      <Box sx={{ flex: "1 1 auto" }} />
+                      <Button onClick={handleNext}>Send Campaign</Button>
+                    </Box>
                   </>
                 )}
               </Box>

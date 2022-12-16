@@ -184,15 +184,16 @@ const CampaignInitialForm = (props) => {
             id="admin_email"
             name="admin_email"
             label="Admin Email"
-            // value={props.formik.values.subject}
-            // onChange={props.formik.handleChange}
-            // error={
-            //   props.formik.touched.subject &&
-            //   Boolean(props.formik.errors.subject)
-            // }
-            // helperText={
-            //   props.formik.touched.subject && props.formik.errors.subject
-            // }
+            value={props.formik.values.admin_email}
+            onChange={props.formik.handleChange}
+            error={
+              props.formik.touched.admin_email &&
+              Boolean(props.formik.errors.admin_email)
+            }
+            helperText={
+              props.formik.touched.admin_email &&
+              props.formik.errors.admin_email
+            }
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -207,15 +208,16 @@ const CampaignInitialForm = (props) => {
             id="operator_email"
             name="operator_email"
             label="Operator Email"
-            // value={props.formik.values.subject}
-            // onChange={props.formik.handleChange}
-            // error={
-            //   props.formik.touched.subject &&
-            //   Boolean(props.formik.errors.subject)
-            // }
-            // helperText={
-            //   props.formik.touched.subject && props.formik.errors.subject
-            // }
+            value={props.formik.values.operator_email}
+            onChange={props.formik.handleChange}
+            error={
+              props.formik.touched.operator_email &&
+              Boolean(props.formik.errors.operator_email)
+            }
+            helperText={
+              props.formik.touched.operator_email &&
+              props.formik.errors.operator_email
+            }
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
