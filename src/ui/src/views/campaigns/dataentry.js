@@ -56,7 +56,7 @@ const camRowsTransform = (campaignRows) => {
     campaignRows.customer_id = "";
   }
   if (!campaignRows.hasOwnProperty("customer_poc")) {
-    campaignRows.customer_poc = {};
+    campaignRows.customer_poc = "";
   }
   if (!campaignRows.hasOwnProperty("target_emails")) {
     campaignRows.target_emails = [];

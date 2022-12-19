@@ -19,46 +19,52 @@ import { useGetAll } from "services/api.js";
 
 const cols = [
   { field: "id", hide: true },
-  { field: "name", headerName: "Name", midWidth: 500, flex: 1 },
-  { field: "identifier", headerName: "Identifier", midWidth: 100, flex: 1 },
+  { field: "name", headerName: "Name", midWidth: 500, flex: 1.5 },
+  { field: "identifier", headerName: "Identifier", midWidth: 100, flex: 0.5 },
   {
-    field: "primaryPOC",
-    headerName: "Primary Point of Contact",
+    field: "address_1",
+    headerName: "Address 1",
     midWidth: 200,
     flex: 1,
   },
+  {
+    field: "address_2",
+    headerName: "Address 2",
+    midWidth: 100,
+    flex: 0.5,
+  },
+  {
+    field: "city",
+    headerName: "City",
+    midWidth: 150,
+    flex: 1,
+  },
+  {
+    field: "state",
+    headerName: "State",
+    midWidth: 100,
+    flex: 0.75,
+  },
+  {
+    field: "zip",
+    headerName: "Zip",
+    midWidth: 100,
+    flex: 0.5,
+  },
 ];
-const cusRows = (rowsArray) => {
-  if (Object.keys(rowsArray).length !== 0) {
-    let counter = 0;
-    let cusRows = [];
-    cusRows = Array.from(rowsArray);
-    cusRows.forEach((entry) => {
-      entry["id"] = counter;
-      counter = counter + 1;
-      entry["primaryPOC"] =
-        entry["contact_list"][0]["first_name"] +
-        " " +
-        entry["contact_list"][0]["last_name"];
-    });
-    return rowsArray;
-  }
-  return [];
-};
-// const getData = require("views/customers/mockCusData.json");
 
 const CampaignInitialForm = (props) => {
   const customers = useGetAll("customers");
   const domains = useGetAll("sending_domains");
   const landingPages = useGetAll("landing_pages");
-  const rows = cusRows(customers.getData);
   const [cusShown, showCus] = useState(false);
   const [cusSelected, selectCus] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
   const handleRowClick = (params) => {
-    // console.log(params.row);
     selectCus(true);
     setSelectedRow(params.row);
+    props.formik.setFieldValue("customer_id", params.row._id);
+    props.formik.setFieldValue("customer_poc", "");
   };
   const cancelCusSelect = () => {
     if (Object.keys(selectedRow).length === 0) {
@@ -79,7 +85,7 @@ const CampaignInitialForm = (props) => {
           <>Unable to load customer data from the database.</>
         ) : (
           <AdvancedSimpleDataTable
-            data={{ rows: rows, columns: cols }}
+            data={{ rows: customers.getData, columns: cols }}
             handleRowClick={handleRowClick}
           />
         )}
@@ -92,23 +98,24 @@ const CampaignInitialForm = (props) => {
     </>
   );
   const custDisplay = (
-    <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-      <Card variant="outlined" style={{ backgroundColor: "#fafafa" }}>
-        <CardContent sx={{ m: -1.5 }}>
-          <Typography variant="h5" color="#8a8a8a">
-            {selectedRow.name} ({selectedRow.identifier})
-          </Typography>
-          <Typography color="#8a8a8a">
-            {selectedRow.address_1} {selectedRow.address_2}
-            <br />
-            {selectedRow.city}, {selectedRow.state}
-            {" " + selectedRow.zip_code}
-          </Typography>
-        </CardContent>
-      </Card>
-    </Grid>
+    <>
+      <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+        <Card variant="outlined" style={{ backgroundColor: "#fafafa" }}>
+          <CardContent sx={{ m: -1.5 }}>
+            <Typography variant="h5" color="#8a8a8a">
+              {selectedRow.name} ({selectedRow.identifier})
+            </Typography>
+            <Typography color="#8a8a8a">
+              {selectedRow.address_1} {selectedRow.address_2}
+              <br />
+              {selectedRow.city}, {selectedRow.state}
+              {" " + selectedRow.zip_code}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </>
   );
-
   return (
     <>
       <Divider color="gray" sx={{ height: 2 }} />
@@ -296,57 +303,38 @@ const CampaignInitialForm = (props) => {
           </Grid>
         ) : !cusSelected && Object.keys(selectedRow).length == 0 ? (
           custTable
-        ) : !cusSelected && Object.keys(selectedRow).length != 0 ? (
-          <>
-            {custDisplay}
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <TextField
-                size="small"
-                fullWidth
-                id="poc_name"
-                name="poc_name"
-                label="Primary Point of Contact"
-                value={
-                  selectedRow.contact_list[0].first_name +
-                  " " +
-                  selectedRow.contact_list[0].last_name
-                }
-                // onChange={props.formik.handleChange}
-                // error={
-                //   props.formik.touched.subject &&
-                //   Boolean(props.formik.errors.subject)
-                // }
-                // helperText={
-                //   props.formik.touched.subject && props.formik.errors.subject
-                // }
-              />
-            </Grid>
-            {custTable}
-          </>
         ) : (
           <>
             {custDisplay}
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
               <TextField
                 size="small"
+                select
                 fullWidth
-                id="poc_name"
-                name="poc_name"
+                id="customer_poc"
+                name="customer_poc"
                 label="Primary Point of Contact"
-                value={
-                  selectedRow.contact_list[0].first_name +
-                  " " +
-                  selectedRow.contact_list[0].last_name
+                defaultValue={""}
+                value={props.formik.values.customer_poc}
+                onChange={props.formik.handleChange}
+                error={
+                  props.formik.touched.customer_poc &&
+                  Boolean(props.formik.errors.customer_poc)
                 }
-                // onChange={props.formik.handleChange}
-                // error={
-                //   props.formik.touched.subject &&
-                //   Boolean(props.formik.errors.subject)
-                // }
-                // helperText={
-                //   props.formik.touched.subject && props.formik.errors.subject
-                // }
-              />
+                helperText={
+                  props.formik.touched.customer_poc &&
+                  props.formik.errors.customer_poc
+                }
+              >
+                {selectedRow.contact_list.map((entry, index) => {
+                  let name = entry.first_name + " " + entry.last_name;
+                  return (
+                    <MenuItem key={index} value={name}>
+                      {name}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
             </Grid>
             <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
               <Button
@@ -358,6 +346,11 @@ const CampaignInitialForm = (props) => {
               </Button>
             </Grid>
           </>
+        )}
+        {!cusSelected && Object.keys(selectedRow).length != 0 ? (
+          <>{custTable}</>
+        ) : (
+          <></>
         )}
         <Grid item sx={{ mb: 2 }} />
       </Grid>
