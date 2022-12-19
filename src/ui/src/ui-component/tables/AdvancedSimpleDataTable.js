@@ -105,6 +105,7 @@ export default function AdvancedSimpleDataTable(props) {
           pageSize={10}
           rowsPerPageOptions={[10]}
           density="compact"
+          getRowId={(row) => row._id}
           onRowClick={props.handleRowClick}
           componentsProps={{
             toolbar: {

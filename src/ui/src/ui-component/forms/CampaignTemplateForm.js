@@ -31,24 +31,9 @@ const cols = [
   },
 ];
 
-const temRows = (rowsArray) => {
-  if (Object.keys(rowsArray).length !== 0) {
-    let counter = 0;
-    let temRows = [];
-    temRows = Array.from(rowsArray);
-    temRows.forEach((entry) => {
-      entry["id"] = counter;
-      counter = counter + 1;
-    });
-    return rowsArray;
-  }
-  return [];
-};
-
 export default function CampaignTemplateForm() {
   // const getData = require("views/templates/mockTemData.json");
   const { isLoading, getData, getError } = useGetAll("templates");
-  const rows = temRows(getData);
   const [selectedRow, setRow] = useState({});
   const [htmlValue, setHTMLValue] = useState("");
   const handleRowClick = (params) => {
@@ -78,7 +63,7 @@ export default function CampaignTemplateForm() {
             Select a template by clicking on a row.
           </Typography>
           <AdvancedSimpleDataTable
-            data={{ rows: rows, columns: cols }}
+            data={{ rows: getData, columns: cols }}
             handleRowClick={handleRowClick}
           />
         </Grid>
