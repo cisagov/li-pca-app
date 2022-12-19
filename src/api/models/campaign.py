@@ -152,15 +152,25 @@ class Campaign(Model):
 class CampaignSchema(BaseSchema):
     """Campaign Schema."""
 
+    admin_email = fields.Str()
+    archived = fields.Bool()
     assessment_uuid = fields.Str()
+    customer_id = fields.Str()
+    customer_poc = fields.Str()
     description = fields.Str()
+    email_template_uuid = fields.Str()
     end_datetime = DateTimeField()
+    landing_page_id = fields.Str()
+    landing_page_url = fields.Str()
     name = fields.Str()
+    operator_email = fields.Str()
+    sending_domain_id = fields.Str()
     start_datetime = DateTimeField()
     status = fields.Str(
         validate=validate.OneOf(["queued", "running", "completed", "error"])
     )
-    target_template_uuid = fields.Str()
-    email_template_uuid = fields.Str()
     target_count = fields.Int()
-    archived = fields.Bool()
+    target_template_uuid = fields.Str()
+    target_emails = fields.List(fields.Str())
+    target_count = fields.Int()
+    time_zone = fields.Str()
