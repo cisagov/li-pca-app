@@ -17,6 +17,7 @@ import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
 import CampaignReviewForm from "ui-component/forms/CampaignReviewForm";
 import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
 import MainCard from "ui-component/cards/MainCard";
+import { useGetAll } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
@@ -112,6 +113,9 @@ const CampaignDataEntryPage = () => {
   const campaignValues = camRowsTransform(state.row);
   const [activeStep, setActiveStep] = useState(0);
   const [invalidAert, setInvalidAlert] = useState(false);
+  const customers = useGetAll("customers");
+  const domains = useGetAll("sending_domains");
+  const landingPages = useGetAll("landing_pages");
   const formik = useFormik({
     initialValues: campaignValues,
     validationSchema: validationSchema,
@@ -205,7 +209,12 @@ const CampaignDataEntryPage = () => {
                   </>
                 ) : activeStep == 0 ? (
                   <>
-                    <CampaignInitialForm formik={formik} />
+                    <CampaignInitialForm
+                      formik={formik}
+                      customers={customers}
+                      domains={domains}
+                      landingPages={landingPages}
+                    />
                     {invalidAlertJSX}
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}

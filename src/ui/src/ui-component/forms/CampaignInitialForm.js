@@ -15,7 +15,6 @@ import Typography from "@mui/material/Typography";
 
 // project imports
 import AdvancedSimpleDataTable from "ui-component/tables/AdvancedSimpleDataTable";
-import { useGetAll } from "services/api.js";
 
 const cols = [
   { field: "id", hide: true },
@@ -54,13 +53,9 @@ const cols = [
 ];
 
 const CampaignInitialForm = (props) => {
-  const customers = useGetAll("customers");
-  const domains = useGetAll("sending_domains");
-  const landingPages = useGetAll("landing_pages");
   const [cusShown, showCus] = useState(false);
   const [cusSelected, selectCus] = useState(false);
   const [selectedCusRow, setSelectedCusRow] = useState({});
-  const [targetsFile, setTargetsFile] = useState([]);
   const handleRowClick = (params) => {
     selectCus(true);
     setSelectedCusRow(params.row);
@@ -80,13 +75,13 @@ const CampaignInitialForm = (props) => {
         <Typography variant="caption" sx={{ mb: 0.5 }} component="div">
           Select a customer by clicking on a row.
         </Typography>
-        {customers.isLoading ? (
+        {props.customers.isLoading ? (
           <>Loading...</>
-        ) : customers.getError[0] ? (
+        ) : props.customers.getError[0] ? (
           <>Unable to load customer data from the database.</>
         ) : (
           <AdvancedSimpleDataTable
-            data={{ rows: customers.getData, columns: cols }}
+            data={{ rows: props.customers.getData, columns: cols }}
             handleRowClick={handleRowClick}
           />
         )}
@@ -191,7 +186,7 @@ const CampaignInitialForm = (props) => {
               props.formik.errors.sending_domain_id
             }
           >
-            {domains.getData.map((entry) => {
+            {props.domains.getData.map((entry) => {
               return (
                 <MenuItem key={entry._id} value={entry._id}>
                   {entry.name}
@@ -273,7 +268,7 @@ const CampaignInitialForm = (props) => {
               props.formik.errors.landing_page_id
             }
           >
-            {landingPages.getData.map((entry) => {
+            {props.landingPages.getData.map((entry) => {
               return (
                 <MenuItem key={entry._id} value={entry._id}>
                   {entry.name}
@@ -472,6 +467,9 @@ const CampaignInitialForm = (props) => {
 
 CampaignInitialForm.propTypes = {
   formik: PropTypes.object,
+  customers: PropTypes.object,
+  domains: PropTypes.object,
+  landingPages: PropTypes.object,
 };
 
 export default CampaignInitialForm;
