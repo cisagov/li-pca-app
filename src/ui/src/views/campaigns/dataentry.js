@@ -118,6 +118,8 @@ const CampaignDataEntryPage = () => {
     validateOnMount: true,
     validateOnChange: true,
     onSubmit: (values) => {
+      values.target_emails = values.target_emails.split("\n");
+      values.target_email_domains = values.target_email_domains.split(",");
       console.log(values);
     },
   });
