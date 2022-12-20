@@ -59,15 +59,16 @@ const CampaignInitialForm = (props) => {
   const landingPages = useGetAll("landing_pages");
   const [cusShown, showCus] = useState(false);
   const [cusSelected, selectCus] = useState(false);
-  const [selectedRow, setSelectedRow] = useState({});
+  const [selectedCusRow, setSelectedCusRow] = useState({});
+  const [targetsFile, setTargetsFile] = useState([]);
   const handleRowClick = (params) => {
     selectCus(true);
-    setSelectedRow(params.row);
+    setSelectedCusRow(params.row);
     props.formik.setFieldValue("customer_id", params.row._id);
     props.formik.setFieldValue("customer_poc", "");
   };
   const cancelCusSelect = () => {
-    if (Object.keys(selectedRow).length === 0) {
+    if (Object.keys(selectedCusRow).length === 0) {
       showCus(false);
     } else {
       selectCus(true);
@@ -97,24 +98,44 @@ const CampaignInitialForm = (props) => {
       </Grid>
     </>
   );
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      let fileReader = new FileReader();
+      fileReader.readAsText(file);
+      fileReader.onload = function () {
+        props.formik.setFieldValue("target_emails", fileReader.result);
+      };
+      fileReader.onerror = function () {
+        console.log(fileReader.error);
+      };
+    }
+  };
+  const handleDuplicates = () => {
+    const target_emails = props.formik.values.target_emails;
+    const newLineExpression = /\r\n|\n\r|\n|\r/g;
+    const new_te = target_emails
+      .split(newLineExpression)
+      .filter((item, index, array) => array.indexOf(item) === index)
+      .join("\n");
+    props.formik.setFieldValue("target_emails", new_te);
+  };
   const custDisplay = (
-    <>
-      <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-        <Card variant="outlined" style={{ backgroundColor: "#fafafa" }}>
-          <CardContent sx={{ m: -1.5 }}>
-            <Typography variant="h5" color="#8a8a8a">
-              {selectedRow.name} ({selectedRow.identifier})
-            </Typography>
-            <Typography color="#8a8a8a">
-              {selectedRow.address_1} {selectedRow.address_2}
-              <br />
-              {selectedRow.city}, {selectedRow.state}
-              {" " + selectedRow.zip_code}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-    </>
+    <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+      <Card variant="outlined" style={{ backgroundColor: "#fafafa" }}>
+        <CardContent sx={{ m: -1.5 }}>
+          <Typography variant="h5" color="#8a8a8a">
+            {selectedCusRow.name} ({selectedCusRow.identifier})
+          </Typography>
+          <Typography color="#8a8a8a">
+            {selectedCusRow.address_1} {selectedCusRow.address_2}
+            <br />
+            {selectedCusRow.city}, {selectedCusRow.state}
+            {" " + selectedCusRow.zip_code}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Grid>
   );
   return (
     <>
@@ -301,7 +322,7 @@ const CampaignInitialForm = (props) => {
               Select Customer
             </Button>
           </Grid>
-        ) : !cusSelected && Object.keys(selectedRow).length == 0 ? (
+        ) : !cusSelected && Object.keys(selectedCusRow).length == 0 ? (
           custTable
         ) : (
           <>
@@ -326,7 +347,7 @@ const CampaignInitialForm = (props) => {
                   props.formik.errors.customer_poc
                 }
               >
-                {selectedRow.contact_list.map((entry, index) => {
+                {selectedCusRow.contact_list.map((entry, index) => {
                   let name = entry.first_name + " " + entry.last_name;
                   return (
                     <MenuItem key={index} value={name}>
@@ -347,7 +368,7 @@ const CampaignInitialForm = (props) => {
             </Grid>
           </>
         )}
-        {!cusSelected && Object.keys(selectedRow).length != 0 ? (
+        {!cusSelected && Object.keys(selectedCusRow).length != 0 ? (
           <>{custTable}</>
         ) : (
           <></>
@@ -370,19 +391,20 @@ const CampaignInitialForm = (props) => {
           <TextField
             size="small"
             multiline
-            minRows={2}
+            minRows={1}
             fullWidth
-            id="target_domains"
-            name="target_domains"
-            label="Target Domains"
-            // onChange={props.formik.handleChange}
-            // error={
-            //   props.formik.touched.subject &&
-            //   Boolean(props.formik.errors.subject)
-            // }
-            // helperText={
-            //   props.formik.touched.subject && props.formik.errors.subject
-            // }
+            id="target_email_domains"
+            name="target_email_domains"
+            label="Target Email Domains"
+            onChange={props.formik.handleChange}
+            error={
+              props.formik.touched.target_email_domains &&
+              Boolean(props.formik.errors.target_email_domains)
+            }
+            helperText={
+              props.formik.touched.target_email_domains &&
+              props.formik.errors.target_email_domains
+            }
           />
           <Typography variant="caption" sx={{ mt: 1 }} component="div">
             Specify the domains that the target emails can be under. Provide a
@@ -395,22 +417,24 @@ const CampaignInitialForm = (props) => {
             Target Recipients
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+        <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
           <Button
+            component="label"
             variant="contained"
             fullWidth
             endIcon={<UploadIcon />}
-            // onClick={() => selectCus(false)}
           >
+            <input
+              type="file"
+              accept=".csv, text/plain"
+              hidden
+              onChange={handleFileUpload}
+            />
             Upload Email Targets
           </Button>
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-          <Button
-            variant="contained"
-            fullWidth
-            // onClick={() => selectCus(false)}
-          >
+        <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+          <Button variant="contained" fullWidth onClick={handleDuplicates}>
             Remove Duplicate Emails
           </Button>
         </Grid>
@@ -420,22 +444,24 @@ const CampaignInitialForm = (props) => {
             multiline
             minRows={2}
             fullWidth
+            value={props.formik.values.target_emails}
             id="target_emails"
             name="target_emails"
             label="Target Emails"
-            // onChange={props.formik.handleChange}
-            // error={
-            //   props.formik.touched.subject &&
-            //   Boolean(props.formik.errors.subject)
-            // }
-            // helperText={
-            //   props.formik.touched.subject && props.formik.errors.subject
-            // }
+            onChange={props.formik.handleChange}
+            error={
+              props.formik.touched.target_emails &&
+              Boolean(props.formik.errors.target_emails)
+            }
+            helperText={
+              props.formik.touched.target_emails &&
+              props.formik.errors.target_emails
+            }
           />
           <Typography variant="caption" sx={{ mt: 1 }} component="div">
-            Upload an Excel spreadsheet or comma-separated value text file
-            containing the list of target individuals or enter them directly in
-            the field below. <br />
+            Upload a .CSV file or an Excel spreadsheet saved as a .CSV or
+            comma-separated value text file containing the list of target
+            individuals or enter them directly in the field below. <br />
             Format: email, first name, last name, position
           </Typography>
         </Grid>
