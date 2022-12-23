@@ -1820,6 +1820,7 @@ components:
             - running
             - completed
             - error
+            - incomplete
         archived:
           type: boolean
         admin_email:
@@ -1837,6 +1838,10 @@ components:
         customer_poc:
           type: string
         target_emails:
+          type: array
+          items:
+            type: string
+        target_email_domains:
           type: array
           items:
             type: string

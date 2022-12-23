@@ -167,10 +167,11 @@ class CampaignSchema(BaseSchema):
     sending_domain_id = fields.Str()
     start_datetime = DateTimeField()
     status = fields.Str(
-        validate=validate.OneOf(["queued", "running", "completed", "error"])
+        validate=validate.OneOf(["queued", "running", "completed", "error", "incomplete"])
     )
     target_count = fields.Int()
     target_template_uuid = fields.Str()
     target_emails = fields.List(fields.Str())
+    target_email_domains = fields.List(fields.Str())
     target_count = fields.Int()
     time_zone = fields.Str()
