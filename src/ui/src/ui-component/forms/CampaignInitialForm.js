@@ -82,9 +82,7 @@ const CustomerDisplay = (props) => {
       </Grid>
     </>
   );
-  if (props.customers.isLoading) {
-    return <>Loading...</>;
-  } else if (props.customers.getError[0]) {
+  if (props.customers.getError[0]) {
     return <>Error loading customer data from the database.</>;
   } else if (!customer_id) {
     if (!tableDisplayed) {
@@ -220,7 +218,6 @@ const CampaignInitialForm = (props) => {
       .join("\n");
     props.formik.setFieldValue("target_emails", new_te);
   };
-  const loadingDisplay = <>Loading...</>;
   return (
     <>
       <Divider color="gray" sx={{ height: 2 }} />
@@ -257,9 +254,7 @@ const CampaignInitialForm = (props) => {
               Select the Sending Domain
             </Typography>
           </Box>
-          {props.domains.isLoading ? (
-            loadingDisplay
-          ) : props.domains.getError[0] ? (
+          {props.domains.getError[0] ? (
             <>Error loading domain data from the database.</>
           ) : (
             <TextField
@@ -344,9 +339,7 @@ const CampaignInitialForm = (props) => {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          {props.landingPages.isLoading ? (
-            loadingDisplay
-          ) : props.landingPages.getError[0] ? (
+          {props.landingPages.getError[0] ? (
             <>Error loading landing page data from the database.</>
           ) : (
             <TextField

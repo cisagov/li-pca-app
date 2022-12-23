@@ -170,7 +170,14 @@ const CampaignDataEntryPage = () => {
       setInvalidAlert(true);
     }
   };
-
+  if (
+    customers.isLoading ||
+    domains.isLoading ||
+    landingPages.isLoading ||
+    templates.isLoading
+  ) {
+    return <MainCard title={"Campaign" + " Wizard"}>Loading...</MainCard>;
+  }
   return (
     <MainCard title={"Campaign" + " Wizard"}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1300 }}>
@@ -242,7 +249,12 @@ const CampaignDataEntryPage = () => {
                   </>
                 ) : (
                   <>
-                    <CampaignReviewForm />
+                    <CampaignReviewForm
+                      formik={formik}
+                      customers={customers}
+                      domains={domains}
+                      landingPages={landingPages}
+                    />
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
                       <Box sx={{ flex: "1 1 auto" }} />

@@ -48,12 +48,10 @@ export default function CampaignTemplateForm(props) {
   const handleRowClick = (params) => {
     props.formik.setFieldValue("target_template_uuid", params.row._id);
   };
-  if (props.templates.isLoading) {
-    return <Typography>Loading...</Typography>;
-  } else if (props.templates.getError[0]) {
+  if (props.templates.getError[0]) {
     return (
       <Alert severity="error" sx={{ mb: 2 }}>
-        {props.templates.getError[1]}. Unable to load template data from the
+        {props.templates.getError[1]}. Error loading template data from the
         database.
       </Alert>
     );
