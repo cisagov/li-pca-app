@@ -69,7 +69,7 @@ const camRowsTransform = (campaignRows) => {
     campaignRows.target_count = "";
   }
   if (!campaignRows.hasOwnProperty("target_template_uuid")) {
-    campaignRows.target_template_uuid = [];
+    campaignRows.target_template_uuid = "";
   }
   if (!campaignRows.hasOwnProperty("start_datetime")) {
     campaignRows.start_datetime = "";
@@ -116,6 +116,7 @@ const CampaignDataEntryPage = () => {
   const customers = useGetAll("customers");
   const domains = useGetAll("sending_domains");
   const landingPages = useGetAll("landing_pages");
+  const templates = useGetAll("templates");
   const formik = useFormik({
     initialValues: campaignValues,
     validationSchema: validationSchema,
@@ -130,9 +131,6 @@ const CampaignDataEntryPage = () => {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   const handleReset = () => {
     setActiveStep(0);
@@ -163,12 +161,10 @@ const CampaignDataEntryPage = () => {
       )}
     </>
   );
-  const [value, setValue] = useState(0);
-  const handleInitialNext = (event, newValue) => {
+  const handleFirstNext = () => {
     formik.setTouched(initialFieldsToValidate);
     if (formik.isValid) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      setValue(newValue);
       setInvalidAlert(false);
     } else {
       setInvalidAlert(true);
@@ -219,12 +215,15 @@ const CampaignDataEntryPage = () => {
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
                       <Box sx={{ flex: "1 1 auto" }} />
-                      <Button onClick={handleInitialNext}>Next</Button>
+                      <Button onClick={handleFirstNext}>Next</Button>
                     </Box>
                   </>
                 ) : activeStep == 1 ? (
                   <>
-                    <CampaignTemplateForm />
+                    <CampaignTemplateForm
+                      templates={templates}
+                      formik={formik}
+                    />
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
                       <Box sx={{ flex: "1 1 auto" }} />
