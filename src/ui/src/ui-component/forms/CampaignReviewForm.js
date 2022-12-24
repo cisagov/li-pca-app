@@ -1,11 +1,36 @@
+import PropTypes from "prop-types";
+
 // material-ui
-import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-const CampaignReviewForm = () => {
+const CampaignReviewForm = (props) => {
+  const sending_domain_id = props.formik.values.sending_domain_id;
+  const landing_pg_id = props.formik.values.landing_page_id;
+  const customer_id = props.formik.values.customer_id;
+  const template_id = props.formik.values.target_template_uuid;
+  let sending_domain_name = "";
+  let landing_page_name = "";
+  let customer_name = "";
+  let template_name = "";
+  if (sending_domain_id && !props.domains.getError[0]) {
+    let entry = props.domains.getData.find((d) => d._id == sending_domain_id);
+    sending_domain_name = entry.name;
+  }
+  if (landing_pg_id && !props.landingPages.getError[0]) {
+    let entry = props.landingPages.getData.find((l) => l._id == landing_pg_id);
+    landing_page_name = entry.name;
+  }
+  if (customer_id && !props.customers.getError[0]) {
+    let entry = props.customers.getData.find((c) => c._id == customer_id);
+    customer_name = entry.name;
+  }
+  if (template_id && !props.templates.getError[0]) {
+    let entry = props.templates.getData.find((t) => t._id == template_id);
+    template_name = entry.name;
+  }
   return (
     <>
       <Divider color="gray" sx={{ height: 2 }} />
@@ -23,8 +48,7 @@ const CampaignReviewForm = () => {
             name="name"
             label="Campaign Name"
             disabled
-            value="Campaign Name"
-            // value={props.formik.values.name}
+            value={props.formik.values.name}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -40,8 +64,7 @@ const CampaignReviewForm = () => {
             name="admin_email"
             label="Admin Email"
             disabled
-            value="Admin email"
-            // value={props.formik.values.admin_email}
+            value={props.formik.values.admin_email}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -57,8 +80,7 @@ const CampaignReviewForm = () => {
             name="operator_email"
             label="Operator Email"
             disabled
-            value="Operator Email"
-            // value={props.formik.values.operator_email}
+            value={props.formik.values.operator_email}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -70,12 +92,11 @@ const CampaignReviewForm = () => {
           <TextField
             size="small"
             fullWidth
-            id="domain"
-            name="domain"
+            id="sending_domain_name"
+            name="sending_domain_name"
             label="Sending Domain"
             disabled
-            value="Sending Domain"
-            // value={props.formik.values.domain}
+            value={sending_domain_name}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -87,12 +108,11 @@ const CampaignReviewForm = () => {
           <TextField
             size="small"
             fullWidth
-            id="landing_page_id"
-            name="landing_page_id"
-            label="Landing Page Selection"
+            id="landing_page_name"
+            name="landing_page_name"
+            label="Landing Page"
             disabled
-            value="Landing Page"
-            // value={props.formik.values.landing_page_id}
+            value={landing_page_name}
           />
         </Grid>
       </Grid>
@@ -100,7 +120,7 @@ const CampaignReviewForm = () => {
       <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
           <Typography variant="h5" gutterBottom component="div">
-            Customer Name
+            Customer
           </Typography>
         </Grid>
         <Grid item xs={12} sm={9} md={9} lg={9} xl={8}>
@@ -109,10 +129,9 @@ const CampaignReviewForm = () => {
             fullWidth
             id="customer_name"
             name="customer_name"
-            label="Customer Name"
+            label="Customer"
             disabled
-            value="Customer Name"
-            // value={props.formik.values.customer_name}
+            value={customer_name}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -126,10 +145,9 @@ const CampaignReviewForm = () => {
             fullWidth
             id="poc_name"
             name="poc_name"
-            label="Point of Contact Name"
+            label="Point of Contact"
             disabled
-            value="Point of Contact Name"
-            // value={props.formik.values.poc_name}
+            value={props.formik.values.customer_poc}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -145,8 +163,8 @@ const CampaignReviewForm = () => {
             name="target_domains"
             label="Target Domains"
             disabled
-            value="Target Domains"
-            // value={props.formik.values.target_domains}
+            // value={props.formik.values.target_email_domains}
+            value="@domain.com"
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -162,8 +180,7 @@ const CampaignReviewForm = () => {
             name="target_emails"
             label="Target Emails"
             disabled
-            value="Target Emails"
-            // value={props.formik.values.target_emails}
+            value={props.formik.values.target_emails}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -177,10 +194,9 @@ const CampaignReviewForm = () => {
             fullWidth
             id="template_name"
             name="template_name"
-            label="Template Name"
+            label="Template ID"
             disabled
-            value="Template Name"
-            // value={props.formik.values.template_name}
+            value={template_name}
           />
         </Grid>
       </Grid>
@@ -188,60 +204,39 @@ const CampaignReviewForm = () => {
       <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
           <Typography variant="h5" gutterBottom component="div">
-            Schedule (Between Days)
+            Start Date and Time
           </Typography>
         </Grid>
         <Grid item xs={12} sm={9} md={9} lg={9} xl={8}>
           <TextField
             size="small"
             fullWidth
-            id="date_scheduled"
-            name="date_scheduled"
-            label="Date Scheduled"
+            id="start_datetime"
+            name="start_datetime"
+            label="Start Date and Time"
             disabled
-            value="2/12/2023 - 2/12/2023"
-            // value={props.formik.values.template_name}
+            value={props.formik.values.start_datetime}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
           <Typography variant="h5" gutterBottom component="div">
-            Schedule (Between Times)
+            End Date and Time
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={4} md={4} lg={4} xl={3.5}>
+        <Grid item xs={12} sm={9} md={9} lg={9} xl={8}>
           <TextField
             size="small"
             fullWidth
-            id="time_start"
-            name="time_start"
-            label="Time Start"
+            id="end_datetime"
+            name="end_datetime"
+            label="End Date and Time"
             disabled
-            value="09:00 AM"
-            // value={props.formik.values.time_start}
-          />
-        </Grid>
-        <Grid item xs={12} sm={1} md={1} lg={1} xl={1}>
-          <Box justifyContent="center" display="flex" sx={{ mt: 1 }}>
-            <Typography variant="h5" gutterBottom component="div">
-              To
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={4} md={4} lg={4} xl={3.5}>
-          <TextField
-            size="small"
-            fullWidth
-            id="time_end"
-            name="time_end"
-            label="Time End"
-            disabled
-            value="05:00 PM"
-            // value={props.formik.values.time_end}
+            value={props.formik.values.end_datetime}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
           <Typography variant="h5" gutterBottom component="div">
-            Schedule (Time Zone)
+            Time Zone
           </Typography>
         </Grid>
         <Grid item xs={12} sm={9} md={9} lg={9} xl={8}>
@@ -252,8 +247,7 @@ const CampaignReviewForm = () => {
             name="time_zone"
             label="Time Zone"
             disabled
-            value="Time Zone"
-            // value={props.formik.values.time_zone}
+            value={props.formik.values.time_zone}
           />
         </Grid>
       </Grid>
@@ -265,8 +259,12 @@ const CampaignReviewForm = () => {
   );
 };
 
-// CampaignReviewForm.propTypes = {
-//   formik: PropTypes.object,
-// };
+CampaignReviewForm.propTypes = {
+  formik: PropTypes.object,
+  customers: PropTypes.object,
+  domains: PropTypes.object,
+  landingPages: PropTypes.object,
+  templates: PropTypes.object,
+};
 
 export default CampaignReviewForm;
