@@ -254,6 +254,7 @@ const CampaignDataEntryPage = () => {
                       customers={customers}
                       domains={domains}
                       landingPages={landingPages}
+                      templates={templates}
                     />
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
