@@ -61,9 +61,14 @@ const camRowsTransform = (campaignRows) => {
   }
   if (!campaignRows.hasOwnProperty("target_emails")) {
     campaignRows.target_emails = [];
+  } else if (Array.isArray(campaignRows.target_emails)) {
+    campaignRows.target_emails = campaignRows["target_emails"].join("\r\n");
   }
   if (!campaignRows.hasOwnProperty("target_email_domains")) {
     campaignRows.target_email_domains = [];
+  } else if (Array.isArray(campaignRows.target_email_domains)) {
+    campaignRows.target_email_domains =
+      campaignRows["target_email_domains"].join(", ");
   }
   if (!campaignRows.hasOwnProperty("target_count")) {
     campaignRows.target_count = "";
@@ -123,8 +128,8 @@ const CampaignDataEntryPage = () => {
     validateOnMount: true,
     validateOnChange: true,
     onSubmit: (values) => {
-      values.target_emails = values.target_emails.split("\n");
-      values.target_email_domains = values.target_email_domains.split(",");
+      values.target_emails = values.target_emails.split(/\r?\n/);
+      values.target_email_domains = values.target_email_domains.split(", ");
       console.log(values);
     },
   });
