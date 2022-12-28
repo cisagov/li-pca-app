@@ -54,12 +54,13 @@ const cols = [
 ];
 
 const CustomerDisplay = (props) => {
-  const customer_id = props.formik.values.customer_id;
+  let formik = props.formik;
+  const customer_id = formik.values.customer_id;
   const [tableDisplayed, showTableDisplay] = useState(false);
   const handleRowClick = (params) => {
     showTableDisplay(false);
-    props.formik.setFieldValue("customer_id", params.row._id);
-    props.formik.setFieldValue("customer_poc", "");
+    formik.setFieldValue("customer_id", params.row._id);
+    formik.setFieldValue("customer_poc", "");
   };
   const cancelCusSelect = () => {
     showTableDisplay(false);
@@ -82,6 +83,17 @@ const CustomerDisplay = (props) => {
       </Grid>
     </>
   );
+  const selectButton = (
+    <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={() => showTableDisplay(true)}
+      >
+        Select Customer
+      </Button>
+    </Grid>
+  );
   if (props.customers.getError[0]) {
     return <>Error loading customer data from the database.</>;
   } else if (props.customers.getData.length == 0) {
@@ -95,17 +107,7 @@ const CustomerDisplay = (props) => {
     );
   } else if (!customer_id) {
     if (!tableDisplayed) {
-      return (
-        <Grid item xs={12} sm={6} md={3} lg={3} xl={3}>
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={() => showTableDisplay(true)}
-          >
-            Select Customer
-          </Button>
-        </Grid>
-      );
+      return selectButton;
     }
     return customerTableDisplay;
   } else if (customer_id) {
@@ -121,7 +123,7 @@ const CustomerDisplay = (props) => {
               remake or rechoose a customer.
             </Alert>
           </Grid>
-          {customerTableDisplay}
+          {tableDisplayed ? customerTableDisplay : selectButton}
         </>
       );
     }
@@ -151,15 +153,13 @@ const CustomerDisplay = (props) => {
             name="customer_poc"
             label="Primary Point of Contact"
             defaultValue={""}
-            value={props.formik.values.customer_poc}
-            onChange={props.formik.handleChange}
+            value={formik.values.customer_poc}
+            onChange={formik.handleChange}
             error={
-              props.formik.touched.customer_poc &&
-              Boolean(props.formik.errors.customer_poc)
+              formik.touched.customer_poc && Boolean(formik.errors.customer_poc)
             }
             helperText={
-              props.formik.touched.customer_poc &&
-              props.formik.errors.customer_poc
+              formik.touched.customer_poc && formik.errors.customer_poc
             }
           >
             {selectedRow.contact_list.map((entry, index) => {
@@ -205,13 +205,16 @@ CustomerDisplay.propTypes = {
 };
 
 const CampaignInitialForm = (props) => {
+  const domains = props.domains;
+  const landingPages = props.landingPages;
+  let formik = props.formik;
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       let fileReader = new FileReader();
       fileReader.readAsText(file);
       fileReader.onload = function () {
-        props.formik.setFieldValue("target_emails", fileReader.result);
+        formik.setFieldValue("target_emails", fileReader.result);
       };
       fileReader.onerror = function () {
         console.log(fileReader.error);
@@ -219,14 +222,22 @@ const CampaignInitialForm = (props) => {
     }
   };
   const handleDuplicates = () => {
-    const target_emails = props.formik.values.target_emails;
+    const target_emails = formik.values.target_emails;
     const newLineExpression = /\r\n|\n\r|\n|\r/g;
     const new_te = target_emails
       .split(newLineExpression)
       .filter((item, index, array) => array.indexOf(item) === index)
       .join("\n");
-    props.formik.setFieldValue("target_emails", new_te);
+    formik.setFieldValue("target_emails", new_te);
   };
+  if (!domains.getData.some((e) => e._id === formik.values.sending_domain_id)) {
+    formik.values.sending_domain_id = "";
+  }
+  if (
+    !landingPages.getData.some((e) => e._id === formik.values.landing_page_id)
+  ) {
+    formik.values.landing_page_id = "";
+  }
   return (
     <>
       <Divider color="gray" sx={{ height: 2 }} />
@@ -249,12 +260,10 @@ const CampaignInitialForm = (props) => {
             name="name"
             label="Campaign Name"
             placeholder="Enter a unique campaign name"
-            value={props.formik.values.name}
-            onChange={props.formik.handleChange}
-            error={
-              props.formik.touched.name && Boolean(props.formik.errors.name)
-            }
-            helperText={props.formik.touched.name && props.formik.errors.name}
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            error={formik.touched.name && Boolean(formik.errors.name)}
+            helperText={formik.touched.name && formik.errors.name}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -263,11 +272,11 @@ const CampaignInitialForm = (props) => {
               Select the Sending Domain
             </Typography>
           </Box>
-          {props.domains.getError[0] ? (
+          {domains.getError[0] ? (
             <Alert severity="error">
               Error loading domain data from the database.
             </Alert>
-          ) : props.domains.getData.length == 0 ? (
+          ) : domains.getData.length == 0 ? (
             <Alert severity="error">
               No domains found. Go to "Sending Domains" in the Main Menu to add
               them.
@@ -280,18 +289,18 @@ const CampaignInitialForm = (props) => {
               label="Sending Domain Selection"
               id="sending_domain_id"
               name="sending_domain_id"
-              value={props.formik.values.sending_domain_id}
-              onChange={props.formik.handleChange}
+              value={formik.values.sending_domain_id}
+              onChange={formik.handleChange}
               error={
-                props.formik.touched.sending_domain_id &&
-                Boolean(props.formik.errors.sending_domain_id)
+                formik.touched.sending_domain_id &&
+                Boolean(formik.errors.sending_domain_id)
               }
               helperText={
-                props.formik.touched.sending_domain_id &&
-                props.formik.errors.sending_domain_id
+                formik.touched.sending_domain_id &&
+                formik.errors.sending_domain_id
               }
             >
-              {props.domains.getData.map((entry) => {
+              {domains.getData.map((entry) => {
                 return (
                   <MenuItem key={entry._id} value={entry._id}>
                     {entry.name}
@@ -313,16 +322,12 @@ const CampaignInitialForm = (props) => {
             id="admin_email"
             name="admin_email"
             label="Admin Email"
-            value={props.formik.values.admin_email}
-            onChange={props.formik.handleChange}
+            value={formik.values.admin_email}
+            onChange={formik.handleChange}
             error={
-              props.formik.touched.admin_email &&
-              Boolean(props.formik.errors.admin_email)
+              formik.touched.admin_email && Boolean(formik.errors.admin_email)
             }
-            helperText={
-              props.formik.touched.admin_email &&
-              props.formik.errors.admin_email
-            }
+            helperText={formik.touched.admin_email && formik.errors.admin_email}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -337,15 +342,14 @@ const CampaignInitialForm = (props) => {
             id="operator_email"
             name="operator_email"
             label="Operator Email"
-            value={props.formik.values.operator_email}
-            onChange={props.formik.handleChange}
+            value={formik.values.operator_email}
+            onChange={formik.handleChange}
             error={
-              props.formik.touched.operator_email &&
-              Boolean(props.formik.errors.operator_email)
+              formik.touched.operator_email &&
+              Boolean(formik.errors.operator_email)
             }
             helperText={
-              props.formik.touched.operator_email &&
-              props.formik.errors.operator_email
+              formik.touched.operator_email && formik.errors.operator_email
             }
           />
         </Grid>
@@ -355,11 +359,11 @@ const CampaignInitialForm = (props) => {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          {props.landingPages.getError[0] ? (
+          {landingPages.getError[0] ? (
             <Alert severity="error" sx={{ mt: -1 }}>
               Error loading landing pages from the database.
             </Alert>
-          ) : props.landingPages.getData.length == 0 ? (
+          ) : landingPages.getData.length == 0 ? (
             <Alert severity="error" sx={{ mt: -1 }}>
               No landing pages found. Go to "Landing Pages" in the Main Menu to
               add them.
@@ -373,18 +377,17 @@ const CampaignInitialForm = (props) => {
               name="landing_page_id"
               label="Landing Page Selection"
               select
-              value={props.formik.values.landing_page_id}
-              onChange={props.formik.handleChange}
+              value={formik.values.landing_page_id}
+              onChange={formik.handleChange}
               error={
-                props.formik.touched.landing_page_id &&
-                Boolean(props.formik.errors.landing_page_id)
+                formik.touched.landing_page_id &&
+                Boolean(formik.errors.landing_page_id)
               }
               helperText={
-                props.formik.touched.landing_page_id &&
-                props.formik.errors.landing_page_id
+                formik.touched.landing_page_id && formik.errors.landing_page_id
               }
             >
-              {props.landingPages.getData.map((entry) => {
+              {landingPages.getData.map((entry) => {
                 return (
                   <MenuItem key={entry._id} value={entry._id}>
                     {entry.name}
@@ -407,15 +410,14 @@ const CampaignInitialForm = (props) => {
             id="landing_page_url"
             name="landing_page_url"
             label="Landing Page URL"
-            value={props.formik.values.landing_page_url}
-            onChange={props.formik.handleChange}
+            value={formik.values.landing_page_url}
+            onChange={formik.handleChange}
             error={
-              props.formik.touched.landing_page_url &&
-              Boolean(props.formik.errors.landing_page_url)
+              formik.touched.landing_page_url &&
+              Boolean(formik.errors.landing_page_url)
             }
             helperText={
-              props.formik.touched.landing_page_url &&
-              props.formik.errors.landing_page_url
+              formik.touched.landing_page_url && formik.errors.landing_page_url
             }
           />
           <Typography variant="caption" sx={{ mt: 1 }} component="div">
@@ -428,7 +430,7 @@ const CampaignInitialForm = (props) => {
             Assign the Customer
           </Typography>
         </Grid>
-        <CustomerDisplay formik={props.formik} customers={props.customers} />
+        <CustomerDisplay formik={formik} customers={props.customers} />
         <Grid item sx={{ mb: 2 }} />
       </Grid>
       <Divider color="gray" sx={{ height: 2 }} />
@@ -452,14 +454,14 @@ const CampaignInitialForm = (props) => {
             id="target_email_domains"
             name="target_email_domains"
             label="Target Email Domains"
-            onChange={props.formik.handleChange}
+            onChange={formik.handleChange}
             error={
-              props.formik.touched.target_email_domains &&
-              Boolean(props.formik.errors.target_email_domains)
+              formik.touched.target_email_domains &&
+              Boolean(formik.errors.target_email_domains)
             }
             helperText={
-              props.formik.touched.target_email_domains &&
-              props.formik.errors.target_email_domains
+              formik.touched.target_email_domains &&
+              formik.errors.target_email_domains
             }
           />
           <Typography variant="caption" sx={{ mt: 1 }} component="div">
@@ -500,18 +502,17 @@ const CampaignInitialForm = (props) => {
             multiline
             minRows={2}
             fullWidth
-            value={props.formik.values.target_emails}
+            value={formik.values.target_emails}
             id="target_emails"
             name="target_emails"
             label="Target Emails"
-            onChange={props.formik.handleChange}
+            onChange={formik.handleChange}
             error={
-              props.formik.touched.target_emails &&
-              Boolean(props.formik.errors.target_emails)
+              formik.touched.target_emails &&
+              Boolean(formik.errors.target_emails)
             }
             helperText={
-              props.formik.touched.target_emails &&
-              props.formik.errors.target_emails
+              formik.touched.target_emails && formik.errors.target_emails
             }
           />
           <Typography variant="caption" sx={{ mt: 1 }} component="div">
