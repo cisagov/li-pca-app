@@ -84,6 +84,15 @@ const CustomerDisplay = (props) => {
   );
   if (props.customers.getError[0]) {
     return <>Error loading customer data from the database.</>;
+  } else if (props.customers.getData.length == 0) {
+    return (
+      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Alert severity="error">
+          No customers found. Go to "Customers" in the Main Menu to add
+          customers.
+        </Alert>
+      </Grid>
+    );
   } else if (!customer_id) {
     if (!tableDisplayed) {
       return (
@@ -255,7 +264,14 @@ const CampaignInitialForm = (props) => {
             </Typography>
           </Box>
           {props.domains.getError[0] ? (
-            <>Error loading domain data from the database.</>
+            <Alert severity="error">
+              Error loading domain data from the database.
+            </Alert>
+          ) : props.domains.getData.length == 0 ? (
+            <Alert severity="error">
+              No domains found. Go to "Sending Domains" in the Main Menu to add
+              them.
+            </Alert>
           ) : (
             <TextField
               size="small"
@@ -340,7 +356,14 @@ const CampaignInitialForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           {props.landingPages.getError[0] ? (
-            <>Error loading landing page data from the database.</>
+            <Alert severity="error" sx={{ mt: -1 }}>
+              Error loading landing pages from the database.
+            </Alert>
+          ) : props.landingPages.getData.length == 0 ? (
+            <Alert severity="error" sx={{ mt: -1 }}>
+              No landing pages found. Go to "Landing Pages" in the Main Menu to
+              add them.
+            </Alert>
           ) : (
             <TextField
               sx={{ mt: -1 }}

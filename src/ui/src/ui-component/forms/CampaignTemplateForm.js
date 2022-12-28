@@ -55,6 +55,12 @@ export default function CampaignTemplateForm(props) {
         database.
       </Alert>
     );
+  } else if (props.templates.getData.length == 0) {
+    return (
+      <Alert severity="error" sx={{ mb: 2 }}>
+        No templates found. Go to "Templates" in the Main Menu to add templates.
+      </Alert>
+    );
   } else if (template_id) {
     const selectedRow = rows.find((template) => template._id == template_id);
     template_name = selectedRow.name;
