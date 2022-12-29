@@ -207,7 +207,7 @@ const CampaignInitialForm = (props) => {
       let fileReader = new FileReader();
       fileReader.readAsText(file);
       fileReader.onload = function () {
-        formik.setFieldValue("target_emails", fileReader.result);
+        formik.setFieldValue("target_emails_placeholder", fileReader.result);
       };
       fileReader.onerror = function () {
         console.log(fileReader.error);
@@ -215,13 +215,12 @@ const CampaignInitialForm = (props) => {
     }
   };
   const handleDuplicates = () => {
-    const target_emails = formik.values.target_emails;
     const newLineExpression = /\r\n|\n\r|\n|\r/g;
-    const new_te = target_emails
+    const new_te = formik.values.target_emails_placeholder
       .split(newLineExpression)
       .filter((item, index, array) => array.indexOf(item) === index)
       .join("\n");
-    formik.setFieldValue("target_emails", new_te);
+    formik.setFieldValue("target_emails_placeholder", new_te);
   };
   if (!domains.getData.some((e) => e._id === formik.values.sending_domain_id)) {
     formik.values.sending_domain_id = "";
@@ -444,17 +443,18 @@ const CampaignInitialForm = (props) => {
             multiline
             minRows={1}
             fullWidth
-            id="target_email_domains"
-            name="target_email_domains"
+            id="target_email_domains_placeholder"
+            name="target_email_domains_placeholder"
             label="Target Email Domains"
             onChange={formik.handleChange}
+            value={formik.values.target_email_domains_placeholder}
             error={
-              formik.touched.target_email_domains &&
-              Boolean(formik.errors.target_email_domains)
+              formik.touched.target_email_domains_placeholder &&
+              Boolean(formik.errors.target_email_domains_placeholder)
             }
             helperText={
-              formik.touched.target_email_domains &&
-              formik.errors.target_email_domains
+              formik.touched.target_email_domains_placeholder &&
+              formik.errors.target_email_domains_placeholder
             }
           />
           <Typography variant="caption" sx={{ mt: 1 }} component="div">
@@ -495,17 +495,18 @@ const CampaignInitialForm = (props) => {
             multiline
             minRows={2}
             fullWidth
-            value={formik.values.target_emails}
-            id="target_emails"
-            name="target_emails"
+            value={formik.values.target_emails_placeholder}
+            id="target_emails_placeholder"
+            name="target_emails_placeholder"
             label="Target Emails"
             onChange={formik.handleChange}
             error={
-              formik.touched.target_emails &&
-              Boolean(formik.errors.target_emails)
+              formik.touched.target_emails_placeholder &&
+              Boolean(formik.errors.target_emails_placeholder)
             }
             helperText={
-              formik.touched.target_emails && formik.errors.target_emails
+              formik.touched.target_emails_placeholder &&
+              formik.errors.target_emails_placeholder
             }
           />
           <Typography variant="caption" sx={{ mt: 1 }} component="div">

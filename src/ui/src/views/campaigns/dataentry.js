@@ -1,27 +1,31 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // material-ui
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
+import SendIcon from "@mui/icons-material/Send";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 
 // project imports
+import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import CampaignDeliveryForm from "ui-component/forms/CampaignDeliveryForm";
 import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
 import CampaignReviewForm from "ui-component/forms/CampaignReviewForm";
 import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
 import MainCard from "ui-component/cards/MainCard";
-import { useGetAll } from "services/api.js";
+import { useGetAll, submitEntry } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
 import * as yup from "yup";
+import ResultDialog from "ui-component/popups/ResultDialog";
 
 // ==============================|| Create/Update Campaign View ||============================== //
 
@@ -61,13 +65,16 @@ const camRowsTransform = (campaignRows) => {
   }
   if (!campaignRows.hasOwnProperty("target_emails")) {
     campaignRows.target_emails = [];
+    campaignRows.target_emails_placeholder = "";
   } else if (Array.isArray(campaignRows.target_emails)) {
-    campaignRows.target_emails = campaignRows["target_emails"].join("\r\n");
+    campaignRows.target_emails_placeholder =
+      campaignRows["target_emails"].join("\r\n");
   }
   if (!campaignRows.hasOwnProperty("target_email_domains")) {
     campaignRows.target_email_domains = [];
+    campaignRows.target_email_domains_placeholder = "";
   } else if (Array.isArray(campaignRows.target_email_domains)) {
-    campaignRows.target_email_domains =
+    campaignRows.target_email_domains_placeholder =
       campaignRows["target_email_domains"].join(", ");
   }
   if (!campaignRows.hasOwnProperty("target_count")) {
@@ -114,10 +121,15 @@ const initialFieldsToValidate = {
 };
 
 const CampaignDataEntryPage = () => {
+  let navigate = useNavigate();
   const { state } = useLocation();
   const campaignValues = camRowsTransform(state.row);
+  const dataEntryType = state.dataEntryType;
   const [activeStep, setActiveStep] = useState(0);
   const [invalidAert, setInvalidAlert] = useState(false);
+  const [savebtnOpen, setSavebtnOpen] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [getError, setError] = useState([false, ""]);
   const customers = useGetAll("customers");
   const domains = useGetAll("sending_domains");
   const landingPages = useGetAll("landing_pages");
@@ -128,9 +140,30 @@ const CampaignDataEntryPage = () => {
     validateOnMount: true,
     validateOnChange: true,
     onSubmit: (values) => {
-      values.target_emails = values.target_emails.split(/\r?\n/);
-      values.target_email_domains = values.target_email_domains.split(", ");
-      console.log(values);
+      const dType = dataEntryType;
+      const target_emails = values.target_emails_placeholder
+        .toString()
+        .split(/\r?\n/);
+      const target_email_domains = values.target_email_domains_placeholder
+        .toString()
+        .split(", ");
+      values.target_emails = target_emails;
+      values.target_email_domains = target_email_domains;
+      values.target_count = target_emails.length;
+      if (!values.customer_id) {
+        values.customer_poc = "";
+      }
+      if (savebtnOpen) {
+        values.start_datetime = "1970-01-01T00:00:00.000Z";
+        values.end_datetime = "1970-01-01T00:00:00.000Z";
+        values.time_zone = "";
+        values.status = "incomplete";
+      }
+      setHasSubmitted(true);
+      submitEntry("campaigns", values, values._id, dType, setError);
+      setTimeout(() => {
+        setSavebtnOpen(false);
+      });
     },
   });
 
@@ -153,7 +186,6 @@ const CampaignDataEntryPage = () => {
       Back
     </Button>
   );
-
   const invalidAlertJSX = (
     <>
       {invalidAert ? (
@@ -173,6 +205,12 @@ const CampaignDataEntryPage = () => {
       setInvalidAlert(false);
     } else {
       setInvalidAlert(true);
+    }
+  };
+  const closeDialog = () => {
+    setHasSubmitted(false);
+    if (!getError[0]) {
+      navigate("/cat-phishing/campaigns");
     }
   };
   if (
@@ -244,7 +282,7 @@ const CampaignDataEntryPage = () => {
                   </>
                 ) : activeStep == 2 ? (
                   <>
-                    <CampaignDeliveryForm />
+                    {/* <CampaignDeliveryForm /> */}
                     {invalidAlertJSX}
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
@@ -261,10 +299,39 @@ const CampaignDataEntryPage = () => {
                       landingPages={landingPages}
                       templates={templates}
                     />
+                    <ConfirmDialog
+                      subtitle={
+                        "Saving the campaign for later will remove the delivery schedule and mark the campaign's status as incomplete." +
+                        " Do you wish to proceed?"
+                      }
+                      confirmType="Save"
+                      formName="campaign-form"
+                      isOpen={savebtnOpen}
+                      setIsOpen={setSavebtnOpen}
+                    />
+                    <ResultDialog
+                      type={dataEntryType}
+                      hasSubmitted={hasSubmitted}
+                      error={getError}
+                      closeDialog={closeDialog}
+                    />
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
                       <Box sx={{ flex: "1 1 auto" }} />
-                      <Button onClick={handleNext}>Send Campaign</Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => setSavebtnOpen(true)}
+                      >
+                        Save for Later
+                      </Button>
+                      <Box sx={{ ml: 3 }} />
+                      <Button
+                        variant="contained"
+                        onClick={handleNext}
+                        endIcon={<SendIcon />}
+                      >
+                        Send Campaign
+                      </Button>
                     </Box>
                   </>
                 )}
