@@ -1845,10 +1845,6 @@ components:
           type: array
           items:
             type: string
-        target_email_domains:
-          type: array
-          items:
-            type: string
         target_count:
           type: integer
           format: int32
