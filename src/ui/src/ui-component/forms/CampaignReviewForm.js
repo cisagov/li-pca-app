@@ -7,28 +7,32 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 const CampaignReviewForm = (props) => {
-  const sending_domain_id = props.formik.values.sending_domain_id;
-  const landing_pg_id = props.formik.values.landing_page_id;
-  const customer_id = props.formik.values.customer_id;
-  const template_id = props.formik.values.target_template_uuid;
-  let sending_domain_name = "";
-  let landing_page_name = "";
-  let customer_name = "";
-  let template_name = "";
-  if (sending_domain_id && !props.domains.getError[0]) {
-    let entry = props.domains.getData.find((d) => d._id == sending_domain_id);
+  const sd_id = props.formik.values.sending_domain_id;
+  const lp_id = props.formik.values.landing_page_id;
+  const c_id = props.formik.values.customer_id;
+  const t_id = props.formik.values.target_template_uuid;
+  const domains = props.domains;
+  const landingPages = props.landingPages;
+  const customers = props.customers;
+  const templates = props.templates;
+  let sending_domain_name = " ";
+  let landing_page_name = " ";
+  let customer_name = " ";
+  let template_name = " ";
+  if (sd_id && !domains.getError[0] && domains.getData.length != 0) {
+    let entry = props.domains.getData.find((d) => d._id == sd_id);
     sending_domain_name = entry.name;
   }
-  if (landing_pg_id && !props.landingPages.getError[0]) {
-    let entry = props.landingPages.getData.find((l) => l._id == landing_pg_id);
+  if (lp_id && !landingPages.getError[0] && landingPages.getData.length != 0) {
+    let entry = props.landingPages.getData.find((l) => l._id == lp_id);
     landing_page_name = entry.name;
   }
-  if (customer_id && !props.customers.getError[0]) {
-    let entry = props.customers.getData.find((c) => c._id == customer_id);
+  if (c_id && !customers.getError[0] && customers.getData.length != 0) {
+    let entry = props.customers.getData.find((c) => c._id == c_id);
     customer_name = entry.name;
   }
-  if (template_id && !props.templates.getError[0]) {
-    let entry = props.templates.getData.find((t) => t._id == template_id);
+  if (t_id && !templates.getError[0] && templates.getData.length != 0) {
+    let entry = props.templates.getData.find((t) => t._id == t_id);
     template_name = entry.name;
   }
   return (
@@ -163,8 +167,7 @@ const CampaignReviewForm = (props) => {
             name="target_domains"
             label="Target Domains"
             disabled
-            // value={props.formik.values.target_email_domains}
-            value="@domain.com"
+            value={props.formik.values.target_email_domains}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>

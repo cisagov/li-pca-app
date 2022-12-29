@@ -37,8 +37,8 @@ CampaignTemplateForm.propTypes = {
 
 export default function CampaignTemplateForm(props) {
   // const getData = require("views/templates/mockTemData.json");
-  const template_id = props.formik.values.target_template_uuid;
   const rows = props.templates.getData;
+  let template_id = props.formik.values.target_template_uuid;
   let template_name = "(None Selected)";
   let selectedTemplateDisplay = (
     <Grid item xs={12} sm={12} md={12} lg={6.5} xl={6.5}>
@@ -55,6 +55,14 @@ export default function CampaignTemplateForm(props) {
         database.
       </Alert>
     );
+  } else if (props.templates.getData.length == 0) {
+    return (
+      <Alert severity="error" sx={{ mb: 2 }}>
+        No templates found. Go to "Templates" in the Main Menu to add templates.
+      </Alert>
+    );
+  } else if (!rows.some((e) => e._id === template_id)) {
+    template_id = "";
   } else if (template_id) {
     const selectedRow = rows.find((template) => template._id == template_id);
     template_name = selectedRow.name;
