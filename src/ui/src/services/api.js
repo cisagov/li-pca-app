@@ -43,7 +43,7 @@ export const submitEntry = (
   dataEntryType,
   setError
 ) => {
-  if (dataEntryType.substring(0, 3) == "New") {
+  if (dataEntryType.substring(0, 3).toLowerCase() == "new") {
     axios
       .post(baseURL + collectionType, data, {
         headers: headers,
@@ -59,7 +59,7 @@ export const submitEntry = (
         console.log(error);
       });
   }
-  if (dataEntryType.substring(0, 4) == "Edit") {
+  if (dataEntryType.substring(0, 4).toLowerCase() == "edit") {
     axios
       .put(baseURL + collectionType + "/" + id, data, {
         headers: headers,
