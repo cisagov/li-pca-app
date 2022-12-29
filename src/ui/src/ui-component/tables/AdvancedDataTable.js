@@ -240,6 +240,7 @@ export default function AdvancedDataTable(props) {
           components={{ Toolbar: CustomToolbar }}
           pageSize={10}
           rowsPerPageOptions={[10]}
+          getRowId={(row) => row._id}
           componentsProps={{
             toolbar: {
               value: searchText,
