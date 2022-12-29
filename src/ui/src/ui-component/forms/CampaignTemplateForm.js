@@ -63,6 +63,7 @@ export default function CampaignTemplateForm(props) {
     );
   } else if (!rows.some((e) => e._id === template_id)) {
     template_id = "";
+    props.formik.values.target_template_uuid = "";
   } else if (template_id) {
     const selectedRow = rows.find((template) => template._id == template_id);
     template_name = selectedRow.name;

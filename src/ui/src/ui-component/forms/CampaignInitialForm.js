@@ -55,7 +55,8 @@ const cols = [
 
 const CustomerDisplay = (props) => {
   let formik = props.formik;
-  const customer_id = formik.values.customer_id;
+  let customer_id = formik.values.customer_id;
+  const customers = props.customers;
   const [tableDisplayed, showTableDisplay] = useState(false);
   const handleRowClick = (params) => {
     showTableDisplay(false);
@@ -72,7 +73,7 @@ const CustomerDisplay = (props) => {
           Select a customer by clicking on a row.
         </Typography>
         <AdvancedSimpleDataTable
-          data={{ rows: props.customers.getData, columns: cols }}
+          data={{ rows: customers.getData, columns: cols }}
           handleRowClick={handleRowClick}
         />
       </Grid>
@@ -94,9 +95,9 @@ const CustomerDisplay = (props) => {
       </Button>
     </Grid>
   );
-  if (props.customers.getError[0]) {
+  if (customers.getError[0]) {
     return <>Error loading customer data from the database.</>;
-  } else if (props.customers.getData.length == 0) {
+  } else if (customers.getData.length == 0) {
     return (
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
         <Alert severity="error">
@@ -111,21 +112,13 @@ const CustomerDisplay = (props) => {
     }
     return customerTableDisplay;
   } else if (customer_id) {
-    const selectedRow = props.customers.getData.find(
+    const selectedRow = customers.getData.find(
       (customer) => customer._id == customer_id
     );
     if (typeof selectedRow == "undefined") {
-      return (
-        <>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Alert severity="error">
-              Customer {customer_id} has not been found in the database. Please
-              remake or rechoose a customer.
-            </Alert>
-          </Grid>
-          {tableDisplayed ? customerTableDisplay : selectButton}
-        </>
-      );
+      props.formik.values.customer_id = "";
+      customer_id = "";
+      return null;
     }
     const selectedCustomerDisplay = (
       <>
