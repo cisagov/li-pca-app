@@ -77,26 +77,32 @@ function CampaignsPage() {
 
   const campaignRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {
-      let counter = 0;
       let rows = [];
+      let startDate = "";
+      let endDate = "";
+      let startTime = "";
+      let endTime = "";
       rows = Array.from(rowsArray);
       rows.forEach((entry) => {
-        entry["id"] = counter;
-        const startDate = new Date(entry["start_datetime"])
-          .toLocaleDateString("en-US")
-          .toString();
-        const endDate = new Date(entry["end_datetime"])
-          .toLocaleDateString("en-US")
-          .toString();
+        const nullDate = "1970-01-01T00:00:00+00:00";
+        if (entry["start_datetime"] && entry["start_datetime"] != nullDate) {
+          startDate = new Date(entry["start_datetime"])
+            .toLocaleDateString("en-US")
+            .toString();
+          startTime = new Date(entry["start_datetime"])
+            .toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+            .toString();
+        }
+        if (entry["end_datetime"] && entry["end_datetime"] != nullDate) {
+          endDate = new Date(entry["end_datetime"])
+            .toLocaleDateString("en-US")
+            .toString();
+          endTime = new Date(entry["end_datetime"])
+            .toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+            .toString();
+        }
         entry["date_scheduled"] = startDate + " - " + endDate;
-        const startTime = new Date(entry["start_datetime"])
-          .toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
-          .toString();
-        const endTime = new Date(entry["end_datetime"])
-          .toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
-          .toString();
         entry["time_scheduled"] = startTime + " - " + endTime;
-        counter = counter + 1;
       });
       return rowsArray;
     }
