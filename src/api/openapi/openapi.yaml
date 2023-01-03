@@ -802,15 +802,6 @@ paths:
             type: array
             items:
               type: string
-        - name: api_key
-          in: query
-          description: the API Key for Hunter IO
-          required: true
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
       responses:
         "200":
           description: successful operation

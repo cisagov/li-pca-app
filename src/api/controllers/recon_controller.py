@@ -6,6 +6,7 @@
 # Standard Python Libraries
 # import json
 import logging
+import os
 
 # Third-Party Libraries
 # from pymodm.errors import DoesNotExist, OperationError
@@ -32,21 +33,42 @@ def call_harvester_query(domain):
     return jsonify(query_json)
 
 
-def call_hunter_query(domain, api_key):
+def call_hunter_query(domain):
     """Call Hunter.io.
 
     :param domain: a domain to run the query against
     :type domain: basestring
-    :param api_key: an api_key for a Hunter.io user
-    :type api_key: basestring
 
     :rtype: query response
     """
+    api_key = os.environ.get("HUNTER_IO_API_KEY")
+    logging.debug("API key: %s", api_key)
     hunter_url = (
         f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key={api_key}"
     )
     response = requests.get(hunter_url)
     query_json = response.json()
+    hunter_data = parse_hunter_io_results(query_json)
+    query_json["data"] = hunter_data
     logging.debug("Hunter IO response: %s", response)
 
     return jsonify(query_json)
+
+
+def parse_hunter_io_results(query_json):
+    """Parse the results from Hunter.io. Strip social media accounts from results.
+
+    :param hunter_result: a result JSON object from Hunter.io.
+    :type hunter_result: JSON object
+
+    :rtype: JSON object
+    """
+    hunter_data = query_json["data"]
+
+    hunter_data.pop("facebook")
+    hunter_data.pop("instagram")
+    hunter_data.pop("linkedin")
+    hunter_data.pop("twitter")
+    hunter_data.pop("youtube")
+
+    return hunter_data

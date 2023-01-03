@@ -12,6 +12,7 @@ env:
   PIP_CACHE_DIR: ~/.cache/pip
   PRE_COMMIT_CACHE_DIR: ~/.cache/pre-commit
   RUN_TMATE: ${{ secrets.RUN_TMATE }}
+  HUNTER_IO_API_KEY: ${{ secrets.HUNTER_IO_API_KEY }}
 
 jobs:
   lint:

@@ -17,6 +17,7 @@ services:
       - DB_PW=devpass1
       - DB_HOST=li-pca-db
       - DB_PORT=27017
+      - HUNTER_IO_API_KEY=${HUNTER_IO_API_KEY}
     networks:
       - backend
     ports:
