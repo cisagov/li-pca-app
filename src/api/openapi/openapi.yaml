@@ -1811,18 +1811,42 @@ components:
             - running
             - completed
             - error
-        start_datetime:
+            - incomplete
+        archived:
+          type: boolean
+        admin_email:
           type: string
-          format: datetime
-        end_datetime:
+        operator_email:
           type: string
-          format: datetime
+        sending_domain_id:
+          type: string
+        landing_page_id:
+          type: string
+        landing_page_url:
+          type: string
+        customer_id:
+          type: string
+        customer_poc:
+          type: string
+        target_emails:
+          type: array
+          items:
+            type: string
+        target_email_domains:
+          type: array
+          items:
+            type: string
         target_count:
           type: integer
           format: int32
-        archived:
-          type: boolean
-          default: true
+        start_datetime:
+          type: string
+          format: date-time
+        end_datetime:
+          type: string
+          format: date-time
+        time_zone:
+          type: string
       example:
         assessment_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
         email_template_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed5

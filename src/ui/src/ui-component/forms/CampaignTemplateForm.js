@@ -1,4 +1,4 @@
-import { useState } from "react";
+import PropTypes from "prop-types";
 
 // material ui
 import Alert from "@mui/material/Alert";
@@ -10,7 +10,6 @@ import Typography from "@mui/material/Typography";
 // project imports
 import AdvancedSimpleDataTable from "ui-component/tables/AdvancedSimpleDataTable";
 import HtmlEditor from "./HtmlEditor";
-import { useGetAll } from "services/api.js";
 
 const cols = [
   { field: "id", hide: true },
@@ -31,37 +30,66 @@ const cols = [
   },
 ];
 
-const temRows = (rowsArray) => {
-  if (Object.keys(rowsArray).length !== 0) {
-    let counter = 0;
-    let temRows = [];
-    temRows = Array.from(rowsArray);
-    temRows.forEach((entry) => {
-      entry["id"] = counter;
-      counter = counter + 1;
-    });
-    return rowsArray;
-  }
-  return [];
+CampaignTemplateForm.propTypes = {
+  formik: PropTypes.object,
+  templates: PropTypes.object,
 };
 
-export default function CampaignTemplateForm() {
+export default function CampaignTemplateForm(props) {
   // const getData = require("views/templates/mockTemData.json");
-  const { isLoading, getData, getError } = useGetAll("templates");
-  const rows = temRows(getData);
-  const [selectedRow, setRow] = useState({});
-  const [htmlValue, setHTMLValue] = useState("");
+  const rows = props.templates.getData;
+  let template_id = props.formik.values.target_template_uuid;
+  let template_name = "(None Selected)";
+  let selectedTemplateDisplay = (
+    <Grid item xs={12} sm={12} md={12} lg={6.5} xl={6.5}>
+      The selected template will display here.
+    </Grid>
+  );
   const handleRowClick = (params) => {
-    setHTMLValue(params.row.html);
-    setRow(params.row);
+    props.formik.setFieldValue("target_template_uuid", params.row._id);
   };
-  if (isLoading) {
-    return <Typography>Loading...</Typography>;
-  } else if (getError[0]) {
+  if (props.templates.getError[0]) {
     return (
       <Alert severity="error" sx={{ mb: 2 }}>
-        {getError[1]}. Unable to load template data from the database.
+        {props.templates.getError[1]}. Error loading template data from the
+        database.
       </Alert>
+    );
+  } else if (props.templates.getData.length == 0) {
+    return (
+      <Alert severity="error" sx={{ mb: 2 }}>
+        No templates found. Go to "Templates" in the Main Menu to add templates.
+      </Alert>
+    );
+  } else if (!rows.some((e) => e._id === template_id)) {
+    template_id = "";
+    props.formik.values.target_template_uuid = "";
+  } else if (template_id) {
+    const selectedRow = rows.find((template) => template._id == template_id);
+    template_name = selectedRow.name;
+    selectedTemplateDisplay = (
+      <Grid item xs={12} sm={12} md={12} lg={6.5} xl={6.5}>
+        <Typography fontSize={16} display="inline">
+          Subject:&nbsp;
+        </Typography>
+        <Typography fontSize={16} display="inline" fontWeight="medium">
+          {selectedRow.subject}
+        </Typography>
+        <br />
+        <Typography fontSize={16} display="inline">
+          From:&nbsp;
+        </Typography>
+        <Typography fontSize={16} display="inline" fontWeight="medium">
+          {selectedRow.from_address}
+        </Typography>
+        <Box sx={{ mt: 2 }} />
+        <HtmlEditor
+          value={selectedRow.html}
+          setValue={() => selectedRow.html}
+          height={"510"}
+          disabled={true}
+        />
+      </Grid>
     );
   }
   return (
@@ -75,50 +103,19 @@ export default function CampaignTemplateForm() {
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={5} xl={5}>
           <Typography sx={{ mb: 1 }} fontSize={16}>
-            Select a template by clicking on a row.
+            Select or re-select a template by clicking on a row.
           </Typography>
           <AdvancedSimpleDataTable
             data={{ rows: rows, columns: cols }}
             handleRowClick={handleRowClick}
+            selected_id={[template_id]}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={0.5} xl={0.5} />
-        <Grid item xs={12} sm={12} md={12} lg={6.5} xl={6.5}>
-          {JSON.stringify(selectedRow) === "{}" ? (
-            <>The selected template will display here.</>
-          ) : (
-            <>
-              <Typography fontSize={16} display="inline">
-                Subject:&nbsp;
-              </Typography>
-              <Typography fontSize={16} display="inline" fontWeight="medium">
-                {selectedRow.subject}
-              </Typography>
-              <br />
-              <Typography fontSize={16} display="inline">
-                From:&nbsp;
-              </Typography>
-              <Typography fontSize={16} display="inline" fontWeight="medium">
-                {selectedRow.from_address}
-              </Typography>
-              <Box sx={{ mt: 2 }} />
-              <HtmlEditor
-                value={htmlValue}
-                setValue={setHTMLValue}
-                height={"510"}
-                disabled={true}
-              />
-            </>
-          )}
-        </Grid>
-        <Grid item>
+        {selectedTemplateDisplay}
+        <Grid item xs={12} sm={12} md={12} lg={5} xl={5}>
           <Typography fontSize={15}>
-            Selected Template:&nbsp;
-            {JSON.stringify(selectedRow) === "{}" ? (
-              <b>(None selected)</b>
-            ) : (
-              <b>{selectedRow.name}</b>
-            )}
+            Selected Template: <b>{template_name}</b>
           </Typography>
         </Grid>
       </Grid>

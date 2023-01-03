@@ -73,6 +73,7 @@ function CustomToolbar(props) {
 AdvancedSimpleDataTable.propTypes = {
   data: PropTypes.object,
   handleRowClick: PropTypes.func,
+  selected_id: PropTypes.array,
 };
 
 export default function AdvancedSimpleDataTable(props) {
@@ -105,7 +106,9 @@ export default function AdvancedSimpleDataTable(props) {
           pageSize={10}
           rowsPerPageOptions={[10]}
           density="compact"
+          getRowId={(row) => row._id}
           onRowClick={props.handleRowClick}
+          selectionModel={props.selected_id}
           componentsProps={{
             toolbar: {
               value: searchText,

@@ -31,7 +31,9 @@ class TemplateHtmlEditor extends React.Component {
           init={{
             height: 500,
             width: 800,
-            menubar: true,
+            menubar: "file edit insert view format table tools help",
+            selector: "textarea#image-tools",
+            resize: true,
             plugins:
               "print preview powerpaste casechange importcss \
               searchreplace autolink autosave save directionality \
@@ -41,7 +43,10 @@ class TemplateHtmlEditor extends React.Component {
               lists checklist wordcount tinymcespellchecker a11ychecker \
               textpattern noneditable help formatpainter pageembed charmap \
               mentions linkchecker emoticons advtable",
-            toolbar: true,
+            toolbar:
+              "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+            content_style:
+              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
           onEditorChange={this.handleChange}
         />
