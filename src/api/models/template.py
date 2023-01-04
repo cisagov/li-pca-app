@@ -42,7 +42,7 @@ class TemplateIndicatorSchema(Schema):
     """TemplateIndicatorSchema."""
 
     appearance = fields.Nested(TemplateAppearanceSchema)
-    sender = fields.Nested(TemplateSenderSchema)
+    sender = fields.Nested(TemplateSenderSchema, unique=False)
     relevancy = fields.Nested(TemplateRelevancySchema)
     behavior = fields.Nested(TemplateBehaviorSchema)
 
