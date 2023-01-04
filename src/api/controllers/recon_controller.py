@@ -63,12 +63,10 @@ def parse_hunter_io_results(query_json):
 
     :rtype: JSON object
     """
+    social_media_fields = {"facebook", "instagram", "linkedin", "twitter", "youtube"}
     hunter_data = query_json["data"]
 
-    hunter_data.pop("facebook")
-    hunter_data.pop("instagram")
-    hunter_data.pop("linkedin")
-    hunter_data.pop("twitter")
-    hunter_data.pop("youtube")
+    for field in social_media_fields:
+        hunter_data.pop(field)
 
     return hunter_data
