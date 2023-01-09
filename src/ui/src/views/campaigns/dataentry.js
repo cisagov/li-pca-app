@@ -283,7 +283,7 @@ const CampaignDataEntryPage = () => {
                   </>
                 ) : activeStep == 2 ? (
                   <>
-                    {/* <CampaignDeliveryForm /> */}
+                    <CampaignDeliveryForm />
                     {invalidAlertJSX}
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}

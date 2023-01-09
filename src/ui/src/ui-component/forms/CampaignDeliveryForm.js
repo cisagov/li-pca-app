@@ -53,8 +53,8 @@ export default function CampaignDeliveryForm() {
             <DateTimePicker
               fullWidth
               label="Start Date"
-              value={selectedEndDatetime}
-              // onChange={setEndDatetime}
+              value={selectedStartDatetime}
+              onChange={setStartDatetime}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
@@ -68,7 +68,7 @@ export default function CampaignDeliveryForm() {
               fullWith
               label="End Date"
               value={selectedEndDatetime}
-              // onChange={setEndDatetime}
+              onChange={setEndDatetime}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
