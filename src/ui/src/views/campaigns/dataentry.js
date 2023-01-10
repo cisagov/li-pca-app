@@ -150,6 +150,7 @@ const CampaignDataEntryPage = () => {
       values.target_emails = target_emails;
       values.target_email_domains = target_email_domains;
       values.target_count = target_emails.length;
+      values.archived = false;
       if (!values.customer_id) {
         values.customer_poc = "";
       }
@@ -282,7 +283,7 @@ const CampaignDataEntryPage = () => {
                   </>
                 ) : activeStep == 2 ? (
                   <>
-                    {/* <CampaignDeliveryForm /> */}
+                    <CampaignDeliveryForm />
                     {invalidAlertJSX}
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
