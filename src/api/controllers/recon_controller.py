@@ -6,7 +6,6 @@
 # Standard Python Libraries
 # import json
 import logging
-import os
 
 # Third-Party Libraries
 # from pymodm.errors import DoesNotExist, OperationError
@@ -41,8 +40,9 @@ def call_hunter_query(domain):
 
     :rtype: query response
     """
-    api_key = os.environ.get("HUNTER_IO_API_KEY")
-    logging.debug("API key: %s", api_key)
+    # api_key = os.environ.get("HUNTER_IO_API_KEY")
+    api_key = "8f2f96fe9f0fd6fe281fb8e1126104ce7c5fed65"
+    logging.debug("domain: %s", domain)
     hunter_url = (
         f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key={api_key}"
     )
@@ -67,6 +67,12 @@ def parse_hunter_io_results(query_json):
     hunter_data = query_json["data"]
 
     for field in social_media_fields:
-        hunter_data.pop(field)
+        if field in hunter_data:
+            hunter_data.pop(field)
+
+    for email in hunter_data["emails"]:
+        for field in social_media_fields:
+            if field in email:
+                email.pop(field)
 
     return hunter_data
