@@ -10,7 +10,6 @@ import pymongo
 
 # cisagov Libraries
 from api.config.db import get_db
-from api.models.assessment import AssessmentSchema
 from api.models.campaign import CampaignSchema
 from api.models.config import ConfigSchema
 from api.models.customer import CustomerSchema
@@ -353,16 +352,6 @@ class Manager:
             {"$set": self.load_data(data, partial=True)},
             return_document=pymongo.ReturnDocument.AFTER,
             projection=self.convert_fields(fields),
-        )
-
-
-class AssessmentManager(Manager):
-    """AssessmentManager."""
-
-    def __init__(self):
-        """Super."""
-        return super().__init__(
-            collection="assessments", schema=AssessmentSchema, other_indexes=["rv_id"]
         )
 
 
