@@ -79,6 +79,7 @@ function CustomToolbar(props) {
     newEntryButton = (
       <Button
         size="small"
+        sx={{ "& .MuiButton-startIcon": { marginRight: "1.8px" } }}
         startIcon={<AddIcon fontSize="small" />}
         onClick={() => {
           navigate(`${props.newEntryRoute}`, {
@@ -225,6 +226,7 @@ export default function MainDataTable(props) {
         components={{
           Toolbar: CustomToolbar,
         }}
+        getRowId={(row) => row._id}
         pageSize={pageSize}
         density={density}
         rowsPerPageOptions={[rowsPerPage]}
