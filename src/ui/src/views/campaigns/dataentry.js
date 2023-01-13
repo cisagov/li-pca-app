@@ -20,7 +20,7 @@ import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
 import CampaignReviewForm from "ui-component/forms/CampaignReviewForm";
 import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
 import MainCard from "ui-component/cards/MainCard";
-import { useGetAll, submitEntry } from "services/api.js";
+import { useGetAll, submitEntry, deleteEntry } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
@@ -128,6 +128,7 @@ const CampaignDataEntryPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [invalidAert, setInvalidAlert] = useState(false);
   const [savebtnOpen, setSavebtnOpen] = useState(false);
+  const [deletebtnOpen, setDeletebtnOpen] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [getError, setError] = useState([false, ""]);
   const customers = useGetAll("customers");
@@ -213,6 +214,15 @@ const CampaignDataEntryPage = () => {
     if (!getError[0]) {
       navigate("/cat-phishing/campaigns");
     }
+  };
+  const disableDeleteBtn = dataEntryType == "new" ? true : false;
+
+  const confirmDelete = () => {
+    deleteEntry("campaigns", formik.values._id, setError);
+    setTimeout(() => {
+      setDeletebtnOpen(false);
+      setHasSubmitted(true);
+    });
   };
   if (
     customers.isLoading ||
@@ -310,8 +320,23 @@ const CampaignDataEntryPage = () => {
                       isOpen={savebtnOpen}
                       setIsOpen={setSavebtnOpen}
                     />
+                    <ConfirmDialog
+                      subtitle={
+                        <>
+                          <b>{formik.values.name}</b> will be deleted in the
+                          database.
+                          <br />
+                          <br />
+                          <b>THIS ACTION CANNOT BE UNDONE.</b>
+                        </>
+                      }
+                      confirmType="Delete"
+                      handleClick={confirmDelete}
+                      isOpen={deletebtnOpen}
+                      setIsOpen={setDeletebtnOpen}
+                    />
                     <ResultDialog
-                      type={dataEntryType}
+                      type={deletebtnOpen ? "Delete Campaign" : dataEntryType}
                       hasSubmitted={hasSubmitted}
                       error={getError}
                       closeDialog={closeDialog}
@@ -319,6 +344,15 @@ const CampaignDataEntryPage = () => {
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
                       <Box sx={{ flex: "1 1 auto" }} />
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        disabled={disableDeleteBtn}
+                        onClick={() => setDeletebtnOpen(true)}
+                      >
+                        Delete Campaign
+                      </Button>
+                      <Box sx={{ ml: 3 }} />
                       <Button
                         variant="outlined"
                         onClick={() => setSavebtnOpen(true)}
