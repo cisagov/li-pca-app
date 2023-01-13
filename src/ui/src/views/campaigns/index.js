@@ -7,8 +7,8 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 // project imports
-import AdvancedDataTable from "ui-component/tables/AdvancedDataTable";
 import MainCard from "ui-component/cards/MainCard";
+import MainDataTable from "ui-component/tables/MainDataTable";
 import { useGetAll } from "services/api.js";
 
 // ==============================|| Campaigns view ||============================== //
@@ -52,9 +52,8 @@ function BaseJSX(props) {
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {props.children}
           <Box sx={{ maxWidth: 1300 }}>
-            <AdvancedDataTable
+            <MainDataTable
               data={{ rows: props.rows, columns: cols }}
-              // filterModel={filterModel}
               newEntryRoute={props.dataEntry}
               editEntryRoute={props.dataEntry}
               tableCategory={"Campaign"}
