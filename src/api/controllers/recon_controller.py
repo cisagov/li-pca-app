@@ -10,9 +10,11 @@ import os
 
 # Third-Party Libraries
 # from pymodm.errors import DoesNotExist, OperationError
+from dotenv import load_dotenv
 from flask import jsonify
 import requests
 
+load_dotenv()
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -42,14 +44,15 @@ def call_hunter_query(domain):
     :rtype: query response
     """
     api_key = os.environ.get("HUNTER_IO_API_KEY")
-    logging.debug("domain: %s", domain)
+    logging.debug("api_key: %s", api_key)
     hunter_url = (
         f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key={api_key}"
     )
     response = requests.get(hunter_url)
     query_json = response.json()
-    hunter_data = parse_hunter_io_results(query_json)
-    query_json["data"] = hunter_data
+    if query_json:
+        hunter_data = parse_hunter_io_results(query_json)
+        query_json["data"] = hunter_data
     logging.debug("Hunter IO response: %s", response)
 
     return jsonify(query_json)
@@ -64,6 +67,7 @@ def parse_hunter_io_results(query_json):
     :rtype: JSON object
     """
     social_media_fields = {"facebook", "instagram", "linkedin", "twitter", "youtube"}
+
     hunter_data = query_json["data"]
 
     for field in social_media_fields:

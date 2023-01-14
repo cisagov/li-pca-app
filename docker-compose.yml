@@ -1,7 +1,7 @@
 ---
 version: '3'
-services:
 
+services:
   li-pca-api:
     build:
       context: .
@@ -17,13 +17,13 @@ services:
       - DB_PW=devpass1
       - DB_HOST=li-pca-db
       - DB_PORT=27017
-      - HUNTER_IO_API_KEY=${HUNTER_IO_API_KEY}
     networks:
       - backend
     ports:
       - 8080:8080
       - 8043:443
       - 5678:5678
+
 
   li-pca-db:
     container_name: li-pca-db
