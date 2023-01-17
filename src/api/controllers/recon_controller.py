@@ -13,6 +13,7 @@ import os
 from dotenv import load_dotenv
 from flask import jsonify
 import requests
+import yaml
 
 load_dotenv()
 logging.basicConfig(level=logging.DEBUG)
@@ -44,7 +45,6 @@ def call_hunter_query(domain):
     :rtype: query response
     """
     api_key = os.environ.get("HUNTER_IO_API_KEY")
-    logging.debug("api_key: %s", api_key)
     hunter_url = (
         f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key={api_key}"
     )
@@ -66,17 +66,21 @@ def parse_hunter_io_results(query_json):
 
     :rtype: JSON object
     """
-    social_media_fields = {"facebook", "instagram", "linkedin", "twitter", "youtube"}
+    with open("social_media.yaml", "r") as fp:
+        social_media_fields = yaml.safe_load(fp)
 
     hunter_data = query_json["data"]
 
-    for field in social_media_fields:
-        if field in hunter_data:
-            hunter_data.pop(field)
-
-    for email in hunter_data["emails"]:
+    if (
+        social_media_fields
+    ):  # if social_media_fields is empty, return query_json["data"] unchanged
         for field in social_media_fields:
-            if field in email:
-                email.pop(field)
+            if field in hunter_data:
+                hunter_data.pop(field)
+
+        for email in hunter_data["emails"]:
+            for field in social_media_fields:
+                if field in email:
+                    email.pop(field)
 
     return hunter_data
