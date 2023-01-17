@@ -44,7 +44,6 @@ def call_hunter_query(domain):
     :rtype: query response
     """
     api_key = os.environ.get("HUNTER_IO_API_KEY")
-    logging.debug("api_key: %s", api_key)
     hunter_url = (
         f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key={api_key}"
     )
