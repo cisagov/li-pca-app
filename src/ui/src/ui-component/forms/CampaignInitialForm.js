@@ -198,6 +198,7 @@ CustomerDisplay.propTypes = {
 };
 
 const CampaignInitialForm = (props) => {
+  const [dupDisplay, setDupDisplay] = useState([false, 0]);
   const domains = props.domains;
   const landingPages = props.landingPages;
   let formik = props.formik;
@@ -216,11 +217,15 @@ const CampaignInitialForm = (props) => {
   };
   const handleDuplicates = () => {
     const newLineExpression = /\r\n|\n\r|\n|\r/g;
+    const oldLen = formik.values.target_emails_placeholder
+      .toString()
+      .split(/\r?\n/).length;
     const new_te = formik.values.target_emails_placeholder
       .split(newLineExpression)
-      .filter((item, index, array) => array.indexOf(item) === index)
-      .join("\n");
-    formik.setFieldValue("target_emails_placeholder", new_te);
+      .filter((item, index, array) => array.indexOf(item) === index);
+    formik.setFieldValue("target_emails_placeholder", new_te.join("\n"));
+    const diff = oldLen - new_te.length;
+    setDupDisplay([true, diff]);
   };
   if (!domains.getData.some((e) => e._id === formik.values.sending_domain_id)) {
     formik.values.sending_domain_id = "";
@@ -485,10 +490,24 @@ const CampaignInitialForm = (props) => {
           </Button>
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
-          <Button variant="contained" fullWidth onClick={handleDuplicates}>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={handleDuplicates}
+            disabled={formik.values.target_emails_placeholder == ""}
+          >
             Remove Duplicate Emails
           </Button>
         </Grid>
+        {dupDisplay[0] ? (
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Alert severity="info">
+              Number of duplicates removed: {dupDisplay[1]}
+            </Alert>
+          </Grid>
+        ) : (
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} />
+        )}
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <TextField
             size="small"
