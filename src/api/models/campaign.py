@@ -6,6 +6,7 @@ from marshmallow import fields, validate
 from api import util
 from api.models.base import BaseSchema
 from api.models.base_model_ import Model
+from api.models.customer import CustomerContactSchema
 from api.models.fields import DateTimeField
 
 # from datetime import date, datetime  # noqa: F401
@@ -127,7 +128,7 @@ class CampaignSchema(BaseSchema):
 
     admin_email = fields.Str()
     customer_id = fields.Str()
-    customer_poc = fields.Str()
+    customer_poc = fields.Nested(CustomerContactSchema)
     description = fields.Str()
     email_template_uuid = fields.Str()
     end_datetime = DateTimeField()

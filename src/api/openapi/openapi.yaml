@@ -1671,7 +1671,7 @@ components:
         customer_id:
           type: string
         customer_poc:
-          type: string
+          $ref: '#/components/schemas/Contact'
         target_emails:
           type: array
           items:
