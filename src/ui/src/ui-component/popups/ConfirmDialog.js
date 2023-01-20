@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 //material-ui
 import ArchiveIcon from "@mui/icons-material/Archive";
 import Button from "@mui/material/Button";
+import CancelScheduleSendIcon from "@mui/icons-material/CancelScheduleSend";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Dialog from "@mui/material/Dialog";
@@ -25,6 +26,7 @@ const ConfirmDialog = (props) => {
   let endIcon = <CheckCircleOutlineIcon />;
   let color = "primary";
   let confirmButton = <Button />;
+  let cancel = "Cancel";
 
   const isDisabled = () => {
     if (confirmType == "Delete") {
@@ -48,6 +50,12 @@ const ConfirmDialog = (props) => {
   if (confirmType == "Retire") {
     title = "Are you sure you want to retire these record(s)?";
     endIcon = <ArchiveIcon />;
+  }
+  if (confirmType == "Cancel Send") {
+    title = "Are you sure you want to cancel sending?";
+    endIcon = <CancelScheduleSendIcon />;
+    color = "error";
+    cancel = "Close";
   }
   if (confirmType == "Save") {
     confirmButton = (
@@ -113,7 +121,7 @@ const ConfirmDialog = (props) => {
         <DialogActions>
           <Grid item sx={{ mb: 2 }}>
             {confirmButton}
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleClose}>{cancel}</Button>
           </Grid>
         </DialogActions>
       </Grid>

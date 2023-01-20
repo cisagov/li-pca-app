@@ -1,29 +1,38 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
 
 // material-ui
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
+import CancelScheduleSendIcon from "@mui/icons-material/CancelScheduleSend";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 
 // project imports
+import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import MainCard from "ui-component/cards/MainCard";
 import MainDataTable from "ui-component/tables/MainDataTable";
-import { useGetAll } from "services/api.js";
+import ResultDialog from "ui-component/popups/ResultDialog";
+import { useGetAll, submitEntry } from "services/api.js";
 
 // ==============================|| Campaigns view ||============================== //
 
 function BaseJSX(props) {
+  let [selectedRow, setSelectedRow] = useState({});
+  const [savebtnOpen, setSavebtnOpen] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [getError, setError] = useState([false, ""]);
   const cols = [
     { field: "id", hide: true },
     {
       field: "name",
       headerName: "Campaign Name",
       minWidth: 130,
-      flex: 1,
+      flex: 1.5,
     },
     { field: "target_count", headerName: "Target Count", minWidth: 100 },
-    { field: "status", headerName: "Status", minWidth: 70, flex: 0.5 },
+    { field: "status", headerName: "Status", minWidth: 70 },
     {
       field: "date_scheduled",
       headerName: "Date Scheduled",
@@ -34,7 +43,34 @@ function BaseJSX(props) {
       field: "time_scheduled",
       headerName: "Time Scheduled",
       minWidth: 150,
-      flex: 0.8,
+      flex: 1,
+    },
+    {
+      field: "cancel",
+      headerName: "Cancel Send",
+      sortable: false,
+      disableClickEventBubbling: true,
+      renderCell: (cellValues) => {
+        if (
+          cellValues.row.status == "incomplete" ||
+          cellValues.row.status == "completed"
+        ) {
+          return "";
+        }
+        return (
+          <IconButton
+            variant="contained"
+            color="error"
+            onClick={() => {
+              setSavebtnOpen(true);
+              setSelectedRow(cellValues.row);
+            }}
+          >
+            <CancelScheduleSendIcon />
+          </IconButton>
+        );
+      },
+      width: 95,
     },
   ];
   // const filterModel = {
@@ -46,6 +82,22 @@ function BaseJSX(props) {
   //     },
   //   ],
   // };
+  const confirmChange = () => {
+    selectedRow.start_datetime = "1970-01-01T00:00:00+00:00";
+    selectedRow.end_datetime = "1970-01-01T00:00:00+00:00";
+    selectedRow.time_zone = "";
+    selectedRow.status = "incomplete";
+    submitEntry("campaigns", selectedRow, selectedRow._id, "edit", setError);
+    setTimeout(() => {
+      setHasSubmitted(true);
+    });
+  };
+  const closeDialog = () => {
+    setHasSubmitted(false);
+    if (!getError[0]) {
+      window.location.reload();
+    }
+  };
   return (
     <MainCard title="Campaigns">
       <Grid container spacing={2}>
@@ -59,6 +111,23 @@ function BaseJSX(props) {
               tableCategory={"Campaign"}
             />
           </Box>
+          <ConfirmDialog
+            subtitle={
+              selectedRow.name +
+              " will stop any current scheduled sending and remove its current delivery schedule and mark its status as incomplete." +
+              " Do you wish to proceed?"
+            }
+            confirmType="Cancel Send"
+            handleClick={confirmChange}
+            isOpen={savebtnOpen}
+            setIsOpen={setSavebtnOpen}
+          />
+          <ResultDialog
+            type={"edit"}
+            hasSubmitted={hasSubmitted}
+            error={getError}
+            closeDialog={closeDialog}
+          />
         </Grid>
       </Grid>
     </MainCard>
@@ -73,7 +142,6 @@ BaseJSX.propTypes = {
 
 function CampaignsPage() {
   const { isLoading, getData, getError } = useGetAll("campaigns");
-
   const campaignRows = (rowsArray) => {
     if (Object.keys(rowsArray).length !== 0) {
       let rows = [];
@@ -100,8 +168,13 @@ function CampaignsPage() {
             .toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
             .toString();
         }
-        entry["date_scheduled"] = startDate + " - " + endDate;
-        entry["time_scheduled"] = startTime + " - " + endTime;
+        if (entry["start_datetime"] == nullDate) {
+          entry["date_scheduled"] = "-";
+          entry["time_scheduled"] = "-";
+        } else {
+          entry["date_scheduled"] = startDate + " - " + endDate;
+          entry["time_scheduled"] = startTime + " - " + endTime;
+        }
       });
       return rowsArray;
     }

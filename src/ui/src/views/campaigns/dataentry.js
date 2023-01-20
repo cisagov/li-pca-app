@@ -20,12 +20,12 @@ import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
 import CampaignReviewForm from "ui-component/forms/CampaignReviewForm";
 import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
 import MainCard from "ui-component/cards/MainCard";
+import ResultDialog from "ui-component/popups/ResultDialog";
 import { useGetAll, submitEntry, deleteEntry } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
 import * as yup from "yup";
-import ResultDialog from "ui-component/popups/ResultDialog";
 
 // ==============================|| Create/Update Campaign View ||============================== //
 
