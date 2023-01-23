@@ -61,7 +61,12 @@ const camRowsTransform = (campaignRows) => {
     campaignRows.customer_id = "";
   }
   if (!campaignRows.hasOwnProperty("customer_poc")) {
-    campaignRows.customer_poc = "";
+    campaignRows.customer_poc = {};
+    campaignRows.customer_poc_placeholder = "";
+  } else if (typeof campaignRows.customer_poc === "object") {
+    campaignRows.customer_poc_placeholder = JSON.stringify(
+      campaignRows.customer_poc
+    );
   }
   if (!campaignRows.hasOwnProperty("target_emails")) {
     campaignRows.target_emails = [];
@@ -151,9 +156,9 @@ const CampaignDataEntryPage = () => {
       values.target_emails = target_emails;
       values.target_email_domains = target_email_domains;
       values.target_count = target_emails.length;
-      values.archived = false;
-      if (!values.customer_id) {
-        values.customer_poc = "";
+      values.customer_poc = JSON.parse(values.customer_poc_placeholder);
+      if (values.customer_poc_placeholder == "") {
+        values.customer_poc = {};
       }
       if (savebtnOpen) {
         values.start_datetime = "1970-01-01T00:00:00.000Z";
