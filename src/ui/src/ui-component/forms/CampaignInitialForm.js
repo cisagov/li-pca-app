@@ -61,7 +61,7 @@ const CustomerDisplay = (props) => {
   const handleRowClick = (params) => {
     showTableDisplay(false);
     formik.setFieldValue("customer_id", params.row._id);
-    formik.setFieldValue("customer_poc", "");
+    formik.setFieldValue("customer_poc_placeholder", "");
   };
   const cancelCusSelect = () => {
     showTableDisplay(false);
@@ -107,6 +107,7 @@ const CustomerDisplay = (props) => {
       </Grid>
     );
   } else if (!customer_id) {
+    let customer_poc = "";
     if (!tableDisplayed) {
       return selectButton;
     }
@@ -142,24 +143,26 @@ const CustomerDisplay = (props) => {
             size="small"
             select
             fullWidth
-            id="customer_poc"
-            name="customer_poc"
+            id="customer_poc_placeholder"
+            name="customer_poc_placeholder"
             label="Primary Point of Contact"
             defaultValue={""}
-            value={formik.values.customer_poc}
+            value={formik.values.customer_poc_placeholder}
             onChange={formik.handleChange}
             error={
-              formik.touched.customer_poc && Boolean(formik.errors.customer_poc)
+              formik.touched.customer_poc_placeholder &&
+              Boolean(formik.errors.customer_poc_placeholder)
             }
             helperText={
-              formik.touched.customer_poc && formik.errors.customer_poc
+              formik.touched.customer_poc_placeholder &&
+              formik.errors.customer_poc_placeholder
             }
           >
             {selectedRow.contact_list.map((entry, index) => {
               let name = entry.first_name + " " + entry.last_name;
               return (
-                <MenuItem key={index} value={name}>
-                  {name}
+                <MenuItem key={index} value={JSON.stringify(entry)}>
+                  {name} - {entry.email}
                 </MenuItem>
               );
             })}
