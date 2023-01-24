@@ -6,6 +6,7 @@ from marshmallow import fields, validate
 from api import util
 from api.models.base import BaseSchema
 from api.models.base_model_ import Model
+from api.models.customer import CustomerContactSchema
 from api.models.fields import DateTimeField
 
 # from datetime import date, datetime  # noqa: F401
@@ -20,7 +21,6 @@ class Campaign(Model):
 
     def __init__(
         self,
-        assessment_uuid: str = None,
         target_template_uuid: str = None,
         email_template_uuid: str = None,
         status: str = None,
@@ -37,19 +37,16 @@ class Campaign(Model):
         :type status: str
         """
         self.swagger_types = {
-            "assessment_uuid": str,
             "target_template_uuid": str,
             "email_template_uuid": str,
             "status": str,
         }  # type: ignore
 
         self.attribute_map = {
-            "assessment_uuid": "parent_uuid",
             "target_template_uuid": "target_template_uuid",
             "email_template_uuid": "email_template_uuid",
             "status": "status",
         }  # type: ignore
-        self._assessment_uuid = assessment_uuid
         self._target_template_uuid = target_template_uuid
         self._email_template_uuid = email_template_uuid
         self._status = status
@@ -64,29 +61,6 @@ class Campaign(Model):
         :rtype: Campaign
         """
         return util.deserialize_model(dikt, cls)
-
-    @property
-    def assessment_uuid(self) -> str:
-        """Get the assessment_uuid of this Campaign.
-
-        :return: The assessment_uuid of this Campaign.
-        :rtype: str
-        """
-        return self._assessment_uuid  # type: ignore
-
-    @assessment_uuid.setter
-    def assessment_uuid(self, assessment_uuid: str):
-        """Set the assessment_uuid of this Campaign.
-
-        :param assessment_uuid: The assessment_uuid of this Campaign.
-        :type assessment_uuid: str
-        """
-        if assessment_uuid is None:
-            raise ValueError(
-                "Invalid value for `parent_uuid`, must not be `None`"
-            )  # noqa: E501
-
-        self._assessment_uuid = assessment_uuid
 
     @property
     def target_template_uuid(self) -> str:
@@ -153,10 +127,8 @@ class CampaignSchema(BaseSchema):
     """Campaign Schema."""
 
     admin_email = fields.Str()
-    archived = fields.Bool()
-    assessment_uuid = fields.Str()
     customer_id = fields.Str()
-    customer_poc = fields.Str()
+    customer_poc = fields.Nested(CustomerContactSchema)
     description = fields.Str()
     email_template_uuid = fields.Str()
     end_datetime = DateTimeField()
@@ -167,7 +139,9 @@ class CampaignSchema(BaseSchema):
     sending_domain_id = fields.Str()
     start_datetime = DateTimeField()
     status = fields.Str(
-        validate=validate.OneOf(["queued", "running", "completed", "error", "incomplete"])
+        validate=validate.OneOf(
+            ["queued", "running", "completed", "error", "incomplete"]
+        )
     )
     target_count = fields.Int()
     target_template_uuid = fields.Str()

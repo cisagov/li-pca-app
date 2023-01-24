@@ -106,6 +106,7 @@ jobs:
       - name: Setup tmate debug session
         uses: mxschmitt/action-tmate@v3
         if: env.RUN_TMATE
+
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -210,6 +211,7 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
+          HUNTER_IO_API_KEY: ${{ secrets.HUNTER_IO_API_KEY }}
       - uses: actions/cache@v3
         env:
           BASE_CACHE_KEY: "${{ github.job }}-${{ runner.os }}-\

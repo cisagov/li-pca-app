@@ -20,12 +20,12 @@ import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
 import CampaignReviewForm from "ui-component/forms/CampaignReviewForm";
 import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
 import MainCard from "ui-component/cards/MainCard";
-import { useGetAll, submitEntry } from "services/api.js";
+import ResultDialog from "ui-component/popups/ResultDialog";
+import { useGetAll, submitEntry, deleteEntry } from "services/api.js";
 
 //third party
 import { useFormik } from "formik";
 import * as yup from "yup";
-import ResultDialog from "ui-component/popups/ResultDialog";
 
 // ==============================|| Create/Update Campaign View ||============================== //
 
@@ -61,7 +61,12 @@ const camRowsTransform = (campaignRows) => {
     campaignRows.customer_id = "";
   }
   if (!campaignRows.hasOwnProperty("customer_poc")) {
-    campaignRows.customer_poc = "";
+    campaignRows.customer_poc = {};
+    campaignRows.customer_poc_placeholder = "";
+  } else if (typeof campaignRows.customer_poc === "object") {
+    campaignRows.customer_poc_placeholder = JSON.stringify(
+      campaignRows.customer_poc
+    );
   }
   if (!campaignRows.hasOwnProperty("target_emails")) {
     campaignRows.target_emails = [];
@@ -128,6 +133,7 @@ const CampaignDataEntryPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [invalidAert, setInvalidAlert] = useState(false);
   const [savebtnOpen, setSavebtnOpen] = useState(false);
+  const [deletebtnOpen, setDeletebtnOpen] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [getError, setError] = useState([false, ""]);
   const customers = useGetAll("customers");
@@ -150,9 +156,9 @@ const CampaignDataEntryPage = () => {
       values.target_emails = target_emails;
       values.target_email_domains = target_email_domains;
       values.target_count = target_emails.length;
-      values.archived = false;
-      if (!values.customer_id) {
-        values.customer_poc = "";
+      values.customer_poc = JSON.parse(values.customer_poc_placeholder);
+      if (values.customer_poc_placeholder == "") {
+        values.customer_poc = {};
       }
       if (savebtnOpen) {
         values.start_datetime = "1970-01-01T00:00:00.000Z";
@@ -213,6 +219,15 @@ const CampaignDataEntryPage = () => {
     if (!getError[0]) {
       navigate("/cat-phishing/campaigns");
     }
+  };
+  const disableDeleteBtn = dataEntryType == "new" ? true : false;
+
+  const confirmDelete = () => {
+    deleteEntry("campaigns", formik.values._id, setError);
+    setTimeout(() => {
+      setDeletebtnOpen(false);
+      setHasSubmitted(true);
+    });
   };
   if (
     customers.isLoading ||
@@ -310,8 +325,23 @@ const CampaignDataEntryPage = () => {
                       isOpen={savebtnOpen}
                       setIsOpen={setSavebtnOpen}
                     />
+                    <ConfirmDialog
+                      subtitle={
+                        <>
+                          <b>{formik.values.name}</b> will be deleted in the
+                          database.
+                          <br />
+                          <br />
+                          <b>THIS ACTION CANNOT BE UNDONE.</b>
+                        </>
+                      }
+                      confirmType="Delete"
+                      handleClick={confirmDelete}
+                      isOpen={deletebtnOpen}
+                      setIsOpen={setDeletebtnOpen}
+                    />
                     <ResultDialog
-                      type={dataEntryType}
+                      type={deletebtnOpen ? "Delete Campaign" : dataEntryType}
                       hasSubmitted={hasSubmitted}
                       error={getError}
                       closeDialog={closeDialog}
@@ -319,6 +349,15 @@ const CampaignDataEntryPage = () => {
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
                       <Box sx={{ flex: "1 1 auto" }} />
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        disabled={disableDeleteBtn}
+                        onClick={() => setDeletebtnOpen(true)}
+                      >
+                        Delete Campaign
+                      </Button>
+                      <Box sx={{ ml: 3 }} />
                       <Button
                         variant="outlined"
                         onClick={() => setSavebtnOpen(true)}

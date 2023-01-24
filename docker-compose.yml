@@ -1,7 +1,7 @@
 ---
 version: '3'
-services:
 
+services:
   li-pca-api:
     build:
       context: .
@@ -23,6 +23,7 @@ services:
       - 8080:8080
       - 8043:443
       - 5678:5678
+
 
   li-pca-db:
     container_name: li-pca-db

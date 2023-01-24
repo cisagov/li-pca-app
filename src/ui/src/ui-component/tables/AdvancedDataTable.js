@@ -19,6 +19,7 @@ import {
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
+  GridToolbarExport,
 } from "@mui/x-data-grid";
 
 // Tabler icons
@@ -90,15 +91,10 @@ function CustomToolbar(props) {
         <Grid item xs={12} sm={12} md={11} lg={11} xl={7} sx={{ p: 1, pl: 1 }}>
           <GridToolbarColumnsButton />
           <GridToolbarFilterButton />
+          <GridToolbarExport />
           <Button
             size="small"
-            startIcon={<IconDownload size={18} />}
-            onClick={() => confirm("Download all templates?")}
-          >
-            Export
-          </Button>
-          <Button
-            size="small"
+            sx={{ "& .MuiButton-startIcon": { marginRight: "1.8px" } }}
             startIcon={<IconPlus size={18} />}
             onClick={() => {
               navigate(`${props.newEntryRoute}`, {

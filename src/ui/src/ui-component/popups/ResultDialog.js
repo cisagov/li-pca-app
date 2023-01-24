@@ -14,7 +14,7 @@ import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 const ResultDialog = (props) => {
   let bigIcon = <IconCircleCheck color="#00b341" size={100} stroke={1} />;
   let title = "Success";
-  let subtitle = [props.type + " database changes were successful."];
+  let subtitle = "Database changes were made successfully.";
 
   if (props.error[0]) {
     bigIcon = <IconCircleX color="#E62C22" size={100} stroke={1} />;

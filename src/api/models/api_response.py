@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Assessment Model."""
+"""API Response Model."""
 
 from __future__ import absolute_import
 

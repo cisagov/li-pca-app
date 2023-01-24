@@ -8,7 +8,6 @@
 # cisagov Libraries
 from api import encoder, type_util, util
 from api.controllers import (
-    assessments_controller,
     authorization_controller,
     campaigns_controller,
     customers_controller,
@@ -16,21 +15,12 @@ from api.controllers import (
     templates_controller,
     user_controller,
 )
-from api.models import (
-    api_response,
-    assessment,
-    base_model_,
-    campaign,
-    customer,
-    document,
-    template,
-)
+from api.models import api_response, base_model_, campaign, customer, document, template
 
 from ._version import __version__  # noqa: F401
 
 __all__ = [
     "api_response",
-    "assessments_controller",
     "authorization_controller",
     "campaigns_controller",
     "customers_controller",
@@ -38,7 +28,6 @@ __all__ = [
     "templates_controller",
     "user_controller",
     "api_response",
-    "assessment",
     "base_model_",
     "campaign",
     "customer",

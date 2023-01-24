@@ -16,8 +16,6 @@ tags:
     description: Li-PCA Authentication
   - name: customers
     description: Li-PCA Customers
-  - name: assessments
-    description: Li-PCA Assessments
   - name: campaigns
     description: Li-PCA Campaigns
   - name: templates
@@ -37,131 +35,6 @@ tags:
   - name: recommendation
     description: Li-PCA Recommendation
 paths:
-  /v1/assessments:
-    get:
-      tags:
-        - assessments
-      summary: Finds Assessments by status
-      description: Multiple status value entries with comma separated strings
-      operationId: get_all_assessments
-      parameters:
-        - name: customer_uuid
-          in: query
-          description: Assessment uuid filter
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Assessment'
-                x-content-type: application/json
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Assessment'
-        "400":
-          description: Invalid status value
-      x-openapi-router-controller: api.controllers.assessments_controller
-    post:
-      tags:
-        - assessments
-      summary: Add a new assessment to the data store
-      operationId: create_assessment
-      requestBody:
-        $ref: '#/components/requestBodies/Assessment'
-      responses:
-        "405":
-          description: Invalid input
-      x-openapi-router-controller: api.controllers.assessments_controller
-  /v1/assessments/{uuid}:
-    get:
-      tags:
-        - assessments
-      summary: Find assessment by uuid
-      description: Returns a single assessment
-      operationId: get_assessment_by_uuid
-      parameters:
-        - name: uuid
-          in: path
-          description: uuid of assessment to return
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            format: uuid4
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Assessment'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Assessment'
-        "400":
-          description: Invalid ID supplied
-        "404":
-          description: Assessment not found
-      x-openapi-router-controller: api.controllers.assessments_controller
-    put:
-      tags:
-        - assessments
-      summary: Update an existing assessment
-      operationId: update_assessment_by_uuid
-      parameters:
-        - name: uuid
-          in: path
-          description: uuid of assessment to update
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            format: uuid4
-      requestBody:
-        $ref: '#/components/requestBodies/Assessment'
-      responses:
-        "400":
-          description: Invalid uuid supplied
-        "404":
-          description: Assessment not found
-        "405":
-          description: Validation exception
-      x-openapi-router-controller: api.controllers.assessments_controller
-    delete:
-      tags:
-        - assessments
-      summary: Deletes an assessment
-      operationId: delete_assessment_by_uuid
-      parameters:
-        - name: uuid
-          in: path
-          description: uuid to delete
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            format: uuid4
-      responses:
-        "400":
-          description: Invalid uuid supplied
-        "404":
-          description: Assessment not found
-      x-openapi-router-controller: api.controllers.assessments_controller
   /v1/customers:
     get:
       tags:
@@ -205,7 +78,7 @@ paths:
                   $ref: '#/components/schemas/ApiResponse'
                 x-content-type: application/json
         "404":
-          description: Assessment not found
+          description: Customer not found
         "405":
           description: Validation exception
       x-openapi-router-controller: api.controllers.customers_controller
@@ -799,18 +672,7 @@ paths:
           required: true
           explode: false
           schema:
-            type: array
-            items:
-              type: string
-        - name: api_key
-          in: query
-          description: the API Key for Hunter IO
-          required: true
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
+            type: string
       responses:
         "200":
           description: successful operation
@@ -1377,7 +1239,7 @@ paths:
                   $ref: '#/components/schemas/ApiResponse'
                 x-content-type: application/json
         "404":
-          description: Assessment not found
+          description: Recommendation not found
         "405":
           description: Validation exception
       x-openapi-router-controller: api.controllers.recommendations_controller
@@ -1625,27 +1487,6 @@ components:
             name: Test1
         xml:
           name: Customer
-    Assessment:
-      required:
-        - customer_uuid
-        - name
-        - uuid
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid4
-        customer_uuid:
-          type: string
-          format: uuid4
-        name:
-          type: string
-        description:
-          type: string
-      example:
-        uuid: uuid
-      xml:
-        name: Assessment
     Template:
       type: object
       properties:
@@ -1794,10 +1635,6 @@ components:
           description: uuid string value
           format: uuid4
           example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed2
-        assessment_uuid:
-          type: string
-          format: uuid4
-          example: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
         name:
           type: string
         description:
@@ -1821,8 +1658,6 @@ components:
             - completed
             - error
             - incomplete
-        archived:
-          type: boolean
         admin_email:
           type: string
         operator_email:
@@ -1836,7 +1671,7 @@ components:
         customer_id:
           type: string
         customer_poc:
-          type: string
+          $ref: '#/components/schemas/Contact'
         target_emails:
           type: array
           items:
@@ -1857,7 +1692,6 @@ components:
         time_zone:
           type: string
       example:
-        assessment_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed3
         email_template_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed5
         uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed2
         target_template_uuid: a4b545e7-2fec-49a9-a3f4-3528dd7cbed4
@@ -2047,16 +1881,6 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Customer'
-    Assessment:
-      description: Assessment object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Assessment'
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Assessment'
-      required: true
     Campaign:
       description: Campaign object to be added to data store
       content:

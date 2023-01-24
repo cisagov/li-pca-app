@@ -1,12 +1,19 @@
 import PropTypes from "prop-types";
 
 // material-ui
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 import Grid from "@mui/material/Grid";
+import SendIcon from "@mui/icons-material/Send";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 const CampaignReviewForm = (props) => {
+  const poc_placeholder = props.formik.values.customer_poc_placeholder;
   const sd_id = props.formik.values.sending_domain_id;
   const lp_id = props.formik.values.landing_page_id;
   const c_id = props.formik.values.customer_id;
@@ -19,6 +26,20 @@ const CampaignReviewForm = (props) => {
   let landing_page_name = " ";
   let customer_name = " ";
   let template_name = " ";
+  let poc_obj = { first_name: " ", last_name: " ", email: " " };
+  let customer_poc = " ";
+  if (poc_placeholder != undefined && poc_placeholder != "") {
+    poc_obj = JSON.parse(props.formik.values.customer_poc_placeholder);
+    customer_poc = poc_obj.first_name + " " + poc_obj.last_name;
+  }
+  let start_datetime = props.formik.values.start_datetime;
+  let end_datetime = props.formik.values.end_datetime;
+  if (start_datetime == "1970-01-01T00:00:00+00:00") {
+    start_datetime = " ";
+  }
+  if (end_datetime == "1970-01-01T00:00:00+00:00") {
+    end_datetime = " ";
+  }
   if (sd_id && !domains.getError[0] && domains.getData.length != 0) {
     let entry = props.domains.getData.find((d) => d._id == sd_id);
     sending_domain_name = entry.name;
@@ -151,7 +172,7 @@ const CampaignReviewForm = (props) => {
             name="poc_name"
             label="Point of Contact"
             disabled
-            value={props.formik.values.customer_poc}
+            value={customer_poc}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -218,7 +239,7 @@ const CampaignReviewForm = (props) => {
             name="start_datetime"
             label="Start Date and Time"
             disabled
-            value={props.formik.values.start_datetime}
+            value={start_datetime}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -234,7 +255,7 @@ const CampaignReviewForm = (props) => {
             name="end_datetime"
             label="End Date and Time"
             disabled
-            value={props.formik.values.end_datetime}
+            value={end_datetime}
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
@@ -256,7 +277,83 @@ const CampaignReviewForm = (props) => {
       </Grid>
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 1, mb: 1 }}>
-        <Grid item></Grid>
+        <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
+          <Typography variant="h5" gutterBottom component="div">
+            Test Email Recipients
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={9} md={9} lg={9} xl={8}>
+          <FormLabel sx={{ mt: 1, mb: 1 }}>
+            The recipients below will recieve a test email when Send Test Email
+            is clicked.
+          </FormLabel>
+          <FormGroup onChange={(e) => console.log(e.target.checked)}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  size="small"
+                  value="admin_email"
+                  defaultChecked
+                  // checked={}
+                />
+              }
+              label={props.formik.values.admin_email}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  size="small"
+                  value="operator_email"
+                  defaultChecked
+                  // checked={}
+                />
+              }
+              label={props.formik.values.operator_email}
+            />
+            {poc_placeholder == undefined || poc_placeholder == "" ? (
+              <></>
+            ) : (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    size="small"
+                    value="customer_poc_email"
+                    // checked={}
+                  />
+                }
+                label={poc_obj.email}
+              />
+            )}
+          </FormGroup>
+          <Typography variant="caption" sx={{ mt: 1, mb: 1 }} component="div">
+            Additional recipients may be provided here in a comma separated
+            list. Format: name@domain.com, name@domain.com
+          </Typography>
+          <TextField
+            size="small"
+            fullWidth
+            id="additional_recipients"
+            name="additional_recipients"
+            label="Additional Email Addresses"
+            multiline
+            minRows={2}
+            // value=""
+          />
+        </Grid>
+        <Grid item xs={12} sm={3} md={3} lg={3} xl={4} />
+        <Grid item xs={12} sm={4} md={3} lg={2} xl={2}>
+          <Button
+            fullWidth
+            variant="contained"
+            size="small"
+            color="warning"
+            endIcon={<SendIcon />}
+            // onClick={() => setDeletebtnOpen(true)}
+          >
+            Send Test Email
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={3} md={3} lg={3} xl={4} />
       </Grid>
     </>
   );

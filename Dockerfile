@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
-RUN pip install -e .
+RUN pip install -e . -r requirements.txt
 
 COPY . /usr/src/app
 
