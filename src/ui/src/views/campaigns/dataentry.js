@@ -298,7 +298,7 @@ const CampaignDataEntryPage = () => {
                   </>
                 ) : activeStep == 2 ? (
                   <>
-                    <CampaignDeliveryForm />
+                    <CampaignDeliveryForm formik={formik} />
                     {invalidAlertJSX}
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
