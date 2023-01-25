@@ -53,7 +53,7 @@ services:
       - 3000:3000
     volumes:
       - ./src/ui:/usr/src/ui
-    command: bash -c "npm ci && npm start --only=prod --no-audit"
+    command: bash -c "npm install && npm start --only=prod --no-audit"
     networks:
       - backend
       - frontend
