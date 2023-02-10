@@ -19,7 +19,7 @@ const SubCard = forwardRef(
       children,
       content,
       contentClass,
-      darkTitle,
+      // darkTitle,
       secondary,
       sx = {},
       contentSX = {},
