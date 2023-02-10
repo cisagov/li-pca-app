@@ -16,17 +16,19 @@ import themeTypography from "./typography";
 export const theme = (customization) => {
   const color = colors;
 
+  let mode = customization?.mode;
   const themeOption = {
-    colors: color,
+    // colors: color,
     heading: color.grey900,
     paper: color.paper,
     backgroundDefault: color.paper,
-    background: color.primaryLight,
-    darkTextPrimary: color.grey700,
-    darkTextSecondary: color.grey500,
-    textDark: color.grey900,
-    menuSelected: color.secondaryDark,
-    menuSelectedBack: color.secondaryLight,
+    background: mode == "light" ? color.primaryLight : color.darkBackground,
+    darkTextPrimary: mode == "dark" ? color.grey100 : color.grey700,
+    darkTextSecondary: mode == "dark" ? color.grey100 : color.grey500,
+    textDark: mode == "dark" ? color.grey100 : color.grey900,
+    menuSelected: mode == "dark" ? color.darkTextTitle : color.textDark,
+    menuSelectedBack:
+      mode == "dark" ? color.darkPrimary800 : color.primaryLight,
     divider: color.grey200,
     customization,
   };
@@ -37,7 +39,8 @@ export const theme = (customization) => {
     mixins: {
       toolbar: {
         // Change background color of menu bar here
-        //background: color.primary800,
+        // background: mode == "dark" ? color.darkBackground : color.primaryDark,
+        // background: color.primary800,
         minHeight: "48px",
         padding: "16px",
         "@media (min-width: 600px)": {
