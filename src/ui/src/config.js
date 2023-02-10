@@ -5,6 +5,7 @@ const config = {
   defaultPath: "/cat-phishing/campaigns",
   fontFamily: `'Roboto', sans-serif`,
   borderRadius: 12,
+  mode: "light",
 };
 
 export default config;

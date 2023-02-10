@@ -9,6 +9,7 @@ export const initialState = {
   fontFamily: config.fontFamily,
   borderRadius: config.borderRadius,
   opened: true,
+  mode: config.mode,
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
@@ -36,6 +37,11 @@ const customizationReducer = (state = initialState, action) => {
       return {
         ...state,
         borderRadius: action.borderRadius,
+      };
+    case actionTypes.SET_MODE:
+      return {
+        ...state,
+        mode: action.mode,
       };
     default:
       return state;
