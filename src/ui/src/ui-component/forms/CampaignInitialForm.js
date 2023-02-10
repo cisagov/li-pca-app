@@ -107,7 +107,6 @@ const CustomerDisplay = (props) => {
       </Grid>
     );
   } else if (!customer_id) {
-    let customer_poc = "";
     if (!tableDisplayed) {
       return selectButton;
     }
