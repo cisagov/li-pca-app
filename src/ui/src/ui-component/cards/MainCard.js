@@ -67,7 +67,7 @@ const MainCard = forwardRef(
         <CardHeader
           sx={headerSX}
           title={
-            <Typography variant="h3" color="primary">
+            <Typography variant="h3" color="text.secondary">
               {title}
             </Typography>
           }
