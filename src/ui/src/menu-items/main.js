@@ -20,11 +20,11 @@ const icons = {
   IconUser,
 };
 
-// ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
+// ==============================|| DOCUMENTATION MENU ITEMS ||============================== //
 
 const main = {
   id: "main",
-  title: "Main",
+  title: "Main Menu",
   type: "group",
   children: [
     {
