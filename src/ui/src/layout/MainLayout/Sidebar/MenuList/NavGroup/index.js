@@ -35,8 +35,9 @@ const NavGroup = ({ item }) => {
         subheader={
           item.title && (
             <Typography
-              variant="caption"
-              sx={{ ...theme.typography.menuCaption }}
+              variant="h4"
+              // sx={{ ...theme.typography.menuCaption }}
+              color="text.primary"
               display="block"
               gutterBottom
             >
