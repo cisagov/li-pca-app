@@ -1,73 +1,78 @@
+// assets
+import colors from "assets/scss/_themes-vars.module.scss";
+
 /**
  * Color intention that you want to used in your theme
  * @param {JsonObject} theme Theme customization object
  */
 
 export default function themePalette(theme) {
+  let mode = theme?.customization?.mode;
   return {
-    mode: theme?.customization?.navType,
+    mode: mode,
     common: {
-      black: theme.colors?.darkPaper,
+      black: colors.darkPaper,
     },
     primary: {
-      light: theme.colors?.primaryLight,
-      main: theme.colors?.primaryMain,
-      dark: theme.colors?.primaryDark,
-      200: theme.colors?.primary200,
-      800: theme.colors?.primary800,
+      light: mode == "dark" ? colors.darkPrimaryLight : colors.primaryLight,
+      main: mode == "dark" ? colors.darkPrimaryMain : colors.primaryMain,
+      dark: mode == "dark" ? colors.darkPrimaryDark : colors.primaryDark,
+      200: mode == "dark" ? colors.darkPrimary200 : colors.primary200,
+      800: mode == "dark" ? colors.darkPrimary800 : colors.primary800,
     },
     secondary: {
-      light: theme.colors?.secondaryLight,
-      main: theme.colors?.secondaryMain,
-      dark: theme.colors?.secondaryDark,
-      200: theme.colors?.secondary200,
-      800: theme.colors?.secondary800,
+      light: mode == "dark" ? colors.darkSecondaryLight : colors.secondaryLight,
+      main: mode == "dark" ? colors.darkSecondaryMain : colors.secondaryMain,
+      dark: mode == "dark" ? colors.darkSecondaryDark : colors.secondaryDark,
+      200: mode == "dark" ? colors.darkSecondary200 : colors.secondary200,
+      800: mode == "dark" ? colors.darkSecondary800 : colors.secondary800,
     },
     error: {
-      light: theme.colors?.errorLight,
-      main: theme.colors?.errorMain,
-      dark: theme.colors?.errorDark,
+      light: colors.errorLight,
+      main: colors.errorMain,
+      dark: colors.errorDark,
     },
     orange: {
-      light: theme.colors?.orangeLight,
-      main: theme.colors?.orangeMain,
-      dark: theme.colors?.orangeDark,
+      light: colors.orangeLight,
+      main: colors.orangeMain,
+      dark: colors.orangeDark,
     },
     warning: {
-      light: theme.colors?.warningLight,
-      main: theme.colors?.warningMain,
-      dark: theme.colors?.warningDark,
+      light: colors.warningLight,
+      main: colors.warningMain,
+      dark: colors.warningDark,
     },
     success: {
-      light: theme.colors?.successLight,
-      200: theme.colors?.success200,
-      main: theme.colors?.successMain,
-      dark: theme.colors?.successDark,
+      light: colors.successLight,
+      200: colors.success200,
+      main: colors.successMain,
+      dark: colors.successDark,
     },
     grey: {
-      50: theme.colors?.grey50,
-      100: theme.colors?.grey100,
-      500: theme.darkTextSecondary,
-      600: theme.heading,
-      700: theme.darkTextPrimary,
-      900: theme.textDark,
+      50: colors.grey50,
+      100: colors.grey100,
+      500: colors.darkTextSecondary,
+      600: colors.heading,
+      700: colors.darkTextPrimary,
+      900: colors.textDark,
     },
     dark: {
-      light: theme.colors?.darkTextPrimary,
-      main: theme.colors?.darkLevel1,
-      dark: theme.colors?.darkLevel2,
-      800: theme.colors?.darkBackground,
-      900: theme.colors?.darkPaper,
+      light: mode == "dark" ? colors.grey700 : colors.darkTextPrimary,
+      main: mode == "dark" ? colors.grey400 : colors.darkLevel1,
+      dark: mode == "dark" ? colors.grey300 : colors.darkLevel2,
+      800: mode == "dark" ? colors.grey100 : colors.darkBackground,
+      900: mode == "dark" ? colors.grey50 : colors.darkPaper,
     },
     text: {
-      primary: theme.darkTextPrimary,
-      secondary: theme.darkTextSecondary,
-      dark: theme.textDark,
-      hint: theme.colors?.grey100,
+      primary: mode == "dark" ? colors.darkTextPrimary : colors.grey700,
+      secondary: mode == "dark" ? colors.grey100 : colors.grey400,
+      dark: mode == "dark" ? colors.grey100 : colors.textDark,
+      hint: mode == "dark" ? colors.grey100 : colors.grey300,
     },
     background: {
-      paper: theme.paper,
-      default: theme.backgroundDefault,
+      paper: mode == "dark" ? colors.darkPaper : colors.paper,
+      default: mode == "dark" ? colors.darkPaper : colors.paper,
+      // default: colors.backgroundDefault,
     },
   };
 }
