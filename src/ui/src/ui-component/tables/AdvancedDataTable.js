@@ -23,7 +23,7 @@ import {
 } from "@mui/x-data-grid";
 
 // Tabler icons
-import { IconDownload, IconPlus } from "@tabler/icons";
+import { IconPlus } from "@tabler/icons";
 
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
