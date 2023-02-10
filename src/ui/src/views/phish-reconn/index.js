@@ -62,7 +62,6 @@ function BaseJSX(props) {
         return (
           <IconButton
             variant="contained"
-            color="dark"
             disabled={isDisabled}
             onClick={() => {
               toScroll;
@@ -204,7 +203,7 @@ function PhishReconnPage() {
       dataEntry={"data-entry"}
       triggerDataFetch={triggerDataFetch}
     >
-      <Typography variant="h5" sx={{ mb: 2 }}>
+      <Typography sx={{ mb: 2 }}>
         Select a Customer Domain to run Reconnaissance on or view its past
         results
       </Typography>

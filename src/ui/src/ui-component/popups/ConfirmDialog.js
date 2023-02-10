@@ -96,7 +96,9 @@ const ConfirmDialog = (props) => {
           <Grid item sx={{ mt: 2 }}>
             <IconAlertCircle color="#2196f3" size={100} stroke={1} />
           </Grid>
-          <Grid item>{title}</Grid>
+          <Grid item sx={{ color: "text.secondary" }}>
+            {title}
+          </Grid>
         </DialogTitle>
         <DialogContent>
           <Grid item sx={{ mb: 2 }}>

@@ -451,13 +451,7 @@ const CustomerForm = (props) => {
           </>
         )}
         <Grid item xs={10} sm={1} md={1} lg={1} xl={1}>
-          <Button
-            color="dark"
-            variant="text"
-            size="large"
-            fullWidth
-            onClick={handleCancel}
-          >
+          <Button variant="text" size="large" fullWidth onClick={handleCancel}>
             Cancel
           </Button>
           <ConfirmDialog

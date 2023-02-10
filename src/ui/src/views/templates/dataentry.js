@@ -512,7 +512,6 @@ const TemplateDataEntryPage = () => {
           <Grid item xs={10} sm={2} md={1} lg={1} xl={1}>
             <Button
               fullWidth
-              color="dark"
               variant="text"
               size="large"
               onClick={handleCancel}

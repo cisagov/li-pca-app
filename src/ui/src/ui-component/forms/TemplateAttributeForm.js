@@ -48,7 +48,7 @@ const TemplateAttrForm = (props) => {
       <form id="template-form" onSubmit={props.formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Typography variant="h4" gutterBottom component="div">
+            <Typography variant="h4" gutterBottom color="text.secondary">
               Subject:
             </Typography>
           </Grid>
@@ -71,7 +71,7 @@ const TemplateAttrForm = (props) => {
             />
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Typography variant="h4" gutterBottom component="div">
+            <Typography variant="h4" gutterBottom color="text.secondary">
               From Address:
             </Typography>
           </Grid>
@@ -114,7 +114,7 @@ const TemplateAttrForm = (props) => {
             @domain.com&#62;
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Typography variant="h4" gutterBottom component="div">
+            <Typography variant="h4" gutterBottom color="text.secondary">
               Recommendations:
             </Typography>
           </Grid>
@@ -145,7 +145,7 @@ const TemplateAttrForm = (props) => {
       <form id="template-form" onSubmit={props.formik.handleSubmit}>
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Typography variant="h4" gutterBottom component="div">
+            <Typography variant="h4" gutterBottom color="text.secondary">
               Campaign Config:
             </Typography>
           </Grid>

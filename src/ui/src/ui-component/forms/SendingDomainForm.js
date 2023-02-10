@@ -227,7 +227,7 @@ const SendingDomainForm = (props) => {
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} md={12} xl={12} sx={{ mt: 1 }}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Email Headers
           </Typography>
         </Grid>
@@ -409,11 +409,9 @@ const SendingDomainForm = (props) => {
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 sx={{
-                  backgroundColor: "#f8f8f8",
                   border: 1,
                   borderRadius: "12px",
                   borderColor: "white",
-                  color: "#595959",
                   fontSize: 16,
                 }}
               >

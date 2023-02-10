@@ -68,11 +68,11 @@ const DeceptionCalculator = (props) => {
       <Typography variant="h3" gutterBottom component="div" color="primary">
         Deception Calculator
       </Typography>
-      <Typography variant="body1" color="black" sx={{ mb: 1 }}>
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
         Final Deception Score: {" " + props.templateData.deception_score}
       </Typography>
       <form>
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        <Typography variant="h4" sx={{ mb: 1, color: "text.secondary" }}>
           Appearance
         </Typography>
         <FormLabel>Grammar</FormLabel>
@@ -150,7 +150,7 @@ const DeceptionCalculator = (props) => {
             label="2 = Proper"
           />
         </RadioGroup>
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        <Typography variant="h4" sx={{ mb: 1, color: "text.secondary" }}>
           Sender
         </Typography>
         <FormLabel>External</FormLabel>
@@ -228,7 +228,7 @@ const DeceptionCalculator = (props) => {
             label="2 = Superior"
           />
         </RadioGroup>
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        <Typography variant="h4" sx={{ mb: 1, color: "text.secondary" }}>
           Relevancy
         </Typography>
         <FormLabel>Organization</FormLabel>

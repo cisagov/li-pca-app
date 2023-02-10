@@ -31,7 +31,9 @@ const ResultDialog = (props) => {
           <Grid item sx={{ mt: 2 }}>
             {bigIcon}
           </Grid>
-          <Grid item>{title}</Grid>
+          <Grid item sx={{ color: "text.secondary" }}>
+            {title}
+          </Grid>
         </DialogTitle>
         <DialogContent>
           <Grid item>

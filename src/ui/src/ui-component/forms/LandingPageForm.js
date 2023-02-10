@@ -213,7 +213,6 @@ const LandingPageForm = (props) => {
           </Grid>
           <Grid item xs={11} sm={2} md={2} lg={2} xl={2}>
             <Button
-              color="dark"
               variant="text"
               size="large"
               fullWidth

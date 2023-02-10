@@ -61,12 +61,13 @@ const CampaignReviewForm = (props) => {
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Campaign Name
           </Typography>
         </Grid>
         <Grid item xs={12} sm={9} md={9} lg={9} xl={8}>
           <TextField
+            sx={{ color: "text.secondary" }}
             size="small"
             fullWidth
             id="name"
@@ -77,7 +78,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Admin Email
           </Typography>
         </Grid>
@@ -93,7 +94,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Operator Email
           </Typography>
         </Grid>
@@ -109,7 +110,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Sending Domain
           </Typography>
         </Grid>
@@ -125,7 +126,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Landing Page
           </Typography>
         </Grid>
@@ -144,7 +145,7 @@ const CampaignReviewForm = (props) => {
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Customer
           </Typography>
         </Grid>
@@ -160,7 +161,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Primary Point of Contact
           </Typography>
         </Grid>
@@ -176,7 +177,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Target Domains
           </Typography>
         </Grid>
@@ -192,7 +193,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Target Emails
           </Typography>
         </Grid>
@@ -208,7 +209,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Template Name
           </Typography>
         </Grid>
@@ -227,7 +228,7 @@ const CampaignReviewForm = (props) => {
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Start Date and Time
           </Typography>
         </Grid>
@@ -243,7 +244,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             End Date and Time
           </Typography>
         </Grid>
@@ -259,7 +260,7 @@ const CampaignReviewForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Time Zone
           </Typography>
         </Grid>
@@ -278,7 +279,7 @@ const CampaignReviewForm = (props) => {
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 1, mb: 1 }}>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={4}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.secondary">
             Test Email Recipients
           </Typography>
         </Grid>
@@ -325,11 +326,12 @@ const CampaignReviewForm = (props) => {
               />
             )}
           </FormGroup>
-          <Typography variant="caption" sx={{ mt: 1, mb: 1 }} component="div">
+          <Typography variant="caption" sx={{ mt: 1 }}>
             Additional recipients may be provided here in a comma separated
             list. Format: name@domain.com, name@domain.com
           </Typography>
           <TextField
+            sx={{ mt: 1 }}
             size="small"
             fullWidth
             id="additional_recipients"

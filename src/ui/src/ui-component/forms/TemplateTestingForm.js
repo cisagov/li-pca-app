@@ -40,7 +40,7 @@ const TemplateTestingForm = () => {
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h4" gutterBottom component="div">
+          <Typography variant="h4" gutterBottom color="text.secondary">
             Sending Profile:
           </Typography>
           <Typography variant="body2" gutterBottom component="div">
@@ -70,10 +70,10 @@ const TemplateTestingForm = () => {
           </TextField>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h4" gutterBottom component="div">
+          <Typography variant="h4" gutterBottom color="text.secondary">
             Customer:
           </Typography>
-          <Typography variant="body2" gutterBottom component="div">
+          <Typography variant="body2" gutterBottom color="text.secondary">
             Select the customer that will be used in generating tags.
           </Typography>
         </Grid>
@@ -95,7 +95,7 @@ const TemplateTestingForm = () => {
           </TextField>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h4" gutterBottom component="div">
+          <Typography variant="h4" gutterBottom color="text.secondary">
             Email:
           </Typography>
           <Typography variant="body2" gutterBottom component="div">
@@ -116,10 +116,10 @@ const TemplateTestingForm = () => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={10} xl={9}>
-          <Typography variant="h4" gutterBottom component="div">
+          <Typography variant="h4" gutterBottom color="text.secondary">
             Tags:
           </Typography>
-          <Typography variant="body2" gutterBottom component="div">
+          <Typography variant="body2" gutterBottom color="text.secondary">
             Enter other attributes used for tags.
           </Typography>
         </Grid>

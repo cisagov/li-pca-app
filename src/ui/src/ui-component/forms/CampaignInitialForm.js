@@ -124,12 +124,12 @@ const CustomerDisplay = (props) => {
     const selectedCustomerDisplay = (
       <>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          <Card variant="outlined" style={{ backgroundColor: "#fafafa" }}>
+          <Card variant="outlined">
             <CardContent sx={{ m: -1.5 }}>
-              <Typography variant="h5" color="#8a8a8a">
+              <Typography variant="h5" color="text.secondary">
                 {selectedRow.name} ({selectedRow.identifier})
               </Typography>
-              <Typography color="#8a8a8a">
+              <Typography color="text.secondary">
                 {selectedRow.address_1} {selectedRow.address_2}
                 <br />
                 {selectedRow.city}, {selectedRow.state}
@@ -243,13 +243,13 @@ const CampaignInitialForm = (props) => {
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 0.1, mb: 2.5 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography color="black" fontSize={18} component="div">
+          <Typography color="primary" fontSize={18} component="div">
             <Box sx={{ fontWeight: "regular" }}>Campaign Assignment</Box>
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Box sx={{ mb: 2 }}>
-            <Typography variant="h5" gutterBottom component="div">
+            <Typography variant="h5" gutterBottom color="text.primary">
               Specify the Campaign Name
             </Typography>
           </Box>
@@ -268,7 +268,7 @@ const CampaignInitialForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Box sx={{ mb: 2 }}>
-            <Typography variant="h5" gutterBottom component="div">
+            <Typography variant="h5" gutterBottom color="text.primary">
               Select the Sending Domain
             </Typography>
           </Box>
@@ -312,7 +312,7 @@ const CampaignInitialForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Box sx={{ mb: 2 }}>
-            <Typography variant="h5" gutterBottom component="div">
+            <Typography variant="h5" gutterBottom color="text.primary">
               Assign the Administrator
             </Typography>
           </Box>
@@ -332,7 +332,7 @@ const CampaignInitialForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           <Box sx={{ mb: 2 }}>
-            <Typography variant="h5" gutterBottom component="div">
+            <Typography variant="h5" gutterBottom color="text.primary">
               Assign the Operator
             </Typography>
           </Box>
@@ -354,7 +354,7 @@ const CampaignInitialForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.primary">
             Select the Landing Page
           </Typography>
         </Grid>
@@ -426,7 +426,7 @@ const CampaignInitialForm = (props) => {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: -1 }}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.primary">
             Assign the Customer
           </Typography>
         </Grid>
@@ -436,12 +436,12 @@ const CampaignInitialForm = (props) => {
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 0.1 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography fontSize={18} color="black" component="div">
+          <Typography fontSize={18} color="primary" component="div">
             <Box sx={{ fontWeight: "regular" }}>Target Email Selection</Box>
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: -1 }}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.primary">
             Target Email Domain
           </Typography>
         </Grid>
@@ -472,7 +472,7 @@ const CampaignInitialForm = (props) => {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: -1 }}>
-          <Typography variant="h5" gutterBottom component="div">
+          <Typography variant="h5" gutterBottom color="text.primary">
             Target Recipients
           </Typography>
         </Grid>

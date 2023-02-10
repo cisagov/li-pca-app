@@ -76,7 +76,7 @@ const PhishReconForm = (props) => {
       </Grid>
       <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
       <Grid item xs={10} sm={10} md={10} lg={10} xl={10} sx={{ mt: 3 }}>
-        <Typography variant="h5">Web Search Findings</Typography>
+        <Typography>Web Search Findings</Typography>
       </Grid>
       <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
         <TextField

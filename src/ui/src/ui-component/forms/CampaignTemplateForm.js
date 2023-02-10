@@ -97,7 +97,7 @@ export default function CampaignTemplateForm(props) {
       <Divider color="gray" sx={{ height: 2 }} />
       <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography color="black" fontSize={18} component="div">
+          <Typography color="primary" fontSize={18} component="div">
             <Box sx={{ fontWeight: "regular" }}>Template Selection</Box>
           </Typography>
         </Grid>
