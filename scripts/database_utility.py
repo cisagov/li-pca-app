@@ -2,7 +2,7 @@
 
 # Standard Python Libraries
 import argparse
-import subprocess
+import subprocess  # nosec
 
 
 def main():
@@ -101,7 +101,7 @@ def execute_subprocess_command(command):
     """Call subprocess.run and execute the desired command."""
     print(f"Executing command: {command}")
     out = subprocess.run(
-        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False
+        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False  # nosec
     )
     print(out.stdout.decode())
 

@@ -12,6 +12,3 @@ tests:
 
 skips:
   - B101  # skip "assert used" check since assertions are required in pytests
-
-exclude_dirs:
-  - 'scripts/database_utility.py'
