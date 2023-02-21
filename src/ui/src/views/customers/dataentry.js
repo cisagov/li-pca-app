@@ -103,7 +103,7 @@ const CustDataEntryPage = () => {
   const renderCampaigns = () => {
     const title = (
       <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ mt: 5, mb: 3 }}>
-        <Typography variant="h4" gutterBottom component="div">
+        <Typography fontSize={18} gutterBottom color="primary">
           Customer Campaigns
         </Typography>
       </Grid>
