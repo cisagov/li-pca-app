@@ -173,11 +173,11 @@ const TemplateDataEntryPage = () => {
   const [deletebtnOpen, setDeletebtnOpen] = useState(false);
   const [getDelete, setDelete] = useState(false);
   const alertSubtitle = (
-    <p>
+    <>
       Please check that <b>Template Name</b>, <b>HTML</b>, <b>Subject</b>,
       &nbsp;<b>Display Name</b>, and <b>Sender</b> are all filled out and <br />
-      that the <b>Deception Score</b> is between 1 and 6.
-    </p>
+      that the <b>Deception Score</b> is between 4 and 6.
+    </>
   );
   const validationSchema = yup.object({
     subject: yup.string().required("Subject is required"),
@@ -218,7 +218,7 @@ const TemplateDataEntryPage = () => {
   const handleSave = () => {
     formik.setTouched(fieldsToValidate);
     if (
-      templateData["deception_score"] == 0 ||
+      templateData["deception_score"] < 4 ||
       templateData["deception_score"] > 6
     ) {
       setAlertbtnOpen(true);
@@ -232,7 +232,7 @@ const TemplateDataEntryPage = () => {
     setAlertbtnOpen(false);
     setError([false, ""]);
     setDelete(false);
-    if (!getError[0]) {
+    if (getError[0]) {
       navigate("/cat-phishing/templates");
     }
     setHasSubmitted(false);
@@ -485,7 +485,6 @@ const TemplateDataEntryPage = () => {
                 title="Template has missing or incorrect values"
                 subtitle={alertSubtitle}
                 isOpen={alertbtnOpen}
-                setIsOpen={setAlertbtnOpen}
                 closeDialog={closeDialog}
               />
               <ConfirmDialog
