@@ -16,6 +16,10 @@ import UploadIcon from "@mui/icons-material/Upload";
 
 // project imports
 import AdvancedSimpleDataTable from "ui-component/tables/AdvancedSimpleDataTable";
+import AlertDialog from "ui-component/popups/AlertDialog";
+
+// third-party
+const XLSX = require("xlsx");
 
 const cols = [
   { field: "id", hide: true },
@@ -200,22 +204,55 @@ CustomerDisplay.propTypes = {
 };
 
 const CampaignInitialForm = (props) => {
-  const [dupDisplay, setDupDisplay] = useState([false, 0]);
+  let formik = props.formik;
   const domains = props.domains;
   const landingPages = props.landingPages;
-  let formik = props.formik;
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      let fileReader = new FileReader();
-      fileReader.readAsText(file);
-      fileReader.onload = function () {
-        formik.setFieldValue("target_emails_placeholder", fileReader.result);
-      };
-      fileReader.onerror = function () {
-        console.log(fileReader.error);
-      };
+  const [dupDisplay, setDupDisplay] = useState([false, 0]);
+  const [uploadErrorMsg, setErrorMsg] = useState("");
+  const [popUp, setPopUp] = useState(false);
+  const cCount = (targetEmails) => {
+    if (targetEmails == "") {
+      setErrorMsg(
+        "Warning: The uploaded file was empty. No data has been added."
+      );
+      return true;
+    } else {
+      const arr = targetEmails.split("\n");
+      for (var i = 0; i < arr.length; i++) {
+        let numOfCommas = arr[i].split(",").length - 1;
+        if (numOfCommas < 2) {
+          return false;
+        }
+      }
     }
+    setErrorMsg("");
+    return true;
+  };
+  const handleFileUpload = (e) => {
+    const field = "target_emails_placeholder";
+    const file = e.target.files[0];
+    const fileReader = new FileReader();
+    let result = "";
+    if (file) {
+      if (file.name.slice(-4).toLowerCase() == "xlsx") {
+        fileReader.onload = function () {
+          const wb = XLSX.read(fileReader.result, { type: "binary" });
+          result = XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]);
+          cCount(result) ? formik.setFieldValue(field, result) : setPopUp(true);
+        };
+        fileReader.readAsBinaryString(file);
+      } else {
+        fileReader.readAsText(file);
+        fileReader.onload = function () {
+          result = fileReader.result;
+          cCount(result) ? formik.setFieldValue(field, result) : setPopUp(true);
+        };
+      }
+      setDupDisplay([false, 0]);
+    }
+    fileReader.onerror = function () {
+      console.log(fileReader.error);
+    };
   };
   const handleDuplicates = () => {
     const newLineExpression = /\r\n|\n\r|\n|\r/g;
@@ -484,7 +521,7 @@ const CampaignInitialForm = (props) => {
           >
             <input
               type="file"
-              accept=".csv, text/plain"
+              accept=".csv, text/plain, .xlsx"
               hidden
               onChange={handleFileUpload}
             />
@@ -508,9 +545,16 @@ const CampaignInitialForm = (props) => {
             </Alert>
           </Grid>
         ) : (
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} />
+          <></>
         )}
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          {uploadErrorMsg ? (
+            <Alert severity="warning" sx={{ mb: 2 }}>
+              {uploadErrorMsg}
+            </Alert>
+          ) : (
+            <></>
+          )}
           <TextField
             size="small"
             multiline
@@ -519,7 +563,7 @@ const CampaignInitialForm = (props) => {
             value={formik.values.target_emails_placeholder}
             id="target_emails_placeholder"
             name="target_emails_placeholder"
-            label="Target Emails"
+            label="Target Email List"
             onChange={formik.handleChange}
             error={
               formik.touched.target_emails_placeholder &&
@@ -531,12 +575,28 @@ const CampaignInitialForm = (props) => {
             }
           />
           <Typography variant="caption" sx={{ mt: 1 }} component="div">
-            Upload a .CSV file or an Excel spreadsheet saved as a .CSV or
-            comma-separated value text file containing the list of target
-            individuals or enter them directly in the field below. <br />
-            Format: email, first name, last name, position
+            Upload a comma-separated .CSV or .TXT file or a .XLSX Excel file
+            containing the list of target individuals or enter them directly in
+            the field above. <br />
+            Format per line: email, first name, last name, position
           </Typography>
         </Grid>
+        <AlertDialog
+          title="Required fields missing from targets file"
+          subtitle={
+            <>
+              Each line in the file is required to have at least a
+              <br />
+              target's <b>email, first name, </b>and<b> last name.</b>
+              <br />
+              Please check the contents of your file and try again.
+            </>
+          }
+          isOpen={popUp}
+          closeDialog={() => {
+            setPopUp(false);
+          }}
+        />
       </Grid>
     </>
   );
