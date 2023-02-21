@@ -117,12 +117,16 @@ const validationSchema = yup.object({
     .string()
     .email("Invalid email")
     .required("Operator email is required"),
+  target_emails_placeholder: yup
+    .string()
+    .required("Target email list is required"),
 });
 
 const initialFieldsToValidate = {
   name: true,
   admin_email: true,
   operator_email: true,
+  target_emails_placeholder: true,
 };
 
 const CampaignDataEntryPage = () => {
