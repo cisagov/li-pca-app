@@ -48,7 +48,6 @@ AlertDialog.propTypes = {
   subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   isOpen: PropTypes.bool,
   closeDialog: PropTypes.func,
-  setIsOpen: PropTypes.func,
 };
 
 export default AlertDialog;
