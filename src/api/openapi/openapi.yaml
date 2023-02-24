@@ -21,13 +21,17 @@ tags:
   - name: templates
     description: Li-PCA Templates
   - name: documents
-    description: Li-PCA Reports
+    description: Li-PCA Documents
+  - name: exports
+    description: Li-PCA Exports
   - name: sending_domains
     description: Li-PCA Sending Domains
   - name: domains
     description: Li-PCA Domains
   - name: recon
     description: Li-PCA Recon
+  - name: reports
+    description: Li-PCA Reports
   - name: landing_pages
     description: Li-PCA Landing Pages
   - name: emails
@@ -1339,6 +1343,298 @@ paths:
         default:
           description: successful operation
       x-openapi-router-controller: api.controllers.recommendations_controller
+  /v1/exports:
+    get:
+      tags:
+        - exports
+      summary: Get all export
+      description: Get All Exports
+      operationId: get_all_exports
+      parameters:
+        - name: name
+          in: query
+          description: Export name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Export'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Export'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Export not found
+        "405":
+          description: Validation Exception
+      x-openapi-router-controller: api.controllers.exports_controller
+    post:
+      tags:
+        - exports
+      summary: Add new export to the data store
+      operationId: create_export
+      requestBody:
+        description: created export object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Export'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Export'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Export'
+      x-openapi-router-controller: api.controllers.exports_controller
+  /v1/exports/{uuid}:
+    get:
+      tags:
+        - exports
+      summary: Find export by uuid
+      description: returns a single export
+      operationId: get_export_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of export to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Export'
+            application/xml:
+              schema:
+                $ref:
+                  '#/components/schemas/Export'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: export not found
+      x-openapi-router-controller: api.controllers.exports_controller
+    put:
+      tags:
+        - exports
+      summary: Update an existing export
+      operationId: update_export_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of export to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      requestBody:
+        description: Updated export object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Export'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: export not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.exports_controller
+    delete:
+      tags:
+        - exports
+      summary: Deletes a export
+      operationId: delete_export_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: export not found
+      x-openapi-router-controller: api.controllers.exports_controller
+  /v1/reports:
+    get:
+      tags:
+        - reports
+      summary: Get all report
+      description: Get All Reports
+      operationId: get_all_reports
+      parameters:
+        - name: name
+          in: query
+          description: Report name filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Sending Domain not found
+        "405":
+          description: Validation Exception
+      x-openapi-router-controller: api.controllers.reports_controller
+    post:
+      tags:
+        - reports
+      summary: Add new report to the data store
+      operationId: create_report
+      requestBody:
+        description: created report object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Report'
+      x-openapi-router-controller: api.controllers.reports_controller
+  /v1/reports/{uuid}:
+    get:
+      tags:
+        - reports
+      summary: Find report by uuid
+      description: returns a single report
+      operationId: get_report_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of report to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+            application/xml:
+              schema:
+                $ref:
+                  '#/components/schemas/Report'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: report not found
+      x-openapi-router-controller: api.controllers.reports_controller
+    put:
+      tags:
+        - reports
+      summary: Update an existing report
+      operationId: update_report_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of report to update
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      requestBody:
+        description: Updated report object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: report not found
+        "405":
+          description: Validation exception
+      x-openapi-router-controller: api.controllers.reports_controller
+    delete:
+      tags:
+        - reports
+      summary: Deletes a report
+      operationId: delete_report_by_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            format: uuid64
+      responses:
+        "400":
+          description: Invalid uuid supplied
+        "404":
+          description: report not found
+      x-openapi-router-controller: api.controllers.reports_controller
 components:
   schemas:
     User:
@@ -1834,6 +2130,24 @@ components:
           type: boolean
         html:
           type: string
+    Export:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    Report:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
     Email:
       type: object
       properties:
@@ -1944,6 +2258,26 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/LandingPage'
+      required: true
+    Export:
+      description: A export object to be added to the data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Export'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Export'
+      required: true
+    Report:
+      description: A report object to be added to the data store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Report'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Report'
       required: true
     Email:
       description: A landing page object to be added to the data store
