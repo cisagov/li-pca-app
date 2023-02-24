@@ -14,9 +14,11 @@ from api.models.campaign import CampaignSchema
 from api.models.config import ConfigSchema
 from api.models.customer import CustomerSchema
 from api.models.cycle import CycleSchema
+from api.models.export import ExportSchema
 from api.models.landing_page import LandingPageSchema
 from api.models.nonhuman import NonHumanSchema
 from api.models.recommendation import RecommendationSchema
+from api.models.report import ReportSchema
 from api.models.sending_domain import SendingDomainSchema
 from api.models.subscription_manager import SubscriptionSchema
 from api.models.target import TargetSchema
@@ -399,6 +401,16 @@ class CycleManager(Manager):
             schema=CycleSchema,
         )
 
+class ExportManager(Manager):
+    """ExportManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="exports",
+            schema=ExportSchema,
+            other_indexes=["name"],
+        )
 
 class LandingPageManager(Manager):
     """LandingPageManager."""
@@ -429,6 +441,16 @@ class NonHumanManager(Manager):
             schema=NonHumanSchema,
         )
 
+class ReportManager(Manager):
+    """ReportManager."""
+
+    def __init__(self):
+        """Super."""
+        return super().__init__(
+            collection="reports",
+            schema=ReportSchema,
+            other_indexes=["name"],
+        )
 
 class SendingDomainManager(Manager):
     """SendingDomainManager."""
