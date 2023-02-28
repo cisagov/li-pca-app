@@ -352,8 +352,8 @@ const TemplateDataEntryPage = () => {
                     />
                     {htmlValue == "<!DOCTYPE html>" || htmlValue == "" ? (
                       <Box sx={{ mt: 2 }}>
-                        <Alert severity="error">
-                          HTML cannot be empty in order to save the template.
+                        <Alert severity="warning">
+                          HTML must not be empty in order to save the template.
                         </Alert>
                       </Box>
                     ) : (

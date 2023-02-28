@@ -389,7 +389,7 @@ function CustomerPOCForm(props) {
             title="Add at least two point of contacts to be able to Save"
             placement="bottom-start"
           >
-            <Alert severity="error">
+            <Alert severity="warning">
               Customer does not have two or more contacts
             </Alert>
           </Tooltip>

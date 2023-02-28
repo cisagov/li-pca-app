@@ -200,7 +200,7 @@ const CampaignDataEntryPage = () => {
   const invalidAlertJSX = (
     <>
       {invalidAert ? (
-        <Alert severity="error" sx={{ mt: 2 }}>
+        <Alert severity="warning" sx={{ mt: 2 }}>
           Some fields are incomplete or incorrect. Please address them before
           continuing.
         </Alert>
