@@ -120,7 +120,6 @@ function CustomerPOCForm(props) {
         setCusContactsRows(updatedPOCData);
       });
       actions.resetForm();
-      console.log(contactLen);
       if (contactLen + 1 < 2) {
         setToggleCard(true);
       } else {
