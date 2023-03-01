@@ -38,14 +38,14 @@ const validationSchema = yup.object({
 });
 
 function CustomerPOCForm(props) {
-  const [isToggleCardOn, setToggleCard] = useState(true);
+  let initialPOCValues = {};
+  let contactLen = props.custPOCData.length;
+  const [isToggleCardOn, setToggleCard] = useState(contactLen < 2);
   const [editContact, setEditContact] = useState(false);
   const [cusContactsRows, setCusContactsRows] = useState(props.custPOCData);
   const [deletebtnOpen, setDeletebtnOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
   let [entryToEdit, setEntryToEdit] = useState({});
-  let initialPOCValues = {};
-  let contactLen = props.custPOCData.length;
   if (!editContact) {
     initialPOCValues = props.initialPOCValues;
   } else {
@@ -120,7 +120,12 @@ function CustomerPOCForm(props) {
         setCusContactsRows(updatedPOCData);
       });
       actions.resetForm();
-      setToggleCard(!isToggleCardOn);
+      console.log(contactLen);
+      if (contactLen + 1 < 2) {
+        setToggleCard(true);
+      } else {
+        setToggleCard(false);
+      }
       setEditContact(false);
     },
   });
@@ -167,16 +172,16 @@ function CustomerPOCForm(props) {
   };
   return (
     <>
-      {isToggleCardOn ? (
+      {!isToggleCardOn ? (
         <>
           <Grid item xs={10} sm={6} md={5} lg={4} xl={3} sx={{ mb: 1 }}>
             <Button
-              color="warning"
+              color="primary"
               variant="contained"
               size="large"
               fullWidth
               onClick={() => {
-                setToggleCard(!isToggleCardOn);
+                setToggleCard(true);
               }}
             >
               Add Customer Contact
@@ -346,7 +351,7 @@ function CustomerPOCForm(props) {
                       onClick={() => {
                         formik.setValues(props.initialPOCValues);
                         formik.setTouched({});
-                        setToggleCard(!isToggleCardOn);
+                        setToggleCard(false);
                       }}
                     >
                       Close
@@ -390,7 +395,7 @@ function CustomerPOCForm(props) {
             placement="bottom-start"
           >
             <Alert severity="warning">
-              Customer does not have two or more contacts
+              Customer must have two or more contacts in order to save a form
             </Alert>
           </Tooltip>
         </Grid>
