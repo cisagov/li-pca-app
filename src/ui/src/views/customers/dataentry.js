@@ -130,11 +130,6 @@ const CustDataEntryPage = () => {
     <MainCard title={mainCardTitle}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Typography gutterBottom fontSize={18} color="primary">
-              Customer Information
-            </Typography>
-          </Grid>
           <CustomerForm
             initialCustValues={custValues}
             setCustData={setCustData}
@@ -142,7 +137,7 @@ const CustDataEntryPage = () => {
             dataEntryType={mainCardTitle}
             identifiers={getOtherIdentifiers(state.rows, custValues)}
           >
-            <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 3 }}>
+            <Grid item xs={10} sm={12} md={12} lg={12} xl={12} sx={{ mb: 2 }}>
               <Typography gutterBottom fontSize={18} color="primary">
                 Customer/Organization Point of Contacts
               </Typography>
