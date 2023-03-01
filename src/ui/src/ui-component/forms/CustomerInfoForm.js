@@ -1,6 +1,4 @@
-import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
 //material-ui
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -244,6 +242,8 @@ const CustomerInfoForm = (props) => {
 
 CustomerInfoForm.propTypes = {
   formik: PropTypes.object,
+  setCustData: PropTypes.func,
+  custData: PropTypes.object,
 };
 
 export default CustomerInfoForm;
