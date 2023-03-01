@@ -141,7 +141,7 @@ function CustomerPOCForm(props) {
   const handleEdit = (entry) => {
     entryToEdit = entry;
     formik.setValues(entryToEdit);
-    setToggleCard(false);
+    setToggleCard(true);
     setEditContact(true);
     setEntryToEdit(entry);
   };
