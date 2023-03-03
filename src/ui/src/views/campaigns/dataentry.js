@@ -135,7 +135,7 @@ const CampaignDataEntryPage = () => {
   const campaignValues = camRowsTransform(state.row);
   const dataEntryType = state.dataEntryType;
   const [activeStep, setActiveStep] = useState(0);
-  const [invalidAert, setInvalidAlert] = useState(false);
+  const [invalidAlert, setInvalidAlert] = useState("");
   const [savebtnOpen, setSavebtnOpen] = useState(false);
   const [deletebtnOpen, setDeletebtnOpen] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -197,25 +197,35 @@ const CampaignDataEntryPage = () => {
       Back
     </Button>
   );
-  const invalidAlertJSX = (
-    <>
-      {invalidAert ? (
-        <Alert severity="warning" sx={{ mt: 2 }}>
-          Some fields are incomplete or incorrect. Please address them before
-          continuing.
-        </Alert>
-      ) : (
-        <></>
-      )}
-    </>
-  );
   const handleFirstNext = () => {
     formik.setTouched(initialFieldsToValidate);
     if (formik.isValid) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      setInvalidAlert(false);
+      setInvalidAlert("");
     } else {
-      setInvalidAlert(true);
+      setInvalidAlert(
+        "Some fields are missing or incorrect. Please address them before continuing."
+      );
+    }
+  };
+  const handleThirdNext = () => {
+    const now = new Date();
+    const startVal = formik.values.start_datetime;
+    const nullVal = "1970-01-01T00:00:00+00:00";
+    const start = new Date(startVal);
+    const end = new Date(formik.values.end_datetime);
+
+    if (startVal != nullVal && start < now) {
+      setInvalidAlert(
+        "The Start time must happen after the current time. Please address this before continuing."
+      );
+    } else if (startVal != nullVal && start > end) {
+      setInvalidAlert(
+        "The Start time must happen before the End time. Please address this before continuing."
+      );
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setInvalidAlert("");
     }
   };
   const closeDialog = () => {
@@ -281,7 +291,13 @@ const CampaignDataEntryPage = () => {
                       domains={domains}
                       landingPages={landingPages}
                     />
-                    {invalidAlertJSX}
+                    {invalidAlert ? (
+                      <Alert severity="error" sx={{ mt: 2 }}>
+                        {invalidAlert}
+                      </Alert>
+                    ) : (
+                      <></>
+                    )}
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
                       <Box sx={{ flex: "1 1 auto" }} />
@@ -302,12 +318,21 @@ const CampaignDataEntryPage = () => {
                   </>
                 ) : activeStep == 2 ? (
                   <>
-                    <CampaignDeliveryForm />
-                    {invalidAlertJSX}
+                    <CampaignDeliveryForm
+                      formik={formik}
+                      dataEntryType={dataEntryType}
+                    />
+                    {invalidAlert ? (
+                      <Alert severity="error" sx={{ mt: 2 }}>
+                        {invalidAlert}
+                      </Alert>
+                    ) : (
+                      <></>
+                    )}
                     <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                       {backButton}
                       <Box sx={{ flex: "1 1 auto" }} />
-                      <Button onClick={handleNext}>Next</Button>
+                      <Button onClick={handleThirdNext}>Next</Button>
                     </Box>
                   </>
                 ) : (
