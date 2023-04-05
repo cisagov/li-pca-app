@@ -14,7 +14,15 @@ import { useGetAll } from "services/api.js";
 
 // ==============================|| Landing Page view ||============================== //
 
-function BaseJSX(props) {
+/**
+ * Renders the main card with the landing page table.
+ * @param {object} props - Component props.
+ * @param {array} props.rows - Array of rows to display in the table.
+ * @param {string} props.dataEntry - Route to add or edit a landing page entry.
+ * @param {React.ReactNode} props.children - Child components to render.
+ * @returns {JSX.Element} The MainCard and MainDataTable of the component.
+ */
+function LandingPageTable({ rows, dataEntry, children }) {
   const cols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Name", midWidth: 100, flex: 1 },
@@ -32,23 +40,23 @@ function BaseJSX(props) {
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
-        if (params.value == true) {
+        if (params.value) {
           return <CheckCircleIcon />;
         }
         return false;
       },
     },
   ];
-
   return (
     <MainCard title="Landing Pages">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          {children}
           <Box sx={{ maxWidth: 1200 }}>
             <MainDataTable
-              data={{ rows: props.rows, columns: cols }}
-              newEntryRoute={props.dataEntry}
-              editEntryRoute={props.dataEntry}
+              data={{ rows: rows, columns: cols }}
+              newEntryRoute={dataEntry}
+              editEntryRoute={dataEntry}
               tableCategory={"Landing Pages"}
             />
           </Box>
@@ -58,63 +66,44 @@ function BaseJSX(props) {
   );
 }
 
-BaseJSX.propTypes = {
+LandingPageTable.propTypes = {
   rows: PropTypes.array,
   children: PropTypes.object,
   dataEntry: PropTypes.string,
 };
 
+/**
+ * The LandingPagesPage component, used to render the landing pages view.
+ *
+ * @returns {JSX.Element} The LandingPagesPage component.
+ */
 function LandingPagesPage() {
-  const { isLoading, getData, getError } = useGetAll("landing_pages");
-
-  const landingpageRows = (rowsArray) => {
-    if (Object.keys(rowsArray).length !== 0) {
-      let counter = 0;
-      let landingpageRows = [];
-      landingpageRows = Array.from(rowsArray);
-      landingpageRows.forEach((entry) => {
-        entry["id"] = counter;
-        counter = counter + 1;
-      });
-      return rowsArray;
-    }
-    return [];
-  };
+  const isLoading = useGetAll("landing_pages").isLoading;
+  const getData = useGetAll("landing_pages").getData;
+  const getError = useGetAll("landing_pages").getError;
+  const rows = getData;
   // Mock data test
   // const jsonRows = require("./mockLandingPageData.json");
   // const rows = landingpageRows(jsonRows);
 
-  const rows = landingpageRows(getData);
-
-  if (isLoading) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+  return (
+    <LandingPageTable rows={isLoading ? [] : rows} dataEntry={"data-entry"}>
+      {isLoading ? (
         <Typography>Loading...</Typography>
-      </BaseJSX>
-    );
-  } else if (getError[0]) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+      ) : getError[0] ? (
         <Alert severity="error" sx={{ mb: 2 }}>
           {getError[1]}. Unable to load landing page data from the database.
         </Alert>
-      </BaseJSX>
-    );
-  } else if (rows.length === 0) {
-    return (
-      <BaseJSX rows={[]} dataEntry={"data-entry"}>
+      ) : rows.length === 0 ? (
         <Typography sx={{ mb: 2 }}>
           No landing page data entries found.
         </Typography>
-      </BaseJSX>
-    );
-  }
-  return (
-    <BaseJSX rows={rows} dataEntry={"data-entry"}>
-      <Typography sx={{ mb: 2 }}>
-        Landing page data from the database shown below.
-      </Typography>
-    </BaseJSX>
+      ) : (
+        <Typography sx={{ mb: 2 }}>
+          Landing page data from the database shown below.
+        </Typography>
+      )}
+    </LandingPageTable>
   );
 }
 

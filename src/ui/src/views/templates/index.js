@@ -12,7 +12,15 @@ import { useGetAll } from "services/api.js";
 
 // ==============================|| Templates view ||============================== //
 
-function BaseJSX(props) {
+/**
+ * Renders the main card with the template table.
+ * @param {object} props - Component props.
+ * @param {array} props.rows - Array of rows to display in the table.
+ * @param {string} props.dataEntry - Route to add or edit a template entry.
+ * @param {React.ReactNode} props.children - Child components to render.
+ * @returns {JSX.Element} The MainCard and MainDataTable of the component.
+ */
+function TemplateTable({ rows, dataEntry, children }) {
   const cols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Template Name", minWidth: 140, flex: 2.5 },
@@ -49,13 +57,13 @@ function BaseJSX(props) {
     <MainCard title="Templates">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {props.children}
+          {children}
           <Box sx={{ maxWidth: 1200 }}>
             <AdvancedDataTable
-              data={{ rows: props.rows, columns: cols }}
+              data={{ rows: rows, columns: cols }}
               filterModel={filterModel}
-              newEntryRoute={props.dataEntry}
-              editEntryRoute={props.dataEntry}
+              newEntryRoute={dataEntry}
+              editEntryRoute={dataEntry}
               tableCategory={"Template"}
               apiType={"templates"}
             />
@@ -66,61 +74,43 @@ function BaseJSX(props) {
   );
 }
 
-BaseJSX.propTypes = {
+TemplateTable.propTypes = {
   rows: PropTypes.array,
   children: PropTypes.object,
   dataEntry: PropTypes.string,
 };
 
+/**
+ * The TemplatesPage component, used to render the templates view.
+ *
+ * @returns {JSX.Element} The TemplatesPage component.
+ */
 function TemplatesPage() {
-  const temRows = (rowsArray) => {
-    if (Object.keys(rowsArray).length !== 0) {
-      let counter = 0;
-      let temRows = [];
-      temRows = Array.from(rowsArray);
-      temRows.forEach((entry) => {
-        entry["id"] = counter;
-        counter = counter + 1;
-      });
-      return rowsArray;
-    }
-    return [];
-  };
-
-  const { isLoading, getData, getError } = useGetAll("templates");
-
+  const isLoading = useGetAll("templates").isLoading;
+  const getData = useGetAll("templates").getData;
+  const getError = useGetAll("templates").getError;
+  const rows = getData;
   //  Mock data test
   // const jsonRows = require("./mockTemData.json");
   // const rows = temRows(jsonRows);
-  const rows = temRows(getData);
+  // const rows = temRows(getData);
 
-  if (isLoading) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+  return (
+    <TemplateTable rows={isLoading ? [] : rows} dataEntry={"data-entry"}>
+      {isLoading ? (
         <Typography>Loading...</Typography>
-      </BaseJSX>
-    );
-  } else if (getError[0]) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+      ) : getError[0] ? (
         <Alert severity="error" sx={{ mb: 2 }}>
           {getError[1]}. Unable to load template data from the database.
         </Alert>
-      </BaseJSX>
-    );
-  } else if (rows.length === 0) {
-    return (
-      <BaseJSX rows={[]} dataEntry={"data-entry"}>
+      ) : rows.length === 0 ? (
         <Typography sx={{ mb: 2 }}>No template data entries found.</Typography>
-      </BaseJSX>
-    );
-  }
-  return (
-    <BaseJSX rows={rows} dataEntry={"data-entry"}>
-      <Typography sx={{ mb: 2 }}>
-        Template data from the database shown below.
-      </Typography>
-    </BaseJSX>
+      ) : (
+        <Typography sx={{ mb: 2 }}>
+          Template data from the database shown below.
+        </Typography>
+      )}
+    </TemplateTable>
   );
 }
 export default TemplatesPage;

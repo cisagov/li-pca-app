@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 
 // material-ui
@@ -18,30 +18,42 @@ import { useGetAll, fetchData } from "services/api.js";
 
 // ==============================|| Phish Reconn view ||============================== //
 
-function BaseJSX(props) {
-  const [selectedRow, setSelectedRow] = React.useState({});
-  const [viewResults, setViewResults] = React.useState(false);
+/**
+ * Renders the main card with the phish recon table.
+ * @param {object} props - Component props.
+ * @param {array} props.rows - Array of rows to display in the table.
+ * @param {string} props.dataEntry - Route to add or edit a phish recon entry.
+ * @param {string} props.triggerDataFetch - Fetched data used for the PhishReconForm.
+ * @param {React.ReactNode} props.children - Child components to render.
+ * @returns {JSX.Element} The MainCard and MainDataTable of the component.
+ */
+function PhishReconTable({ rows, dataEntry, children, triggerDataFetch }) {
+  const [selectedRow, setSelectedRow] = useState({});
+  const [viewResults, setViewResults] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [getHarvesterData, setHarvesterData] = useState([]);
   const [getError, setError] = useState([false, ""]);
-  const toScroll = setTimeout(function () {
-    const element = document.getElementById("section1");
-    window.scrollTo({
-      top: element.getBoundingClientRect().height + 80,
-      behavior: "smooth",
-    });
-  }, 2);
+
+  const sectionRef = useRef(null);
+  let timerId;
+  const handleScrollClick = () => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      const element = sectionRef.current;
+      if (element) {
+        window.scrollTo({
+          top: element.getBoundingClientRect().height + 80,
+          behavior: "smooth",
+        });
+      }
+    }, 100);
+  };
+
   const handleHarvesterClick = (row) => {
     setViewResults(false);
     setSelectedRow(row);
     setLoading(true);
-    fetchData(
-      row,
-      props.triggerDataFetch,
-      setLoading,
-      setHarvesterData,
-      setError
-    );
+    fetchData(row, triggerDataFetch, setLoading, setHarvesterData, setError);
   };
 
   const cols = [
@@ -64,7 +76,7 @@ function BaseJSX(props) {
             variant="contained"
             disabled={isDisabled}
             onClick={() => {
-              toScroll;
+              handleScrollClick();
               setSelectedRow(cellValues.row);
               setViewResults(true);
             }}
@@ -100,27 +112,25 @@ function BaseJSX(props) {
       flex: 0.6,
     },
   ];
-  let displayTable = (
-    <Box sx={{ maxWidth: 1200 }}>
-      <MainDataTable
-        data={{ rows: props.rows, columns: cols }}
-        newEntryRoute={props.dataEntry}
-        editEntryRoute={props.dataEntry}
-        tableCategory={"Phish Reconnaissance"}
-      />
-    </Box>
-  );
+
   return (
     <MainCard title="Phish Reconnaissance">
-      <Grid container spacing={2} id="section1">
-        <Grid item xs={8} sm={12} md={12} lg={12} xl={12}>
-          {props.children}
-          {displayTable}
+      <Grid container spacing={2} ref={sectionRef} id="section1">
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          {children}
+          <Box sx={{ maxWidth: 1200 }}>
+            <MainDataTable
+              data={{ rows: rows, columns: cols }}
+              newEntryRoute={dataEntry}
+              editEntryRoute={dataEntry}
+              tableCategory={"Phish Reconnaissance"}
+            />
+          </Box>
         </Grid>
       </Grid>
       <PhishReconForm
         selectedRow={selectedRow}
-        triggerDataFetch={props.triggerDataFetch}
+        triggerDataFetch={triggerDataFetch}
         viewResults={viewResults}
         isLoading={isLoading}
         getData={getHarvesterData}
@@ -130,84 +140,76 @@ function BaseJSX(props) {
   );
 }
 
-BaseJSX.propTypes = {
+PhishReconTable.propTypes = {
   rows: PropTypes.array,
   children: PropTypes.object,
   dataEntry: PropTypes.string,
   triggerDataFetch: PropTypes.func,
 };
 
+/**
+ * Transforms an array of customer data to the format needed by the ReconTable component.
+ * @param {Object[]} rowsArray - An array of customer data objects.
+ * @returns {Object[]} - The transformed array of customer data objects.
+ */
+const reconRows = (rowsArray) => {
+  if (!Array.isArray(rowsArray) || rowsArray.length === 0) {
+    return [];
+  }
+  const reconRows = rowsArray.map((entry) => {
+    const customer_notes = entry.hasOwnProperty("customer_notes")
+      ? entry.customer_notes
+      : "";
+    const recon_results = entry.hasOwnProperty("recon_results")
+      ? entry.recon_results
+      : [];
+    const last_recon_date = recon_results.reduce(
+      (prev, curr) => {
+        const prev_date = new Date(prev.recon_time);
+        const curr_date = new Date(curr.recon_time);
+        return prev_date > curr_date ? prev : curr;
+      },
+      { recon_time: "-" }
+    ).recon_time;
+
+    return { ...entry, customer_notes, last_recon_date };
+  });
+
+  return reconRows;
+};
+
+/**
+ * Renders a page for displaying Recon data for customers.
+ * @returns {JSX.Element} - The React component for the page.
+ */
 function PhishReconnPage() {
   const [fetchData, setFetchData] = useState(true);
+  // Toggles the state of `fetchData` to trigger data refetch.
   const triggerDataFetch = () => setFetchData((t) => !t);
-  const { isLoading, getData, getError } = useGetAll("customers");
-  const reconRows = (rowsArray) => {
-    if (Object.keys(rowsArray).length !== 0) {
-      let counter = 0;
-      let reconRows = [];
-      reconRows = Array.from(rowsArray);
-      reconRows.forEach((entry) => {
-        entry["id"] = counter;
-        counter = counter + 1;
-        if (!entry.hasOwnProperty("customer_notes")) {
-          entry.customer_notes = "";
-        }
-        if (entry.hasOwnProperty("recon_results")) {
-          let getLastReconDate = entry.recon_results.reduce(function (
-            prev,
-            curr
-          ) {
-            let prev_date = new Date(prev.recon_time);
-            let curr_date = new Date(curr.recon_time);
-            return prev_date > curr_date ? prev.recon_time : curr.recon_time;
-          });
-          entry.last_recon_date = getLastReconDate.recon_time;
-        } else {
-          entry.last_recon_date = "-";
-        }
-      });
-      return reconRows;
-    }
-    return [];
-  };
-  // Mock data test
-  // const jsonRows = require("./mockReconData.json");
-  // const rows = reconRows(jsonRows);
-  const rows = reconRows(getData);
-  if (isLoading) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
-        <Typography>Loading...</Typography>
-      </BaseJSX>
-    );
-  } else if (getError[0]) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {getError[1]}. Unable to load data from the database.
-        </Alert>
-      </BaseJSX>
-    );
-  } else if (rows.length === 0) {
-    return (
-      <BaseJSX rows={[]} dataEntry={"data-entry"}>
-        <Typography sx={{ mb: 2 }}>
-          No Phish Reconnaissance entries found.
-        </Typography>
-      </BaseJSX>
-    );
-  }
+  const { isLoading, getData: rows, error } = useGetAll("customers");
+  const transformedRows = useMemo(() => reconRows(rows), [rows]);
+
   return (
-    <BaseJSX
-      rows={rows}
+    <PhishReconTable
+      rows={isLoading ? [] : transformedRows}
       dataEntry={"data-entry"}
       triggerDataFetch={triggerDataFetch}
     >
-      <Typography sx={{ mb: 2 }}>
-        Select a Customer Domain to run Reconnaissance on or view its past
-        results
-      </Typography>
-    </BaseJSX>
+      {isLoading ? (
+        <Typography>Loading...</Typography>
+      ) : error ? (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}. Unable to load data from the database.
+        </Alert>
+      ) : transformedRows.length === 0 ? (
+        <Typography sx={{ mb: 2 }}>No recon data entries found.</Typography>
+      ) : (
+        <Typography sx={{ mb: 2 }}>
+          Select a Customer Domain to run Reconnaissance on or view its past
+          results.
+        </Typography>
+      )}
+    </PhishReconTable>
   );
 }
 

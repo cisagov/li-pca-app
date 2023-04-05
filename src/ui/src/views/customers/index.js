@@ -13,7 +13,15 @@ import { useGetAll } from "services/api.js";
 
 // ==============================|| Customers view ||============================== //
 
-function BaseJSX(props) {
+/**
+ * Renders the main card with the customer table.
+ * @param {object} props - Component props.
+ * @param {array} props.rows - Array of rows to display in the table.
+ * @param {string} props.dataEntry - Route to add or edit a customer entry.
+ * @param {React.ReactNode} props.children - Child components to render.
+ * @returns {JSX.Element} The MainCard and MainDataTable of the component.
+ */
+function CustomerTable({ rows, dataEntry, children }) {
   const cols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Name", minWidth: 100, flex: 2 },
@@ -35,12 +43,12 @@ function BaseJSX(props) {
     <MainCard title="Customers">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {props.children}
+          {children}
           <Box sx={{ maxWidth: 1200 }}>
             <MainDataTable
-              data={{ rows: props.rows, columns: cols }}
-              newEntryRoute={props.dataEntry}
-              editEntryRoute={props.dataEntry}
+              data={{ rows: rows, columns: cols }}
+              newEntryRoute={dataEntry}
+              editEntryRoute={dataEntry}
               tableCategory={"Customer"}
             />
           </Box>
@@ -50,64 +58,63 @@ function BaseJSX(props) {
   );
 }
 
-BaseJSX.propTypes = {
+CustomerTable.propTypes = {
   rows: PropTypes.array,
   children: PropTypes.object,
   dataEntry: PropTypes.string,
 };
 
-function CustomersPage() {
-  const { isLoading, getData, getError } = useGetAll("customers");
+/**
+ * Updates an array of customer objects by adding a "primaryPOC" property
+ * which concatenates the first and last name of the primary contact.
+ *
+ * @param {Array} rowsArray - An array of customer objects.
+ * @returns {Array} The updated array of customer objects.
+ */
+function addPrimaryPOC(rowsArray) {
+  if (rowsArray.length === 0) return [];
+  const updatedRows = rowsArray.map((entry) => {
+    const primaryContact = entry.contact_list[0];
+    const primaryPOC = `${primaryContact.first_name} ${primaryContact.last_name}`;
+    return {
+      ...entry,
+      primaryPOC,
+    };
+  });
+  return updatedRows;
+}
 
-  const cusRows = (rowsArray) => {
-    if (Object.keys(rowsArray).length !== 0) {
-      let counter = 0;
-      let cusRows = [];
-      cusRows = Array.from(rowsArray);
-      cusRows.forEach((entry) => {
-        entry["id"] = counter;
-        counter = counter + 1;
-        entry["primaryPOC"] =
-          entry["contact_list"][0]["first_name"] +
-          " " +
-          entry["contact_list"][0]["last_name"];
-      });
-      return rowsArray;
-    }
-    return [];
-  };
+/**
+ * The CustomersPage component, used to render the customers view.
+ *
+ * @returns {JSX.Element} The CustomersPage component.
+ */
+function CustomersPage() {
+  const isLoading = useGetAll("customers").isLoading;
+  const getData = useGetAll("customers").getData;
+  const getError = useGetAll("customers").getError;
+  const rows = addPrimaryPOC(getData);
   // Mock data test
   // const jsonRows = require("./mockCusData.json");
   // const rows = cusRows(jsonRows);
-  const rows = cusRows(getData);
 
-  if (isLoading) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+  return (
+    <CustomerTable rows={isLoading ? [] : rows} dataEntry={"data-entry"}>
+      {isLoading ? (
         <Typography>Loading...</Typography>
-      </BaseJSX>
-    );
-  } else if (getError[0]) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+      ) : getError[0] ? (
         <Alert severity="error" sx={{ mb: 2 }}>
           {getError[1]}. Unable to load customer data from the database.
         </Alert>
-      </BaseJSX>
-    );
-  } else if (rows.length === 0) {
-    return (
-      <BaseJSX rows={[]} dataEntry={"data-entry"}>
+      ) : rows.length === 0 ? (
         <Typography sx={{ mb: 2 }}>No customer data entries found.</Typography>
-      </BaseJSX>
-    );
-  }
-  return (
-    <BaseJSX rows={rows} dataEntry={"data-entry"}>
-      <Typography sx={{ mb: 2 }}>
-        Customer data from the database shown below.
-      </Typography>
-    </BaseJSX>
+      ) : (
+        <Typography sx={{ mb: 2 }}>
+          Customer data from the database shown below.
+        </Typography>
+      )}
+    </CustomerTable>
   );
 }
+
 export default CustomersPage;

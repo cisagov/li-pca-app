@@ -18,8 +18,16 @@ import { useGetAll, submitEntry } from "services/api.js";
 
 // ==============================|| Campaigns view ||============================== //
 
-function BaseJSX(props) {
-  let [selectedRow, setSelectedRow] = useState({});
+/**
+ * Renders the main card with the campaign table.
+ * @param {object} props - Component props.
+ * @param {array} props.rows - Array of rows to display in the table.
+ * @param {string} props.dataEntry - Route to add or edit a campaign entry.
+ * @param {React.ReactNode} props.children - Child components to render.
+ * @returns {JSX.Element} The MainCard and MainDataTable of the component.
+ */
+function CampaignTable({ rows, dataEntry, children }) {
+  const [selectedRow, setSelectedRow] = useState({});
   const [savebtnOpen, setSavebtnOpen] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [getError, setError] = useState([false, ""]);
@@ -52,8 +60,8 @@ function BaseJSX(props) {
       disableClickEventBubbling: true,
       renderCell: (cellValues) => {
         if (
-          cellValues.row.status == "incomplete" ||
-          cellValues.row.status == "completed"
+          cellValues?.row?.status === "incomplete" ||
+          cellValues?.row?.status === "completed"
         ) {
           return "";
         }
@@ -73,15 +81,6 @@ function BaseJSX(props) {
       width: 95,
     },
   ];
-  // const filterModel = {
-  //   items: [
-  //     {
-  //       columnField: "retired",
-  //       operatorValue: "equals",
-  //       value: "false",
-  //     },
-  //   ],
-  // };
   const confirmChange = () => {
     selectedRow.start_datetime = "1970-01-01T00:00:00+00:00";
     selectedRow.end_datetime = "1970-01-01T00:00:00+00:00";
@@ -102,21 +101,17 @@ function BaseJSX(props) {
     <MainCard title="Campaigns">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {props.children}
+          {children}
           <Box sx={{ maxWidth: 1300 }}>
             <MainDataTable
-              data={{ rows: props.rows, columns: cols }}
-              newEntryRoute={props.dataEntry}
-              editEntryRoute={props.dataEntry}
+              data={{ rows: rows, columns: cols }}
+              newEntryRoute={dataEntry}
+              editEntryRoute={dataEntry}
               tableCategory={"Campaign"}
             />
           </Box>
           <ConfirmDialog
-            subtitle={
-              selectedRow.name +
-              " will stop any current scheduled sending and remove its current delivery schedule and mark its status as incomplete." +
-              " Do you wish to proceed?"
-            }
+            subtitle={`${selectedRow.name} stops any scheduled sending, removes its delivery schedule, and marks its status as incomplete. Do you wish to proceed?`}
             confirmType="Cancel Send"
             handleClick={confirmChange}
             isOpen={savebtnOpen}
@@ -134,84 +129,85 @@ function BaseJSX(props) {
   );
 }
 
-BaseJSX.propTypes = {
+CampaignTable.propTypes = {
   rows: PropTypes.array,
   children: PropTypes.object,
   dataEntry: PropTypes.string,
 };
 
+/**
+ * Convert the start_datetime and end_datetime fields of an array of campaign rows
+ * to formatted date and time strings, and update the rows with these values.
+ *
+ * @param {Array} rowsArray - The array of campaign rows to be processed.
+ * @returns {Array} - The processed array of campaign rows.
+ */
+const campaignRows = (rowsArray) => {
+  if (rowsArray.length === 0) {
+    return [];
+  }
+
+  return rowsArray.map((entry) => {
+    const nullDate = "1970-01-01T00:00:00+00:00";
+    let startDate = "";
+    let endDate = "";
+    let startTime = "";
+    let endTime = "";
+    if (entry["start_datetime"] && entry["start_datetime"] != nullDate) {
+      const startDateTime = new Date(entry["start_datetime"]);
+      startDate = startDateTime.toLocaleDateString("en-US");
+      startTime = startDateTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+    if (entry["end_datetime"] && entry["end_datetime"] != nullDate) {
+      const endDateTime = new Date(entry["end_datetime"]);
+      endDate = endDateTime.toLocaleDateString("en-US");
+      endTime = endDateTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+    if (entry["start_datetime"] == nullDate) {
+      entry["date_scheduled"] = "-";
+      entry["time_scheduled"] = "-";
+    } else {
+      entry["date_scheduled"] = startDate + " - " + endDate;
+      entry["time_scheduled"] = startTime + " - " + endTime;
+    }
+    return entry;
+  });
+};
+
+/**
+ * The CampaignsPage component, used to render the templates view.
+ *
+ * @returns {JSX.Element} The CampaignsPage component.
+ */
 function CampaignsPage() {
   const { isLoading, getData, getError } = useGetAll("campaigns");
-  const campaignRows = (rowsArray) => {
-    if (Object.keys(rowsArray).length !== 0) {
-      let rows = [];
-      let startDate = "";
-      let endDate = "";
-      let startTime = "";
-      let endTime = "";
-      rows = Array.from(rowsArray);
-      rows.forEach((entry) => {
-        const nullDate = "1970-01-01T00:00:00+00:00";
-        if (entry["start_datetime"] && entry["start_datetime"] != nullDate) {
-          startDate = new Date(entry["start_datetime"])
-            .toLocaleDateString("en-US")
-            .toString();
-          startTime = new Date(entry["start_datetime"])
-            .toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
-            .toString();
-        }
-        if (entry["end_datetime"] && entry["end_datetime"] != nullDate) {
-          endDate = new Date(entry["end_datetime"])
-            .toLocaleDateString("en-US")
-            .toString();
-          endTime = new Date(entry["end_datetime"])
-            .toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
-            .toString();
-        }
-        if (entry["start_datetime"] == nullDate) {
-          entry["date_scheduled"] = "-";
-          entry["time_scheduled"] = "-";
-        } else {
-          entry["date_scheduled"] = startDate + " - " + endDate;
-          entry["time_scheduled"] = startTime + " - " + endTime;
-        }
-      });
-      return rowsArray;
-    }
-    return [];
-  };
-  // Mock data test
-  // const jsonRows = require("./mockCusData.json");
-  // const rows = cusRows(jsonRows);
   const rows = campaignRows(getData);
+  // Mock data test
+  // const jsonRows = require("./mockCusData.json"); v
+  // const rows = cusRows(jsonRows);
 
-  if (isLoading) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+  return (
+    <CampaignTable rows={isLoading ? [] : rows} dataEntry={"data-entry"}>
+      {isLoading ? (
         <Typography>Loading...</Typography>
-      </BaseJSX>
-    );
-  } else if (getError[0]) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+      ) : getError[0] ? (
         <Alert severity="error" sx={{ mb: 2 }}>
           {getError[1]}. Unable to load campaign data from the database.
         </Alert>
-      </BaseJSX>
-    );
-  } else if (rows.length === 0) {
-    return (
-      <BaseJSX rows={[]} dataEntry={"data-entry"}>
+      ) : rows.length === 0 ? (
         <Typography sx={{ mb: 2 }}>No campaign data entries found.</Typography>
-      </BaseJSX>
-    );
-  }
-  return (
-    <BaseJSX rows={rows} dataEntry={"data-entry"}>
-      <Typography sx={{ mb: 2 }}>
-        Campaign data from the database shown below.
-      </Typography>
-    </BaseJSX>
+      ) : (
+        <Typography sx={{ mb: 2 }}>
+          Campaigns from the database shown below.
+        </Typography>
+      )}
+    </CampaignTable>
   );
 }
 export default CampaignsPage;

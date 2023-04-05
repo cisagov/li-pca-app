@@ -13,7 +13,15 @@ import { useGetAll, deleteEntry } from "services/api.js";
 
 // ==============================|| Sending Domains view ||============================== //
 
-function BaseJSX(props) {
+/**
+ * Renders the main card with the sending domain table.
+ * @param {object} props - Component props.
+ * @param {array} props.rows - Array of rows to display in the table.
+ * @param {string} props.dataEntry - Route to add or edit a sending domain entry.
+ * @param {React.ReactNode} props.children - Child components to render.
+ * @returns {JSX.Element} The MainCard and MainDataTable of the component.
+ */
+function SendingDomainTable({ rows, dataEntry, children }) {
   const cols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Sending Domain", midWidth: 100, flex: 1.25 },
@@ -40,12 +48,12 @@ function BaseJSX(props) {
     <MainCard title="Sending Domains">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {props.children}
+          {children}
           <Box sx={{ maxWidth: 1200 }}>
             <MainDataTable
-              data={{ rows: props.rows, columns: cols }}
-              newEntryRoute={props.dataEntry}
-              editEntryRoute={props.dataEntry}
+              data={{ rows: rows, columns: cols }}
+              newEntryRoute={dataEntry}
+              editEntryRoute={dataEntry}
               tableCategory={"Sending Domains"}
               deleteEntry={deleteEntry}
               apiType={"sending_domains"}
@@ -57,62 +65,44 @@ function BaseJSX(props) {
   );
 }
 
-BaseJSX.propTypes = {
+SendingDomainTable.propTypes = {
   rows: PropTypes.array,
   children: PropTypes.object,
   dataEntry: PropTypes.string,
 };
 
+/**
+ * The SendingDomainsPage component, used to render the sending domains view.
+ *
+ * @returns {JSX.Element} The SendingDomainsPage component.
+ */
 function SendingDomainsPage() {
-  const { isLoading, getData, getError } = useGetAll("sending_domains");
-
-  const domainRows = (rowsArray) => {
-    if (Object.keys(rowsArray).length !== 0) {
-      let counter = 0;
-      let domainRows = [];
-      domainRows = Array.from(rowsArray);
-      domainRows.forEach((entry) => {
-        entry["id"] = counter;
-        counter = counter + 1;
-      });
-      return rowsArray;
-    }
-    return [];
-  };
+  const isLoading = useGetAll("sending_domains").isLoading;
+  const getData = useGetAll("sending_domains").getData;
+  const getError = useGetAll("sending_domains").getError;
+  const rows = getData;
   // Mock data test
   // const jsonRows = require("./mockDomainData.json");
   // const rows = domainRows(jsonRows);
-  const rows = domainRows(getData);
 
-  if (isLoading) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+  return (
+    <SendingDomainTable rows={isLoading ? [] : rows} dataEntry={"data-entry"}>
+      {isLoading ? (
         <Typography>Loading...</Typography>
-      </BaseJSX>
-    );
-  } else if (getError[0]) {
-    return (
-      <BaseJSX rows={[]} dataEntry={""}>
+      ) : getError[0] ? (
         <Alert severity="error" sx={{ mb: 2 }}>
           {getError[1]}. Unable to load sending domain data from the database.
         </Alert>
-      </BaseJSX>
-    );
-  } else if (rows.length === 0) {
-    return (
-      <BaseJSX rows={[]} dataEntry={"data-entry"}>
+      ) : rows.length === 0 ? (
         <Typography sx={{ mb: 2 }}>
           No sending domain data entries found.
         </Typography>
-      </BaseJSX>
-    );
-  }
-  return (
-    <BaseJSX rows={rows} dataEntry={"data-entry"}>
-      <Typography sx={{ mb: 2 }}>
-        Sending domain data from the database shown below.
-      </Typography>
-    </BaseJSX>
+      ) : (
+        <Typography sx={{ mb: 2 }}>
+          Sending domain data from the database shown below.
+        </Typography>
+      )}
+    </SendingDomainTable>
   );
 }
 
