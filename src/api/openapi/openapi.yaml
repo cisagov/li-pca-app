@@ -172,7 +172,7 @@ paths:
       parameters:
         - name: uuid
           in: path
-          description: uuid that needs to be updated
+          description: uuid that needs to be deleted
           required: true
           style: simple
           explode: false
@@ -323,7 +323,7 @@ paths:
       summary: Update an existing template
       operationId: bulk_update_templates
       requestBody:
-        description: Bulk Update template object
+        description: Bulk Update template objects
         content:
           application/json:
             schema:
@@ -382,7 +382,7 @@ paths:
     post:
       tags:
         - campaigns
-      summary: Add a new campaign to the data store
+      summary: Add a new campain
       operationId: create_campaign
       requestBody:
         description: Created campaign object
@@ -489,7 +489,7 @@ paths:
       tags:
         - sending_domains
         - domains
-      summary: Get all sending profiles (domains)
+      summary: Get all sending domains (domains)
       description: Get All Sending Domains (Domains)
       operationId: get_all_sending_domains
       parameters:
@@ -529,10 +529,10 @@ paths:
       tags:
         - sending_domains
         - domains
-      summary: Add new sending profile to the data store
+      summary: Add new sending domain to the data store
       operationId: create_sending_domain
       requestBody:
-        description: created sending profile object
+        description: created sending domain object
         content:
           application/json:
             schema:
@@ -555,12 +555,12 @@ paths:
         - sending_domains
         - domains
       summary: Find sending profile by uuid
-      description: returns a single sending profile
+      description: returns a single sending domain
       operationId: get_sending_domain_by_uuid
       parameters:
         - name: uuid
           in: path
-          description: uuid of sending profile to return
+          description: uuid of sending domain to return
           required: true
           style: simple
           explode: false
@@ -581,18 +581,18 @@ paths:
         "400":
           description: Invalid ID supplied
         "404":
-          description: sending profile not found
+          description: sending domain not found
       x-openapi-router-controller: api.controllers.sending_domains_controller
     put:
       tags:
         - sending_domains
         - domains
-      summary: Update an existing sending profile
+      summary: Update an existing sending domain
       operationId: update_sending_domain_by_uuid
       parameters:
         - name: uuid
           in: path
-          description: uuid of sending profile to update
+          description: uuid of sending domain to update
           required: true
           style: simple
           explode: false
@@ -600,7 +600,7 @@ paths:
             type: string
             format: uuid64
       requestBody:
-        description: Updated sending profile object
+        description: Updated sending domain object
         content:
           application/json:
             schema:
@@ -609,7 +609,7 @@ paths:
         "400":
           description: Invalid uuid supplied
         "404":
-          description: sending profile not found
+          description: sending domain not found
         "405":
           description: Validation exception
       x-openapi-router-controller: api.controllers.sending_domains_controller
@@ -617,7 +617,7 @@ paths:
       tags:
         - sending_domains
         - domains
-      summary: Deletes a sending profile
+      summary: Deletes a sending domain
       operationId: delete_sending_domain_by_uuid
       parameters:
         - name: uuid
@@ -633,7 +633,7 @@ paths:
         "400":
           description: Invalid uuid supplied
         "404":
-          description: sending profile not found
+          description: sending domain not found
       x-openapi-router-controller: api.controllers.sending_domains_controller
   /v1/harvester:
     get:
@@ -1471,7 +1471,7 @@ paths:
     delete:
       tags:
         - exports
-      summary: Deletes a export
+      summary: Deletes an export
       operationId: delete_export_by_uuid
       parameters:
         - name: uuid
@@ -1493,7 +1493,7 @@ paths:
     get:
       tags:
         - reports
-      summary: Get all report
+      summary: Get all reports
       description: Get All Reports
       operationId: get_all_reports
       parameters:
@@ -1645,9 +1645,9 @@ components:
           format: int64
         username:
           type: string
-        firstName:
+        first_name:
           type: string
-        lastName:
+        last_name:
           type: string
         email:
           type: string
@@ -1655,26 +1655,26 @@ components:
           type: string
         phone:
           type: string
-        userStatus:
+        user_status:
           type: integer
           description: User Status
           format: int32
+      required:
+        - username
+        - password
+        - first_name
+        - last_name
       example:
-        firstName: firstName
-        lastName: lastName
+        first_name: John
+        last_name: Smith
+        username: john.smith
         password: password
-        userStatus: 6
-        phone: phone
-        id: 0
-        email: email
-        username: username
+        user_status: 1
+        phone: 111-111-1111
+        email: john.smith@test.org
       xml:
         name: User
     Contact:
-      required:
-        - first_name
-        - last_name
-        - email
       type: object
       properties:
         first_name:
@@ -1695,6 +1695,19 @@ components:
         active:
           type: boolean
           default: true
+      required:
+        - first_name
+        - last_name
+        - email
+      example:
+        first_name: John
+        last_name: Smith
+        title: Manager
+        office_phone: 111-111-1111
+        mobile_phone: 111-111-1234
+        email: john.smith@test.org
+        notes: Available 9AM to 5PM
+        active: true
     Customer:
       type: object
       properties:
@@ -1860,8 +1873,13 @@ components:
       example:
         name: "Order Details"
         description: "Contains fake order tracking information."
-        sender_profile_id: "some-fake-id"
+        sender_domain_id: "some-fake-uuid"
         deception_score: 1
+        from_address: test@test.com
+        retired: false
+        subject: Test
+        category: Social Media
+        industry: Academia
       xml:
         name: Template
     TemplateIndicators:
