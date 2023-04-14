@@ -11,63 +11,54 @@ import SendingDomainForm from "ui-component/forms/SendingDomainForm";
 
 // ==============================|| Create/Update Customer View ||============================== //
 
-const sdRowsTransform = (domainRows) => {
-  if (!domainRows.hasOwnProperty("name")) {
-    domainRows.name = "";
-  }
-  if (!domainRows.hasOwnProperty("landing_page_domain")) {
-    domainRows.landing_page_domain = "";
-  }
-  if (!domainRows.hasOwnProperty("from_address")) {
-    domainRows.from_address = "";
-  }
-  if (!domainRows.hasOwnProperty("_of_customers_using")) {
-    domainRows._of_customers_using = "";
-  }
-  if (!domainRows.hasOwnProperty("customer_type")) {
-    domainRows.customer_type = "";
-  }
-  if (!domainRows.hasOwnProperty("last_modified_date")) {
-    domainRows.last_modified_date = "";
-  }
-  if (!domainRows.hasOwnProperty("sending_ips")) {
-    domainRows.sending_ips = "";
-  }
-  if (!domainRows.hasOwnProperty("interface_type")) {
-    domainRows.interface_type = "SMTP";
-  }
-  if (!domainRows.hasOwnProperty("mailgun_api_key")) {
-    domainRows.mailgun_api_key = "";
-  }
-  if (!domainRows.hasOwnProperty("mailgun_domain")) {
-    domainRows.mailgun_domain = "";
-  }
-  if (!domainRows.hasOwnProperty("smtp_host")) {
-    domainRows.smtp_host = "";
-  }
-  if (!domainRows.hasOwnProperty("smtp_username")) {
-    domainRows.smtp_username = "";
-  }
-  if (!domainRows.hasOwnProperty("smtp_password")) {
-    domainRows.smtp_password = "";
-  }
-  if (!domainRows.hasOwnProperty("headers")) {
-    domainRows.headers = [];
-  }
-  return domainRows;
+/**
+ * Transforms a row object to include default values for any missing properties.
+ * @param {Object} domainRows - The row object to transform.
+ * @returns {Object} The transformed row object.
+ */
+const sdRowTransform = (domainRows) => {
+  const defaultValues = {
+    name: "",
+    landing_page_domain: "",
+    from_address: "",
+    _of_customers_using: "",
+    customer_type: "",
+    last_modified_date: "",
+    sending_ips: "",
+    interface_type: "SMTP",
+    mailgun_api_key: "",
+    mailgun_domain: "",
+    smtp_host: "",
+    smtp_username: "",
+    smtp_password: "",
+    headers: [],
+  };
+
+  return {
+    ...defaultValues,
+    ...domainRows,
+  };
 };
 
+/**
+ * A helper function to determine whether to display a "New Sending Domain" or "Edit Sending Domain" header.
+ *
+ * @param {String} dataEntryType The type of data entry being performed, either "new" or "edit".
+ * @returns {String} The header to display.
+ */
 const newOrEdit = (dataEntryType) => {
-  if (dataEntryType == "new") {
-    return "New Sending Domain";
-  }
-  return "Edit Sending Domain";
+  return dataEntryType === "new" ? "New Sending Domain" : "Edit Sending Domain";
 };
 
+/**
+ * The component that renders the data entry page for sending domains.
+ *
+ * @returns {JSX.Element} The SDDataEntryPage component.
+ */
 const SDDataEntryPage = () => {
   const { state } = useLocation();
-  let sdValues = sdRowsTransform(state.row);
-  let mainCardTitle = newOrEdit(state.dataEntryType);
+  const sdValues = sdRowTransform(state.row);
+  const mainCardTitle = newOrEdit(state.dataEntryType);
   const [sdData, setSdData] = useState(sdValues);
 
   return (

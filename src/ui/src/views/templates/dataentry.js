@@ -35,45 +35,26 @@ import { submitEntry, deleteEntry } from "services/api.js";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+/**
+ * Transforms a row object to include default values for any missing properties.
+ * @param {Object} templateRows - The row object to transform.
+ * @returns {Object} The transformed row object.
+ */
 const temRowsTransform = (templateRows) => {
-  if (!templateRows.hasOwnProperty("name")) {
-    templateRows.name = "";
-  }
-  if (!templateRows.hasOwnProperty("from_address")) {
-    templateRows.from_address = "";
-  }
-  if (!templateRows.hasOwnProperty("landing_page_id")) {
-    templateRows.landing_page_id = "";
-  }
-  if (!templateRows.hasOwnProperty("sending_domain_id")) {
-    templateRows.sending_domain_id = "";
-  }
-  if (!templateRows.hasOwnProperty("deception_score")) {
-    templateRows.deception_score = 0;
-  }
-  if (!templateRows.hasOwnProperty("retired")) {
-    templateRows.retired = false;
-  }
-  if (!templateRows.hasOwnProperty("retired_description")) {
-    templateRows.retired_description = "";
-  }
-  if (!templateRows.hasOwnProperty("sophisticated")) {
-    templateRows.sophisticated = [];
-  }
-  if (!templateRows.hasOwnProperty("red_flag")) {
-    templateRows.red_flag = [];
-  }
-  if (!templateRows.hasOwnProperty("subject")) {
-    templateRows.subject = "";
-  }
-  if (!templateRows.hasOwnProperty("text")) {
-    templateRows.text = "";
-  }
-  if (!templateRows.hasOwnProperty("html")) {
-    templateRows.html = "";
-  }
-  if (!templateRows.hasOwnProperty("indicators")) {
-    templateRows.indicators = {
+  const defaultValues = {
+    name: "",
+    from_address: "",
+    landing_page_id: "",
+    sending_domain_id: "",
+    deception_score: 0,
+    retired: false,
+    retired_description: "",
+    sophisticated: [],
+    red_flag: [],
+    subject: "",
+    text: "",
+    html: "",
+    indicators: {
       appearance: {
         grammar: 0,
         link_domain: 0,
@@ -94,11 +75,16 @@ const temRowsTransform = (templateRows) => {
         curiosity: false,
         greed: false,
       },
-    };
-  }
-  if (!templateRows.hasOwnProperty("campaigns")) {
-    templateRows.campaigns = [];
-  }
+    },
+    campaigns: [],
+  };
+
+  Object.entries(defaultValues).forEach(([key, value]) => {
+    if (!templateRows.hasOwnProperty(key)) {
+      templateRows[key] = value;
+    }
+  });
+
   return templateRows;
 };
 
@@ -108,6 +94,14 @@ const campaignColumns = [
   { field: "status", headerName: "Status", minWidth: 100, flex: 1 },
 ];
 
+/**
+A panel that is displayed by the Tabs component when its corresponding tab is selected.
+@param {Object} props - The component props.
+@param {ReactNode} props.children - The content to display inside the panel.
+@param {number} props.index - The index of the panel.
+@param {number} props.value - The index of the currently selected tab.
+@return {ReactNode} The TabPanel component.
+*/
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   return (
@@ -130,22 +124,31 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
+/**
+ * Returns an array of identifiers from the templateData array that are not equal to the templateValues.identifier.
+ *
+ * @param {Array} templateData - An array of objects containing identifiers.
+ * @param {Object} templateValues - An object with a single identifier property.
+ * @returns {Array} - An array of identifiers that are not equal to the templateValues.identifier.
+ */
 const getOtherIdentifiers = (templateData, templateValues) => {
   const identifierArr = templateData.map(({ identifier }) => identifier);
-  return identifierArr.filter((identifier) => {
-    if (identifier != templateValues.identifier) {
-      return identifier;
-    }
-  });
+  return identifierArr.filter(
+    (identifier) => identifier !== templateValues.identifier
+  );
 };
 
-const temNewOrEdit = (dataEntryType) => {
-  if (dataEntryType == "new") {
-    return "New Template";
-  }
-  return "Edit Template";
+/**
+ * A helper function to determine whether to display a "New Template" or "Edit Template" header.
+ *
+ * @param {String} dataEntryType The type of data entry being performed, either "new" or "edit".
+ * @returns {String} The header to display.
+ */
+const newOrEdit = (dataEntryType) => {
+  return dataEntryType === "new" ? "New Template" : "Edit Template";
 };
 
+// An object representing the fields to be validated
 const fieldsToValidate = {
   subject: true,
   name: true,
@@ -153,11 +156,19 @@ const fieldsToValidate = {
   from_address: true,
 };
 
+/**
+ * The component that renders the data entry page for templates.
+ *
+ * @returns {JSX.Element} The TemplateDataEntryPage component.
+ */
 const TemplateDataEntryPage = () => {
+  // react-router-dom hooks
+  const navigate = useNavigate();
   const { state } = useLocation();
-  let navigate = useNavigate();
-  let dataEntryType = temNewOrEdit(state.dataEntryType);
-  let templateValues = temRowsTransform(state.row);
+  // Function calls
+  const dataEntryType = newOrEdit(state.dataEntryType);
+  const templateValues = temRowsTransform(state.row);
+  // Hooks
   const [templateData, setTemplateData] = useState(templateValues);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [htmlValue, setHtmlValue] = useState(templateValues["html"]);
@@ -172,19 +183,16 @@ const TemplateDataEntryPage = () => {
   const [cancelbtnOpen, setCancelbtnOpen] = useState(false);
   const [deletebtnOpen, setDeletebtnOpen] = useState(false);
   const [getDelete, setDelete] = useState(false);
-  const alertSubtitle = (
-    <>
-      Please check that <b>Template Name</b>, <b>HTML</b>, <b>Subject</b>,
-      &nbsp;<b>Display Name</b>, and <b>Sender</b> are all filled out and <br />
-      that the <b>Deception Score</b> is between 4 and 6.
-    </>
-  );
+
+  // Form validation
   const validationSchema = yup.object({
     subject: yup.string().required("Subject is required"),
     name: yup.string().required("Template Name is required"),
     text: yup.string().required("Display Name is required"),
     from_address: yup.string().required("Sender is required"),
   });
+
+  // Form configuration
   const formik = useFormik({
     initialValues: templateValues,
     validationSchema: validationSchema,
@@ -202,11 +210,31 @@ const TemplateDataEntryPage = () => {
       setTimeout(() => setSavebtnOpen(false));
     },
   });
-  let subtitleConfirm = (
+
+  // Alert subtitle for field validation
+  const requiredFields = [
+    "Template Name",
+    "HTML",
+    "Subject",
+    "Sender",
+    "Sender's Display Name",
+  ];
+  const deceptionScoreRule = "Deception Score must be between 4 and 6.";
+  const alertSubtitle = (
+    <>
+      Please check that <b>{requiredFields.join(", ")}</b> are all filled out
+      and <br /> that the <b>{deceptionScoreRule}</b>
+    </>
+  );
+
+  // Alert subtitle to confirm that the update goes through
+  const subtitleConfirm = (
     <>
       <b>{formik.values.name}</b> will be updated in the database.
     </>
   );
+
+  // Fields that if touched, will enable or disable buttons
   let formTouched =
     JSON.stringify(templateValues) != JSON.stringify(formik.values) ||
     JSON.stringify(templateValues) != JSON.stringify(templateData) ||
@@ -215,6 +243,11 @@ const TemplateDataEntryPage = () => {
       JSON.stringify(templateData["red_flag"]) ||
     JSON.stringify(selectedSophTags) !==
       JSON.stringify(templateData["sophisticated"]);
+
+  /**
+   * Handles the save button click event.
+   * Sets form fields as touched, and displays a confirmation dialog if conditions are met.
+   */
   const handleSave = () => {
     formik.setTouched(fieldsToValidate);
     if (
@@ -222,27 +255,40 @@ const TemplateDataEntryPage = () => {
       templateData["deception_score"] > 6
     ) {
       setAlertbtnOpen(true);
-    } else if (formik.isValid && htmlValue != "") {
+    } else if (formik.isValid && htmlValue !== "") {
       setSavebtnOpen(true);
     } else {
       setAlertbtnOpen(true);
     }
   };
+
+  /**
+   * Closes the dialog and navigates to the templates page if there was no error.
+   */
   const closeDialog = () => {
     setAlertbtnOpen(false);
     setError([false, ""]);
     setDelete(false);
-    if (getError[0]) {
+    if (!getError[0]) {
       navigate("/cat-phishing/templates");
     }
     setHasSubmitted(false);
   };
+
+  /**
+   * Determines whether a button is disabled.
+   * @returns {boolean} Returns true if the Save button is disabled, false otherwise.
+   */
   const isDisabled = () => {
     if (!formTouched) {
       return true;
     }
     return false;
   };
+
+  /**
+   * Handles the cancel button click event.
+   */
   const handleCancel = () => {
     if (formTouched) {
       setCancelbtnOpen(true);
@@ -250,6 +296,10 @@ const TemplateDataEntryPage = () => {
       navigate("/cat-phishing/templates");
     }
   };
+
+  /**
+   * Confirms the deletion of a template from the database.
+   */
   const confirmDelete = () => {
     deleteEntry("templates", templateValues._id, setError);
     setTimeout(() => {
@@ -257,6 +307,7 @@ const TemplateDataEntryPage = () => {
       setDelete(true);
     });
   };
+
   return (
     <MainCard title={dataEntryType}>
       <Box sx={{ maxWidth: 1500 }}>

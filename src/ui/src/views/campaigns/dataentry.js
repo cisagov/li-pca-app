@@ -7,19 +7,17 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
+import MainCard from "ui-component/cards/MainCard";
 import SendIcon from "@mui/icons-material/Send";
-import Step from "@mui/material/Step";
-import StepButton from "@mui/material/StepButton";
-import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 
 // project imports
+import SimpleStepper from "ui-component/stepper/SimpleStepper";
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import CampaignDeliveryForm from "ui-component/forms/CampaignDeliveryForm";
 import CampaignInitialForm from "ui-component/forms/CampaignInitialForm";
 import CampaignReviewForm from "ui-component/forms/CampaignReviewForm";
 import CampaignTemplateForm from "ui-component/forms/CampaignTemplateForm";
-import MainCard from "ui-component/cards/MainCard";
 import ResultDialog from "ui-component/popups/ResultDialog";
 import { useGetAll, submitEntry, deleteEntry } from "services/api.js";
 
@@ -29,75 +27,46 @@ import * as yup from "yup";
 
 // ==============================|| Create/Update Campaign View ||============================== //
 
-const camRowsTransform = (campaignRows) => {
-  if (!campaignRows.hasOwnProperty("name")) {
-    campaignRows.name = "";
-  }
-  if (!campaignRows.hasOwnProperty("archived")) {
-    campaignRows.archived = "";
-  }
-  if (!campaignRows.hasOwnProperty("description")) {
-    campaignRows.description = "";
-  }
-  if (!campaignRows.hasOwnProperty("status")) {
-    campaignRows.status = false;
-  }
-  if (!campaignRows.hasOwnProperty("admin_email")) {
-    campaignRows.admin_email = "";
-  }
-  if (!campaignRows.hasOwnProperty("operator_email")) {
-    campaignRows.operator_email = "";
-  }
-  if (!campaignRows.hasOwnProperty("sending_domain_id")) {
-    campaignRows.sending_domain_id = "";
-  }
-  if (!campaignRows.hasOwnProperty("landing_page_id")) {
-    campaignRows.landing_page_id = "";
-  }
-  if (!campaignRows.hasOwnProperty("landing_page_url")) {
-    campaignRows.landing_page_url = "";
-  }
-  if (!campaignRows.hasOwnProperty("customer_id")) {
-    campaignRows.customer_id = "";
-  }
-  if (!campaignRows.hasOwnProperty("customer_poc")) {
-    campaignRows.customer_poc = {};
-    campaignRows.customer_poc_placeholder = "";
-  } else if (typeof campaignRows.customer_poc === "object") {
-    campaignRows.customer_poc_placeholder = JSON.stringify(
-      campaignRows.customer_poc
-    );
-  }
-  if (!campaignRows.hasOwnProperty("target_emails")) {
-    campaignRows.target_emails = [];
-    campaignRows.target_emails_placeholder = "";
-  } else if (Array.isArray(campaignRows.target_emails)) {
-    campaignRows.target_emails_placeholder =
-      campaignRows["target_emails"].join("\r\n");
-  }
-  if (!campaignRows.hasOwnProperty("target_email_domains")) {
-    campaignRows.target_email_domains = [];
-    campaignRows.target_email_domains_placeholder = "";
-  } else if (Array.isArray(campaignRows.target_email_domains)) {
-    campaignRows.target_email_domains_placeholder =
-      campaignRows["target_email_domains"].join(", ");
-  }
-  if (!campaignRows.hasOwnProperty("target_count")) {
-    campaignRows.target_count = "";
-  }
-  if (!campaignRows.hasOwnProperty("target_template_uuid")) {
-    campaignRows.target_template_uuid = "";
-  }
-  if (!campaignRows.hasOwnProperty("start_datetime")) {
-    campaignRows.start_datetime = "";
-  }
-  if (!campaignRows.hasOwnProperty("end_datetime")) {
-    campaignRows.end_datetime = "";
-  }
-  if (!campaignRows.hasOwnProperty("time_zone")) {
-    campaignRows.time_zone = "";
-  }
-  return campaignRows;
+/**
+ * Transforms a row object to include default values for any missing properties.
+ * @param {Object} campaignRows - The row object to transform.
+ * @returns {Object} The transformed row object.
+ */
+const campaignRowTransform = (campaignRows) => {
+  const transformedRows = {
+    name: "",
+    archived: "",
+    description: "",
+    status: false,
+    admin_email: "",
+    operator_email: "",
+    sending_domain_id: "",
+    landing_page_id: "",
+    landing_page_url: "",
+    customer_id: "",
+    customer_poc: {},
+    customer_poc_placeholder: "",
+    target_emails: [],
+    target_emails_placeholder: "",
+    target_email_domains: [],
+    target_email_domains_placeholder: "",
+    target_count: "",
+    target_template_uuid: "",
+    start_datetime: "",
+    end_datetime: "",
+    time_zone: "",
+    ...campaignRows,
+  };
+  // convert objects and arrays to strings for display
+  transformedRows.customer_poc_placeholder = JSON.stringify(
+    transformedRows.customer_poc
+  );
+  transformedRows.target_emails_placeholder =
+    transformedRows.target_emails.join("\r\n");
+  transformedRows.target_email_domains_placeholder =
+    transformedRows.target_email_domains.join(", ");
+
+  return transformedRows;
 };
 
 const steps = [
@@ -107,21 +76,6 @@ const steps = [
   "Review & Send",
 ];
 
-const validationSchema = yup.object({
-  name: yup.string().required("Campaign Name is required"),
-  admin_email: yup
-    .string()
-    .email("Invalid email")
-    .required("Admin email is required"),
-  operator_email: yup
-    .string()
-    .email("Invalid email")
-    .required("Operator email is required"),
-  target_emails_placeholder: yup
-    .string()
-    .required("Target email list is required"),
-});
-
 const initialFieldsToValidate = {
   name: true,
   admin_email: true,
@@ -129,10 +83,16 @@ const initialFieldsToValidate = {
   target_emails_placeholder: true,
 };
 
+/**
+ * The component that renders the data entry page for campaigns.
+ *
+ * @returns {JSX.Element} The CampaignDataEntryPage component.
+ */
 const CampaignDataEntryPage = () => {
-  let navigate = useNavigate();
+  // react-router-dom Hooks
+  const navigate = useNavigate();
   const { state } = useLocation();
-  const campaignValues = camRowsTransform(state.row);
+  // Hooks
   const dataEntryType = state.dataEntryType;
   const [activeStep, setActiveStep] = useState(0);
   const [invalidAlert, setInvalidAlert] = useState("");
@@ -140,12 +100,30 @@ const CampaignDataEntryPage = () => {
   const [deletebtnOpen, setDeletebtnOpen] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [getError, setError] = useState([false, ""]);
+  const initialValues = campaignRowTransform(state.row);
+  // Data fetching
   const customers = useGetAll("customers");
   const domains = useGetAll("sending_domains");
   const landingPages = useGetAll("landing_pages");
   const templates = useGetAll("templates");
+  // Form validation
+  const validationSchema = yup.object({
+    name: yup.string().required("Campaign Name is required"),
+    admin_email: yup
+      .string()
+      .email("Invalid email")
+      .required("Admin email is required"),
+    operator_email: yup
+      .string()
+      .email("Invalid email")
+      .required("Operator email is required"),
+    target_emails_placeholder: yup
+      .string()
+      .required("Target email list is required"),
+  });
+  // Form configuration
   const formik = useFormik({
-    initialValues: campaignValues,
+    initialValues: initialValues,
     validationSchema: validationSchema,
     validateOnMount: true,
     validateOnChange: true,
@@ -160,10 +138,9 @@ const CampaignDataEntryPage = () => {
       values.target_emails = target_emails;
       values.target_email_domains = target_email_domains;
       values.target_count = target_emails.length;
-      values.customer_poc = JSON.parse(values.customer_poc_placeholder);
-      if (values.customer_poc_placeholder == "") {
-        values.customer_poc = {};
-      }
+      values.customer_poc = values.customer_poc_placeholder
+        ? JSON.parse(values.customer_poc_placeholder)
+        : {};
       if (savebtnOpen) {
         values.start_datetime = "1970-01-01T00:00:00.000Z";
         values.end_datetime = "1970-01-01T00:00:00.000Z";
@@ -172,35 +149,64 @@ const CampaignDataEntryPage = () => {
       }
       setHasSubmitted(true);
       submitEntry("campaigns", values, values._id, dType, setError);
-      setTimeout(() => {
-        setSavebtnOpen(false);
-      });
+      setSavebtnOpen(false);
     },
   });
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-  const handleStep = (step) => () => {
+  /**
+   * Sets the active step to a new value.
+   *
+   * @param {number} step - The new active step to set.
+   */
+  const setStep = (step) => {
     setActiveStep(step);
   };
+
+  /**
+   * Handles the "Next" button click by incrementing the active step by 1.
+   */
+  const handleNext = () => {
+    setStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  /**
+   * Handles resetting the active step to the first step.
+   */
+  const handleReset = () => {
+    setStep(0);
+  };
+
+  /**
+   * Handles setting the active step to the specified step number.
+   *
+   * @param {number} step - The step number to set the active step to.
+   */
+  const handleStep = (step) => () => {
+    setStep(step);
+  };
+
+  /**
+   * Renders a "Back" button for the stepper.
+   */
   const backButton = (
     <Button
       color="inherit"
       disabled={activeStep === 0}
-      onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)}
+      onClick={() => setStep((prevActiveStep) => prevActiveStep - 1)}
       sx={{ mr: 1 }}
     >
       Back
     </Button>
   );
+
+  /**
+   * Handles clicking the "Next" button on the first step by validating the form and
+   * either incrementing the active step or displaying an error message.
+   */
   const handleFirstNext = () => {
     formik.setTouched(initialFieldsToValidate);
     if (formik.isValid) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setStep((prevActiveStep) => prevActiveStep + 1);
       setInvalidAlert("");
     } else {
       setInvalidAlert(
@@ -208,6 +214,11 @@ const CampaignDataEntryPage = () => {
       );
     }
   };
+
+  /**
+   * Handles clicking the "Next" button on the third step by checking if the start time is
+   * valid and either incrementing the active step or displaying an error message.
+   */
   const handleThirdNext = () => {
     const now = new Date();
     const startVal = formik.values.start_datetime;
@@ -224,18 +235,27 @@ const CampaignDataEntryPage = () => {
         "The Start time must happen before the End time. Please address this before continuing."
       );
     } else {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setStep((prevActiveStep) => prevActiveStep + 1);
       setInvalidAlert("");
     }
   };
+
+  /**
+   * Closes the dialog and navigates to the campaigns page if there was no error.
+   */
   const closeDialog = () => {
     setHasSubmitted(false);
     if (!getError[0]) {
       navigate("/cat-phishing/campaigns");
     }
   };
+
+  // Determines whether the delete button should be disabled based on the data entry type.
   const disableDeleteBtn = dataEntryType == "new" ? true : false;
 
+  /**
+   * Deletes the campaign and closes the delete confirmation dialog.
+   */
   const confirmDelete = () => {
     deleteEntry("campaigns", formik.values._id, setError);
     setTimeout(() => {
@@ -243,6 +263,8 @@ const CampaignDataEntryPage = () => {
       setHasSubmitted(true);
     });
   };
+
+  // Renders a loading message if any of the necessary data is still loading.
   if (
     customers.isLoading ||
     domains.isLoading ||
@@ -251,6 +273,7 @@ const CampaignDataEntryPage = () => {
   ) {
     return <MainCard title={"Campaign" + " Wizard"}>Loading...</MainCard>;
   }
+
   return (
     <MainCard title={"Campaign" + " Wizard"}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1300 }}>
@@ -258,21 +281,11 @@ const CampaignDataEntryPage = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <Box sx={{ width: "100%" }}>
-                <Stepper
+                <SimpleStepper
+                  steps={steps}
                   activeStep={activeStep}
-                  sx={{ mb: 5, fontWeight: "bold" }}
-                  alternativeLabel
-                >
-                  {steps.map((label, index) => {
-                    return (
-                      <Step key={label}>
-                        <StepButton color="inherit" onClick={handleStep(index)}>
-                          {label}
-                        </StepButton>
-                      </Step>
-                    );
-                  })}
-                </Stepper>
+                  handleStep={handleStep}
+                />
                 {activeStep === steps.length ? (
                   <>
                     <Typography sx={{ mt: 2, mb: 1 }}>

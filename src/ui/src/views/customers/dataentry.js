@@ -23,7 +23,8 @@ import * as yup from "yup";
 
 // ==============================|| Create/Update Customer View ||============================== //
 
-let custPOCValues = {
+// An object with initial values for the customer's point of contacts (POC)
+let initialPOCValues = {
   id: 0,
   email: "",
   first_name: "",
@@ -34,64 +35,75 @@ let custPOCValues = {
   title: "",
 };
 
-let custFilledPOCValues = {};
-
+/**
+ * Transforms a row object to include default values for any missing properties.
+ * @param {Object} custRows - The row object to transform.
+ * @returns {Object} The transformed row object.
+ */
 const custRowsTransform = (custRows) => {
-  if (!custRows.hasOwnProperty("name")) {
-    custRows.name = "";
-  }
-  if (!custRows.hasOwnProperty("identifier")) {
-    custRows.identifier = "";
-  }
-  if (!custRows.hasOwnProperty("domain")) {
-    custRows.domain = "";
-  }
-  if (!custRows.hasOwnProperty("appendix_a_date")) {
-    custRows.appendix_a_date = new Date().toISOString();
-  }
-  if (!custRows.hasOwnProperty("customer_type")) {
-    custRows.customer_type = "";
-  }
-  if (!custRows.hasOwnProperty("address_1")) {
-    custRows.address_1 = "";
-  }
-  if (!custRows.hasOwnProperty("address_2")) {
-    custRows.address_2 = "";
-  }
-  if (!custRows.hasOwnProperty("city")) {
-    custRows.city = "";
-  }
-  if (!custRows.hasOwnProperty("state")) {
-    custRows.state = "";
-  }
-  if (!custRows.hasOwnProperty("zip_code")) {
-    custRows.zip_code = "";
-  }
-  if (!custRows.hasOwnProperty("contact_list")) {
-    custRows.contact_list = [];
-  }
-  if (!custRows.hasOwnProperty("critical_infrastructure")) {
-    custRows.critical_infrastructure = "";
-  }
+  const defaultValues = {
+    name: "",
+    identifier: "",
+    domain: "",
+    appendix_a_date: new Date().toISOString(),
+    customer_type: "",
+    address_1: "",
+    address_2: "",
+    city: "",
+    state: "",
+    zip_code: "",
+    contact_list: [],
+    critical_infrastructure: "",
+  };
+  Object.entries(defaultValues).forEach(([key, value]) => {
+    if (!custRows.hasOwnProperty(key)) {
+      custRows[key] = value;
+    }
+  });
+
   return custRows;
 };
 
+/**
+ * Determines the text to display for a customer data entry type.
+ *
+ * @param {string} dataEntryType - The type of customer data entry, either "new" or "edit".
+ * @returns {string} - The text to display for the specified data entry type.
+ */
 const custNewOrEdit = (dataEntryType) => {
-  if (dataEntryType == "new") {
-    return "New Customer";
-  }
-  return "Edit Customer";
+  return dataEntryType === "new" ? "New Customer" : "Edit Customer";
 };
 
-const getOtherIdentifiers = (custData, custValues) => {
-  const identifierArr = custData.map(({ identifier }) => identifier);
-  return identifierArr.filter((identifier) => {
-    if (identifier != custValues.identifier) {
-      return identifier;
-    }
-  });
+/**
+ * Returns an array of identifiers for all customers in the `custData` array except the one whose identifier matches `custValues.identifier`.
+ *
+ * @param {Array<Object>} custData - An array of customer data objects, each containing an `identifier` property.
+ * @param {Object} custValues - An object representing the customer whose identifier should be excluded from the result array, containing an `identifier` property.
+ * @returns {Array<string>} An array of customer identifiers, excluding the one specified in `custValues.identifier`.
+ */
+function getOtherIdentifiers(custData, custValues) {
+  const identifiers = custData.map((customer) => customer.identifier);
+  const otherIdentifiers = identifiers.filter(
+    (identifier) => identifier !== custValues.identifier
+  );
+  return otherIdentifiers;
+}
+
+// An object representing the fields to be validated
+const fieldsToValidate = {
+  name: true,
+  appendix_a_date: true,
+  identifier: true,
+  domain: true,
+  customer_type: true,
+  address_1: true,
+  city: true,
+  state: true,
+  zip_code: true,
+  critical_infrastructure: true,
 };
 
+// Adds a custom validation method to Yup for validating unique strings
 yup.addMethod(yup.string, "unique", function (myArray, msg) {
   return this.test({
     name: "unique",
@@ -100,14 +112,21 @@ yup.addMethod(yup.string, "unique", function (myArray, msg) {
   });
 });
 
+/**
+ * The component that renders the data entry page for customers.
+ *
+ * @returns {JSX.Element} The CustDataEntryPage component.
+ */
 const CustDataEntryPage = () => {
+  // react-router-dom hooks
+  const navigate = useNavigate();
   const { state } = useLocation();
-  let navigate = useNavigate();
-  let custValues = custRowsTransform(state.row);
-  let dataEntryType = custNewOrEdit(state.dataEntryType);
-  const [custData, setCustData] = useState(custValues);
-  const contactLen = custData.contact_list.length;
+  // Function calls
+  const custValues = custRowsTransform(state.row);
+  const dataEntryType = custNewOrEdit(state.dataEntryType);
   const identifiers = getOtherIdentifiers(state.rows, custValues);
+  // Hooks
+  const [custData, setCustData] = useState(custValues);
   // const [hasCampaigns, setCampaigns] = useState(false);
   const hasCampaigns = false;
   const [contactUpdated, setContactUpdate] = useState(false);
@@ -117,6 +136,8 @@ const CustDataEntryPage = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [getDelete, setDelete] = useState(false);
   const [getError, setError] = useState([false, ""]);
+  // misc variables
+  const contactLen = custData.contact_list.length;
   const campaignCols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Name", flex: 2 },
@@ -125,6 +146,7 @@ const CustDataEntryPage = () => {
     { field: "start_date", headerName: "Start Date", flex: 1.5 },
     { field: "inpsect", headerName: "Inspect", flex: 1.5 },
   ];
+  // Form validation
   const validationSchema = yup.object({
     name: yup
       .string()
@@ -144,26 +166,7 @@ const CustDataEntryPage = () => {
       .string()
       .required("Critical Infrastructure is required"),
   });
-  const fieldsToValidate = {
-    name: true,
-    appendix_a_date: true,
-    identifier: true,
-    domain: true,
-    customer_type: true,
-    address_1: true,
-    city: true,
-    state: true,
-    zip_code: true,
-    critical_infrastructure: true,
-  };
-  const didMount = useRef(false);
-  useEffect(() => {
-    if (didMount.current) {
-      setContactUpdate(true);
-    } else {
-      didMount.current = true;
-    }
-  }, [custData.contact_list]);
+  // Form configuration
   const formik = useFormik({
     initialValues: custValues,
     validationSchema: validationSchema,
@@ -183,25 +186,60 @@ const CustDataEntryPage = () => {
       });
     },
   });
+
+  // UseEffect to set the contact update flag when the contact list is updated.
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (didMount.current) {
+      setContactUpdate(true);
+    } else {
+      didMount.current = true;
+    }
+  }, [custData.contact_list]);
+
+  // Constructs the confirmation message for adding/updating a customer in the database.
+  let subtitleConfirm = `${formik.values.name} will be ${
+    dataEntryType === "New Customer" ? "added to" : "updated in"
+  } the database.`;
+
+  // Checks if a contact has been updated or if any form field has been changed.
+  let contactUpdatedOrDirty = contactUpdated || formik.dirty;
+
+  /**
+   * Handles the cancel button click event.
+   */
   const handleCancel = () => {
-    if (contactUpdated || formik.dirty) {
+    if (contactUpdatedOrDirty) {
       setCancelbtnOpen(true);
     } else {
       navigate("/cat-phishing/customers");
     }
   };
+
+  /**
+   * Determines whether a button is disabled.
+   * @returns {boolean} Returns true if the Save button is disabled, false otherwise.
+   */
   const isDisabled = () => {
-    if (contactLen >= 2 && (contactUpdated || formik.dirty)) {
+    if (contactLen >= 2 && contactUpdatedOrDirty) {
       return false;
     }
     return true;
   };
+
+  /**
+   * Handles the Save button click event.
+   */
   const handleSave = () => {
     formik.setTouched(fieldsToValidate);
-    if (formik.isValid && contactLen >= 2 && (contactUpdated || formik.dirty)) {
+    if (formik.isValid && contactLen >= 2 && contactUpdatedOrDirty) {
       setSavebtnOpen(true);
     }
   };
+
+  /**
+   * Confirms the deletion of a customer from the database.
+   */
   const confirmDelete = () => {
     deleteEntry("customers", custData._id, setError);
     setTimeout(() => {
@@ -210,11 +248,10 @@ const CustDataEntryPage = () => {
       setHasSubmitted(true);
     });
   };
-  let subtitleConfirm =
-    formik.values.name + " will be updated in the database.";
-  if (dataEntryType == "New Customer") {
-    subtitleConfirm = formik.values.name + " will be added to the database.";
-  }
+
+  /**
+   * Closes the dialog box and navigates to the customers list page if no error occurred.
+   */
   const closeDialog = () => {
     setHasSubmitted(false);
     setDelete(false);
@@ -222,6 +259,12 @@ const CustDataEntryPage = () => {
       navigate("/cat-phishing/customers");
     }
   };
+
+  /**
+   * Renders a section for displaying a customer's campaigns.
+   *
+   * @returns {JSX.Element} A React JSX element representing the campaigns section.
+   */
   const renderCampaigns = () => {
     const title = (
       <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ mt: 5, mb: 3 }}>
@@ -230,36 +273,30 @@ const CustDataEntryPage = () => {
         </Typography>
       </Grid>
     );
-    if (state.dataEntryType != "new" && hasCampaigns) {
-      return (
-        <>
-          {title}
+    let content;
+    if (state.dataEntryType != "new") {
+      if (hasCampaigns) {
+        content = (
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: 1 }}>
             <DisplayDataTable data={{ rows: [], columns: campaignCols }} />
           </Grid>
-        </>
-      );
-    } else if (state.dataEntryType != "new") {
-      return (
-        <>
-          {title}
-          <Alert severity="info">Customer has no campaigns</Alert>
-        </>
-      );
+        );
+      } else {
+        content = <Alert severity="info">Customer has no campaigns</Alert>;
+      }
     }
+    return (
+      <>
+        {title}
+        {content}
+      </>
+    );
   };
 
   return (
     <MainCard title={dataEntryType}>
       <Box sx={{ ml: 5, mr: 5, mt: 3, maxWidth: 1000 }}>
         <Grid container spacing={2}>
-          {/* <CustomerForm
-            initialCustValues={custValues}
-            setCustData={setCustData}
-            custData={custData}
-            dataEntryType={mainCardTitle}
-            identifiers={getOtherIdentifiers(state.rows, custValues)}
-          > */}
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             {contactLen < 2 && dataEntryType == "New Customer" ? (
               <></>
@@ -286,8 +323,8 @@ const CustDataEntryPage = () => {
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mb: 1 }}>
               <CustomerPOCForm
-                initialPOCValues={custPOCValues}
-                custFilledPOCValues={custFilledPOCValues}
+                initialPOCValues={initialPOCValues}
+                custFilledPOCValues={{}}
                 setCustData={setCustData}
                 custPOCData={custData.contact_list}
                 custData={custData}
