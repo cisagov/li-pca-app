@@ -3,111 +3,17 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // material-ui
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import TextField from "@mui/material/TextField";
-import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from "@mui/icons-material/Clear";
-import SearchIcon from "@mui/icons-material/Search";
-import {
-  DataGrid,
-  GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
-  GridToolbarExport,
-} from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
+import CustomToolbar from "./CustomToolbar";
+import EditButton from "./EditButton";
 import ResultDialog from "ui-component/popups/ResultDialog";
-
-function escapeRegExp(value) {
-  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-}
-
-CustomToolbar.propTypes = {
-  clearSearch: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-  newEntryRoute: PropTypes.string.isRequired,
-  rows: PropTypes.array,
-  tableCategory: PropTypes.string,
-};
-
-function CustomToolbar(props) {
-  let navigate = useNavigate();
-  const values = {};
-  const searchTextField = (
-    <TextField
-      fullWidth
-      variant="standard"
-      value={props.value}
-      onChange={props.onChange}
-      placeholder="Search…"
-      InputProps={{
-        startAdornment: <SearchIcon fontSize="small" />,
-        endAdornment: (
-          <IconButton
-            title="Clear"
-            aria-label="Clear"
-            size="small"
-            style={{ visibility: props.value ? "visible" : "hidden" }}
-            onClick={props.clearSearch}
-          >
-            <ClearIcon fontSize="small" />
-          </IconButton>
-        ),
-      }}
-      sx={{
-        m: (theme) => theme.spacing(1, 0.5, 1.5),
-        "& .MuiSvgIcon-root": {
-          mr: 0.5,
-        },
-        "& .MuiInput-underline:before": {
-          borderBottom: 1,
-          borderColor: "divider",
-        },
-      }}
-    />
-  );
-  let newEntryButton;
-  if (props.tableCategory != "Phish Reconnaissance") {
-    newEntryButton = (
-      <Button
-        size="small"
-        sx={{ "& .MuiButton-startIcon": { marginRight: "1.8px" } }}
-        startIcon={<AddIcon fontSize="small" />}
-        onClick={() => {
-          navigate(`${props.newEntryRoute}`, {
-            state: { row: values, dataEntryType: "new", rows: props.rows },
-          });
-        }}
-      >
-        New {props.tableCategory}
-      </Button>
-    );
-  }
-
-  return (
-    <GridToolbarContainer>
-      <Grid container>
-        <Grid item xs={11} sm={7} md={5} lg={5} xl={4} sx={{ p: 0.5, pb: 0 }}>
-          {searchTextField}
-        </Grid>
-        <Grid item xs={12} sm={12} md={7} lg={7} xl={7} sx={{ p: 1, pl: 1 }}>
-          <GridToolbarColumnsButton />
-          <GridToolbarFilterButton />
-          <GridToolbarExport />
-          {newEntryButton}
-        </Grid>
-      </Grid>
-    </GridToolbarContainer>
-  );
-}
+import { escapeRegExp } from "utils/stringUtils";
 
 MainDataTable.propTypes = {
   data: PropTypes.object.isRequired,
@@ -118,6 +24,17 @@ MainDataTable.propTypes = {
   apiType: PropTypes.string,
 };
 
+/**
+ * Renders a data table with search, edit, and delete functionality.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.data - An object containing the table data and columns.
+ * @param {string} props.editEntryRoute - The route to navigate to for editing a table entry.
+ * @param {string} props.newEntryRoute - The route to navigate to for adding a new table entry.
+ * @param {string} props.tableCategory - The category of the table.
+ * @param {string} props.apiType - The API type for retiring rows.
+ * @returns {JSX.Element} The data table component.
+ */
 export default function MainDataTable(props) {
   let navigate = useNavigate();
   const [searchText, setSearchText] = React.useState("");
@@ -129,6 +46,12 @@ export default function MainDataTable(props) {
   let pageSize = 10;
   let rowsPerPage = 10;
   let density = "standard";
+
+  /**
+   * Updates the search input and filters the rows to display matching criteria only.
+   *
+   * @param {string} searchValue - The search value entered by the user.
+   */
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
     const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
@@ -145,65 +68,63 @@ export default function MainDataTable(props) {
   }, [props.data.rows]);
 
   const columns = props.data.columns;
-  if (props.tableCategory != "Phish Reconnaissance") {
-    columns.push({
-      field: "edit",
-      headerName: "Edit",
-      sortable: false,
-      disableClickEventBubbling: true,
-      renderCell: (cellValues) => {
-        return (
-          <IconButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              navigate(`${props.editEntryRoute}`, {
-                state: {
-                  row: cellValues.row,
-                  dataEntryType: "edit",
-                  rows: rows,
-                },
-              });
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        );
-      },
-      width: 80,
-    });
-  } else {
-    pageSize = 5;
-    rowsPerPage = 5;
-    density = "compact";
-  }
-  if (
-    props.tableCategory == "Sending Domains"
-    // || props.tableCategory == "Landing Pages"
-  ) {
-    columns.push({
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      disableClickEventBubbling: true,
-      renderCell: (cellValues) => {
-        return (
-          <IconButton
-            variant="contained"
-            color="error"
-            onClick={() => {
-              setRowData(cellValues.row);
-              setDeletebtnOpen(true);
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        );
-      },
-      flex: 0.5,
-    });
+
+  // Adds edit or delete buttons as columns based on `tableCategory`.
+  switch (props.tableCategory) {
+    case "Phish Reconnaissance":
+      pageSize = 5;
+      rowsPerPage = 5;
+      density = "compact";
+      break;
+    case "Sending Domains":
+      columns.push({
+        field: "delete",
+        headerName: "Delete",
+        sortable: false,
+        disableClickEventBubbling: true,
+        renderCell: (cellValues) => {
+          return (
+            <IconButton
+              variant="contained"
+              color="error"
+              onClick={() => {
+                setRowData(cellValues.row);
+                setDeletebtnOpen(true);
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          );
+        },
+        flex: 0.5,
+      });
+      break;
+    default:
+      columns.push({
+        field: "edit",
+        headerName: "Edit",
+        sortable: false,
+        disableClickEventBubbling: true,
+        renderCell: (cellValues) => {
+          return (
+            <EditButton
+              row={cellValues.row}
+              rows={rows}
+              navigate={navigate}
+              editEntryRoute={props.editEntryRoute}
+            />
+          );
+        },
+        width: 80,
+      });
+      break;
   }
 
+  /**
+   * Calls the deleteEntry function with the appropriate parameters and sets a timeout to close the delete button dialog and set the delete state to true.
+   *
+   * @param {function} props.deleteEntry - The function to call to delete the data.
+   */
   const confirmDelete = () => {
     props.deleteEntry(props.apiType, rowData._id, setError);
     setTimeout(() => {
@@ -211,12 +132,19 @@ export default function MainDataTable(props) {
       setDelete(true);
     });
   };
+
+  /**
+   * Closes the delete confirmation dialog and reloads the page if there is no error.
+   *
+   * @param {Array} getError - An array that contains the error message and a boolean value indicating whether there was an error or not.
+   */
   const closeDialog = () => {
     if (!getError[0]) {
       window.location.reload();
     }
     setDelete(false);
   };
+
   return (
     <Box sx={{ width: "100%" }}>
       <DataGrid

@@ -3,140 +3,29 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // material-ui
-import ArchiveIcon from "@mui/icons-material/Archive";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import ClearIcon from "@mui/icons-material/Clear";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import EditIcon from "@mui/icons-material/Edit";
-import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
-import TextField from "@mui/material/TextField";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import SearchIcon from "@mui/icons-material/Search";
-import {
-  DataGrid,
-  GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
-  GridToolbarExport,
-} from "@mui/x-data-grid";
-
-// Tabler icons
-import { IconPlus } from "@tabler/icons";
+import { DataGrid } from "@mui/x-data-grid";
 
 // project imports
 import ConfirmDialog from "ui-component/popups/ConfirmDialog";
+import EditButton from "./EditButton";
 import ResultDialog from "ui-component/popups/ResultDialog";
 import { useRetire } from "services/api.js";
+import CustomToolbar from "./CustomToolbar";
+import { escapeRegExp } from "utils/stringUtils";
 
-function escapeRegExp(value) {
-  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-}
-
-CustomToolbar.propTypes = {
-  clearSearch: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-  newEntryRoute: PropTypes.string.isRequired,
-  rows: PropTypes.array,
-  tableCategory: PropTypes.string,
-  selectedRows: PropTypes.array,
-  confirmRetire: PropTypes.func,
-};
-
-function CustomToolbar(props) {
-  let navigate = useNavigate();
-  const values = {};
-
-  let isDisabled = true;
-  if (props.selectedRows.length !== 0) {
-    isDisabled = false;
-  }
-
-  return (
-    <GridToolbarContainer>
-      <Grid container>
-        <Grid item xs={11} sm={7} md={5} lg={5} xl={4} sx={{ p: 0.5 }}>
-          <TextField
-            fullWidth
-            variant="standard"
-            value={props.value}
-            onChange={props.onChange}
-            placeholder="Search…"
-            InputProps={{
-              startAdornment: <SearchIcon fontSize="small" />,
-              endAdornment: (
-                <IconButton
-                  title="Clear"
-                  aria-label="Clear"
-                  size="small"
-                  style={{ visibility: props.value ? "visible" : "hidden" }}
-                  onClick={props.clearSearch}
-                >
-                  <ClearIcon fontSize="small" />
-                </IconButton>
-              ),
-            }}
-            sx={{
-              m: (theme) => theme.spacing(1, 0.5, 1.5),
-              "& .MuiSvgIcon-root": { mr: 0.5 },
-              "& .MuiInput-underline:before": {
-                borderBottom: 1,
-                borderColor: "divider",
-              },
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={11} lg={11} xl={7} sx={{ p: 1, pl: 1 }}>
-          <GridToolbarColumnsButton />
-          <GridToolbarFilterButton />
-          <GridToolbarExport />
-          <Button
-            size="small"
-            sx={{ "& .MuiButton-startIcon": { marginRight: "1.8px" } }}
-            startIcon={<IconPlus size={18} />}
-            onClick={() => {
-              navigate(`${props.newEntryRoute}`, {
-                state: { row: values, dataEntryType: "new", rows: props.rows },
-              });
-            }}
-          >
-            New {props.tableCategory}
-          </Button>
-          <Button
-            color="error"
-            size="small"
-            startIcon={<ArchiveIcon />}
-            onClick={props.confirmRetire}
-            disabled={isDisabled}
-          >
-            Retire
-          </Button>
-          <Button
-            color="inherit"
-            size="small"
-            startIcon={<ContentCopyIcon />}
-            onClick={() => console.log(props.selectedRows)}
-            disabled={isDisabled}
-          >
-            Duplicate
-          </Button>
-          <Button
-            color="secondary"
-            size="small"
-            startIcon={<MailOutlineIcon />}
-            onClick={() => console.log(props.selectedRows)}
-            disabled={isDisabled}
-          >
-            Test
-          </Button>
-        </Grid>
-      </Grid>
-    </GridToolbarContainer>
-  );
-}
-
+/**
+ * Renders an advanced data table with search, edit, and retire functionality.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.data - An object containing the table data and columns.
+ * @param {string} props.editEntryRoute - The route to navigate to for editing a table entry.
+ * @param {string} props.newEntryRoute - The route to navigate to for adding a new table entry.
+ * @param {string} props.tableCategory - The category of the table.
+ * @param {string} props.apiType - The API type for retiring rows.
+ * @param {Object} props.filterModel - The filter model for the table.
+ * @returns {JSX.Element} The advanced data table component.
+ */
 AdvancedDataTable.propTypes = {
   data: PropTypes.object.isRequired,
   newEntryRoute: PropTypes.string,
@@ -152,6 +41,8 @@ export default function AdvancedDataTable(props) {
   const [rows, setRows] = React.useState(props.data.rows);
   const [selectedRows, setSelectedRows] = React.useState([]);
 
+  // Takes search input and filters the table rows to display matching criteria only.
+  // The filtered rows are then set using the setRows hook.
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
     const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
@@ -175,21 +66,12 @@ export default function AdvancedDataTable(props) {
     disableClickEventBubbling: true,
     renderCell: (cellValues) => {
       return (
-        <IconButton
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            navigate(`${props.editEntryRoute}`, {
-              state: {
-                row: cellValues.row,
-                dataEntryType: "edit",
-                rows: rows,
-              },
-            });
-          }}
-        >
-          <EditIcon />
-        </IconButton>
+        <EditButton
+          row={cellValues.row}
+          rows={rows}
+          navigate={navigate}
+          editEntryRoute={props.editEntryRoute}
+        />
       );
     },
     width: 80,
@@ -197,15 +79,20 @@ export default function AdvancedDataTable(props) {
   const [retire, setRetire] = React.useState(false);
   const [retirebtnOpen, setRetirebtnOpen] = React.useState(false);
 
+  // Sets retire button open to be true and opens the retire confirmation dialog.
   const confirmRetire = () => {
     setRetirebtnOpen(true);
   };
+
+  // Sets the row to be retired and closes the retire confirmation dialog.
   const toRetire = () => {
     setRetire(true);
     setRetirebtnOpen(false);
   };
 
   let getError = useRetire(props.apiType, retire, selectedRows);
+
+  // Close the retire confirmation dialog and reload the page if there are no errors.
   const closeDialog = () => {
     setRetire(false);
     if (!getError[0]) {
@@ -252,7 +139,7 @@ export default function AdvancedDataTable(props) {
           checkboxSelection
           onSelectionModelChange={(ids) => {
             const selectedIDs = new Set(ids);
-            const selectedRows = rows.filter((row) => selectedIDs.has(row.id));
+            const selectedRows = rows.filter((row) => selectedIDs.has(row._id));
             setSelectedRows(selectedRows);
           }}
           initialState={{
