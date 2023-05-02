@@ -69,6 +69,44 @@ export default function MainDataTable(props) {
 
   const columns = props.data.columns;
 
+  const editColumn = {
+    field: "edit",
+    headerName: "Edit",
+    sortable: false,
+    disableClickEventBubbling: true,
+    renderCell: (cellValues) => {
+      return (
+        <EditButton
+          row={cellValues.row}
+          rows={rows}
+          navigate={navigate}
+          editEntryRoute={props.editEntryRoute}
+        />
+      );
+    },
+    width: 80,
+  };
+  const deleteColumn = {
+    field: "delete",
+    headerName: "Delete",
+    sortable: false,
+    disableClickEventBubbling: true,
+    renderCell: (cellValues) => {
+      return (
+        <IconButton
+          variant="contained"
+          color="error"
+          onClick={() => {
+            setRowData(cellValues.row);
+            setDeletebtnOpen(true);
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      );
+    },
+    flex: 0.5,
+  };
   // Adds edit or delete buttons as columns based on `tableCategory`.
   switch (props.tableCategory) {
     case "Phish Reconnaissance":
@@ -77,46 +115,11 @@ export default function MainDataTable(props) {
       density = "compact";
       break;
     case "Sending Domains":
-      columns.push({
-        field: "delete",
-        headerName: "Delete",
-        sortable: false,
-        disableClickEventBubbling: true,
-        renderCell: (cellValues) => {
-          return (
-            <IconButton
-              variant="contained"
-              color="error"
-              onClick={() => {
-                setRowData(cellValues.row);
-                setDeletebtnOpen(true);
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          );
-        },
-        flex: 0.5,
-      });
+      columns.push(editColumn);
+      columns.push(deleteColumn);
       break;
     default:
-      columns.push({
-        field: "edit",
-        headerName: "Edit",
-        sortable: false,
-        disableClickEventBubbling: true,
-        renderCell: (cellValues) => {
-          return (
-            <EditButton
-              row={cellValues.row}
-              rows={rows}
-              navigate={navigate}
-              editEntryRoute={props.editEntryRoute}
-            />
-          );
-        },
-        width: 80,
-      });
+      columns.push(editColumn);
       break;
   }
 
