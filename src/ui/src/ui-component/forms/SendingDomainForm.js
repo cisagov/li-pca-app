@@ -25,6 +25,7 @@ import ConfirmDialog from "ui-component/popups/ConfirmDialog";
 import ResultDialog from "ui-component/popups/ResultDialog";
 import { submitEntry } from "services/api.js";
 
+// This object contains fields that need to be validated
 const fieldsToValidate = {
   name: true,
   from_address: true,
@@ -32,6 +33,7 @@ const fieldsToValidate = {
   sending_ips: true,
 };
 
+// This is the validation schema for the form using the Yup library
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
   from_address: yup
@@ -41,41 +43,49 @@ const validationSchema = yup.object({
   interface_type: yup.string().required("Interface Type is required"),
   sending_ips: yup.string().required("Sending IP[s] is required"),
 });
-
+/**
+ * Component for displaying and managing sending domains.
+ * @param {Object} props - Component props.
+ * @param {Object} props.initialValues - Initial values for the form.
+ * @param {string} props.dataEntryType - The type of data entry (e.g. "New Sending Domain" or "Edit Sending Domain").
+ * @param {Object} props.sdData - The sending domain data.
+ * @param {Function} props.setSdData - A function to set the sending domain data.
+ * @returns {JSX.Element} SendingDomainForm component.
+ */
 const SendingDomainForm = (props) => {
   let navigate = useNavigate();
-  let [emailHeaderArray, setHeaderArray] = useState([]);
-  let [customHeader, setCustomHeader] = useState("");
-  let [headerValue, setHeaderValue] = useState("");
+  const [emailHeaderArray, setHeaderArray] = useState(
+    props.initialValues.headers
+  );
+  const [customHeader, setCustomHeader] = useState("");
+  const [headerValue, setHeaderValue] = useState("");
   const [savebtnOpen, setSavebtnOpen] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [cancelbtnOpen, setCancelbtnOpen] = useState(false);
   const [getError, setError] = useState([false, ""]);
+  /**
+   * Add a header to the email header array.
+   */
   const addHeader = () => {
-    if (customHeader != "" && headerValue != "") {
-      let newElement = {
+    if (customHeader !== "" && headerValue !== "") {
+      const newElement = {
         key: customHeader,
         value: headerValue,
       };
-      setHeaderArray((emailHeaderArray) => [...emailHeaderArray, newElement]);
+      setHeaderArray([...emailHeaderArray, newElement]);
       setCustomHeader("");
       setHeaderValue("");
     }
   };
-
-  if (Object.keys(emailHeaderArray).length !== 0) {
-    let counter = 0;
-    emailHeaderArray.forEach((entry) => {
-      entry["id"] = counter;
-      counter = counter + 1;
-    });
-  }
-
+  /**
+   * Delete a row from the email header array.
+   * @param {Object} selectedRow - The row to delete.
+   */
   const handleDelete = (selectedRow) => {
     const id = selectedRow.id;
     setHeaderArray(emailHeaderArray.filter((item) => item.id !== id));
   };
-
+  // Initialize formik form
   const formik = useFormik({
     initialValues: props.initialValues,
     validationSchema: validationSchema,
@@ -84,8 +94,13 @@ const SendingDomainForm = (props) => {
     onSubmit: (values) => {
       const sd = "sending_domains";
       const dType = props.dataEntryType;
-      // TODO: Add headers to values or whatever ends of being axiosed
-      values.headers = emailHeaderArray;
+      const noIdsArray = emailHeaderArray.map((obj) => {
+        return {
+          key: obj.key,
+          value: obj.value,
+        };
+      });
+      values.headers = noIdsArray;
       props.setSdData(Object.assign(props.sdData, values));
       setHasSubmitted(true);
       submitEntry(sd, props.sdData, props.sdData._id, dType, setError);
@@ -94,11 +109,12 @@ const SendingDomainForm = (props) => {
       });
     },
   });
-  let subtitleConfirm =
-    formik.values.name + " will be updated in the database.";
-  if (props.dataEntryType == "New Sending Domain") {
-    subtitleConfirm = formik.values.name + " will be added to the database.";
-  }
+  // Confirm subtitle based on data entry type
+  const subtitleConfirm =
+    props.dataEntryType === "New Sending Domain"
+      ? formik.values.name + " will be added to the database."
+      : formik.values.name + " will be updated in the database.";
+  // Define columns for header data grid
   const header_cols = [
     { field: "id", hide: true },
     { field: "key", headerName: "Header", flex: 1 },
@@ -124,7 +140,10 @@ const SendingDomainForm = (props) => {
       flex: 0.25,
     },
   ];
-
+  /**
+  Renders SMTP input fields for a formik form
+  @returns {JSX.Element} JSX Element containing SMTP input fields
+  */
   const smtpFields = () => {
     return (
       <>
@@ -180,6 +199,10 @@ const SendingDomainForm = (props) => {
       </>
     );
   };
+  /**
+   * Renders two text fields for the Mailgun Domain and Mailgun API Key.
+   * @returns {JSX.Element} - Returns a JSX element with two text fields.
+   */
   const mailgunFields = () => {
     return (
       <>
@@ -222,8 +245,13 @@ const SendingDomainForm = (props) => {
       </>
     );
   };
-
+  /**
+   * Renders a form to send a test email with customizable email headers.
+   * @returns {JSX.Element} - Returns a JSX element with a form for sending test emails.
+   */
   const sendTestEmail = () => {
+    // TODO: Handle validating only unique key headers.
+    // TODO: Integrate Mailgun or equivalent functionality.
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} md={12} xl={12} sx={{ mt: 1 }}>
@@ -264,9 +292,9 @@ const SendingDomainForm = (props) => {
             Add Custom Header
           </Button>
         </Grid>
-        {/* <Grid item xs={12} sm={12} md={10} lg={10} xl={9} sx={{ mt: 1 }}> */}
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <DataGrid
+            getRowId={(row) => row.key}
             autoHeight
             hideFooter={true}
             rows={emailHeaderArray}
@@ -287,6 +315,7 @@ const SendingDomainForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
           <Button
+            disabled
             fullWidth
             variant="contained"
             color="warning"
@@ -299,6 +328,10 @@ const SendingDomainForm = (props) => {
       </Grid>
     );
   };
+  /**
+   * Handles the cancel button click event. If formik is dirty, sets the `cancelbtnOpen` state to true,
+   * otherwise navigates to "/cat-phishing/sending-domains".
+   */
   const handleCancel = () => {
     if (formik.dirty) {
       setCancelbtnOpen(true);
@@ -306,18 +339,19 @@ const SendingDomainForm = (props) => {
       navigate("/cat-phishing/sending-domains");
     }
   };
-  const isDisabled = () => {
-    if (formik.dirty) {
-      return false;
-    }
-    return true;
-  };
+  /**
+   * Handles the save button click event. Sets the touched fields of formik to `fieldsToValidate`.
+   * If formik is valid and dirty, sets the `savebtnOpen` state to true.
+   */
   const handleSave = () => {
     formik.setTouched(fieldsToValidate);
     if (formik.isValid && formik.dirty) {
       setSavebtnOpen(true);
     }
   };
+  /**
+   * Closes the dialog and sets `hasSubmitted` state to false. If there is no error, navigates to "/cat-phishing/sending-domains".
+   */
   const closeDialog = () => {
     setHasSubmitted(false);
     if (!getError[0]) {
@@ -400,7 +434,7 @@ const SendingDomainForm = (props) => {
               <MenuItem value={"Mailgun"}>Mailgun</MenuItem>
             </TextField>
           </Grid>
-          {formik.values.interface_type == "SMTP"
+          {formik.values.interface_type === "SMTP"
             ? smtpFields()
             : mailgunFields()}
           <Grid item xs={12} md={12} xl={12} />
@@ -439,7 +473,7 @@ const SendingDomainForm = (props) => {
               color="primary"
               variant="contained"
               size="large"
-              disabled={isDisabled()}
+              disabled={!formik.dirty}
               onClick={handleSave}
             >
               Save Domain
@@ -464,7 +498,7 @@ const SendingDomainForm = (props) => {
           type={props.dataEntryType}
           hasSubmitted={hasSubmitted}
           getDelete={false}
-          error={[]}
+          error={getError}
           closeDialog={closeDialog}
         />
       </form>
