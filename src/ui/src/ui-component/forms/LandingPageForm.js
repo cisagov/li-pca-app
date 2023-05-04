@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 //material-ui
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -23,9 +24,17 @@ import { submitEntry, deleteEntry } from "services/api.js";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+/**
+ * Renders a tab panel component.
+ * @param {Object} props - Component props.
+ * @param {number} props.value - The index of the currently active tab.
+ * @param {number} props.index - The index of this tab panel.
+ * @param {ReactNode} props.children - The content to render within this tab panel.
+ * @param {Object} props.other - Any additional props to be passed to the rendered div.
+ * @returns {JSX.Element} - The rendered tab panel.
+ */
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -49,10 +58,26 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
+// Form validation
 const validationSchema = yup.object({
   name: yup.string().required("Landing Page Name is required"),
 });
 
+// An object representing the fields to be validated
+const fieldsToValidate = {
+  name: true,
+};
+
+/**
+ * A form component for landing pages with various states and actions.
+ * @param {Object} props - The props object for this component.
+ * @param {Object} props.initialValues - An object containing initial form values.
+ * @param {string} props.dataEntryType - The type of data entry being made.
+ * @param {boolean} props.currentPageIsDefault - Indicates if the current page is the default landing page.
+ * @param {Object} props.currentDefaultPage - The current default landing page.
+ * @param {boolean} props.hasDefault - Indicates if there is a default landing page.
+ * @returns {JSX.Element} A JSX element containing a form for landing pages.
+ */
 const LandingPageForm = (props) => {
   let navigate = useNavigate();
   const [cancelbtnOpen, setCancelbtnOpen] = useState(false);
@@ -63,10 +88,18 @@ const LandingPageForm = (props) => {
   const [getError, setError] = useState([false, ""]);
   const [htmlValue, setHtmlValue] = useState(props.initialValues.html);
   const [tabValue, setTabValue] = useState(0);
+  const [activeAlert, setActiveAlert] = useState(false);
+  const isHtmlEmpty = htmlValue === "" || htmlValue === undefined;
+  /**
+   * Handles changes in tab value.
+   * @param {Object} event - The event object.
+   * @param {number} newValue - The new tab value.
+   */
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
     // console.log(event);
   };
+  // Initialize formik form
   const formik = useFormik({
     initialValues: props.initialValues,
     validationSchema: validationSchema,
@@ -74,7 +107,9 @@ const LandingPageForm = (props) => {
     onSubmit: (values) => {
       const dType = props.dataEntryType;
       values["html"] = htmlValue;
+      // Submits entry to the backend.
       submitEntry("landing_pages", values, values._id, dType, setError);
+      // Changes default landing page if applicable.
       const wasNotDefault = !props.currentPageIsDefault;
       const isDefaultChanged =
         props.initialValues.is_default_template != values.is_default_template;
@@ -94,22 +129,15 @@ const LandingPageForm = (props) => {
       });
     },
   });
-
-  const isDisabled = () => {
-    if (formik.dirty || props.initialValues.html != htmlValue) {
-      return false;
-    }
-    return true;
-  };
-
+  // Handles cancel action.
   const handleCancel = () => {
-    if (formik.dirty) {
+    if (formik.dirty || !isHtmlEmpty) {
       setCancelbtnOpen(true);
     } else {
       navigate("/cat-phishing/landing-pages");
     }
   };
-
+  // Confirms delete action.
   const confirmDelete = () => {
     deleteEntry("landing_pages", props.initialValues._id, setError);
     setTimeout(() => {
@@ -117,13 +145,15 @@ const LandingPageForm = (props) => {
       setDelete(true);
     });
   };
-
+  // Handles save action.
   const handleSave = () => {
-    if (formik.dirty || props.initialValues.html != htmlValue) {
+    formik.setTouched(fieldsToValidate);
+    if (formik.dirty && !isHtmlEmpty) {
       setSavebtnOpen(true);
     }
+    setActiveAlert(isHtmlEmpty);
   };
-
+  // Handles close dialog.
   const closeDialog = () => {
     setHasSubmitted(false);
     setDelete(false);
@@ -160,7 +190,7 @@ const LandingPageForm = (props) => {
           <Box sx={{ width: "100%", mb: 3 }}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <Tabs value={tabValue} onChange={handleTabChange}>
-                <Tab label="Landing Page Editor HTML View" />
+                <Tab label="Landing Page Editor" />
                 <Tab label="Templates" />
               </Tabs>
             </Box>
@@ -170,9 +200,16 @@ const LandingPageForm = (props) => {
             <TabPanel value={tabValue} index={1}>
               No templates are currently using this landing page
             </TabPanel>
+            {activeAlert ? (
+              <Alert severity="warning">
+                Landing Page Editor must not be empty in order to save.
+              </Alert>
+            ) : (
+              <></>
+            )}
           </Box>
           {props.dataEntryType == "New Landing Page" ? (
-            <Grid item xs={10} sm={7} md={8} lg={8} xl={9} />
+            <Grid item xs={10} sm={6} md={7} lg={7} xl={8} />
           ) : (
             <>
               <Grid item xs={11} sm={4} md={3} lg={3} xl={2}>
@@ -205,7 +242,9 @@ const LandingPageForm = (props) => {
               color="info"
               variant="contained"
               size="large"
-              disabled={isDisabled()}
+              disabled={
+                !(formik.dirty || props.initialValues.html !== htmlValue)
+              }
               onClick={handleSave}
             >
               Save Page
