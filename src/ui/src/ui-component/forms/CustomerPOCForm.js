@@ -23,9 +23,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { isEqual } from "lodash";
 
+// Regular expression for validating phone number format
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
+// This is the validation schema for the form using the Yup library
 const validationSchema = yup.object({
   first_name: yup.string().required("First Name is required"),
   last_name: yup.string().required("Last Name is required"),
@@ -37,8 +39,18 @@ const validationSchema = yup.object({
   email: yup.string().required("Email is required").email("Email is invalid"),
 });
 
+/**
+ * A functional component that renders a form for managing customer point of contact data.
+ * @param {Object} props - Component props.
+ * @param {Array} props.custPOCData - An array containing customer point of contact data.
+ * @param {Object} props.initialPOCValues - An object containing initial point of contact values.
+ * @param {Object} props.custFilledPOCValues - An object containing initial filled point of contact values.
+ * @param {Function} props.setCustData - A function that sets customer data.
+ * @param {Object} props.setCustData - An object containing customer data.
+ * @returns {JSX.Element} CustomerPOCForm component.
+ */
 function CustomerPOCForm(props) {
-  let initialPOCValues = {};
+  // Define initial values for various state variables
   let contactLen = props.custPOCData.length;
   const [isToggleCardOn, setToggleCard] = useState(contactLen < 2);
   const [editContact, setEditContact] = useState(false);
@@ -46,12 +58,11 @@ function CustomerPOCForm(props) {
   const [deletebtnOpen, setDeletebtnOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
   let [entryToEdit, setEntryToEdit] = useState({});
-  if (!editContact) {
-    initialPOCValues = props.initialPOCValues;
-  } else {
-    initialPOCValues = props.custFilledPOCValues;
-  }
+  let initialPOCValues = editContact
+    ? props.custFilledPOCValues
+    : props.initialPOCValues;
   let updatedPOCData = [];
+  // Define the columns that will be displayed in the point of contact table
   const cusContactsCols = [
     { field: "id", hide: true },
     { field: "name", headerName: "Name", flex: 1 },
@@ -90,17 +101,14 @@ function CustomerPOCForm(props) {
       flex: 0.75,
     },
   ];
+  // Initialize formik form
   const formik = useFormik({
     initialValues: initialPOCValues,
     validationSchema: validationSchema,
     onSubmit: (values, actions) => {
       updatedPOCData = [...props.custPOCData];
-      let idIndex = 0;
-      if (editContact) {
-        idIndex = values.id;
-      } else {
-        idIndex = updatedPOCData.length;
-      }
+      // Sets idIndex to the values.id if editContact is true, otherwise to the length of updatedPOCData
+      let idIndex = editContact ? values.id : updatedPOCData.length;
       updatedPOCData[idIndex] = {
         id: idIndex,
         email: values.email,
@@ -120,41 +128,47 @@ function CustomerPOCForm(props) {
         setCusContactsRows(updatedPOCData);
       });
       actions.resetForm();
-      if (contactLen + 1 < 2) {
-        setToggleCard(true);
-      } else {
-        setToggleCard(false);
-      }
+      // Toggles the display of a contact card based on whether the number of existing contacts is less than two
+      setToggleCard(contactLen + 1 < 2);
       setEditContact(false);
     },
   });
 
-  let counter = 0;
+  let idCounter = 0;
   if (contactLen >= 1) {
-    props.custPOCData.forEach((custRows) => {
-      custRows.id = counter;
-      counter = counter + 1;
-      custRows.name = custRows.first_name + " " + custRows.last_name;
+    props.custPOCData.forEach((entry) => {
+      entry.id = idCounter;
+      entry.name = `${entry.first_name} ${entry.last_name}`;
+      idCounter++;
     });
   }
-
+  /**
+   * Sets formik values, toggles edit mode, sets entry to edit.
+   * @param {Object} entry - Object containing POC data.
+   */
   const handleEdit = (entry) => {
-    entryToEdit = entry;
-    formik.setValues(entryToEdit);
+    formik.setValues(entry);
     setToggleCard(true);
     setEditContact(true);
     setEntryToEdit(entry);
   };
-
+  /**
+   * Determines if save button should be disabled.
+   * @returns {boolean} - True if save button should be disabled, false otherwise.
+   */
   const isDisabled = () => {
-    if (!editContact && formik.dirty) {
+    const { dirty, values } = formik;
+    if (!editContact && dirty) {
       return false;
-    } else if (editContact && !isEqual(formik.values, entryToEdit)) {
+    } else if (editContact && !isEqual(values, entryToEdit)) {
       return false;
     }
     return true;
   };
-
+  /**
+   * Removes entry from updatedPOCData and updates props.custData.
+   * @param {Object} entry - Object containing POC data.
+   */
   const confirmDelete = (entry) => {
     updatedPOCData = cusContactsRows.filter((prevEntry) => {
       return prevEntry !== entry;

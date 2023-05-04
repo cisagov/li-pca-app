@@ -9,8 +9,43 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
-const CustomerInfoForm = (props) => {
-  let formik = props.formik;
+const sectors = [
+  "Chemical Sector",
+  "Commercial Facilities Sector",
+  "Communications Sector",
+  "Critical Manufacturing Sector",
+  "Dams Sector",
+  "Defense Industrial Base Sector",
+  "Emergency Services Sector",
+  "Energy Sector",
+  "Financial Services Sector",
+  "Food and Agriculture Sector",
+  "Government Facilities Sector",
+  "Healthcare and Public Health Sector",
+  "Information Technology Sector",
+  "Nuclear Reactor, Materials, and Waste Sector",
+  "Transportation Systems Sector",
+  "Water and Wastewater Systems Sector",
+];
+
+const customerTypes = [
+  { value: "Federal", label: "Government - Federal" },
+  { value: "State", label: "Government - State" },
+  { value: "Local", label: "Government - Local" },
+  { value: "Tribal", label: "Government - Tribal" },
+  { value: "Territorial", label: "Government - Territorial" },
+  { value: "Private", label: "Private" },
+];
+
+/**
+ * A form component for capturing customer information.
+ * @param {object} props - The props object.
+ * @param {object} props.formik - The Formik state manager.
+ * @param {object} props.custData - Customer data.
+ * @param {Function} props.setCustData - Function to update customer data.
+ * @returns {JSX.Element} A form element with customer information fields.
+ */
+const CustomerInfoForm = ({ formik, custData, setCustData }) => {
   return (
     <>
       <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
@@ -69,12 +104,11 @@ const CustomerInfoForm = (props) => {
             formik.touched.customer_type && formik.errors.customer_type
           }
         >
-          <MenuItem value={"Federal"}>Government - Federal</MenuItem>
-          <MenuItem value={"State"}>Government - State</MenuItem>
-          <MenuItem value={"Local"}>Government - Local</MenuItem>
-          <MenuItem value={"Tribal"}>Government - Tribal</MenuItem>
-          <MenuItem value={"Territorial"}>Government - Territorial</MenuItem>
-          <MenuItem value={"Private"}>Private</MenuItem>
+          {customerTypes.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
         </TextField>
       </Grid>
       <Grid item xs={11} sm={6} md={4.5} lg={4.5} xl={4.5}>
@@ -96,48 +130,11 @@ const CustomerInfoForm = (props) => {
             formik.errors.critical_infrastructure
           }
         >
-          <MenuItem value={"Chemical Sector"}>Chemical Sector</MenuItem>
-          <MenuItem value={"Commercial Facilities Sector"}>
-            Commercial Facilities Sector
-          </MenuItem>
-          <MenuItem value={"Communications Sector"}>
-            Communications Sector
-          </MenuItem>
-          <MenuItem value={"Critical Manufacturing Sector"}>
-            Critical Manufacturing Sector
-          </MenuItem>
-          <MenuItem value={"Dams Sector"}>Dams Sector</MenuItem>
-          <MenuItem value={"Defense Industrial Base Sector"}>
-            Defense Industrial Base Sector
-          </MenuItem>
-          <MenuItem value={"Emergency Services Sector"}>
-            Emergency Services Sector
-          </MenuItem>
-          <MenuItem value={"Energy Sector"}>Energy Sector</MenuItem>
-          <MenuItem value={"Financial Services Sector"}>
-            Financial Services Sector
-          </MenuItem>
-          <MenuItem value={"Food and Agriculture Sector"}>
-            Food and Agriculture Sector
-          </MenuItem>
-          <MenuItem value={"Government Facilities Sector"}>
-            Government Facilities Sector
-          </MenuItem>
-          <MenuItem value={"Healthcare and Public Health Sector"}>
-            Healthcare and Public Health Sector
-          </MenuItem>
-          <MenuItem value={"Information Technology Sector"}>
-            Information Technology Sector
-          </MenuItem>
-          <MenuItem value={"Nuclear Reactor, Materials, and Waste Sector"}>
-            Nuclear Reactor, Materials, and Waste Sector
-          </MenuItem>
-          <MenuItem value={"Transportation Systems Sector"}>
-            Transportation Systems Sector
-          </MenuItem>
-          <MenuItem value={"Water and Wastewater Systems Sector"}>
-            Water and Wastewater Systems Sector
-          </MenuItem>
+          {sectors.map((sector) => (
+            <MenuItem key={sector} value={sector}>
+              {sector}
+            </MenuItem>
+          ))}
         </TextField>
       </Grid>
       <Grid item xs={11} sm={6} md={3} lg={3} xl={3}>
@@ -146,9 +143,9 @@ const CustomerInfoForm = (props) => {
             fullWidth
             size="small"
             label="Appendix A Date"
-            value={props.custData.appendix_a_date}
+            value={custData.appendix_a_date}
             onChange={(e) => {
-              props.setCustData({ ...props.custData, appendix_a_date: e });
+              setCustData({ ...custData, appendix_a_date: e });
               formik.setFieldValue("appendix_a_date", e);
             }}
             renderInput={(params) => (
