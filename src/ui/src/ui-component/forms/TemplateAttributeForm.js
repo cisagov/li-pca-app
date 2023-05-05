@@ -16,35 +16,62 @@ import TemplateAttrRecsForm from "./TemplateAttrRecsForm";
 import { useGetAll } from "services/api.js";
 
 const recsJson = require("views/templates/recommendations.json");
+/**
+ * Retrieves the recommendations JSON to return only the entries with the recommendation type "Sophisticated".
+ */
 const sophJson = recsJson.filter(
   (entry) => entry.recommendation_type === "Sophisticated"
 );
+/**
+ * Filters the recommendations JSON to return only the entries with the recommendation type "Red Flag".
+ */
 const redFlagJson = recsJson.filter(
   (entry) => entry.recommendation_type === "Red Flag"
 );
 
+/**
+ * Renders a form for editing or creating attributes for an email template.
+ * @param {object} props - The props for the component.
+ * @param {object} props.formik - The Formik state manager.
+ * @param {function} props.setSophTags - Function to update the selection of "Sophisticated" tags.
+ * @param {function} props.setRFTags - Function to update the selection "Red Flag" tags array.
+ * @param {array} props.selectedRFTags - An array with all the "Red Flag" tags selected.
+ * @param {array} props.selectedSophTags - An array with all the "Sophisticated" tags selected.
+ * @returns {JSX.Element} JSX element representing the email template creation form.
+ */
 const TemplateAttrForm = (props) => {
   const [sophisticatedArray, setSophArray] = useState(sophJson);
   const [redFlagArray, setRFArray] = useState(redFlagJson);
   const domains = useGetAll("sending_domains");
   const landingPages = useGetAll("landing_pages");
 
-  const message = (str) => {
-    let msg =
-      "Either no " +
-      str +
-      " have been created in the system or there was an error fetching them.";
+  /**
+   * Returns a message to display when a sending domain or landing page is not found in the system.
+   * @param {string} entity - The entity that was not found. (e.g. "sending domains", "landing pages")
+   * @returns {string} The error message to display.
+   */
+  const getNotFoundMessage = (entity) => {
+    return `Either no ${entity} have been created in the system or there was an error fetching them. Please try again later or contact support if the issue persists.`;
+  };
+
+  /**
+   * Returns an error message to display when a sending domain or landing page is not found.
+   * @param {string} entity - The entity that was not found. (e.g. "sending domains", "landing pages")
+   * @returns {JSX.Element} The error message wrapped in a Tooltip component.
+   */
+  const message = (entity) => {
+    const msg = getNotFoundMessage(entity);
     return (
       <Tooltip placement="right" title={msg}>
         <Alert severity="error" size="small">
-          No {str} found.
+          No {entity} found.
         </Alert>
       </Tooltip>
     );
   };
 
   return (
-    <Box sx={{ midWidth: 300, maxWidth: 1000 }}>
+    <Box sx={{ minWidth: 300, maxWidth: 1000 }}>
       <form id="template-form" onSubmit={props.formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

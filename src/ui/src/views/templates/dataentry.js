@@ -269,21 +269,10 @@ const TemplateDataEntryPage = () => {
     setAlertbtnOpen(false);
     setError([false, ""]);
     setDelete(false);
-    if (!getError[0]) {
+    if (!getError[0] && hasSubmitted) {
       navigate("/cat-phishing/templates");
     }
     setHasSubmitted(false);
-  };
-
-  /**
-   * Determines whether a button is disabled.
-   * @returns {boolean} Returns true if the Save button is disabled, false otherwise.
-   */
-  const isDisabled = () => {
-    if (!formTouched) {
-      return true;
-    }
-    return false;
   };
 
   /**
@@ -521,7 +510,7 @@ const TemplateDataEntryPage = () => {
                 variant="contained"
                 size="large"
                 onClick={handleSave}
-                disabled={isDisabled()}
+                disabled={!formTouched}
               >
                 Save Template
               </Button>

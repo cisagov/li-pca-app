@@ -17,6 +17,15 @@ import * as yup from "yup";
 // project imports
 import ResultDialog from "ui-component/popups/ResultDialog";
 
+/**
+ * A form for adding new recommendation attributes to a template.
+ * @param {Object} props - The props object.
+ * @param {Array} props.redFlagArray - An array of Red Flag recommendations.
+ * @param {Array} props.sophisticatedArray - An array of Sophisticated recommendations.
+ * @param {Function} props.setRFArray - A function to set the Red Flag recommendation array.
+ * @param {Function} props.setSophArray - A function to set the Sophisticated recommendation array.
+ * @returns {JSX.Element} - The TemplateAttrRecsForm component.
+ */
 const TemplateAttrRecsForm = (props) => {
   const [toggleOn, setToggleOn] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -25,10 +34,12 @@ const TemplateAttrRecsForm = (props) => {
     recommendation_type: "",
     recommendation_description: "",
   };
+  // The validation schema for the form using the Yup library
   const validationSchema = yup.object({
     title: yup.string().required("Title is required"),
     recommendation_type: yup.string().required("Type is required"),
   });
+  // Initialize formik form
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
@@ -43,12 +54,9 @@ const TemplateAttrRecsForm = (props) => {
       setHasSubmitted(true);
     },
   });
-  const isDisabled = () => {
-    if (formik.dirty) {
-      return false;
-    }
-    return true;
-  };
+  /**
+   * Closes the dialog pop up and resets the form.
+   */
   const closeDialog = () => {
     setHasSubmitted(false);
     setToggleOn(false);
@@ -168,7 +176,7 @@ const TemplateAttrRecsForm = (props) => {
                       type="submit"
                       size="large"
                       fullWidth
-                      disabled={isDisabled()}
+                      disabled={!formik.dirty}
                     >
                       Save
                     </Button>

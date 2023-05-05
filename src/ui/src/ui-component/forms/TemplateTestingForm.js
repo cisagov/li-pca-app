@@ -19,13 +19,18 @@ const initialTemplateTestVals = {
   role: "",
 };
 
+/**
+ * A functional component that renders a form to send a test email template.
+ * @returns {JSX.Element} TemplateTestingForm component.
+ */
 const TemplateTestingForm = () => {
+  // The validation schema for the form using the Yup library
   const validationSchema = yup.object({
     sending_profile: yup.string().required("Sending Profile is required"),
     customer: yup.string().required("Customer is required"),
     email: yup.string().required("Email is required"),
   });
-
+  // Initialize formik form
   const formik = useFormik({
     initialValues: initialTemplateTestVals,
     validationSchema: validationSchema,
