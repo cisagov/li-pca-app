@@ -19,40 +19,52 @@ import { submitEntry } from "services/api.js";
 
 // ==============================|| Phish Reconn Form view ||============================== //
 
+/**
+ * Manage Reconnaissance details for each customer.
+ * @param {Object} props - Component props.
+ * @param {Object} props.selectedRow - The selected row object.
+ * @param {boolean} props.viewResults - A flag indicating if the view results page is being used.
+ * @param {boolean} props.isLoading - A boolean to indicate whether API response is still loading.
+ * @param {Array} props.getData - An array of data to export.
+ * @param {Function} props.setError - A function to set the error from the API response.
+ * @param {Array} props.getError - An array of data with if there's an error, and if so, what it is.
+ */
 const PhishReconForm = (props) => {
-  const name = props.selectedRow.name;
-  const [notes, setNotes] = useState(props.selectedRow.customer_notes);
-  const [getError, setError] = useState([false, ""]);
+  const { selectedRow, viewResults, isLoading, getData, getError, setError } =
+    props;
+  const { customer_notes } = selectedRow;
+  const [notes, setNotes] = useState(customer_notes);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [savebtnOpen, setSavebtnOpen] = useState(false);
+  // Effect hook to update the notes state variable when customer_notes change
   useEffect(() => {
-    setNotes(props.selectedRow.customer_notes);
-  }, [props.selectedRow.customer_notes]);
-  const validateNotes = () => {
-    if (notes === props.selectedRow.customer_notes) {
-      return true;
-    }
-    return false;
-  };
+    setNotes(customer_notes);
+  }, [customer_notes]);
+  /**
+   * Function to validate notes.
+   * @returns {boolean} true if notes are equal to customer_notes.
+   */
+  const validateNotes = () => notes === customer_notes;
+  /**
+   * Function to export data as JSON and download it.
+   */
   const exportData = () => {
-    let data = [];
-    if (props.viewResults) {
-      data = props.selectedRow.recon_results;
-    } else {
-      data = props.getData;
-    }
+    const data = viewResults ? selectedRow.recon_results : getData;
     const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
       JSON.stringify(data)
     )}`;
     const link = document.createElement("a");
     link.href = jsonString;
-    link.download = props.selectedRow.domain + "_results.json";
+    link.download = `${selectedRow.domain}_results.json`;
     link.click();
   };
+  /**
+   * Function to save notes and submit the form data.
+   */
   const saveNotes = () => {
     const data = { customer_notes: notes };
-    submitEntry("customers", data, props.selectedRow._id, "Edit", setError);
+    submitEntry("customers", data, selectedRow._id, "Edit", setError);
     setHasSubmitted(true);
     setSavebtnOpen(false);
     if (!getError[0]) {
@@ -60,6 +72,7 @@ const PhishReconForm = (props) => {
       setNotes(notes);
     }
   };
+  // JSX for rendering the additional components for the recon form
   const reconExtras = (
     <>
       <Grid item xs={10} sm={6} md={4} lg={3} xl={3}>
@@ -137,19 +150,19 @@ const PhishReconForm = (props) => {
       />
     </>
   );
-  if (props.viewResults) {
+  if (viewResults) {
     return (
       <Grid container spacing={2} sx={{ mt: 1 }} id="section2">
         <Grid item xs={12} sm={12} md={12} xl={12}>
           <Typography variant="h5">Results for {name}</Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <pre>{JSON.stringify(props.selectedRow.recon_results, null, 2)}</pre>
+          <pre>{JSON.stringify(selectedRow.recon_results, null, 2)}</pre>
         </Grid>
         {reconExtras}
       </Grid>
     );
-  } else if (props.isLoading) {
+  } else if (isLoading) {
     return (
       <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -170,28 +183,28 @@ const PhishReconForm = (props) => {
         </Grid>
       </Grid>
     );
-  } else if (props.getError[0]) {
+  } else if (getError[0]) {
     return (
       <Grid container spacing={2} id="section2" sx={{ mb: 2, mt: 3 }}>
         <Grid item xs={8} lg={12} xl={12}>
-          Unable to retrieve results. {props.getError[0]}.
+          Unable to retrieve results. {getError[1]}.
         </Grid>
       </Grid>
     );
-  } else if (props.getData.length != 0) {
+  } else if (getData.length != 0) {
     return (
       <Grid container spacing={2} sx={{ mb: 2, mt: 3 }}>
         <Grid item xs={12} sm={12} md={12} xl={12} id="section2">
           <Typography variant="h5">Results for {name}</Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <pre>{JSON.stringify(props.getData, null, 2)}</pre>
+          <pre>{JSON.stringify(getData, null, 2)}</pre>
         </Grid>
-        {props.getError[0] ? (
+        {getError[0] ? (
           <>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              {props.getError[0]} Unable to save results to database. See
-              console log for more details.
+              {getError[0]} Unable to save results to database. See console log
+              for more details.
             </Grid>
             <Grid item xs={2} sm={6} md={8} lg={9} xl={9} />
           </>
@@ -217,9 +230,10 @@ PhishReconForm.propTypes = {
   selectedRow: PropTypes.object,
   triggerDataFetch: PropTypes.func,
   viewResults: PropTypes.bool,
-  getData: PropTypes.array,
-  getError: PropTypes.array,
   isLoading: PropTypes.bool,
+  getData: PropTypes.array,
+  setError: PropTypes.func,
+  getError: PropTypes.array,
 };
 
 export default PhishReconForm;
