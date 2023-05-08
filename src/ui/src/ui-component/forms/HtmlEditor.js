@@ -2,6 +2,15 @@ import PropTypes from "prop-types";
 
 import { Editor } from "@tinymce/tinymce-react";
 
+/**
+ * A React component for rendering an HTML editor.
+ * @param {Object} props - The props object for the component.
+ * @param {string} [props.height="700"] - The height of the editor (in pixels).
+ * @param {string} props.value - The current value of the editor.
+ * @param {function} props.setValue - A function to set the value of the editor.
+ * @param {boolean} [props.disabled=false] - Whether the editor should be disabled.
+ * @returns {JSX.Element} - The HTML editor component.
+ */
 function HtmlEditor(props) {
   let height = props.height;
   if (typeof height == undefined) {
@@ -9,7 +18,6 @@ function HtmlEditor(props) {
   }
   return (
     <Editor
-      apiKey="93v3azvbr0e5gg10ha39h4nehsyg1f2orfiw6mp22qjr6j6j"
       value={props.value}
       onEditorChange={(newValue) => props.setValue(newValue)}
       init={{
